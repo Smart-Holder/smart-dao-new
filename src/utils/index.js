@@ -1,0 +1,79 @@
+// import moment from "moment";
+import { rng } from 'somes/rng';
+
+/**
+ * 格式化地址
+ * @param {string} address
+ * @param {number} bef 前面显示几位
+ * @param {number} aft 后面显示几位
+ */
+export function formatAddress(address, bef = 3, aft = 4) {
+  if (address) return address.substr(0, bef) + '...' + address.substr(-aft);
+  else return '--';
+}
+
+export function isArray(value) {
+  return Array.isArray(value);
+}
+
+export function isObject(value) {
+  return Object.prototype.toString.call(value) === '[object Object]';
+}
+
+export function hasProperty(obj, prop) {
+  return Object.prototype.hasOwnProperty.call(obj, prop);
+}
+
+// 转换成毫秒
+export function timeFormat(days = 0, hours = 0, minutes = 0) {
+  return (
+    days * 24 * 60 * 60 * 1000 + hours * 60 * 60 * 1000 + minutes * 60 * 1000
+  );
+}
+
+// 256随机数 hex
+export function hexRandomNumber() {
+  return '0x' + rng(32).toString('hex');
+}
+
+export function formatTime(val) {
+  // return moment(val).format("HH:mm:ss");
+  return val;
+}
+
+export function getLocalStorage(key) {
+  return JSON.parse(localStorage.getItem(key));
+}
+
+export function setLocalStorage(key, value) {
+  return localStorage.setItem(key, JSON.stringify(value));
+}
+
+export function getSessionStorage(key) {
+  if (typeof sessionStorage !== 'undefined') {
+    return JSON.parse(sessionStorage.getItem(key));
+  }
+}
+
+export function setSessionStorage(key, value) {
+  return sessionStorage.setItem(key, JSON.stringify(value));
+}
+
+// 刷新或关闭页面前，浏览器默认的弹窗提示
+export function beforeUnload(e) {
+  e.returnValue = 'loading';
+  e.preventDefault();
+  return 'loading';
+}
+
+// 禁止页面的 click 事件
+export function stopClick(e) {
+  e.stopPropagation();
+  e.preventDefault();
+}
+
+// export function splitString(str, len = 2) {
+//   if (typeof str !== 'string') {
+//     return str;
+//   }
+// }

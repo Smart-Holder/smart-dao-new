@@ -1,0 +1,338 @@
+{
+  "administrator": "管理者",
+  "about": "プロフィール",
+  "amount": "額",
+  "address": "アドレス",
+  "avatar": "アバター",
+  "aging": "時効",
+  "author": "作者",
+  "back": "戻る",
+  "bidder": "入札者",
+  "blockchain": "ブロックチェーン",
+  "close": "閉じる",
+  "creator": "クリエイター",
+  "content": "内容",
+  "delete": "削除",
+  "detail": "ディテール",
+  "description": "説明",
+  "divide": "分割",
+  "days": "Days",
+  "edit": "編集",
+  "help": "お問い合わせ",
+  "hours": "Hours",
+  "id": "ID",
+  "introduction": "紹介",
+  "media": "メディア",
+  "metadata": "メタデーター",
+  "minutes": "Minutes",
+  "nickname": "ニックネーム",
+  "name": "名称",
+  "no": "No",
+  "next": "次へ",
+  "needed": "必要",
+  "off": "OFF",
+  "on": "ON",
+  "owner": "オーナー",
+  "onshelves": "公開",
+  "price": "価格",
+  "purchaser": "購入者",
+  "pending": "保留中",
+  "passed": "成功",
+  "question": "よくある質問",
+  "revoke": "取り消す",
+  "remarks": "備考",
+  "rejected": "却下",
+  "save": "セーブ",
+  "saved": "保存完了",
+  "supply": "サプライ",
+  "selling": "販売",
+  "support": "サポート",
+  "status": "状態",
+  "success": "成功",
+  "total": "トータル",
+  "time": "時間",
+  "type": "タイプ",
+  "title": "タイトル",
+  "upload": "アップロード",
+  "voting": "投票",
+  "votes": "投票",
+  "yes": "Yes",
+
+  "button": {
+    "connect": "ウォレットコネクト",
+    "disconnect": "ウォレット　ディスコネクト",
+    "launch": "ローンチ",
+    "dashboard": "ダッシュボードへ",
+    "nftp": "NFTP情報を設定する"
+  },
+  "header": {
+    "connect": {
+      "title": "ユーザーアカウントは:",
+      "link": "アカウントをお持ちでない場合?"
+    },
+    "disconnect": {
+      "title": "アクティブアカウント",
+      "yes": {
+        "label": "接続完了",
+        "desc1": "接続している",
+        "desc2": "ネットワーク"
+      },
+      "no": {
+        "label": "接続なし",
+        "desc": "ウォレットの Ethereum ノードに接続できません。ネットワーク設定でノードの設定を変更できます。 &#10;もしくはクライアントを更新してみましょう。"
+      },
+      "copy": "クリップボードにコピー"
+    },
+    "network": {
+      "title": "ネットワークを選択",
+      "main": "メインネットワーク",
+      "test": "テストネットワーク"
+    }
+  },
+  "aside": {
+    "smartApp": "スマートアプリ",
+    "smartUtils": "スマートユーティリティ",
+    "home": "Home",
+    "basic": "基本情報",
+    "member": "メンバー",
+    "order": "オーダー",
+    "assets": "アセッツ",
+    "revenue": "レベニュー",
+    "governance": "ガバナンス",
+    "event": "イベント",
+    "creator": "NFTクリエイター"
+  },
+  "home": {
+    "h1": "<span class='sd-h1-2'>SmartDAO</span> Launchにようこそ",
+    "h2": "わずか数分で自分のDAOを作成できる",
+    "createButton": {
+      "label": "DAOを作成する",
+      "desc": "DAO LaunchであなたのDAOを作成する"
+    },
+    "continueButton": {
+      "label": "ローンチを続ける",
+      "desc": "放棄して新しいDAOを作り直す"
+    },
+    "openButton": {
+      "label": "既存DAOを開く",
+      "desc": "DAO 名でダッシュボードにアクセス"
+    }
+  },
+  "launch": {
+    "steps": {
+      "template": "テンプレートを選択する",
+      "information": "基本情報を記入する",
+      "nftp": "NFTPアセットを設定する",
+      "company": "認定会社情報を設定する",
+      "assetRules": "アセットコントラクトルールを設定する",
+      "votingRules": "投票ルールを設定する",
+      "review": "レニュー＆ローンチ"
+    },
+    "aside": {
+      "title": "DAOをローンチする",
+      "launching": "DAO のローンチには数分かかる場合があります",
+      "desc": "署名プロセス中",
+      "createDAO": "DAOを作成する",
+      "success": "署名成功"
+    },
+    "template": {
+      "title": "テンプレート",
+      "h1": "テンプレートを選択する",
+      "h2": "事前設定されたテンプレートで作成する",
+      "DAC": {
+        "name": "DAC",
+        "name2": "自律分散型会社",
+        "desc": "ガバナンス権はスマートコントラクトを通して、代理会社に委任され、代理会社はガバナンス権利を実行します。メンバーは投票でいつでも代理会社をリプレースすることが出来ます。"
+      },
+      "DAO": {
+        "name": "DAO",
+        "name2": "自律分散型組織",
+        "desc": "ガバナンスはスマート コントラクトによって完全に完了し、メンバーはチェーン上のガバナンス項目に投票でき、スマート コントラクトは自動的にガバナンス決議を実行します。 ガバナンス ルールは、メンバーの投票によって変更できます。"
+      }
+    },
+    "information": {
+      "title": "基本情報",
+      "h1": "基本情報を記入する",
+      "h2": "DAOの基本情報を定義する",
+      "desc": "DAOの基本情報は誰でも見られ、かつ公式サイトにて公開表示されます",
+      "mission": "ビジョン＆ミッション"
+    },
+    "nftp": {
+      "title": "NFTPアセット",
+      "h1": "NFTPアセットを設定する",
+      "h2": "NFTP(証明用画像PFP)メンバーアセットを定義する",
+      "desc": "NFTP は DAOメンバーシップ アセットです。 NFTP アセットを保有するメンバーは、DAO の特典を獲得できるし、DAO ガバナンスに参加できます。",
+      "members": "NFTPメンバーズ",
+      "addMore": "もっと追加する"
+    },
+    "company": {
+      "title": "認定会社情報",
+      "h1": "認定会社情報を設定する",
+      "h2": "認定会社の基本情報を定義する",
+      "desc": "認定会社は後で投票により変更できます",
+      "name": "会社名",
+      "key": "会社パブリックキーアドレス",
+      "number": "会社登録番号"
+    },
+    "assetRules": {
+      "title": "アセットコントラクトルール",
+      "h1": "アセットコントラクトルールを設定する",
+      "h2": "アセットの発行と流通のルールを設定する",
+      "desc": "資産発行税は、資産の最初の売却から受け取った収益の割合です。資産流通税 資産の二次販売から得た収益の割合。 DAOガバナンスによって変更できます。",
+      "tax1": "アセット発行税金",
+      "tax2": "アセット流通税金"
+    },
+    "votingRules": {
+      "title": "コントラクト投票ルール",
+      "h1": "コントラクト投票ルールを設定する",
+      "h2": "DAOガバナンスルールを定義する",
+      "desc": "DAOガバナンスパラメータの意味として、サポートはサポートレートを表し、ミニマム投票数は投票を参加するメンバーの最低数を表します。DAOガバナンスにより変更できます。",
+      "min": "ミニマム投票数",
+      "duration": "投票期間"
+    },
+    "review": {
+      "h1": "情報確認",
+      "desc": "DAOセッティングを確認する"
+    },
+    "launch": {
+      "desc1": "お待ちください",
+      "desc2": "DAO作成完了",
+      "desc3": "完了",
+      "desc4": "DAO の準備ができました"
+    }
+  },
+  "dashboard": {
+    "entry": {
+      "h1": "Smart Dashboard",
+      "h2": "スマート ダッシュボードを使用して、DAO 情報と DAO エントリを管理します。",
+      "title": "既存DAOを選択する",
+      "placeholder": "DAOを選択する",
+      "nftpTitle": "NFTP情報を設定する",
+      "nftpInfo": "nftp 情報を設定すると、nftp アセットが理解しやすくなります"
+    },
+    "home": {
+      "h1": "何をしたいですか？"
+    },
+    "basic": {
+      "h1": "基本情報セッティング"
+    },
+    "member": {
+      "h1": "メンバーセッティング",
+      "number": "メンバー数",
+      "addMember": "メンバーを追加する",
+      "deleteMember": "メンバーを削除",
+      "nftpInfo": "NFTP Info",
+      "supply": "現在総供給量",
+      "nftpName": "NFTP名称",
+      "transferable": "譲渡可能",
+      "distribution": "オーナーシップディストリビューション",
+      "nftpBalance": "NFTP残高",
+      "addInfo": "メンバーを追加すると、メンバーは DAOを楽しんだり、DAOの中にアセットを発行したりできます",
+      "deleteInfo": "メンバーが削除されると、メンバーはDAOにアクセスできなくなり、DAOの中にアセットを発行出来なくなります",
+      "tokenNumber": "削除するトークンの数"
+    },
+    "order": {
+      "DAOOrders": "DAOオーダーズ",
+      "myOrders": "マイオーダー",
+      "totalOrders": "トータルオーダーズ",
+      "totalVolume": "トータルボリューム",
+      "fixedPrice": "公定価格",
+      "dealPrice": "取引価格",
+      "TransactionMethod": "取引方法",
+      "TransactionTime": "取引時間",
+      "orderDetail": "オーダーディテール"
+    },
+    "assets": {
+      "h1": "アセッツリスト",
+      "recycleBin": "ゴミ箱",
+      "createTime": "作成時間",
+      "sellingPrice": "販売価格",
+      "month": "1カ月",
+      "revokeAsset": "アセットを外す",
+      "onshelvesAsset": "アセットを公開する",
+      "deleteAsset": "アセットを削除する",
+      "recoverAsset": "アセットをリカバーする",
+      "onshelvesInfo": "アセットを公開すると、",
+      "deleteInfo": "アセットが削除されると、アセットはごみ箱に移動し、そこからアセットを復元できます",
+      "recoverInfo": "アセットがリカバーされた後、アセットはアセットリストに復元されます"
+    },
+    "revenue": {
+      "h1": "レベニューリスト",
+      "items": "アイテム",
+      "incomeAmount": "売上",
+      "totalBalance": "総合収入",
+      "incomeType": "収入タイプ",
+      "transactionTime": "取引時間",
+      "divideDetail": "デバイドディテール",
+      "divideInfo": "DAOのイニシャルシェアリングルールに従う",
+      "nftpNumber": "NFTPs数",
+      "shareAmount": "シェアアマウント",
+      "createTransaction": "取引を実行する",
+      "revenueDetail": "売上詳細"
+    },
+    "governance": {
+      "h1": "投票リスト",
+      "empty": "ここに投票はありません",
+      "create": "新たな投票を作成する",
+      "newVote": "新たな投票",
+      "newVoteInfo": "これらの投票は有益であり、シグナリングに使用されます。組織に直接的な影響はありません。",
+      "voteType": "投票タイプ",
+      "allVotes": "すべての投票",
+      "createTransaction": "取引を実行する",
+      "desc1": "許可メモ",
+      "desc2": "許可説明",
+      "desc3": "トリガー・アクションが実行されます",
+      "desc4": "アクション説明",
+      "transactionSigned": "取引署名済み",
+      "transactionInfo": "成功しました！あなたの取引はプロセスのためにネットワークに送信されました。"
+    },
+    "vote": {
+      "votingDetail": "投票詳細",
+      "createBy": "作成者",
+      "currentVotes": "現在投票数",
+      "yourVote": "あなたの投票",
+      "votedInfo": "あなたの投票は成功しました",
+      "youVoted": "あなたは投票しました",
+      "min": "ミニマム投票数"
+    },
+    "event": {
+      "h1": "イベントリスト",
+      "addEvent": "イベントを追加する",
+      "editEvent": "イベントを編集する",
+      "deleteEvent": "イベントを削除する",
+      "addInfo": "イベント紹介を追加する",
+      "editInfo": "イベント紹介を編集する",
+      "createTime": "作成時間"
+    },
+    "NFTCreator": {
+      "imageInfo": "イメージ、ビデオ、オーディオ、また3Dモデル",
+      "fileType": "サポートされているファイルのタイプ",
+      "types": "JPG, PNG, GIF, SVG.",
+      "maxSize": "最大サイズ",
+      "externalLink": "外部リンク"
+    }
+  },
+  "rules": {
+    "required": "空にすることはできません",
+    "length": "{min}-{max} 文字数が入力できます",
+    "repeat": "ユーザー名がすでに存在します",
+    "ethAddress": "無効なイーサリアム アドレス",
+    "english": "中国語を入力できません",
+    "votingPeriod": "投票期間は 30 日を超えてはならない",
+    "minimum": "最小数は {min}"
+  },
+  "message": {
+    "noMetaMask": "メタマスクをインストールしてください",
+    "metaMaskConnect": "メタマスクに接続失敗しました",
+    "permission1": "Callerは権限なし、DAOだけはCallできる",
+    "permission2": "Callerが権限がありません",
+    "imageSize": "イメージサイズは{size}MBを超えることが出来ません",
+    "jpg": "JPGのみが使えません",
+    "noSupported": "現在利用できません",
+    "noDAO": "DAOが存在しません",
+    "shelves": "公開成功しました",
+    "shelvesOff": "非公開成功しました",
+    "delete": "削除成功しました",
+    "recover": "リカバー成功しました"
+  }
+}

@@ -1,0 +1,338 @@
+{
+  "administrator": "administrator",
+  "about": "about",
+  "amount": "Amount",
+  "address": "Address",
+  "avatar": "Avatar",
+  "aging": "时效",
+  "author": "Author",
+  "back": "Back",
+  "bidder": "Bidder",
+  "blockchain": "Blockchain",
+  "close": "Close",
+  "creator": "Creator",
+  "content": "Content",
+  "delete": "Delete",
+  "detail": "Detail",
+  "description": "Description",
+  "divide": "Divide",
+  "days": "Days",
+  "edit": "Edit",
+  "help": "help",
+  "hours": "Hours",
+  "id": "ID",
+  "introduction": "Introduction",
+  "media": "Media",
+  "metadata": "Metadata",
+  "minutes": "Minutes",
+  "nickname": "Nickname",
+  "name": "Name",
+  "no": "No",
+  "next": "Next",
+  "needed": "needed",
+  "off": "OFF",
+  "on": "ON",
+  "owner": "Owner",
+  "onshelves": "Onshelves",
+  "price": "Price",
+  "purchaser": "Purchaser",
+  "pending": "Pending",
+  "passed": "Passed",
+  "question": "Question",
+  "revoke": "Revoke",
+  "remarks": "Remarks",
+  "rejected": "Rejected",
+  "save": "Save",
+  "saved": "Saved",
+  "supply": "Supply",
+  "selling": "Selling",
+  "support": "Support",
+  "status": "Status",
+  "success": "Success",
+  "total": "Total",
+  "time": "Time",
+  "type": "Type",
+  "title": "Title",
+  "upload": "Upload",
+  "voting": "Voting",
+  "votes": "Votes",
+  "yes": "Yes",
+
+  "button": {
+    "connect": "Connect Wallet",
+    "disconnect": "Disconnect Wallet",
+    "launch": "Launch",
+    "dashboard": "Get Dashboard",
+    "nftp": "Setting NFTP Info"
+  },
+  "header": {
+    "connect": {
+      "title": "User Account From:",
+      "link": "Don't have an account?"
+    },
+    "disconnect": {
+      "title": "Active Account",
+      "yes": {
+        "label": "Connected",
+        "desc1": "CONNECTED TO",
+        "desc2": "NETWORK"
+      },
+      "no": {
+        "label": "No Connection",
+        "desc": "We cannot connect to the wallet's Ethereum node. You can change the node settings in Network Settings. &#10; You can also refresh the client."
+      },
+      "copy": "Copy to clipboard"
+    },
+    "network": {
+      "title": "Choose Your Network",
+      "main": "Main Network",
+      "test": "Test Network"
+    }
+  },
+  "aside": {
+    "smartApp": "Smart app",
+    "smartUtils": "Smart utils",
+    "home": "Home",
+    "basic": "Basic Info",
+    "member": "Member",
+    "order": "Order",
+    "assets": "Assets",
+    "revenue": "Revenue",
+    "governance": "Governance",
+    "event": "Event",
+    "creator": "NFT Creator"
+  },
+  "home": {
+    "h1": "welcome to <span class='sd-h1-2'>SmartDAO</span> Launch",
+    "h2": "Create your own DAO in a few minutes!",
+    "createButton": {
+      "label": "Create a DAO",
+      "desc": "Start your DAO with SmartDAO launch"
+    },
+    "continueButton": {
+      "label": "Continue to Launch",
+      "desc": "Abandon and recreate a new one"
+    },
+    "openButton": {
+      "label": "Open an existing DAO",
+      "desc": "Access dashboard by DAO name"
+    }
+  },
+  "launch": {
+    "steps": {
+      "template": "Select Template",
+      "information": "Set Basic Information",
+      "nftp": "Set NFTP Asset",
+      "company": "Set authorized company information",
+      "assetRules": "Set Asset contract Rules",
+      "votingRules": "Set Voting Rules",
+      "review": "Review & Launch"
+    },
+    "aside": {
+      "title": "Launching your DAO",
+      "launching": "Launching DAO may take a few minutes",
+      "desc": "Signature Process",
+      "createDAO": "Create DAO",
+      "success": "Signature successful"
+    },
+    "template": {
+      "title": "Template",
+      "h1": "Select Template",
+      "h2": "Create with our pre-configured templates",
+      "DAC": {
+        "name": "DAC",
+        "name2": "Decentralized Autonomous Company",
+        "desc": "The governance rights are delegated to a company through a smart contract, and the company is represented by the company to complete the governance work. Members can initiate a vote to replace the proxy company at any time."
+      },
+      "DAO": {
+        "name": "DAO",
+        "name2": "Decentralized Autonomous Organization",
+        "desc": "Governance will be completely completed by smart contracts, members can vote on governance items on the chain, and smart contracts will automatically execute governance resolutions. Any governance rules can be modified by member voting."
+      }
+    },
+    "information": {
+      "title": "Basic Information",
+      "h1": "Set Basic Information",
+      "h2": "Define the basic information of dao",
+      "desc": "The basic information of dao is publicly visible to anyone and will be used for display on the official website",
+      "mission": "Vision & Mission"
+    },
+    "nftp": {
+      "title": "NFTP Asset",
+      "h1": "Set NFTP Asset",
+      "h2": "Define NFTP(Picture for proof) member assets",
+      "desc": "NFTP is a dao membership asset. Members who hold NFTP assets can obtain DAO benefits and participate in DAO governance.",
+      "members": "NFTP Members",
+      "addMore": "Add more"
+    },
+    "company": {
+      "title": "Authorized Company Information",
+      "h1": "Set Authorized Company information",
+      "h2": "Define the basic information of the authorized company",
+      "desc": "Authorized company can vote on changes at a later time",
+      "name": "Company Name",
+      "key": "Company Public Key Address",
+      "number": "Company Registration Number"
+    },
+    "assetRules": {
+      "title": "Asset Contract Rules",
+      "h1": "Set Asset Contract Rules",
+      "h2": "Define asset issuance and circulation rules",
+      "desc": "Asset issuance tax is The percentage of revenue received from the initial sale of an asset. Asset circulation tax The percentage of revenue earned from secondary sales of the asset. It can be modified by dao governance.",
+      "tax1": "Asset issuance tax",
+      "tax2": "Asset circulation tax"
+    },
+    "votingRules": {
+      "title": "Voting Contract Rules",
+      "h1": "Set Voting Contract Rules",
+      "h2": "Define dao governance rules",
+      "desc": "The parameters of DAO governance, SUPPORT represents the support rate, MINIMUM NUMBER OF VOTES represents the minimum number of participants to vote. It can be modified by dao governance.",
+      "min": "Minimum number of votes",
+      "duration": "Vote Duration"
+    },
+    "review": {
+      "h1": "Review Information",
+      "desc": "Check and confirm dao settings"
+    },
+    "launch": {
+      "desc1": "Please Wait",
+      "desc2": "Your DAO is being created",
+      "desc3": "All done",
+      "desc4": "Your DAO is ready"
+    }
+  },
+  "dashboard": {
+    "entry": {
+      "h1": "Smart Dashboard",
+      "h2": "Smart Dashboard is used to manage DAO information and DAO entry",
+      "title": "Select a Existing DAO",
+      "placeholder": "Select a DAO",
+      "nftpTitle": "Set NFTP Info",
+      "nftpInfo": "After set nftp infos, Your nftp assets will become more readable"
+    },
+    "home": {
+      "h1": "What do you want to do?"
+    },
+    "basic": {
+      "h1": "BaseInfo Settings"
+    },
+    "member": {
+      "h1": "Member Settings",
+      "number": "Number Of Members",
+      "addMember": "Add member",
+      "deleteMember": "Delete member",
+      "nftpInfo": "NFTP Info",
+      "supply": "Current Total Supply",
+      "nftpName": "NFTP Name",
+      "transferable": "Transferable",
+      "distribution": "Ownership Distribution",
+      "nftpBalance": "NFTP Balance",
+      "addInfo": "After adding members, members can enjoy dao share, and publish assets under dao",
+      "deleteInfo": "After the member is deleted, the member cannot enjoy the dao share and cannot publish the assets under the dao",
+      "tokenNumber": "Number of tokens to remove"
+    },
+    "order": {
+      "DAOOrders": "DAO Orders",
+      "myOrders": "My Orders",
+      "totalOrders": "Total orders",
+      "totalVolume": "Total volume",
+      "fixedPrice": "Fixed price",
+      "dealPrice": "Deal price",
+      "TransactionMethod": "Transaction method",
+      "TransactionTime": "Transaction time",
+      "orderDetail": "Order Detail"
+    },
+    "assets": {
+      "h1": "Assets List",
+      "recycleBin": "Recycle Bin",
+      "createTime": "Create Time",
+      "sellingPrice": "Selling Price",
+      "month": "one month",
+      "revokeAsset": "Revoke Asset",
+      "onshelvesAsset": "Onshelves Asset",
+      "deleteAsset": "Delete Asset",
+      "recoverAsset": "Recover Asset",
+      "onshelvesInfo": "After the ASSET is ON SHELVES, the ............",
+      "deleteInfo": "After the ASSET is deleted, assets will go to the recycle bin, from which you can restore assets",
+      "recoverInfo": "After the ASSET is RECOVER, The asset will be restored to the asset list"
+    },
+    "revenue": {
+      "h1": "Revenue List",
+      "items": "Items",
+      "incomeAmount": "Income amount",
+      "totalBalance": "Total Balance",
+      "incomeType": "Income Type",
+      "transactionTime": "Transaction time",
+      "divideDetail": "Divide Detail",
+      "divideInfo": "According to DAO's initial sharing rules",
+      "nftpNumber": "Number of NFTPs",
+      "shareAmount": "Share amount",
+      "createTransaction": "Create Transaction",
+      "revenueDetail": "Revenue Detail"
+    },
+    "governance": {
+      "h1": "Voting List",
+      "empty": "No Votes Here",
+      "create": "Create a new vote",
+      "newVote": "New Vote",
+      "newVoteInfo": "These votes are informative and used for signaling. They don’t have any direct repercussions on the organization.",
+      "voteType": "Vote Type",
+      "allVotes": "All Votes",
+      "createTransaction": "Create Transaction",
+      "desc1": "Permission Note",
+      "desc2": "Permission description",
+      "desc3": "Action to be Triggered",
+      "desc4": "Action description",
+      "transactionSigned": "Transaction signed",
+      "transactionInfo": "Success! Your transaction has been sent to the network for processing."
+    },
+    "vote": {
+      "votingDetail": "Voting Detail",
+      "createBy": "Create By",
+      "currentVotes": "Current Votes",
+      "yourVote": "Your Vote",
+      "votedInfo": "Your vote was cast successfully",
+      "youVoted": "You Voted",
+      "min": "Minimum of votes"
+    },
+    "event": {
+      "h1": "Event List",
+      "addEvent": "Add Event",
+      "editEvent": "Edit Event",
+      "deleteEvent": "Delete Event",
+      "addInfo": "Add Event Introduce",
+      "editInfo": "Edit Event Introduce",
+      "createTime": "Create Time"
+    },
+    "NFTCreator": {
+      "imageInfo": "Image,Video,Audio,or 3D Model",
+      "fileType": "File types supported",
+      "types": "JPG, PNG, GIF, SVG.",
+      "maxSize": "Max size",
+      "externalLink": "External Link"
+    }
+  },
+  "rules": {
+    "required": "Can not be empty",
+    "length": "{min}-{max} characters are supported",
+    "repeat": "Duplicate {name} exists",
+    "ethAddress": "Invalid Ethereum address",
+    "english": "Chinese is not supported",
+    "votingPeriod": "The voting period shall not exceed 30 days",
+    "minimum": "The minimum is {min}"
+  },
+  "message": {
+    "noMetaMask": "Please install MetaMask.",
+    "metaMaskConnect": "Error connecting to MetaMask",
+    "permission1": "Caller does not have permission, only DAO call",
+    "permission2": "Caller does not have permission",
+    "imageSize": "Image size cannot exceed {size}MB",
+    "jpg": "Only supports jpg image format",
+    "noSupported": "Not currently supported",
+    "noDAO": "no existing DAO",
+    "shelves": "Put on shelves success",
+    "shelvesOff": "Pull off shelves success",
+    "delete": "successfully delete",
+    "recover": "successfully recover"
+  }
+}

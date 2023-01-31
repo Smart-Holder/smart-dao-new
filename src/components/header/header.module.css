@@ -1,0 +1,55 @@
+.layout .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+  padding: 0 25px;
+  background: #fff;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  display: inline-block;
+  width: 26px;
+  height: 26px;
+  background: linear-gradient(164deg, #2f4cdd 0%, #d45bff 100%);
+  border-radius: 6px;
+}
+
+.name {
+  height: 27px;
+  margin-left: 8px;
+  font-size: 16px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #3c4369;
+  line-height: 27px;
+}
+
+.right {
+}
+
+.connect h1 {
+  text-align: center;
+}
+
+.connect .buttons {
+  text-align: center;
+}
+
+.connect .button {
+  display: inline-block;
+  width: 140px;
+  height: 80px;
+  padding: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.connect .button:hover {
+  background: #f9faff;
+}
