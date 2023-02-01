@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import { Layout, Tabs } from 'antd';
@@ -6,27 +6,27 @@ const { Content } = Layout;
 import styles from '@/styles/mine.module.css';
 import { getCookie } from '@/utils/cookie';
 import type { TabsProps } from 'antd';
+import { Divider, Space, Button } from 'antd';
 
 import { getDAOList } from '@/store/features/daoSlice';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
-import Header from '@/components/header';
-import Footer from '@/components/footer';
+import BasicLayout from '@/components/layout/basic';
 import DAO from '@/components/mine';
 import Info from '@/components/mine/info';
 
-const items: TabsProps['items'] = [
-  {
-    key: '1',
-    label: `我的DAO`,
-    children: <DAO />,
-  },
-  {
-    key: '2',
-    label: `个人信息`,
-    children: <Info />,
-  },
-];
+// const items: TabsProps['items'] = [
+//   {
+//     key: '1',
+//     label: `我的DAO`,
+//     children: <DAO />,
+//   },
+//   {
+//     key: '2',
+//     label: `个人信息`,
+//     children: <Info />,
+//   },
+// ];
 
 export default function Mine() {
   const dispatch = useAppDispatch();
@@ -37,11 +37,21 @@ export default function Mine() {
 
   const { DAOList } = useAppSelector((store) => store.dao);
 
+  const [active, setActive] = useState(1);
+
   // useEffect(() => {
   //   dispatch(getDAOList({ chain: chainId, owner: address }));
   // }, []);
 
   // console.log('DAOList', DAOList);
+
+  const handleDAOClick = () => {
+    setActive(1);
+  };
+
+  const handleInfoClick = () => {
+    setActive(2);
+  };
 
   const onChange = (key: string) => {
     console.log(key);
@@ -56,19 +66,31 @@ export default function Mine() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className={styles.layout}>
-        <Header />
-        <Content className={styles.content}>
-          <div>
-            <p className={styles.title1}>
-              Welcome! Discovery the hole magic worlds !
-            </p>
-            <p className={styles.title2}>Welcome to SmartDAO</p>
-          </div>
-          <div className={styles['site-layout-content']}>
-            <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
-          </div>
-        </Content>
-        <Footer />
+        <BasicLayout>
+          <Content className={styles.content}>
+            <div>
+              <p className={styles.title1}>
+                Welcome! Discovery the hole magic worlds !
+              </p>
+              <p className={styles.title2}>Welcome to SmartDAO</p>
+            </div>
+            <div className={styles['site-layout-content']}>
+              <Space split={<Divider type="vertical" />}>
+                <Button type="link" onClick={handleDAOClick}>
+                  我的DAO
+                </Button>
+                <Button type="link" onClick={handleInfoClick}>
+                  个人信息
+                </Button>
+              </Space>
+              {/* <Tabs defaultActiveKey="1" items={items} onChange={onChange} /> */}
+              <div>
+                {active === 1 && <DAO />}
+                {active === 2 && <Info />}
+              </div>
+            </div>
+          </Content>
+        </BasicLayout>
       </Layout>
     </>
   );

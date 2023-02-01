@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import { Layout, Tabs } from 'antd';
@@ -6,28 +6,12 @@ const { Content } = Layout;
 import styles from '@/styles/mine.module.css';
 import { getCookie } from '@/utils/cookie';
 import type { TabsProps } from 'antd';
-import { Divider, Space, Typography } from 'antd';
+import { Divider, Space, Button } from 'antd';
 
 import { getDAOList } from '@/store/features/daoSlice';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
-const items: TabsProps['items'] = [
-  {
-    key: '1',
-    label: `我创建的`,
-    children: `Content of Tab Pane 1`,
-  },
-  {
-    key: '2',
-    label: `我加入的`,
-    children: `Content of Tab Pane 2`,
-  },
-  {
-    key: '3',
-    label: `我关注的`,
-    children: `Content of Tab Pane 3`,
-  },
-];
+import List from '@/components/mine/daoList';
 
 export default function Mine() {
   const dispatch = useAppDispatch();
@@ -43,18 +27,37 @@ export default function Mine() {
 
   // console.log('DAOList', DAOList);
 
+  const [active, setActive] = useState(1);
+
+  const handleClick1 = () => {
+    setActive(1);
+  };
+  const handleClick2 = () => {
+    setActive(2);
+  };
+  const handleClick3 = () => {
+    setActive(3);
+  };
+
   const onChange = (key: string) => {
     console.log(key);
   };
 
   return (
     <>
-      <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+      {/* <Tabs defaultActiveKey="1" items={items} onChange={onChange} /> */}
       <Space split={<Divider type="vertical" />}>
-        <Typography.Link>Link</Typography.Link>
-        <Typography.Link>Link</Typography.Link>
-        <Typography.Link>Link</Typography.Link>
+        <Button type="link" onClick={handleClick1}>
+          我创建的
+        </Button>
+        <Button type="link" onClick={handleClick2}>
+          我加入的
+        </Button>
+        <Button type="link" onClick={handleClick3}>
+          我关注的
+        </Button>
       </Space>
+      <List type={active} />
     </>
   );
 }

@@ -9,6 +9,7 @@ import styles from './header.module.css';
 import { getCookie } from '@/utils/cookie';
 import { formatAddress } from '@/utils';
 import ConnectModal from '@/components/connect/modal';
+import CreateModal from '@/components/create/modal';
 
 // 引入对应的方法
 // import { increment, decrement } from '@/store/features/counterSlice';
@@ -47,6 +48,7 @@ const Header = () => {
   const router = useRouter();
 
   const connectModal: any = createRef();
+  const createModal: any = createRef();
 
   const handleDropdownClick = (e: MouseEvent) => {
     e.preventDefault();
@@ -71,6 +73,8 @@ const Header = () => {
       router.push('/mine');
     } else if (key === 'disconnect') {
       dispatch(disconnect());
+    } else if (key === 'create') {
+      createModal.current.show();
     }
 
     setDropdownOpen(false);
@@ -102,6 +106,7 @@ const Header = () => {
       </Layout.Header>
 
       <ConnectModal ref={connectModal} />
+      <CreateModal ref={createModal} />
     </div>
   );
 };
