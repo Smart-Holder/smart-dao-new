@@ -1,8 +1,7 @@
 import Head from 'next/head';
 import { Layout } from 'antd';
 
-import Header from '@/components/header';
-import Footer from '@/components/footer';
+import BasicLayout from '@/components/layout/basic';
 import styles from '@/styles/home.module.css';
 
 const { Content } = Layout;
@@ -17,17 +16,17 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout className={styles.layout}>
-        <Header />
-        <Content className={styles.content}>
-          <div>
-            <p className={styles.title1}>
-              Welcome! Discovery the hole magic worlds !
-            </p>
-            <p className={styles.title2}>Welcome to SmartDAO</p>
-          </div>
-          <div className={styles['site-layout-content']}>Home Content</div>
-        </Content>
-        <Footer />
+        <BasicLayout>
+          <Content className={styles.content}>
+            <div>
+              <p className={styles.title1}>
+                Welcome! Discovery the hole magic worlds !
+              </p>
+              <p className={styles.title2}>Welcome to SmartDAO</p>
+            </div>
+            <div className={styles['site-layout-content']}>Home Content</div>
+          </Content>
+        </BasicLayout>
       </Layout>
     </>
   );

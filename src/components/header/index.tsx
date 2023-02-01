@@ -1,29 +1,23 @@
-import React, {
-  useState,
-  useMemo,
-  useCallback,
-  MouseEvent,
-  useEffect,
-} from 'react';
+import React, { useState, MouseEvent, createRef } from 'react';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { Layout, theme, Button, Dropdown, Space, Modal } from 'antd';
+import { Layout, Dropdown, Space } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { useRouter } from 'next/router';
 import styles from './header.module.css';
-import { connectType } from '@/config/enum';
 import { getCookie } from '@/utils/cookie';
 import { formatAddress } from '@/utils';
+import ConnectModal from '@/components/connect/modal';
 
 // 引入对应的方法
 // import { increment, decrement } from '@/store/features/counterSlice';
 // import { getMovieData } from '@/store/features/movieSlice';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
-import { connectWallet, disconnect } from '@/store/features/walletSlice';
+import { disconnect } from '@/store/features/walletSlice';
 
-import iconMetamask from '/public/images/icon-metamask.png';
-import iconWallet from '/public/images/icon-wallet.png';
+import iconUser from '/public/images/icon-user.png';
 
 const items: MenuProps['items'] = [
   {
@@ -46,18 +40,19 @@ const Header = () => {
   // const address = getCookie('address');
 
   const [isDropdownOpen, setDropdownOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // 通过useDispatch 派发事件
   const dispatch = useAppDispatch();
 
   const router = useRouter();
 
+  const connectModal: any = createRef();
+
   const handleDropdownClick = (e: MouseEvent) => {
     e.preventDefault();
 
     if (!getCookie('address')) {
-      setIsModalOpen(true);
+      connectModal.current.show();
       return;
     }
   };
@@ -81,26 +76,6 @@ const Header = () => {
     setDropdownOpen(false);
   };
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleMetaMask = () => {
-    dispatch(connectWallet(connectType.MetaMask));
-    handleCancel();
-  };
-
-  const handleWallet = () => {
-    dispatch(connectWallet(connectType.WalletConnect));
-    handleCancel();
-  };
-
-  // useEffect(() => {
-  //   if (address) {
-  //     handleCancel();
-  //   }
-  // }, [address]);
-
   return (
     <div className={styles.layout}>
       <Layout.Header className={styles.header}>
@@ -108,7 +83,7 @@ const Header = () => {
           <div className={styles.logo} />
           <span className={styles.name}>SmartDAO</span>
         </div>
-        <div className={styles.right}>
+        <div>
           <Dropdown
             menu={{ items, onClick: handleMenuClick }}
             trigger={['click']}
@@ -116,7 +91,8 @@ const Header = () => {
             onOpenChange={handleOpenChange}
           >
             <a onClick={handleDropdownClick}>
-              <Space>
+              <Space className={styles['dropdown-trigger']} size={3}>
+                <Image src={iconUser} alt="user" />
                 {address ? formatAddress(address) : 'Connect Wallet'}
                 <DownOutlined />
               </Space>
@@ -125,21 +101,7 @@ const Header = () => {
         </div>
       </Layout.Header>
 
-      <Modal open={isModalOpen} onCancel={handleCancel} footer={null}>
-        <div className={styles.connect}>
-          <h1>Select Wallet</h1>
-          <div className={styles.buttons}>
-            <div className={styles.button} onClick={handleMetaMask}>
-              <Image src={iconMetamask} alt="metamask" />
-              <p>MetaMask</p>
-            </div>
-            <div className={styles.button} onClick={handleWallet}>
-              <Image src={iconWallet} alt="wallet" />
-              <p>Wallet Connect</p>
-            </div>
-          </div>
-        </div>
-      </Modal>
+      <ConnectModal ref={connectModal} />
     </div>
   );
 };

@@ -6,6 +6,7 @@ const { Content } = Layout;
 import styles from '@/styles/mine.module.css';
 import { getCookie } from '@/utils/cookie';
 import type { TabsProps } from 'antd';
+import { Divider, Space, Typography } from 'antd';
 
 import { getDAOList } from '@/store/features/daoSlice';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
@@ -46,5 +47,14 @@ export default function Mine() {
     console.log(key);
   };
 
-  return <Tabs defaultActiveKey="1" items={items} onChange={onChange} />;
+  return (
+    <>
+      <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+      <Space split={<Divider type="vertical" />}>
+        <Typography.Link>Link</Typography.Link>
+        <Typography.Link>Link</Typography.Link>
+        <Typography.Link>Link</Typography.Link>
+      </Space>
+    </>
+  );
 }

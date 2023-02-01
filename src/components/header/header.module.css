@@ -30,7 +30,14 @@
   line-height: 27px;
 }
 
-.right {
+.dropdown-trigger {
+  height: 23px;
+  padding: 0 4px;
+  color: #3e4954;
+  font-size: 8px;
+  line-height: 10px;
+  background: #f9faff;
+  border-radius: 12px;
 }
 
 .connect h1 {
