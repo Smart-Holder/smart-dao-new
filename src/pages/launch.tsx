@@ -1,13 +1,13 @@
+import Head from 'next/head';
 import { Layout } from 'antd';
 
 import BasicLayout from '@/components/layout/basic';
+import Form from '@/components/launch/form';
 import styles from '@/styles/content.module.css';
-
-import DAOList from '@/components/home/daoList';
 
 const { Content } = Layout;
 
-export default function Home() {
+export default function Launch() {
   return (
     <BasicLayout>
       <Content className={styles.content}>
@@ -17,9 +17,8 @@ export default function Home() {
           </div>
           <div className={styles.title2}>Welcome to SmartDAO</div>
         </div>
-        {/* <div className={`${styles.box} ${styles['box-scroll']}`}> */}
         <div className={styles.box}>
-          <DAOList />
+          <Form />
         </div>
       </Content>
     </BasicLayout>

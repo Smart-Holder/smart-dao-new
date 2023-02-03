@@ -13,28 +13,11 @@ import { disconnect } from '@/store/features/walletSlice';
 import ConnectModal from '@/components/connect/modal';
 import CreateModal from '@/components/create/modal';
 import Search from '@/components/search';
-import Menu from '@/components/header/menu';
-import Lang from '@/components/header/lang';
 
 import { getCookie } from '@/utils/cookie';
 import { formatAddress } from '@/utils';
 
 import iconUser from '/public/images/icon-user.png';
-
-const items: MenuProps['items'] = [
-  {
-    label: 'Create DAO',
-    key: 'create',
-  },
-  {
-    label: 'Mine',
-    key: 'mine',
-  },
-  {
-    label: 'Disconnect Wallet',
-    key: 'disconnect',
-  },
-];
 
 const langList: MenuProps['items'] = [
   {
@@ -43,7 +26,7 @@ const langList: MenuProps['items'] = [
   },
 ];
 
-const Header = () => {
+const Lang = () => {
   // 通过useSelector直接拿到store中定义的value
   const { address } = useAppSelector((store) => store.wallet);
   // const address = getCookie('address');
@@ -89,25 +72,44 @@ const Header = () => {
   };
 
   return (
-    <div className={styles.layout}>
-      <Layout.Header className={styles.header}>
-        <div className={styles.left}>
-          <div className={styles.logo} />
-          <span className={styles.name}>SmartDAO</span>
-          <Search />
-        </div>
-        <div>
-          <Space size={26}>
-            <Menu />
-            <Lang />
-          </Space>
-        </div>
-      </Layout.Header>
+    <div className="wrap">
+      <Dropdown
+        menu={{ items: langList, onClick: handleMenuClick }}
+        trigger={['click']}
+        open={isDropdownOpen}
+        onOpenChange={handleOpenChange}
+      >
+        <Space
+          className="dropdown-trigger"
+          size={3}
+          onClick={handleDropdownClick}
+          align="center"
+        >
+          <GlobalOutlined style={{ fontSize: 22, verticalAlign: 'middle' }} />
+          <span className="dropdown-trigger-content">English</span>
+          <DownOutlined />
+        </Space>
+      </Dropdown>
+      <style jsx>
+        {`
+          .wrap :global(.dropdown-trigger) {
+            height: 46px;
+            padding: 0 12px 0 7px;
+            color: #3e4954;
+            font-size: 14px;
+            line-height: 46px;
+            background: #f9faff;
+            border-radius: 23px;
+            cursor: pointer;
+          }
 
-      <ConnectModal ref={connectModal} />
-      <CreateModal ref={createModal} />
+          .wrap :global(.dropdown-trigger-content) {
+            padding: 0 10px 0 4px;
+          }
+        `}
+      </style>
     </div>
   );
 };
 
-export default Header;
+export default Lang;

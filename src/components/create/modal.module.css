@@ -1,20 +1,70 @@
-.connect h1 {
+.connect {
+  padding-top: 78px;
   text-align: center;
 }
 
-.connect .buttons {
-  text-align: center;
+.connect .h1 {
+  height: 37px;
+  font-size: 26px;
+  font-family: PingFangSC-Semibold, PingFang SC;
+  font-weight: 600;
+  color: #3c4369;
+  line-height: 37px;
+}
+
+.connect .h2 {
+  height: 22px;
+  margin-top: 14px;
+  font-size: 16px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #969ba0;
+  line-height: 22px;
 }
 
 .connect .button {
-  display: inline-block;
-  width: 140px;
-  height: 80px;
-  padding: 15px;
-  border-radius: 8px;
-  cursor: pointer;
+  height: 88px;
+  margin-top: 162px;
+  padding-left: 38px;
+  padding-right: 26px;
+  background-color: #546ff6;
+  border-radius: 44px;
 }
 
-.connect .button:hover {
-  background: #f9faff;
+.button-content {
+  display: flex;
+}
+
+.button-content-left {
+  display: flex;
+  flex-direction: column;
+  margin-right: 10px;
+  font-size: 28px;
+  font-family: HelveticaNeue-Bold, HelveticaNeue;
+  font-weight: bold;
+  color: #ffffff;
+  line-height: 34px;
+  text-align: right;
+}
+
+.button-content-left span:last-child {
+  height: 18px;
+  font-size: 12px;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  line-height: 18px;
+}
+
+.footer {
+  margin-top: 62px;
+  margin-bottom: 21px;
+  height: 16px;
+  font-size: 14px;
+  font-family: HelveticaNeue;
+  color: #969ba0;
+  line-height: 16px;
+}
+
+.footer a {
+  color: #969ba0;
 }

@@ -13,7 +13,6 @@ import { disconnect } from '@/store/features/walletSlice';
 import ConnectModal from '@/components/connect/modal';
 import CreateModal from '@/components/create/modal';
 import Search from '@/components/search';
-import Menu from '@/components/header/menu';
 import Lang from '@/components/header/lang';
 
 import { getCookie } from '@/utils/cookie';
@@ -43,7 +42,7 @@ const langList: MenuProps['items'] = [
   },
 ];
 
-const Header = () => {
+const Menu = () => {
   // 通过useSelector直接拿到store中定义的value
   const { address } = useAppSelector((store) => store.wallet);
   // const address = getCookie('address');
@@ -89,25 +88,46 @@ const Header = () => {
   };
 
   return (
-    <div className={styles.layout}>
-      <Layout.Header className={styles.header}>
-        <div className={styles.left}>
-          <div className={styles.logo} />
-          <span className={styles.name}>SmartDAO</span>
-          <Search />
-        </div>
-        <div>
-          <Space size={26}>
-            <Menu />
-            <Lang />
-          </Space>
-        </div>
-      </Layout.Header>
+    <div className="wrap">
+      <Dropdown
+        menu={{ items, onClick: handleMenuClick }}
+        trigger={['click']}
+        open={isDropdownOpen}
+        onOpenChange={handleOpenChange}
+        overlayStyle={{}}
+      >
+        <Space
+          className="dropdown-trigger"
+          size={3}
+          onClick={handleDropdownClick}
+        >
+          <Image src={iconUser} alt="user" width={32} height={32} />
+          <span className="dropdown-trigger-content">
+            {address ? formatAddress(address) : 'Connect Wallet'}
+          </span>
+          <DownOutlined />
+        </Space>
+      </Dropdown>
 
-      <ConnectModal ref={connectModal} />
-      <CreateModal ref={createModal} />
+      <style jsx>
+        {`
+          .wrap :global(.dropdown-trigger) {
+            height: 46px;
+            padding: 0 12px 0 7px;
+            color: #3e4954;
+            font-size: 14px;
+            background: #f9faff;
+            border-radius: 23px;
+            cursor: pointer;
+          }
+
+          .wrap :global(.dropdown-trigger-content) {
+            padding: 0 21px 0 10px;
+          }
+        `}
+      </style>
     </div>
   );
 };
 
-export default Header;
+export default Menu;

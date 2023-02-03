@@ -1,6 +1,19 @@
 // import moment from "moment";
 import { rng } from 'somes/rng';
 
+// 防抖
+export const debounce = (fn, time) => {
+  let timer = null;
+
+  return function () {
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+      fn.apply(this, arguments);
+    }, time);
+  };
+};
+
 /**
  * 格式化地址
  * @param {string} address

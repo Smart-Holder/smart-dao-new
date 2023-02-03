@@ -19,8 +19,6 @@ export default function List({ type }: { type: number }) {
     dispatch(getDAOList({ chain: chainId, owner: address }));
   }, []);
 
-  console.log(DAOList);
-
   return (
     <div>
       <Space size={30}>
