@@ -1,64 +1,64 @@
 import store from '@/store';
-import router from '@/router';
+import router from 'next/router';
 import { getCookie } from '@/utils/cookie';
-import i18n from '@/plugins/i18n';
+// import i18n from '@/plugins/i18n';
 
-const stepList = {
-  DAC: [
-    {
-      path: '/create',
-      key: 'template',
-      title: i18n.t('launch.steps.template'),
-    },
-    {
-      path: '/create/information',
-      key: 'information',
-      title: i18n.t('launch.steps.information'),
-    },
-    { path: '/create/nftp', key: 'nftp', title: i18n.t('launch.steps.nftp') },
-    {
-      path: '/create/company',
-      key: 'company',
-      title: i18n.t('launch.steps.company'),
-    },
-    {
-      path: '/create/voting-rules',
-      key: 'votingRules',
-      title: i18n.t('launch.steps.votingRules'),
-    },
-    {
-      path: '/create/review',
-      key: 'review',
-      title: i18n.t('launch.steps.review'),
-    },
-    { path: '/create/launch' },
-  ],
-  DAO: [
-    { path: '/create', key: 'template', title: 'Select Template' },
-    {
-      path: '/create/information',
-      key: 'information',
-      title: i18n.t('launch.steps.information'),
-    },
-    { path: '/create/nftp', key: 'nftp', title: i18n.t('launch.steps.nftp') },
-    {
-      path: '/create/asset-rules',
-      key: 'assetRules',
-      title: i18n.t('launch.steps.assetRules'),
-    },
-    {
-      path: '/create/voting-rules',
-      key: 'votingRules',
-      title: i18n.t('launch.steps.votingRules'),
-    },
-    {
-      path: '/create/review',
-      key: 'review',
-      title: i18n.t('launch.steps.review'),
-    },
-    { path: '/create/launch' },
-  ],
-};
+// const stepList = {
+//   DAC: [
+//     {
+//       path: '/create',
+//       key: 'template',
+//       title: i18n.t('launch.steps.template'),
+//     },
+//     {
+//       path: '/create/information',
+//       key: 'information',
+//       title: i18n.t('launch.steps.information'),
+//     },
+//     { path: '/create/nftp', key: 'nftp', title: i18n.t('launch.steps.nftp') },
+//     {
+//       path: '/create/company',
+//       key: 'company',
+//       title: i18n.t('launch.steps.company'),
+//     },
+//     {
+//       path: '/create/voting-rules',
+//       key: 'votingRules',
+//       title: i18n.t('launch.steps.votingRules'),
+//     },
+//     {
+//       path: '/create/review',
+//       key: 'review',
+//       title: i18n.t('launch.steps.review'),
+//     },
+//     { path: '/create/launch' },
+//   ],
+//   DAO: [
+//     { path: '/create', key: 'template', title: 'Select Template' },
+//     {
+//       path: '/create/information',
+//       key: 'information',
+//       title: i18n.t('launch.steps.information'),
+//     },
+//     { path: '/create/nftp', key: 'nftp', title: i18n.t('launch.steps.nftp') },
+//     {
+//       path: '/create/asset-rules',
+//       key: 'assetRules',
+//       title: i18n.t('launch.steps.assetRules'),
+//     },
+//     {
+//       path: '/create/voting-rules',
+//       key: 'votingRules',
+//       title: i18n.t('launch.steps.votingRules'),
+//     },
+//     {
+//       path: '/create/review',
+//       key: 'review',
+//       title: i18n.t('launch.steps.review'),
+//     },
+//     { path: '/create/launch' },
+//   ],
+// };
 
 export function setMakeDAOStorage(key, value) {
   if (!key) {
@@ -100,42 +100,30 @@ export function clearMakeDAOStorage() {
   localStorage.setItem('makeDAO', JSON.stringify(data));
 }
 
-export function getSteps(path) {
-  let step;
-  const steps = stepList[getMakeDAOStorage('template')?.type || 'DAC'];
+// export function getSteps(path) {
+//   let step;
+//   const steps = stepList[getMakeDAOStorage('template')?.type || 'DAC'];
 
-  if (steps) {
-    const index = steps.findIndex(
-      (s) => s.path === (path || router.currentRoute.path),
-    );
-    step = index >= 0 ? index + 1 : step;
-  }
+//   if (steps) {
+//     const index = steps.findIndex(
+//       (s) => s.path === (path || router.currentRoute.path),
+//     );
+//     step = index >= 0 ? index + 1 : step;
+//   }
 
-  return { step, steps };
-}
+//   return { step, steps };
+// }
 
-export function back() {
-  const { step, steps } = getSteps();
+// export function back() {
+//   const { step, steps } = getSteps();
 
-  store.commit('SET_STEP', step - 1);
-  router.replace(steps[step - 2].path);
-}
-
-export function next() {
-  const { step, steps } = getSteps();
-
-  store.commit('SET_STEP', step + 1);
-  router.replace(steps[step].path);
-}
+//   store.commit('SET_STEP', step - 1);
+//   router.replace(steps[step - 2].path);
+// }
 
 // export function next() {
-//   const template = getMakeDAOStorage("template");
-//   // const step = Number(localStorage.getItem("step"));
+//   const { step, steps } = getSteps();
 
-//   const { path } = router.currentRoute;
-//   const nextStep =
-//     stepList[template].findIndex((item) => item.path === path) - 1;
-
-//   store.commit("SET_STEP", nextStep);
-//   router.replace(stepList[template][nextStep]);
+//   store.commit('SET_STEP', step + 1);
+//   router.replace(steps[step].path);
 // }

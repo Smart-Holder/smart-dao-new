@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { Button, Checkbox, Form, Input, Upload, Tag, Space, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import { useIntl } from 'react-intl';
+
 import { validateChinese, validateEthAddress } from '@/utils/validator';
 import { getCookie } from '@/utils/cookie';
 import { hexRandomNumber } from '@/utils';
@@ -9,8 +11,6 @@ import { validateImage, getBase64 } from '@/utils/image';
 
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-
-import styles from './form.module.css';
 
 import iconSuccess from '/public/images/icon-success.png';
 
@@ -34,7 +34,9 @@ const FormGroup: React.FC = () => {
   ]);
 
   const [avatar, setAvatar] = useState();
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { formatMessage } = useIntl();
 
   const [form] = Form.useForm();
 
@@ -96,16 +98,14 @@ const FormGroup: React.FC = () => {
     // }
 
     if (info.file.status === 'done') {
-      // process.env.NEXT_PUBLIC_QINIU_IMG_URL
-      console.log('upload', info.file);
-      // setAvatar();
+      setAvatar(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
     }
   };
 
   const beforeUpload = (file: RcFile) => {
     const message = validateImage(file);
 
-    return !!message;
+    return !message;
   };
 
   const handleCancel = () => {
@@ -125,7 +125,6 @@ const FormGroup: React.FC = () => {
         autoComplete="off"
         labelAlign="left"
         requiredMark={false}
-        validateMessages={validateMessages}
         validateTrigger="onBlur"
       >
         <div className="wrap">
@@ -243,7 +242,7 @@ const FormGroup: React.FC = () => {
 
         <Form.Item>
           <Button className="button-submit" type="primary" htmlType="submit">
-            Launch
+            Save
           </Button>
         </Form.Item>
       </Form>

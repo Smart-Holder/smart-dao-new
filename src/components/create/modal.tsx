@@ -33,7 +33,8 @@ const ConnectModal = (props: any, ref: any) => {
   };
 
   const handleClick = () => {
-    router.push('/launch');
+    setIsModalOpen(false);
+    router.push('/basic');
   };
 
   return (

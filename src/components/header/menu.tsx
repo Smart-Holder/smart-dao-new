@@ -5,7 +5,6 @@ import { Layout, Dropdown, Space } from 'antd';
 import { DownOutlined, GlobalOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { useRouter } from 'next/router';
-import styles from './header.module.css';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { disconnect } from '@/store/features/walletSlice';
@@ -13,7 +12,6 @@ import { disconnect } from '@/store/features/walletSlice';
 import ConnectModal from '@/components/connect/modal';
 import CreateModal from '@/components/create/modal';
 import Search from '@/components/search';
-import Lang from '@/components/header/lang';
 
 import { getCookie } from '@/utils/cookie';
 import { formatAddress } from '@/utils';
@@ -108,6 +106,9 @@ const Menu = () => {
           <DownOutlined />
         </Space>
       </Dropdown>
+
+      <ConnectModal ref={connectModal} />
+      <CreateModal ref={createModal} />
 
       <style jsx>
         {`

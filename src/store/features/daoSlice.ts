@@ -14,22 +14,15 @@ import { disconnect } from './walletSlice';
 export interface DAOState {
   currentDAO: any;
   DAOList: Array<any>;
-  loading: boolean;
-  loadingTimer: number | null;
   step: number;
   launch: number;
-  lang: string;
 }
 const initialState: DAOState = {
   currentDAO: getSessionStorage('currentDAO') || { name: '' },
   DAOList: [],
-  loading: false,
-  loadingTimer: null,
-  // step: Number(localStorage.getItem('step')) || 1,
-  step: 1,
+  // step: Number(localStorage.getItem('step')) || 0,
+  step: 0,
   launch: 0,
-  // lang: localStorage.getItem('lang') || 'en',
-  lang: 'en',
 };
 
 export const getDAOList = createAsyncThunk(
@@ -59,21 +52,18 @@ export const DAOSlice = createSlice({
         sessionStorage.setItem('currentDAO', JSON.stringify(payload));
       }
     },
-    setLoading: (state, { payload }) => {
-      state.loading = payload;
-    },
-    setLoadingTimer: (state, { payload }) => {
-      state.loadingTimer = payload;
-    },
     setStep: (state, { payload }) => {
       state.step = payload;
       localStorage.setItem('step', payload);
     },
+    prevStep: (state) => {
+      state.step -= 1;
+    },
+    nextStep: (state) => {
+      state.step += 1;
+    },
     setLaunch: (state, { payload }) => {
       state.launch = payload;
-    },
-    setLang: (state, { payload }) => {
-      state.lang = payload;
     },
   },
   extraReducers(builder) {
@@ -100,11 +90,10 @@ export const DAOSlice = createSlice({
 export const {
   setDAOList,
   setCurrentDAO,
-  setLoading,
-  setLoadingTimer,
   setStep,
+  nextStep,
+  prevStep,
   setLaunch,
-  setLang,
 } = DAOSlice.actions;
 
 // 默认导出

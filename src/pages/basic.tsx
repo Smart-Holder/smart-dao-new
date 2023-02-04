@@ -1,9 +1,12 @@
 import Head from 'next/head';
+import dynamic from 'next/dynamic';
 import { Layout } from 'antd';
 
 import BasicLayout from '@/components/layout/basic';
-import Form from '@/components/launch/form';
+// import Form from '@/components/launch/form';
 import styles from '@/styles/content.module.css';
+
+const Form = dynamic(() => import('@/components/launch/form'), { ssr: false });
 
 const { Content } = Layout;
 
