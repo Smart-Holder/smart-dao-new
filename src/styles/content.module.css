@@ -70,3 +70,40 @@
   background: #fff;
   border-radius: 12px;
 }
+
+/* ---------dashboard---------- */
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 148px) !important;
+  padding: 40px 54px 0;
+  margin-left: 240px;
+  text-align: left;
+}
+
+.dashboard-content .title1 {
+  height: 42px;
+  font-size: 24px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #000000;
+  line-height: 42px;
+}
+
+.dashboard-content .title2 {
+  height: 27px;
+  margin-top: 3px;
+  font-size: 16px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #969ba0;
+  line-height: 27px;
+}
+
+.dashboard-content .box {
+  flex: 1;
+  padding: 34px 32px;
+  margin-top: 30px;
+  background: #fff;
+  border-radius: 12px;
+}

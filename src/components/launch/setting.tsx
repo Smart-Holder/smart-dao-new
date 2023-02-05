@@ -51,8 +51,9 @@ const App = () => {
         />
       )}
 
+      {step === 0 && <Template />}
+
       <div style={{ width: 550 }}>
-        {step === 0 && <Template />}
         {step === 1 && <Tax />}
         {step === 2 && <Vote />}
         {step === 3 && <Executor />}
