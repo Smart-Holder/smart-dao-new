@@ -69,7 +69,7 @@ export const DAOSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(disconnect, (state) => {
-        console.log('extraReducer: delete dao');
+        console.log('disconnect extraReducer: delete dao');
         state.DAOList = [];
         state.currentDAO = { name: '' };
       })

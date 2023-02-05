@@ -1,16 +1,17 @@
-import Web3 from 'web3';
+// import Web3 from 'web3';
 // import { Message } from "element-ui";
 // import store from "@/store/index";
 // import router from "@/router";
 import { connectType } from '@/config/enum';
 // import i18n from "@/plugins/i18n";
-import store from '@/store';
-import { setProvider } from '@/store/features/walletSlice';
+// import store from '@/store';
+// import { setProvider } from '@/store/features/walletSlice';
 
 export async function connect() {
   if (typeof window.ethereum !== 'undefined') {
     try {
-      store.dispatch(setProvider(window.ethereum));
+      // store.dispatch(setProvider(window.ethereum));
+      // store.dispatch({ type: 'wallet/setProvider', payload: window.ethereum });
       // const dispatch = useAppDispatch();
       // store.commit("SET_PROVIDER", window.ethereum);
 
@@ -38,6 +39,7 @@ export async function connect() {
       return {
         address: accounts[0],
         chainId: Number(chainId).toString(),
+        provider: window.ethereum,
       };
     } catch (error) {
       console.error('Error connecting to MetaMask', error);

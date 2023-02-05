@@ -4,6 +4,7 @@ import counterSlice from './features/counterSlice';
 import movieSlice from './features/movieSlice';
 import walletSlice from './features/walletSlice';
 import daoSlice from './features/daoSlice';
+import userSlice from './features/userSlice';
 
 // configureStore创建一个redux数据
 const store = configureStore({
@@ -21,6 +22,7 @@ const store = configureStore({
     common: commonSlice,
     wallet: walletSlice,
     dao: daoSlice,
+    user: userSlice,
   },
 });
 

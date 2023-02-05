@@ -4,10 +4,15 @@ import { ConfigProvider } from 'antd';
 import sdk from 'hcstore/sdk';
 
 import { initialize } from '@/api';
-import { setCookie } from '@/utils/cookie';
+import { getCookie, setCookie } from '@/utils/cookie';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { setLang } from '@/store/features/commonSlice';
+// import {
+//   setAddress,
+//   setChainId,
+//   setConnectType,
+// } from '@/store/features/walletSlice';
 
 import getLanguageConfig, { languageList } from '@/utils/language';
 
@@ -30,30 +35,50 @@ const theme = {
 const App = (props: any) => {
   const dispatch = useAppDispatch();
   const { lang } = useAppSelector((store) => store.common);
+  const { address, chainId } = useAppSelector((store) => store.wallet);
   const [languageConfig, setConfig] = useState({}) as any;
 
-  const [isInit, setInit] = useState(false);
+  // 如果 store 中没有 address, chainId 等信息, 尝试从 cookie 中获取
+  // useEffect(() => {
+  //   if (!address) {
+  //     const addr = getCookie('address');
+  //     const chain = getCookie('chainId');
+  //     const type = getCookie('connectType');
+
+  //     if (addr) {
+  //       dispatch(setAddress(addr));
+  //     }
+
+  //     if (chain) {
+  //       dispatch(setChainId(chain));
+  //     }
+
+  //     if (type) {
+  //       dispatch(setConnectType(type));
+  //     }
+  //   }
+  // }, []);
 
   // init api and get qiniu token
-  useEffect(() => {
-    const init = async () => {
-      try {
-        const res1 = await initialize();
+  // useEffect(() => {
+  //   const init = async () => {
+  //     try {
+  //       const res1 = await initialize();
 
-        setInit(true);
+  //       setInit(true);
 
-        const token = await sdk.utils.methods.qiniuToken();
+  //       const token = await sdk.utils.methods.qiniuToken();
 
-        if (token) {
-          setCookie('qiniuToken', token);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  //       if (token) {
+  //         setCookie('qiniuToken', token);
+  //       }
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
 
-    init();
-  }, []);
+  //   init();
+  // }, []);
 
   // init language
   useEffect(() => {
@@ -72,7 +97,25 @@ const App = (props: any) => {
     }
   }, [lang]);
 
-  if (!isInit || !languageConfig.locale) {
+  // 连接钱包后，再次 init api
+  // useEffect(() => {
+  //   const init = async () => {
+  //     try {
+  //       const res1 = await initialize();
+  //       dispatch(setIsInit(true));
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+
+  //   if (address && chainId) {
+  //     init();
+  //   }
+  // }, [address, chainId]);
+
+  console.log('language:', languageConfig.locale);
+
+  if (!languageConfig.locale) {
     return null;
   }
 

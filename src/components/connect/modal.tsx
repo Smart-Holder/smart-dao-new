@@ -1,4 +1,9 @@
-import React, { useState, useImperativeHandle, forwardRef } from 'react';
+import React, {
+  useState,
+  useImperativeHandle,
+  forwardRef,
+  useEffect,
+} from 'react';
 import Image from 'next/image';
 import { Modal, Space, Button, Typography } from 'antd';
 import styles from './connect.module.css';

@@ -1,12 +1,11 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { Button, Input, Modal, Typography } from 'antd';
+import { Button, Input, Modal, Typography, Image } from 'antd';
 import { Checkbox, Form, Upload, Tag, Space } from 'antd';
 import Icon, { RightCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
-import { useAppDispatch } from '@/store/hooks';
-import { connectWallet } from '@/store/features/walletSlice';
+import { useAppSelector, useAppDispatch } from '@/store/hooks';
+import { setUserInfo } from '@/store/features/userSlice';
 
 import { connectType } from '@/config/enum';
 
@@ -16,6 +15,8 @@ import { validateImage, getBase64 } from '@/utils/image';
 
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+
+import sdk from 'hcstore/sdk';
 
 const { Link } = Typography;
 
@@ -29,9 +30,11 @@ const validateMessages = {
 const InfoModal = (props: any, ref: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
-
-  // 通过useDispatch 派发事件
   const dispatch = useAppDispatch();
+
+  const { userInfo } = useAppSelector((store) => store.user);
+
+  const [image, setImage] = useState();
 
   useImperativeHandle(ref, () => ({
     show: () => {
@@ -44,27 +47,43 @@ const InfoModal = (props: any, ref: any) => {
   };
 
   const onFinish = (values: any) => {
-    console.log('Success:', values);
+    console.log('validate Success:', values);
+
+    if (image) {
+      const params = {
+        ...userInfo,
+        image,
+        nickname: values.nickname,
+      };
+
+      sdk.user.methods.setUser(params).then(() => {
+        handleCancel();
+        sdk.user.methods.getUser().then((res) => {
+          if (res && res.nickname) {
+            dispatch(setUserInfo(res));
+          }
+        });
+      });
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
+    console.log('validate Failed:', errorInfo);
   };
 
   const handleChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>,
   ) => {
     if (info.file.status === 'done') {
-      // process.env.NEXT_PUBLIC_QINIU_IMG_URL
       console.log('upload', info.file);
-      // setAvatar();
+      setImage(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
     }
   };
 
   const beforeUpload = (file: RcFile) => {
     const message = validateImage(file);
 
-    return !!message;
+    return !message;
   };
 
   const handleSubmit = () => {};
@@ -87,7 +106,7 @@ const InfoModal = (props: any, ref: any) => {
           validateTrigger="onBlur"
         >
           <Form.Item
-            name="name"
+            name="nickname"
             rules={[
               { required: true },
               { type: 'string', min: 5, max: 12 },
@@ -110,9 +129,20 @@ const InfoModal = (props: any, ref: any) => {
                 beforeUpload={beforeUpload}
                 onChange={handleChange}
               >
-                <div>
-                  <PlusOutlined />
-                </div>
+                {image ? (
+                  <Image
+                    style={{ borderRadius: 10, cursor: 'pointer' }}
+                    src={image}
+                    width={100}
+                    height={100}
+                    preview={false}
+                    alt="image"
+                  />
+                ) : (
+                  <div>
+                    <PlusOutlined />
+                  </div>
+                )}
               </Upload>
 
               <span className="upload-desc">Upload Images: png、jpeg… </span>

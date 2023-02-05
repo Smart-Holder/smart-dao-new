@@ -1,7 +1,7 @@
-import React, { useState, MouseEvent, createRef } from 'react';
+import React, { useState, MouseEvent, createRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { Layout, Dropdown, Space } from 'antd';
+import { Layout, Dropdown, Space, Image as Img } from 'antd';
 import { DownOutlined, GlobalOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { useRouter } from 'next/router';
@@ -11,12 +11,17 @@ import { disconnect } from '@/store/features/walletSlice';
 
 import ConnectModal from '@/components/connect/modal';
 import CreateModal from '@/components/create/modal';
+import InfoModal from '@/components/create/info';
 import Search from '@/components/search';
 
 import { getCookie } from '@/utils/cookie';
 import { formatAddress } from '@/utils';
 
 import iconUser from '/public/images/icon-user.png';
+import { setUserInfo } from '@/store/features/userSlice';
+import { setLoading } from '@/store/features/commonSlice';
+
+import sdk from 'hcstore/sdk';
 
 const items: MenuProps['items'] = [
   {
@@ -33,27 +38,21 @@ const items: MenuProps['items'] = [
   },
 ];
 
-const langList: MenuProps['items'] = [
-  {
-    label: 'English',
-    key: 'en',
-  },
-];
-
 const Menu = () => {
   // 通过useSelector直接拿到store中定义的value
   const { address } = useAppSelector((store) => store.wallet);
+  const { isInit } = useAppSelector((store) => store.common);
+  const { nickname, image } = useAppSelector((store) => store.user.userInfo);
   // const address = getCookie('address');
 
   const [isDropdownOpen, setDropdownOpen] = useState(false);
 
-  // 通过useDispatch 派发事件
   const dispatch = useAppDispatch();
-
   const router = useRouter();
 
   const connectModal: any = createRef();
   const createModal: any = createRef();
+  const infoModal: any = createRef();
 
   const handleDropdownClick = (e: MouseEvent) => {
     e.preventDefault();
@@ -85,6 +84,30 @@ const Menu = () => {
     setDropdownOpen(false);
   };
 
+  // useEffect(() => {
+  //   sdk.user.methods.getUser().then((res) => {
+  //     if (res && !res.nickname) {
+  //       infoModal.current.show();
+  //     }
+
+  //     if (res && res.nickname) {
+  //       dispatch(setUserInfo(res));
+  //     }
+  //   });
+  // }, []);
+
+  useEffect(() => {
+    if (isInit && !nickname) {
+      infoModal.current.show();
+    }
+  }, [isInit]);
+
+  // useEffect(() => {
+  //   if (address && !nickname) {
+  //     infoModal.current.show();
+  //   }
+  // }, [address, nickname]);
+
   return (
     <div className="wrap">
       <Dropdown
@@ -99,7 +122,18 @@ const Menu = () => {
           size={3}
           onClick={handleDropdownClick}
         >
-          <Image src={iconUser} alt="user" width={32} height={32} />
+          {image ? (
+            <Img
+              style={{ borderRadius: '50%' }}
+              src={image}
+              width={32}
+              height={32}
+              preview={false}
+              alt="avatar"
+            />
+          ) : (
+            <Image src={iconUser} alt="user" width={32} height={32} />
+          )}
           <span className="dropdown-trigger-content">
             {address ? formatAddress(address) : 'Connect Wallet'}
           </span>
@@ -109,6 +143,7 @@ const Menu = () => {
 
       <ConnectModal ref={connectModal} />
       <CreateModal ref={createModal} />
+      <InfoModal ref={infoModal} />
 
       <style jsx>
         {`

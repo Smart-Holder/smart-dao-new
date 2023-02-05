@@ -1,12 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 export interface CommonState {
+  isInit: boolean; // init api, qiniu and user. '/provider/api.tsx'
   lang: string;
   loading: boolean;
   loadingTimer: number | null;
   searchText: string;
 }
 const initialState: CommonState = {
+  isInit: false,
   // lang: localStorage.getItem('lang') || 'en',
   lang: '',
   loading: false,
@@ -18,6 +20,9 @@ export const CommonSlice = createSlice({
   name: 'common',
   initialState,
   reducers: {
+    setIsInit: (state, { payload }) => {
+      state.isInit = payload;
+    },
     setLang: (state, { payload }) => {
       state.lang = payload;
     },
@@ -33,7 +38,12 @@ export const CommonSlice = createSlice({
   },
 });
 
-export const { setLang, setLoading, setLoadingTimer, setSearchText } =
-  CommonSlice.actions;
+export const {
+  setIsInit,
+  setLang,
+  setLoading,
+  setLoadingTimer,
+  setSearchText,
+} = CommonSlice.actions;
 
 export default CommonSlice.reducer;

@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Space } from 'antd';
+import sdk from 'hcstore/sdk';
 
 import Item from './daoItem';
 
@@ -69,7 +70,15 @@ const DAOList = () => {
   const DAOList = testData;
 
   useEffect(() => {
-    dispatch(getDAOList({ chain: chainId, owner: address }));
+    // dispatch(getDAOList({ chain: chainId, owner: address }));
+    const getData = async () => {
+      const res = await sdk.user.methods.getUserLikeDAOs();
+      console.log('home dao list', res);
+      // const res1 = await sdk.user.methods.getUser();
+      // console.log('res1', res1);
+    };
+
+    getData();
   }, []);
 
   return (
