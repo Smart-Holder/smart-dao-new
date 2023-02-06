@@ -180,12 +180,12 @@ const App = () => {
           }
 
           .bottom-item .num {
-            height: 60px;
+            height: 55px;
             font-size: 40px;
             font-family: PingFangSC-Regular, PingFang SC;
             font-weight: 400;
             color: #0e0e0e;
-            line-height: 60px;
+            line-height: 55px;
           }
         `}
       </style>
