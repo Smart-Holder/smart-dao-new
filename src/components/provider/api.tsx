@@ -64,7 +64,7 @@ const App = (props: any) => {
   useEffect(() => {
     const init = async () => {
       try {
-        const res1 = await initialize(address, chainId);
+        const res1 = await initialize(address);
         const token = await sdk.utils.methods.qiniuToken();
 
         if (token) {

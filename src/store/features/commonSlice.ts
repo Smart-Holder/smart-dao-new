@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { disconnect } from './walletSlice';
 
 export interface CommonState {
   isInit: boolean; // init api, qiniu and user. '/provider/api.tsx'
@@ -35,6 +36,12 @@ export const CommonSlice = createSlice({
     setSearchText: (state, { payload }) => {
       state.searchText = payload;
     },
+  },
+  extraReducers(builder) {
+    builder.addCase(disconnect, (state) => {
+      console.log('disconnect extraReducer: delete isInit');
+      state.isInit = false;
+    });
   },
 });
 

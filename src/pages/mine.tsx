@@ -12,8 +12,7 @@ import { getDAOList } from '@/store/features/daoSlice';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
 import BasicLayout from '@/components/layout/basic';
-import DAO from '@/components/mine';
-import Info from '@/components/mine/info';
+import Mine from '@/components/mine';
 
 // const items: TabsProps['items'] = [
 //   {
@@ -28,7 +27,7 @@ import Info from '@/components/mine/info';
 //   },
 // ];
 
-export default function Mine() {
+export default function App() {
   const dispatch = useAppDispatch();
 
   // const { chainId, address } = useAppSelector((store) => store.wallet);
@@ -67,19 +66,7 @@ export default function Mine() {
           <div className={styles.title2}>Welcome to SmartDAO</div>
         </div>
         <div className={styles.box}>
-          <Space split={<Divider type="vertical" />}>
-            <Button type="link" onClick={handleDAOClick}>
-              我的DAO
-            </Button>
-            <Button type="link" onClick={handleInfoClick}>
-              个人信息
-            </Button>
-          </Space>
-          {/* <Tabs defaultActiveKey="1" items={items} onChange={onChange} /> */}
-          <div>
-            {active === 1 && <DAO />}
-            {active === 2 && <Info />}
-          </div>
+          <Mine />
         </div>
       </Content>
     </BasicLayout>

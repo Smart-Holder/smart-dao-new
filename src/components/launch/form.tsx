@@ -1,6 +1,16 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { Button, Checkbox, Form, Input, Upload, Tag, Space, Modal } from 'antd';
+import {
+  Button,
+  Checkbox,
+  Form,
+  Input,
+  Upload,
+  Tag,
+  Space,
+  Modal,
+  Image as Img,
+} from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useIntl } from 'react-intl';
 
@@ -8,11 +18,13 @@ import { validateChinese, validateEthAddress } from '@/utils/validator';
 import { getCookie } from '@/utils/cookie';
 import { hexRandomNumber } from '@/utils';
 import { validateImage, getBase64 } from '@/utils/image';
+import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 import iconSuccess from '/public/images/icon-success.png';
+import { deployAssetSalesDAO } from '@/store/features/daoSlice';
 
 const validateMessages = {
   required: '${label} is required!',
@@ -22,6 +34,9 @@ const validateMessages = {
 };
 
 const FormGroup: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const { chainId, address, web3 } = useAppSelector((store) => store.wallet);
+
   const [members, setMembers] = useState([
     {
       id: hexRandomNumber(),
@@ -41,11 +56,27 @@ const FormGroup: React.FC = () => {
   const [form] = Form.useForm();
 
   const onFinish = (values: any) => {
-    console.log('Success:', values);
+    const params = {
+      chain: chainId,
+      address: address,
+      operator: address,
+      web3: web3,
+      memberBaseName: values.name + '-NFTP',
+      ...values,
+      members,
+      image: avatar,
+
+      defaultVoteTime: 0,
+      assetIssuanceTax: 6000,
+      assetCirculationTax: 1000,
+    };
+    console.log('form:', params);
+
+    dispatch(deployAssetSalesDAO(params));
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
+    console.log('form Failed:', errorInfo);
   };
 
   const removeMember = (value: string) => {
@@ -182,9 +213,20 @@ const FormGroup: React.FC = () => {
                   beforeUpload={beforeUpload}
                   onChange={handleChange}
                 >
-                  <div>
-                    <PlusOutlined />
-                  </div>
+                  {avatar ? (
+                    <Img
+                      style={{ borderRadius: 10, cursor: 'pointer' }}
+                      src={avatar}
+                      width={100}
+                      height={100}
+                      preview={false}
+                      alt="image"
+                    />
+                  ) : (
+                    <div>
+                      <PlusOutlined />
+                    </div>
+                  )}
                 </Upload>
 
                 <span className="upload-desc">Upload Images: png、jpeg… </span>

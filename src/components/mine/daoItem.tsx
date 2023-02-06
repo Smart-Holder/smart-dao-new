@@ -21,22 +21,22 @@ export default function Info(props: any) {
       <Image
         style={{ cursor: 'pointer', borderRadius: 10 }}
         src={test}
-        width={98}
-        height={98}
+        width={144}
+        height={144}
         preview={false}
         alt="avatar"
         onClick={handleClick}
       />
-      <p>{props.data.name}</p>
+      <div className="text">{props.data.name}</div>
       <style jsx>
         {`
-          p {
-            margin-top: 7px;
-            font-size: 12px;
+          .text {
+            margin-top: 24px;
+            font-size: 20px;
             font-family: PingFangSC-Regular, PingFang SC;
             font-weight: 400;
             color: #232323;
-            line-height: 12px;
+            line-height: 24px;
             text-align: center;
           }
         `}

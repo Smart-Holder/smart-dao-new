@@ -1,7 +1,7 @@
 import React, { useState, MouseEvent, createRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { Layout, Dropdown, Space, Image as Img } from 'antd';
+import { Layout, Dropdown, Space, Image as Img, Avatar } from 'antd';
 import { DownOutlined, GlobalOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { useRouter } from 'next/router';
@@ -123,14 +123,15 @@ const Menu = () => {
           onClick={handleDropdownClick}
         >
           {image ? (
-            <Img
-              style={{ borderRadius: '50%' }}
-              src={image}
-              width={32}
-              height={32}
-              preview={false}
-              alt="avatar"
-            />
+            // <Img
+            //   style={{ borderRadius: '50%' }}
+            //   src={image}
+            //   width={32}
+            //   height={32}
+            //   preview={false}
+            //   alt="avatar"
+            // />
+            <Avatar size={32} src={image} style={{ backgroundColor: '#fff' }} />
           ) : (
             <Image src={iconUser} alt="user" width={32} height={32} />
           )}
