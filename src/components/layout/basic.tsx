@@ -3,9 +3,10 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { Layout } from 'antd';
 
+import Header from '@/components/header';
 import Footer from '@/components/footer';
 
-const Header = dynamic(() => import('@/components/header'), { ssr: false });
+// const Header = dynamic(() => import('@/components/header'), { ssr: false });
 
 export default function BasicLayout({ children }: { children: ReactElement }) {
   return (

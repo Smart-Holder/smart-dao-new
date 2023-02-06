@@ -12,9 +12,7 @@ const App = () => {
           <div className={styles.title1}>Chose your mo ban elements</div>
           <div className={styles.title2}>Welcome to SmartDAO</div>
         </div>
-        <div className={styles.box} style={{ padding: '68px 55px' }}>
-          Content
-        </div>
+        <div className={styles.box}>Content</div>
       </Layout.Content>
     </DashboardLayout>
   );

@@ -25,7 +25,7 @@ function getItem(
 const items: MenuProps['items'] = [
   getItem('基础设置', 'sub1', <MailOutlined />, [
     getItem('欢迎页', '/launch'),
-    getItem('基础信息', '/launch/info'),
+    getItem('基础信息', '/launch/information'),
     getItem('业务模版', '/launch/setting'),
   ]),
 ];

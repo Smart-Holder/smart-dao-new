@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import { Layout } from 'antd';
 
 import DashboardLayout from '@/components/layout/dashboard';
-import Tax from '@/containers/dashboard/basic/tax';
+import Votes from '@/containers/dashboard/governance/votes';
 
 import styles from '@/styles/content.module.css';
 
@@ -16,7 +16,7 @@ const App = () => {
           <div className={styles.title2}>Welcome to SmartDAO</div>
         </div>
         <div className={styles.box}>
-          <Tax />
+          <Votes />
         </div>
       </Layout.Content>
     </DashboardLayout>

@@ -1,6 +1,7 @@
 import { Layout } from 'antd';
 
 import LaunchLayout from '@/components/layout/launch';
+import Index from '@/containers/launch';
 
 import styles from '@/styles/content.module.css';
 
@@ -14,7 +15,9 @@ const Home = () => {
           </div>
           <div className={styles.title2}>Welcome to SmartDAO</div>
         </div>
-        <div className={styles.box}></div>
+        <div className={styles.box}>
+          <Index />
+        </div>
       </Layout.Content>
     </LaunchLayout>
   );

@@ -42,7 +42,7 @@ const items: MenuProps['items'] = [
   ]),
   getItem('Governance', '/dashboard/governance', <MailOutlined />, [
     getItem('发起提案', '/dashboard/governance/proposal'),
-    getItem('投票站', '/dashboard/governance/vote'),
+    getItem('投票站', '/dashboard/governance/votes'),
   ]),
   getItem('财务管理', '/dashboard/financial', <MailOutlined />, [
     getItem('Assets', '/dashboard/financial/assets'),

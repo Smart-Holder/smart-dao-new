@@ -1,10 +1,16 @@
 import React from 'react';
 import { Layout, Space } from 'antd';
 import router from 'next/router';
+import dynamic from 'next/dynamic';
 
 import Search from '@/components/search';
-import Menu from '@/components/header/menu';
-import Language from '@/components/header/language';
+// import Menu from '@/components/header/menu';
+// import Language from '@/components/header/language';
+
+const Menu = dynamic(() => import('@/components/header/menu'), { ssr: false });
+const Language = dynamic(() => import('@/components/header/language'), {
+  ssr: false,
+});
 
 const Header = () => {
   const handleClick = () => {

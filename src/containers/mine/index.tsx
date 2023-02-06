@@ -3,7 +3,6 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { Layout, Tabs } from 'antd';
 const { Content } = Layout;
-import styles from '@/styles/mine.module.css';
 import { getCookie } from '@/utils/cookie';
 import type { TabsProps } from 'antd';
 import { Divider, Space, Button } from 'antd';

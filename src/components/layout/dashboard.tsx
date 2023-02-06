@@ -3,10 +3,11 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { Layout, Image, Space, Button } from 'antd';
 
+import Header from '@/components/header';
 import Sider from '@/components/sider/dashbordSider';
 import Footer from '@/components/footer';
 
-const Header = dynamic(() => import('@/components/header'), { ssr: false });
+// const Header = dynamic(() => import('@/components/header'), { ssr: false });
 
 export default function BasicLayout({ children }: { children: ReactElement }) {
   return (
