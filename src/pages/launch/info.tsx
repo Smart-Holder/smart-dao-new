@@ -6,7 +6,7 @@ import LaunchLayout from '@/components/layout/launch';
 
 import styles from '@/styles/content.module.css';
 
-const Form = dynamic(() => import('@/components/launch/form'), { ssr: false });
+const Form = dynamic(() => import('@/containers/launch/form'), { ssr: false });
 
 const App = () => {
   return (

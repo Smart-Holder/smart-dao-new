@@ -3,7 +3,7 @@ import { Modal, Input, Button } from 'antd';
 import { ExclamationOutlined } from '@ant-design/icons';
 
 import Slider from '@/components/slider';
-import Footer from '@/components/launch/steps/footer';
+import Footer from '@/containers/launch/steps/footer';
 
 import { useAppDispatch } from '@/store/hooks';
 import { prevStep, nextStep } from '@/store/features/daoSlice';

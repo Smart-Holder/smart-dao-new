@@ -7,7 +7,7 @@ import LaunchLayout from '@/components/layout/launch';
 
 import styles from '@/styles/content.module.css';
 
-const Setting = dynamic(() => import('@/components/launch/setting'), {
+const Setting = dynamic(() => import('@/containers/launch/setting'), {
   ssr: false,
 });
 

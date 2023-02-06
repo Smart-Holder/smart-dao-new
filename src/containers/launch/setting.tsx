@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Button, Space, Steps } from 'antd';
 
-import Template from '@/components/launch/steps/template';
-import Tax from '@/components/launch/steps/tax';
-import Vote from '@/components/launch/steps/vote';
-import Executor from '@/components/launch/steps/executor';
-import Review from '@/components/launch/steps/review';
+import Template from '@/containers/launch/steps/template';
+import Tax from '@/containers/launch/steps/tax';
+import Vote from '@/containers/launch/steps/vote';
+import Executor from '@/containers/launch/steps/executor';
+import Review from '@/containers/launch/steps/review';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { setStep, prevStep, nextStep } from '@/store/features/daoSlice';

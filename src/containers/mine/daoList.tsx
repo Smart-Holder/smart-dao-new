@@ -3,7 +3,7 @@ import { Space, Button, Divider } from 'antd';
 import { getDAOList } from '@/store/features/daoSlice';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
-import Item from '@/components/mine/daoItem';
+import Item from '@/containers/mine/daoItem';
 
 import { getCookie } from '@/utils/cookie';
 
@@ -37,21 +37,21 @@ export default function List() {
     <div className="dao-list-wrap">
       <Space size={50} split={<Divider className="divider" type="vertical" />}>
         <Button
-          className={`button ${active === 1 ? 'active' : ''}`}
+          className={`list-button ${active === 1 ? 'active' : ''}`}
           type="link"
           onClick={handleClick1}
         >
           我创建的
         </Button>
         <Button
-          className={`button ${active === 2 ? 'active' : ''}`}
+          className={`list-button ${active === 2 ? 'active' : ''}`}
           type="link"
           onClick={handleClick2}
         >
           我加入的
         </Button>
         <Button
-          className={`button ${active === 3 ? 'active' : ''}`}
+          className={`list-button ${active === 3 ? 'active' : ''}`}
           type="link"
           onClick={handleClick3}
         >
@@ -83,7 +83,7 @@ export default function List() {
             border-color: #000;
           }
 
-          .dao-list-wrap :global(.button) {
+          .dao-list-wrap :global(.list-button) {
             height: 40px;
 
             height: 30px;

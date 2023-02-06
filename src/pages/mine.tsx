@@ -12,7 +12,7 @@ import { getDAOList } from '@/store/features/daoSlice';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
 import BasicLayout from '@/components/layout/basic';
-import Mine from '@/components/mine';
+import Mine from '@/containers/mine';
 
 // const items: TabsProps['items'] = [
 //   {

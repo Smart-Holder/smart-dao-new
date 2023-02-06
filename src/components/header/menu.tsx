@@ -9,9 +9,9 @@ import { useRouter } from 'next/router';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { disconnect } from '@/store/features/walletSlice';
 
-import ConnectModal from '@/components/connect/modal';
-import CreateModal from '@/components/create/modal';
-import InfoModal from '@/components/create/info';
+import WalletModal from '@/components/modal/walletModal';
+import CreateModal from '@/components/modal/createModal';
+import InfoModal from '@/components/modal/infoModal';
 import Search from '@/components/search';
 
 import { getCookie } from '@/utils/cookie';
@@ -50,7 +50,7 @@ const Menu = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const connectModal: any = createRef();
+  const walletModal: any = createRef();
   const createModal: any = createRef();
   const infoModal: any = createRef();
 
@@ -58,7 +58,7 @@ const Menu = () => {
     e.preventDefault();
 
     if (!getCookie('address')) {
-      connectModal.current.show();
+      walletModal.current.show();
       return;
     }
   };
@@ -142,7 +142,7 @@ const Menu = () => {
         </Space>
       </Dropdown>
 
-      <ConnectModal ref={connectModal} />
+      <WalletModal ref={walletModal} />
       <CreateModal ref={createModal} />
       <InfoModal ref={infoModal} />
 

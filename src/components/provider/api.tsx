@@ -37,28 +37,28 @@ const App = (props: any) => {
   const dispatch = useAppDispatch();
   const { lang, isInit } = useAppSelector((store) => store.common);
   const { address, chainId } = useAppSelector((store) => store.wallet);
-  const [languageConfig, setConfig] = useState({}) as any;
+  const [init, setInit] = useState(false);
 
-  // init api and get qiniu token
-  // useEffect(() => {
-  //   const init = async () => {
-  //     try {
-  //       const res1 = await initialize();
+  // init api
+  useEffect(() => {
+    const init = async () => {
+      try {
+        const res1 = await initialize();
 
-  //       setInit(true);
+        setInit(true);
 
-  //       const token = await sdk.utils.methods.qiniuToken();
+        // const token = await sdk.utils.methods.qiniuToken();
 
-  //       if (token) {
-  //         setCookie('qiniuToken', token);
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
+        // if (token) {
+        //   setCookie('qiniuToken', token);
+        // }
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  //   init();
-  // }, []);
+    init();
+  }, []);
 
   // 连接钱包后，init api, qiniu and user
   useEffect(() => {
@@ -88,9 +88,9 @@ const App = (props: any) => {
     }
   }, [address, chainId]);
 
-  // if (!isInit) {
-  //   return null;
-  // }
+  if (!init) {
+    return null;
+  }
 
   return <>{props.children}</>;
 };

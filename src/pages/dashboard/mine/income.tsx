@@ -13,7 +13,7 @@ const App = () => {
           <div className={styles.title2}>Welcome to SmartDAO</div>
         </div>
         <div className={styles.box} style={{ padding: '68px 55px' }}>
-          Income
+          Content
         </div>
       </Layout.Content>
     </DashboardLayout>

@@ -6,7 +6,7 @@ import BasicLayout from '@/components/layout/basic';
 // import Form from '@/components/launch/form';
 import styles from '@/styles/content.module.css';
 
-const Form = dynamic(() => import('@/components/launch/form'), { ssr: false });
+const Form = dynamic(() => import('@/containers/launch/form'), { ssr: false });
 
 const { Content } = Layout;
 

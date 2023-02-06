@@ -1,7 +1,7 @@
 import React, { createRef } from 'react';
 import { Image, Typography, Space, Button } from 'antd';
 
-import InfoModal from '@/components/create/info';
+import InfoModal from '@/components/modal/infoModal';
 
 const { Title, Paragraph, Text, Link } = Typography;
 

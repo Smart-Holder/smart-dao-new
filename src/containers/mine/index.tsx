@@ -11,8 +11,8 @@ import { Divider, Space, Button } from 'antd';
 import { getDAOList } from '@/store/features/daoSlice';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
-import DAO from '@/components/mine/daoList';
-import Info from '@/components/mine/info';
+import DAO from '@/containers/mine/daoList';
+import Info from '@/containers/mine/info';
 
 export default function Mine() {
   const dispatch = useAppDispatch();

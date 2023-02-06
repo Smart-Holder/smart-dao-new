@@ -3,13 +3,9 @@ import dynamic from 'next/dynamic';
 import { Layout } from 'antd';
 
 import DashboardLayout from '@/components/layout/dashboard';
-// import Setting from '@/components/launch/setting';
+import Information from '@/containers/dashboard/mine/information';
 
 import styles from '@/styles/content.module.css';
-
-const Setting = dynamic(() => import('@/components/launch/setting'), {
-  ssr: false,
-});
 
 const App = () => {
   return (
@@ -20,7 +16,7 @@ const App = () => {
           <div className={styles.title2}>Welcome to SmartDAO</div>
         </div>
         <div className={styles.box} style={{ padding: '68px 55px' }}>
-          <Setting />
+          <Information />
         </div>
       </Layout.Content>
     </DashboardLayout>

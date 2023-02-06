@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Space, Steps } from 'antd';
 
 import Slider from '@/components/slider';
-import Footer from '@/components/launch/steps/footer';
+import Footer from '@/containers/launch/steps/footer';
 
 import { useAppDispatch } from '@/store/hooks';
 import { prevStep, nextStep } from '@/store/features/daoSlice';
