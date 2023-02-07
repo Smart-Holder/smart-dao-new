@@ -22,7 +22,7 @@ const theme = {
   },
   components: {
     Button: {
-      // colorPrimary: '#2F4CDD',
+      colorPrimary: '#2F4CDD',
     },
   },
 };
