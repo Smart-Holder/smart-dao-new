@@ -1,5 +1,5 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
-import { Button, Input, Modal, Typography, Image } from 'antd';
+import { Button, Input, Modal, Typography, Image, message } from 'antd';
 import { Checkbox, Form, Upload, Tag, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
@@ -18,11 +18,11 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 export default function Info() {
   const dispatch = useAppDispatch();
   const { userInfo } = useAppSelector((store) => store.user);
-  const [image, setImage] = useState();
+  const [image, setImage] = useState(userInfo.image);
 
   const initialValues = {
-    nickname: '',
-    image: '',
+    nickname: userInfo.nickname,
+    // image: userInfo.image,
   };
 
   const onFinish = (values: any) => {
@@ -40,6 +40,7 @@ export default function Info() {
           if (res && res.nickname) {
             dispatch(setUserInfo(res));
           }
+          message.success('success!');
         });
       });
     }
@@ -72,7 +73,7 @@ export default function Info() {
 
       <Form
         name="info"
-        initialValues={{ remember: true }}
+        initialValues={initialValues}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
@@ -89,8 +90,8 @@ export default function Info() {
           ]}
         >
           <Input
-            className="input"
-            prefix={<span style={{ color: '#000' }}>Name:</span>}
+            className="smart-input"
+            prefix={<span className="smart-input-prefix">Name:</span>}
           />
         </Form.Item>
 
@@ -159,13 +160,6 @@ export default function Info() {
             font-family: AppleSystemUIFont;
             color: #969ba0;
             line-height: 18px;
-          }
-
-          .info-wrap :global(.input) {
-            height: 76px;
-            margin-top: 39px;
-
-            font-size: 18px;
           }
 
           .info-wrap .upload-desc {

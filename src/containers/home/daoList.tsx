@@ -1,13 +1,14 @@
-import { useEffect } from 'react';
-import { Space } from 'antd';
+import { useEffect, useState } from 'react';
+import { Col, Row, Space } from 'antd';
 import sdk from 'hcstore/sdk';
 
 import Item from './daoItem';
 
-import { getDAOList } from '@/store/features/daoSlice';
+import { getDAOList, setDAOList } from '@/store/features/daoSlice';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
 import { getCookie } from '@/utils/cookie';
+import { debounce } from '@/utils';
 
 const testData = [
   {
@@ -66,16 +67,37 @@ const DAOList = () => {
   const chainId = Number(getCookie('chainId'));
   const address = getCookie('address');
 
-  // const { DAOList } = useAppSelector((store) => store.dao);
-  const DAOList = testData;
+  const { DAOList } = useAppSelector((store) => store.dao);
+  // const DAOList = testData;
+  const [width, setWidth] = useState('');
+
+  const onResize = () => {
+    if (DAOList.length > 0) {
+      const el = document.querySelector('.test') as any;
+
+      const col = Math.floor(el.offsetWidth / (196 + 15));
+      const w = 100 / col;
+      setWidth(w ? w + '%' : 'auto');
+    }
+  };
+
+  useEffect(() => {
+    onResize();
+  }, [DAOList]);
+
+  useEffect(() => {
+    window.addEventListener('resize', debounce(onResize, 200));
+    return () => {
+      window.removeEventListener('resize', debounce(onResize, 200));
+    };
+  }, []);
 
   useEffect(() => {
     // dispatch(getDAOList({ chain: chainId, owner: address }));
     const getData = async () => {
-      const res = await sdk.user.methods.getUserLikeDAOs();
-      console.log('home dao list', res);
-      // const res1 = await sdk.user.methods.getUser();
-      // console.log('res1', res1);
+      const res = await sdk.dao.methods.getAllDAOs({ chain: chainId });
+      // console.log('home dao list', res);
+      dispatch(setDAOList(res));
     };
 
     getData();
@@ -86,11 +108,28 @@ const DAOList = () => {
       <div className="h1">Discovery! Most Favorites Items</div>
       <div className="h2">Lorem ipsum dolor sit amet, consectetur</div>
 
-      <Space size={[15, 59]} wrap>
+      {/* <Row justify="center" gutter={[30, 59]}>
+        {DAOList.map((item: any) => (
+          <Col key={item.id}>
+            <Item data={item} />
+          </Col>
+        ))}
+      </Row> */}
+
+      <div className="test">
+        {width &&
+          DAOList.map((item: any) => (
+            <div className="test2" key={item.id}>
+              <Item data={item} />
+            </div>
+          ))}
+      </div>
+
+      {/* <Space size={[15, 59]} wrap>
         {DAOList.map((item: any) => (
           <Item data={item} key={item.id} />
         ))}
-      </Space>
+      </Space> */}
 
       <style jsx>{`
         .h1 {
@@ -108,6 +147,18 @@ const DAOList = () => {
           font-weight: 400;
           color: #969ba0;
           line-height: 18px;
+        }
+
+        .test {
+          display: flex;
+          flex-wrap: wrap;
+        }
+
+        .test2 {
+          display: flex;
+          justify-content: center;
+          flex-basis: ${width};
+          margin-bottom: 59px;
         }
       `}</style>
     </div>
