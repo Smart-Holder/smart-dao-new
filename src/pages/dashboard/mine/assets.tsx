@@ -1,4 +1,4 @@
-import { Layout, Table } from 'antd';
+import { Layout, MenuProps, Space, Select, Table } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
 
 import DashboardLayout from '@/components/layout/dashboard';
@@ -8,7 +8,7 @@ import styles from './styles.module.css';
 import Counts from './components/counts';
 import Filters from './components/filters';
 
-const App = () => {
+const Assets = () => {
   return (
     <DashboardLayout>
       <Layout.Content className={contentStyles['dashboard-content']}>
@@ -16,8 +16,6 @@ const App = () => {
           <Counts
             items={[
               { num: 12456, title: 'All Acounts' },
-              { num: 31232, title: 'All Acounts' },
-              { num: 31232, title: 'All Acounts' },
               { num: 31232, title: 'All Acounts' },
             ]}
           />
@@ -85,4 +83,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Assets;
