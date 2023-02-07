@@ -1,8 +1,10 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import commonSlice from './features/commonSlice';
 import counterSlice from './features/counterSlice';
 import movieSlice from './features/movieSlice';
 import walletSlice from './features/walletSlice';
 import daoSlice from './features/daoSlice';
+import userSlice from './features/userSlice';
 
 // configureStore创建一个redux数据
 const store = configureStore({
@@ -15,10 +17,12 @@ const store = configureStore({
     }),
   // 合并多个Slice
   reducer: {
-    counter: counterSlice,
+    counter: counterSlice, // test
     movie: movieSlice, // test async
+    common: commonSlice,
     wallet: walletSlice,
     dao: daoSlice,
+    user: userSlice,
   },
 });
 

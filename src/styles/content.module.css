@@ -1,0 +1,109 @@
+/* -------home------ */
+.content {
+  display: flex;
+  flex-direction: column;
+  /* height: calc(100vh - 120px); */
+  min-height: calc(100vh - 148px) !important;
+  padding: 0 54px;
+}
+
+.content .title1 {
+  height: 42px;
+  margin-top: 31px;
+  font-size: 24px;
+  font-weight: 400;
+  color: #000000;
+  line-height: 42px;
+  text-align: center;
+}
+
+.content .title2 {
+  height: 27px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #3c4369;
+  line-height: 27px;
+  text-align: center;
+}
+
+.content .box {
+  flex: 1;
+  padding: 35px 42px;
+  margin-top: 31px;
+  background: #fff;
+  border-radius: 10px;
+}
+
+/* ---------launch---------- */
+.launch-content {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 148px) !important;
+  padding: 40px 52px 0 26px;
+  margin-left: 240px;
+  text-align: left;
+}
+
+.launch-content .title1 {
+  height: 42px;
+  font-size: 24px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #000000;
+  line-height: 42px;
+}
+
+.launch-content .title2 {
+  height: 27px;
+  margin-top: 3px;
+  font-size: 16px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #969ba0;
+  line-height: 27px;
+}
+
+.launch-content .box {
+  flex: 1;
+  padding: 34px 32px;
+  margin-top: 30px;
+  background: #fff;
+  border-radius: 12px;
+}
+
+/* ---------dashboard---------- */
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 148px) !important;
+  padding: 40px 52px 0 26px;
+  margin-left: 240px;
+  text-align: left;
+}
+
+.dashboard-content .title1 {
+  height: 42px;
+  font-size: 24px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #000000;
+  line-height: 42px;
+}
+
+.dashboard-content .title2 {
+  height: 27px;
+  margin-top: 3px;
+  font-size: 16px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #969ba0;
+  line-height: 27px;
+}
+
+.dashboard-content .box {
+  flex: 1;
+  padding: 34px 32px;
+  margin-top: 30px;
+  background: #fff;
+  border-radius: 12px;
+}

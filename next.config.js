@@ -21,7 +21,7 @@ const externals = function ({ context, request }, callback) {
 };
 
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Important: return the modified config
     if (config.externals) {

@@ -83,14 +83,12 @@ export const walletSlice = createSlice({
       state.balance = payload;
     },
     disconnect: (state) => {
-      // todo
       state.provider = undefined;
       state.connectType = 0;
       state.address = '';
       state.chainId = 0;
       state.balance = 0;
-      // commit("SET_DAO_LIST", []);
-      // commit("SET_CURRENT_DAO", { name: "" });
+      state.web3 = null;
       clearCookie('address');
       clearCookie('chainId');
       clearCookie('connectType');
@@ -103,21 +101,20 @@ export const walletSlice = createSlice({
   // 包括由 createAsyncThunk 或其他slice生成的actions。
   extraReducers(builder) {
     builder
-      .addCase(connectWallet.pending, (state) => {
-        console.log('connect pending!');
-      })
       .addCase(connectWallet.fulfilled, (state, { payload }) => {
         console.log('connect fulfilled', payload);
-        const { chainId, address, connectType } = payload;
+        const { provider, chainId, address, connectType } = payload;
 
-        initApi(address, chainId);
+        // initApi(address, chainId);
 
         setCookie('address', address, 30);
         setCookie('chainId', chainId, 30);
         setCookie('connectType', connectType, 30);
 
+        state.provider = provider;
+        state.web3 = new Web3(provider);
         state.address = address;
-        state.chainId = chainId;
+        state.chainId = Number(chainId);
         state.connectType = connectType;
       })
       .addCase(connectWallet.rejected, (state, err) => {
