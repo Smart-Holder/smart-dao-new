@@ -10,17 +10,23 @@ const { Content } = Layout;
 export default function Home() {
   return (
     <BasicLayout>
-      <Content className={styles.content}>
+      <Content className={styles['content-home']}>
         <div>
           <div className={styles.title1}>
             Welcome! Discovery the hole magic worlds !
           </div>
           <div className={styles.title2}>Welcome to SmartDAO</div>
         </div>
-        {/* <div className={`${styles.box} ${styles['box-scroll']}`}> */}
+        {/* <div className={styles.space}></div> */}
         <div className={styles.box}>
           <DAOList />
         </div>
+        {/* <div className={styles.space2}></div> */}
+        {/* <div className={styles['box-wrap']}>
+          <div className={styles.box}>
+            <DAOList />
+          </div>
+        </div> */}
       </Content>
     </BasicLayout>
   );

@@ -1,5 +1,11 @@
 :root {
-  --max-width: 1100px;
+  --color-primary: #546ff6;
+  --color-secondary: #2f4cdd;
+
+  --button-primary-color: #2f4cdd;
+  --button-secondary-color: #546ff6;
+
+  /* --max-width: 1100px;
   --border-radius: 12px;
   --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
     'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
@@ -37,7 +43,7 @@
   --callout-rgb: 238, 240, 241;
   --callout-border-rgb: 172, 175, 176;
   --card-rgb: 180, 185, 188;
-  --card-border-rgb: 131, 134, 135;
+  --card-border-rgb: 131, 134, 135; */
 }
 
 * {
@@ -60,4 +66,50 @@ a {
 
 .ant-modal .ant-modal-content {
   border-radius: 30px;
+}
+
+/* ------------ smart-input v1 ------------ */
+/* .smart-input {
+  height: 76px;
+  margin-top: 39px;
+  font-size: 18px;
+}
+
+.smart-input .smart-input-prefix {
+  padding-right: 10px;
+  color: #000;
+} */
+
+/* ------------ smart-input v2 ------------ */
+.smart-input {
+  height: 76px;
+  margin-top: 39px;
+
+  font-size: 16px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  line-height: 24px;
+
+  background-color: #e8ffee;
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+}
+
+.smart-input .ant-input {
+  font-size: 16px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  line-height: 24px;
+
+  background-color: #e8ffee;
+  border: 0;
+  outline: 0;
+}
+
+.smart-input .smart-input-prefix {
+  padding-right: 10px;
+  margin-right: 6px;
+  color: #000;
+  border-right: 2px solid var(--color-secondary);
 }
