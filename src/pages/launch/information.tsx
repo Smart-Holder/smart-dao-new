@@ -6,7 +6,9 @@ import LaunchLayout from '@/components/layout/launch';
 
 import styles from '@/styles/content.module.css';
 
-const Form = dynamic(() => import('@/containers/launch/form'), { ssr: false });
+const Start = dynamic(() => import('@/containers/launch/start'), {
+  ssr: false,
+});
 
 const App = () => {
   return (
@@ -15,7 +17,7 @@ const App = () => {
         <div className={styles.title1}>Welcome! Tianxie nide gerenxinxi!</div>
         <div className={styles.title2}>Welcome to SmartDAO</div>
         <div className={styles.box}>
-          <Form />
+          <Start />
         </div>
       </Layout.Content>
     </LaunchLayout>

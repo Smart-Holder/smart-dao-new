@@ -28,7 +28,7 @@ function getItem(
 
 const items: MenuProps['items'] = [
   getItem('Mine', '/dashboard/mine', <MailOutlined />, [
-    getItem('Home', '/dashboard/mine'),
+    getItem('Home', '/dashboard/mine/home'),
     getItem('Information', '/dashboard/mine/information'),
     getItem('Assets', '/dashboard/mine/assets'),
     getItem('Order', '/dashboard/mine/order'),

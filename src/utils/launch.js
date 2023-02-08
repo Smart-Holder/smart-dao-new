@@ -69,9 +69,15 @@ export function setMakeDAOStorage(key, value) {
 
   const data = JSON.parse(localStorage.getItem('makeDAO') || '{}');
 
+  if (!data[id]) {
+    data[id] = {};
+  }
+
   // reset data
   if (key === 'template' && data[id]?.template?.type !== value.type) {
-    data[id] = {};
+    data[id] = {
+      start: data[id].start,
+    };
   }
 
   data[id][key] = value;

@@ -8,11 +8,13 @@ import { useAppDispatch } from '@/store/hooks';
 import { prevStep, nextStep } from '@/store/features/daoSlice';
 
 import { validateEthAddress } from '@/utils/validator';
+import { setMakeDAOStorage, getMakeDAOStorage } from '@/utils/launch';
 
 const App = () => {
   const dispatch = useAppDispatch();
-  const [tax1, setTax1] = useState(0);
-  const [tax2, setTax2] = useState(0);
+
+  const storageValues = getMakeDAOStorage('executor') || {};
+
   const [form] = Form.useForm();
 
   const onFinish = (values: any) => {};
@@ -27,7 +29,8 @@ const App = () => {
 
   const next = () => {
     form.validateFields().then((res) => {
-      console.log('Success:', res);
+      console.log('form:', res);
+      setMakeDAOStorage('executor', res);
       dispatch(nextStep());
     });
   };
@@ -42,12 +45,13 @@ const App = () => {
 
       <Form
         form={form}
+        initialValues={storageValues}
         autoComplete="off"
         requiredMark={false}
         validateTrigger="onBlur"
       >
         <Form.Item
-          name="address"
+          name="executor"
           rules={[{ required: true }, { validator: validateEthAddress }]}
         >
           <Input

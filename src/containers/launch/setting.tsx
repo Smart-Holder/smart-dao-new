@@ -8,7 +8,12 @@ import Executor from '@/containers/launch/steps/executor';
 import Review from '@/containers/launch/steps/review';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
-import { setStep, prevStep, nextStep } from '@/store/features/daoSlice';
+import {
+  setStep,
+  prevStep,
+  nextStep,
+  resetStep,
+} from '@/store/features/daoSlice';
 import { getCookie } from '@/utils/cookie';
 
 const items = [
@@ -23,12 +28,16 @@ const App = () => {
   const { step } = useAppSelector((store) => store.dao);
 
   useEffect(() => {
-    const s = Number(localStorage.getItem('step'));
-
-    if (s) {
-      setStep(s);
-    }
+    dispatch(resetStep());
   }, []);
+
+  // useEffect(() => {
+  //   const s = Number(localStorage.getItem('step'));
+
+  //   if (s) {
+  //     setStep(s);
+  //   }
+  // }, []);
 
   const next = () => {
     // setCurrent(current + 1);

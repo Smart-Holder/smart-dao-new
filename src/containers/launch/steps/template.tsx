@@ -1,20 +1,21 @@
 import { Space } from 'antd';
 
 import { useAppDispatch } from '@/store/hooks';
-import { nextStep } from '@/store/features/daoSlice';
+import { nextStep, resetStep } from '@/store/features/daoSlice';
 
-// import { setMakeDAOStorage } from '@/utils/launch';
+import { setMakeDAOStorage } from '@/utils/launch';
+import { useEffect } from 'react';
 
 const App = () => {
   const dispatch = useAppDispatch();
 
   const handleClick1 = () => {
-    // setMakeDAOStorage('template', { type: 'DAO' });
+    setMakeDAOStorage('template', { type: 'DAO' });
     dispatch(nextStep());
   };
 
   const handleClick2 = () => {
-    // setMakeDAOStorage('template', { type: 'DAC' });
+    setMakeDAOStorage('template', { type: 'DAO' });
     dispatch(nextStep());
   };
 

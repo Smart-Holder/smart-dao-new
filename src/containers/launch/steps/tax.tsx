@@ -7,17 +7,26 @@ import Footer from '@/containers/launch/steps/footer';
 import { useAppDispatch } from '@/store/hooks';
 import { prevStep, nextStep } from '@/store/features/daoSlice';
 
+import { setMakeDAOStorage, getMakeDAOStorage } from '@/utils/launch';
+
 const App = () => {
   const dispatch = useAppDispatch();
-  const [tax1, setTax1] = useState(0);
-  const [tax2, setTax2] = useState(0);
+
+  const storageValues = getMakeDAOStorage('tax') || {};
+
+  const [assetIssuanceTax, setAssetIssuanceTax] = useState(
+    storageValues.assetIssuanceTax || 60,
+  );
+  const [assetCirculationTax, setAssetCirculationTax] = useState(
+    storageValues.assetCirculationTax || 10,
+  );
 
   const onTaxChange1 = (value: number) => {
-    console.log(value);
+    setAssetIssuanceTax(value);
   };
 
   const onTaxChange2 = (value: number) => {
-    console.log(value);
+    setAssetCirculationTax(value);
   };
 
   const prev = () => {
@@ -25,6 +34,11 @@ const App = () => {
   };
 
   const next = () => {
+    setMakeDAOStorage('tax', {
+      assetIssuanceTax,
+      assetCirculationTax,
+    });
+    console.log('form:', getMakeDAOStorage('tax'));
     dispatch(nextStep());
   };
 
@@ -38,14 +52,14 @@ const App = () => {
 
       <Slider
         style={{ padding: '23px 0' }}
-        defaultValue={60}
+        defaultValue={assetIssuanceTax}
         label="Issuance Tax"
         color="#FF6D4C"
         onAfterChange={onTaxChange1}
       />
       <Slider
         style={{ padding: '23px 0' }}
-        defaultValue={30}
+        defaultValue={assetCirculationTax}
         label="Circulation Tax"
         color="#2AC154"
         onAfterChange={onTaxChange2}

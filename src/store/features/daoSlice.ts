@@ -7,6 +7,7 @@ import { getCookie, setCookie, clearCookie } from '@/utils/cookie';
 import Web3 from 'web3';
 import { ETH_CHAINS_INFO } from '@/config/chains';
 import { initialize as initApi } from '@/api';
+import sdk from 'hcstore/sdk';
 import { getSessionStorage } from '@/utils';
 import { request, waitBlockNumber } from '@/api';
 import { disconnect } from './walletSlice';
@@ -15,16 +16,24 @@ import { getContract, contractSend } from '@/utils/contract';
 import { abi as DAOABI } from '@/config/abi/DAO.json';
 // import { abi as DAOsABI } from '@/config/abi/DAOs.json';
 import DAOs from '@/config/abi/DAOs.json';
+import { clearMakeDAOStorage } from '@/utils/launch';
+
+import router from 'next/router';
 
 export interface DAOState {
   currentDAO: any;
   DAOList: Array<any>;
+  currentMember: any;
+  userMembers: Array<any>;
   step: number;
   launch: number;
 }
 const initialState: DAOState = {
-  currentDAO: getSessionStorage('currentDAO') || { name: '' },
+  // currentDAO: getSessionStorage('currentDAO') || { name: '' },
+  currentDAO: { name: '' },
   DAOList: [],
+  currentMember: { naem: '' },
+  userMembers: [], // 当前用户的所有成员（所有身份）
   // step: Number(localStorage.getItem('step')) || 0,
   step: 0,
   launch: 0,
@@ -37,16 +46,17 @@ export const deployAssetSalesDAO = createAsyncThunk(
       web3,
       address,
       chain,
-      operator,
       name,
       mission,
       description,
       memberBaseName,
       members,
       image,
-      defaultVoteTime,
       assetIssuanceTax,
       assetCirculationTax,
+      defaultVoteRate,
+      defaultVotePassRate,
+      hours,
     } = params;
     const contract = getContract(
       web3,
@@ -64,7 +74,7 @@ export const deployAssetSalesDAO = createAsyncThunk(
         name,
         mission,
         description,
-        operator,
+        address,
         {
           // InitMemberArgs
           name: memberBaseName,
@@ -81,7 +91,7 @@ export const deployAssetSalesDAO = createAsyncThunk(
         {
           //InitVotePoolArgs
           description: 'VotePool description',
-          lifespan: Math.max(defaultVoteTime, 7 * 24 * 60 * 60 /*7 days*/),
+          lifespan: Math.max(hours, 7 * 24 /*7 days*/) * 60 * 60,
         },
         {
           // InitLedgerArgs
@@ -91,10 +101,10 @@ export const deployAssetSalesDAO = createAsyncThunk(
           // InitAssetArgs
           name: name, // string  name;
           description: 'Asset description',
-          image: `${process.env.NEXT_PUBLIC_BASE_URL}/favicon.ico`,
+          image: `${process.env.NEXT_PUBLIC_BASE_URL}/icon.png`,
           external_link: process.env.NEXT_PUBLIC_BASE_URL,
-          seller_fee_basis_points_first: assetIssuanceTax, // 30%
-          seller_fee_basis_points_second: assetCirculationTax, // 10%
+          seller_fee_basis_points_first: assetIssuanceTax * 100, // 30%
+          seller_fee_basis_points_second: assetCirculationTax * 100, // 10%
           fee_recipient: '0x0000000000000000000000000000000000000000', // auto set
           contractURIPrefix: baseURI,
         },
@@ -107,7 +117,9 @@ export const deployAssetSalesDAO = createAsyncThunk(
 
     console.log('init DAO success');
 
-    return res;
+    const currentDAO = await sdk.utils.methods.getDAO({ chain, address: addr });
+
+    return currentDAO;
 
     // let dao = await request({
     //   method: "getDAO",
@@ -146,6 +158,12 @@ export const DAOSlice = createSlice({
         sessionStorage.setItem('currentDAO', JSON.stringify(payload));
       }
     },
+    setCurrentMember: (state, { payload }) => {
+      state.currentMember = payload;
+    },
+    setUserMembers: (state, { payload }) => {
+      state.userMembers = payload;
+    },
     setStep: (state, { payload }) => {
       state.step = payload;
       localStorage.setItem('step', payload);
@@ -155,6 +173,9 @@ export const DAOSlice = createSlice({
     },
     nextStep: (state) => {
       state.step += 1;
+    },
+    resetStep: (state) => {
+      state.step = 0;
     },
     setLaunch: (state, { payload }) => {
       state.launch = payload;
@@ -171,7 +192,11 @@ export const DAOSlice = createSlice({
         console.log('deployAssetSalesDAO pending!');
       })
       .addCase(deployAssetSalesDAO.fulfilled, (state, { payload }) => {
-        console.log('deployAssetSalesDAO fulfilled', payload);
+        console.log('deployAssetSalesDAO fulfilled. currentDAO: ', payload);
+        clearMakeDAOStorage();
+        state.step = 0;
+        state.currentDAO = payload;
+        router.push('/dashboard/mine/home');
         // state.DAOList = payload;
       })
       .addCase(deployAssetSalesDAO.rejected, (state, err) => {
@@ -197,7 +222,10 @@ export const {
   setStep,
   nextStep,
   prevStep,
+  resetStep,
   setLaunch,
+  setCurrentMember,
+  setUserMembers,
 } = DAOSlice.actions;
 
 // 默认导出

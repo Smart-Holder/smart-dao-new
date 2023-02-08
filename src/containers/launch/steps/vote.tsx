@@ -7,17 +7,30 @@ import Footer from '@/containers/launch/steps/footer';
 import { useAppDispatch } from '@/store/hooks';
 import { prevStep, nextStep } from '@/store/features/daoSlice';
 
+import { setMakeDAOStorage, getMakeDAOStorage } from '@/utils/launch';
+
 const App = () => {
   const dispatch = useAppDispatch();
-  const [tax1, setTax1] = useState(0);
-  const [tax2, setTax2] = useState(0);
 
-  const onTaxChange1 = (value: number) => {
-    console.log(value);
+  const storageValues = getMakeDAOStorage('vote') || {};
+
+  const [defaultVoteRate, setDefaultVoteRate] = useState(
+    storageValues.defaultVoteRate || 60,
+  );
+  const [defaultVotePassRate, setDefaultVotePassRate] = useState(
+    storageValues.defaultVotePassRate || 10,
+  );
+  const [hours, setHours] = useState(storageValues.hours || 168);
+
+  const onChange1 = (value: number) => {
+    setDefaultVoteRate(value);
   };
 
-  const onTaxChange2 = (value: number) => {
-    console.log(value);
+  const onChange2 = (value: number) => {
+    setDefaultVotePassRate(value);
+  };
+  const onChange3 = (value: number) => {
+    setHours(value);
   };
 
   const prev = () => {
@@ -25,6 +38,12 @@ const App = () => {
   };
 
   const next = () => {
+    setMakeDAOStorage('vote', {
+      defaultVoteRate,
+      defaultVotePassRate,
+      hours,
+    });
+    console.log('form:', getMakeDAOStorage('vote'));
     dispatch(nextStep());
   };
 
@@ -38,23 +57,23 @@ const App = () => {
 
       <Slider
         style={{ paddingTop: 23 }}
-        defaultValue={60}
+        defaultValue={defaultVoteRate}
         label="Issuance Tax"
         color="#FF6D4C"
-        onAfterChange={onTaxChange1}
+        onAfterChange={onChange1}
       />
       <Slider
-        defaultValue={30}
+        defaultValue={defaultVotePassRate}
         label="Circulation Tax"
         color="#2AC154"
-        onAfterChange={onTaxChange2}
+        onAfterChange={onChange2}
       />
       <Slider
-        defaultValue={30}
+        defaultValue={hours}
         label="投票期"
         unit="hr"
-        max={200}
-        onAfterChange={onTaxChange2}
+        max={720}
+        onAfterChange={onChange3}
       />
 
       <Footer prev={prev} next={next} />

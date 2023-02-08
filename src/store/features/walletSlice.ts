@@ -8,6 +8,7 @@ import Web3 from 'web3';
 import { ETH_CHAINS_INFO } from '@/config/chains';
 import { initialize as initApi } from '@/api';
 import router from 'next/router';
+import { formatAddress } from '@/utils';
 
 export interface WalletState {
   web3: any;
@@ -16,6 +17,7 @@ export interface WalletState {
   isSupportChain: boolean;
   chainId: number;
   address: string;
+  addressFormat: string;
   balance: number;
   currentChainInfo: any;
 }
@@ -27,6 +29,7 @@ const initialState: WalletState = {
   isSupportChain: false,
   chainId: 0,
   address: getCookie('address'),
+  addressFormat: formatAddress(getCookie('address')),
   // address: '',
   balance: 0,
   currentChainInfo: {},
@@ -67,6 +70,7 @@ export const walletSlice = createSlice({
     },
     setAddress: (state, { payload }) => {
       state.address = payload;
+      state.addressFormat = formatAddress(payload);
     },
     setChainId: (state, { payload }) => {
       state.chainId = payload;

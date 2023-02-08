@@ -1,5 +1,8 @@
+import sdk from 'hcstore/sdk';
 import { Avatar, Space } from 'antd';
 import Image from 'next/image';
+import { useEffect } from 'react';
+import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
 import icon1 from '/public/images/dashboard/mine/home-icon-1.png';
 import icon2 from '/public/images/dashboard/mine/home-icon-2.png';
@@ -9,6 +12,29 @@ import icon4 from '/public/images/dashboard/mine/home-icon-4.png';
 const App = () => {
   const url =
     'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
+
+  const { chainId } = useAppSelector((store) => store.wallet);
+  const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const res = await sdk.dao.methods.getDAOSummarys({
+          chain: chainId,
+          host: currentMember.host,
+        });
+        console.log('members', res);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    console.log('-----', currentMember);
+
+    if (currentMember.host) {
+      getData();
+    }
+  }, [currentMember]);
 
   return (
     <div className="wrap">

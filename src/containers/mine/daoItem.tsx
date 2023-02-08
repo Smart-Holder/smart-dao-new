@@ -13,7 +13,7 @@ export default function Info(props: any) {
 
   const handleClick = () => {
     dispatch(setCurrentDAO(props.data));
-    // router.push('/dashboard/dao');
+    router.push('/dashboard/mine/home');
   };
 
   return (

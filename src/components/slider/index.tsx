@@ -9,6 +9,7 @@ type Params = {
   label?: string;
   unit?: string;
   max?: number;
+  readOnly?: boolean;
   onAfterChange?: (value: number) => void;
 };
 
@@ -20,11 +21,16 @@ const App = ({
   label,
   unit,
   max,
+  readOnly = false,
   onAfterChange,
 }: Params) => {
   const [v, setValue] = useState(defaultValue);
 
   const handleChange = (v: number) => {
+    if (readOnly) {
+      return;
+    }
+
     setValue(v);
   };
 

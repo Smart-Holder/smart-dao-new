@@ -5,23 +5,21 @@ import { ExclamationOutlined } from '@ant-design/icons';
 import Slider from '@/components/slider';
 import Footer from '@/containers/launch/steps/footer';
 
-import { useAppDispatch } from '@/store/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { prevStep, nextStep } from '@/store/features/daoSlice';
+
+import { setMakeDAOStorage, getMakeDAOStorage } from '@/utils/launch';
+import { deployAssetSalesDAO } from '@/store/features/daoSlice';
 
 const App = () => {
   const dispatch = useAppDispatch();
 
-  const [tax1, setTax1] = useState(0);
-  const [tax2, setTax2] = useState(0);
+  const storageValues = getMakeDAOStorage() || {};
+
+  const { start, tax, vote, executor } = storageValues;
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const onTaxChange1 = (value: number) => {
-    console.log(value);
-  };
-
-  const onTaxChange2 = (value: number) => {
-    console.log(value);
-  };
+  const { web3 } = useAppSelector((store) => store.wallet);
 
   const prev = () => {
     dispatch(prevStep());
@@ -32,12 +30,24 @@ const App = () => {
     setIsModalOpen(true);
   };
 
+  const getParams = () => {
+    return {
+      web3,
+      ...start,
+      ...tax,
+      ...vote,
+      ...executor,
+    };
+  };
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
 
   const handleSubmit = () => {
-    setIsModalOpen(false);
+    console.log('params', getParams());
+    dispatch(deployAssetSalesDAO(getParams()));
+    // setIsModalOpen(false);
   };
 
   return (
@@ -50,40 +60,47 @@ const App = () => {
 
       <Slider
         style={{ padding: '23px 0 10px' }}
-        value={60}
+        value={tax?.assetIssuanceTax}
         label="Issuance Tax"
         color="#FF6D4C"
+        readOnly
       />
       <Slider
         style={{ padding: '10px 0' }}
-        value={30}
+        value={tax?.assetCirculationTax}
         label="Circulation Tax"
         color="#2AC154"
+        readOnly
       />
 
       <Slider
         style={{ padding: '10px 0' }}
-        value={60}
+        value={vote?.defaultVoteRate}
         label="Issuance Tax"
         color="#FF6D4C"
+        readOnly
       />
       <Slider
         style={{ padding: '10px 0' }}
-        value={30}
+        value={vote?.defaultVotePassRate}
         label="Circulation Tax"
         color="#2AC154"
+        readOnly
       />
       <Slider
         style={{ padding: '10px 0' }}
-        value={30}
+        value={vote?.hours}
         label="投票期"
         unit="hr"
-        max={200}
+        max={720}
+        readOnly
       />
 
       <Input
         className="input"
+        defaultValue={executor?.executor}
         prefix={<span style={{ color: '#000' }}>Address:</span>}
+        readOnly
       />
 
       <Footer prev={prev} next={next} nextLabel="Launch" />

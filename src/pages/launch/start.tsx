@@ -6,7 +6,9 @@ import BasicLayout from '@/components/layout/basic';
 // import Form from '@/components/launch/form';
 import styles from '@/styles/content.module.css';
 
-const Form = dynamic(() => import('@/containers/launch/form'), { ssr: false });
+const Start = dynamic(() => import('@/containers/launch/start'), {
+  ssr: false,
+});
 
 const { Content } = Layout;
 
@@ -21,7 +23,7 @@ export default function Launch() {
           <div className={styles.title2}>Welcome to SmartDAO</div>
         </div>
         <div className={styles.box}>
-          <Form />
+          <Start />
         </div>
       </Content>
     </BasicLayout>

@@ -15,6 +15,7 @@ import { validateChinese, validateEthAddress } from '@/utils/validator';
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import type { CheckboxValueType } from 'antd/es/checkbox/Group';
+import { formatAddress } from '@/utils';
 
 const options = [
   { label: 'Apple', value: 'Apple' },
@@ -25,6 +26,8 @@ const options = [
 const App = () => {
   const dispatch = useAppDispatch();
   const { userInfo } = useAppSelector((store) => store.user);
+  const { addressFormat } = useAppSelector((store) => store.wallet);
+  const { currentMember } = useAppSelector((store) => store.dao);
   const [image, setImage] = useState();
   const url =
     'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
@@ -75,20 +78,20 @@ const App = () => {
 
   return (
     <div className="wrap">
-      <div className="h1">SGE ZHI NIDE SHUISHOU GUIZI !</div>
+      <div className="h1">个人信息</div>
       <div className="h2">
         Lorem ipsum dolor sit amet, consectetur
         <div className="h2-item">
-          Address: <span>0x232...2312</span>
+          Address: <span>{addressFormat}</span>
         </div>
         <div className="h2-item">
-          User ID: <span>12</span>
+          User ID: <span>{userInfo.id}</span>
         </div>
       </div>
 
       <Form
         name="info"
-        initialValues={{ remember: true }}
+        initialValues={{ name: currentMember.name }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
@@ -120,10 +123,10 @@ const App = () => {
               beforeUpload={beforeUpload}
               onChange={handleChange}
             >
-              {image ? (
+              {currentMember.image ? (
                 <Image
                   style={{ borderRadius: 10, cursor: 'pointer' }}
-                  src={image}
+                  src={currentMember.image}
                   width={100}
                   height={100}
                   preview={false}
@@ -142,16 +145,16 @@ const App = () => {
 
         <div className="items">
           <div className="item">
-            <span>0x8……78cs</span>
+            <span>{formatAddress(currentMember.host)}</span>
             <span className="label">NFTP</span>
           </div>
           <div className="item" style={{ margin: '0 20px' }}>
-            <span>428Edm23</span>
-            <span className="label">Identity Document</span>
+            <span>{currentMember.id}</span>
+            <span className="label">ID</span>
           </div>
           <div className="item">
-            <span>1234</span>
-            <span className="label">Frantes</span>
+            <span>{currentMember.votes}</span>
+            <span className="label">份数</span>
           </div>
         </div>
 
@@ -184,27 +187,27 @@ const App = () => {
 
       <Checkbox.Group
         className="checkbox-group"
-        defaultValue={['Pear']}
+        defaultValue={['1', '2']}
         onChange={onCheckboxChange}
       >
         <Row style={{ width: '100%' }} gutter={[20, 48]}>
           <Col span={6}>
-            <Checkbox value="1">Issued</Checkbox>
+            <Checkbox value="1">投票</Checkbox>
           </Col>
           <Col span={6}>
-            <Checkbox value="2">Issued</Checkbox>
+            <Checkbox value="2">发起提案</Checkbox>
           </Col>
           <Col span={6}>
-            <Checkbox value="3">Issued</Checkbox>
+            <Checkbox value="3">添加NFTP</Checkbox>
           </Col>
           <Col span={6}>
-            <Checkbox value="4">Issued</Checkbox>
+            <Checkbox value="4">发行资产</Checkbox>
           </Col>
           <Col span={6}>
-            <Checkbox value="5">Issued</Checkbox>
+            <Checkbox value="5">上架资产</Checkbox>
           </Col>
-          <Col span={6}>
-            <Checkbox value="6">Issued</Checkbox>
+          <Col span={12}>
+            <Checkbox value="6">修改DAO的基础设置</Checkbox>
           </Col>
         </Row>
       </Checkbox.Group>
