@@ -2,17 +2,15 @@ import { Layout, Table } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
 
 import DashboardLayout from '@/components/layout/dashboard';
-import contentStyles from '@/styles/content.module.css';
-
-import styles from './styles.module.css';
-import Counts from './components/counts';
-import Filters from './components/filters';
+import styles from '@/styles/content.module.css';
+import Counts from '@/containers/dashboard/mine/counts';
+import Filters from '@/containers/dashboard/mine/filters';
 
 const App = () => {
   return (
     <DashboardLayout>
-      <Layout.Content className={contentStyles['dashboard-content']}>
-        <div className={styles['assets-header']}>
+      <Layout.Content className={styles['dashboard-content']}>
+        <div className={styles['dashboard-content-header']}>
           <Counts
             items={[
               { num: 12456, title: 'All Acounts' },
@@ -23,9 +21,9 @@ const App = () => {
           />
           <Filters />
         </div>
-        <div className={styles['assets-body']}>
+        <div className={styles['dashboard-content-body']}>
           <Table
-            className={styles['assets-table']}
+            className={styles['dashboard-content-table']}
             pagination={{ position: ['bottomRight'] }}
             columns={[
               { title: '订单', dataIndex: 'order', key: 'order' },

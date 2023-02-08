@@ -12,7 +12,7 @@ const App = () => {
     <DashboardLayout>
       <Layout.Content className={styles['dashboard-content']}>
         <div>
-          <div className={styles.title1}>Chose your mo ban elements</div>
+          <div className={styles.title1}>Governance</div>
           <div className={styles.title2}>Welcome to SmartDAO</div>
         </div>
         <div className={styles.box}>

@@ -1,13 +1,11 @@
 import { Layout, Table, Button, Modal } from 'antd';
+import { useState } from 'react';
 import { EllipsisOutlined } from '@ant-design/icons';
 
 import DashboardLayout from '@/components/layout/dashboard';
-
-import styles from './styles.module.css';
-import contentStyles from '@/styles/content.module.css';
-import Counts from './components/counts';
-import Filters from './components/filters';
-import { useState } from 'react';
+import styles from '@/styles/content.module.css';
+import Counts from '@/containers/dashboard/mine/counts';
+import Filters from '@/containers/dashboard/mine/filters';
 
 const Order = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,8 +15,8 @@ const Order = () => {
   return (
     <>
       <DashboardLayout>
-        <Layout.Content className={contentStyles['dashboard-content']}>
-          <div className={styles['assets-header']}>
+        <Layout.Content className={styles['dashboard-content']}>
+          <div className={styles['dashboard-content-header']}>
             <Counts
               items={[
                 { num: 12456, title: 'All Acounts' },
@@ -32,7 +30,7 @@ const Order = () => {
             </Button>
             <Filters />
           </div>
-          <div className={styles['assets-body']}>
+          <div className={styles['dashboard-content-body']}>
             <Table
               className={styles['assets-table']}
               pagination={{ position: ['bottomRight'] }}
@@ -97,14 +95,16 @@ const Order = () => {
         onCancel={() => setIsModalOpen(false)}
         footer={null}
       >
-        <div className={styles['modal-content']}>
-          <div className={styles['modal-title']}>分配收益并自动提交提案</div>
-          <div className={styles['modal-subtitle']}>
+        <div className={styles['dashboard-modal-content']}>
+          <div className={styles['dashboard-modal-title']}>
+            分配收益并自动提交提案
+          </div>
+          <div className={styles['dashboard-modal-subtitle']}>
             Create your own DAO in a few minutes!
           </div>
           <Button
             type="primary"
-            className={styles['modal-button']}
+            className={styles['dashboard-modal-button']}
             onClick={onDone}
           >
             Done
