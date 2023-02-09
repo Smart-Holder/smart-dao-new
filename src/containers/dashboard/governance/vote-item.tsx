@@ -21,8 +21,7 @@ export enum TypeKeyMap {
 export type StatusType = keyof typeof StatusKeyMap;
 export type Type = keyof typeof TypeKeyMap;
 
-type VoteItemProps = {
-  className?: string;
+export type VoteItemType = {
   status: StatusType;
   title: string;
   owner: {
@@ -38,6 +37,11 @@ type VoteItemProps = {
   opposed: number;
 };
 
+type VoteItemProps = {
+  className?: string;
+  onClick?: (item: VoteItemType) => void;
+} & VoteItemType;
+
 const VoteItem: FC<VoteItemProps> = (props) => {
   const {
     status,
@@ -50,9 +54,26 @@ const VoteItem: FC<VoteItemProps> = (props) => {
     className,
     support,
     opposed,
+    onClick,
   } = props;
+
   return (
-    <div className={`${styles.item} ${className}`}>
+    <div
+      className={`${styles.item} ${className}`}
+      onClick={() =>
+        onClick?.({
+          status,
+          title,
+          owner,
+          number,
+          type,
+          description,
+          endTime,
+          support,
+          opposed,
+        })
+      }
+    >
       <div className={styles.header}>
         <div className={`${styles['status-box']} ${styles[status]}`}>
           {StatusKeyMap[status]}
