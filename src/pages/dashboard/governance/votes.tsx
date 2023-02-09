@@ -4,9 +4,23 @@ import DashboardLayout from '@/components/layout/dashboard';
 import Filters from '@/containers/dashboard/mine/filters';
 
 import styles from '@/styles/content.module.css';
-import VoteItem from '@/containers/dashboard/governance/vote-item';
+import VoteItem, {
+  VoteItemType,
+} from '@/containers/dashboard/governance/vote-item';
+import VoteModal from '@/containers/dashboard/governance/vote-modal';
+import { useState } from 'react';
 
 const App = () => {
+  const [openModal, setOpenModal] = useState(false);
+  const [currentItem, setCurrentItem] = useState<VoteItemType>();
+  const onClickItem = (item: VoteItemType) => {
+    setCurrentItem(item);
+    setOpenModal(true);
+  };
+  const onCloseModal = () => {
+    setCurrentItem(undefined);
+    setOpenModal(false);
+  };
   return (
     <DashboardLayout>
       <Layout.Content className={styles['dashboard-content']}>
@@ -34,6 +48,7 @@ const App = () => {
                 support={1}
                 opposed={0}
                 endTime={1675845670252}
+                onClick={onClickItem}
               />
             </div>
             <div className={styles['vote-item']}>
@@ -50,6 +65,7 @@ const App = () => {
                 without being intrusive. "
                 support={1}
                 opposed={0}
+                onClick={onClickItem}
                 endTime={1675845670252}
               />
             </div>
@@ -67,11 +83,13 @@ const App = () => {
                 without being intrusive. "
                 support={1}
                 opposed={0}
-                endTime={1675845670252}
+                onClick={onClickItem}
+                endTime={1875885670252}
               />
             </div>
           </div>
         </div>
+        <VoteModal open={openModal} onClose={onCloseModal} data={currentItem} />
       </Layout.Content>
     </DashboardLayout>
   );
