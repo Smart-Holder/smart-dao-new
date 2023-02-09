@@ -35,6 +35,8 @@ export type VoteItemType = {
   endTime: number;
   support: number;
   opposed: number;
+  execTime?: number;
+  execUser?: { avatar?: string; name: string; address: string };
 };
 
 type VoteItemProps = {
@@ -55,6 +57,8 @@ const VoteItem: FC<VoteItemProps> = (props) => {
     support,
     opposed,
     onClick,
+    execTime,
+    execUser,
   } = props;
 
   return (
@@ -71,6 +75,8 @@ const VoteItem: FC<VoteItemProps> = (props) => {
           endTime,
           support,
           opposed,
+          execTime,
+          execUser,
         })
       }
     >

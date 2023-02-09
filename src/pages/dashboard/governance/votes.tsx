@@ -87,6 +87,29 @@ const App = () => {
                 endTime={1875885670252}
               />
             </div>
+            <div className={styles['vote-item']}>
+              <VoteItem
+                status="executed"
+                execTime={1475885670252}
+                execUser={{
+                  name: 'Willy Wonca',
+                  address: '0x0b3E9A6950e4C434E927A4B1ec28593F6b283311',
+                }}
+                title="Meidum Spicy Spagethi Italiano"
+                owner={{
+                  name: 'Willy Wonca',
+                  address: '0x0b3E9A6950e4C434E927A4B1ec28593F6b283311',
+                }}
+                number="#123123"
+                type="basic"
+                description="The service was excellent; our waiter was  knowledgeable and attentive 
+                without being intrusive. "
+                support={1}
+                opposed={0}
+                onClick={onClickItem}
+                endTime={1475885670252}
+              />
+            </div>
           </div>
         </div>
         <VoteModal open={openModal} onClose={onCloseModal} data={currentItem} />

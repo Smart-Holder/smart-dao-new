@@ -51,16 +51,40 @@ const VoteModal: FC<VoteModalProps> = (props) => {
                 <span className={styles['g']}>Mix</span>
               </div>
             </div>
-            <div className={styles['time']}>
-              {Date.now() > data.endTime ? (
-                '投票已经结束'
-              ) : (
-                <>
-                  Times:
+            {data.status === 'executed' ? (
+              <div className={styles['exec-time']}>
+                <div className={styles['time']}>
+                  结束时间:
                   <span className={styles['time-value']}>{data.endTime}</span>
-                </>
-              )}
-            </div>
+                  {Date.now() > data.endTime && (
+                    <span className={styles['time-value']}>
+                      （投票已经结束）
+                    </span>
+                  )}
+                </div>
+                <div className={styles['time']}>
+                  执行时间:
+                  <span className={styles['time-value']}>{data.execTime}</span>
+                  <span className={styles['exec-user']}>执行人：</span>
+                  <span
+                    className={`${styles['time-value']} ${styles['exec-addr']}`}
+                  >
+                    {data.execUser?.address}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <div className={styles['time']}>
+                {Date.now() > data.endTime ? (
+                  '投票已经结束'
+                ) : (
+                  <>
+                    Times:
+                    <span className={styles['time-value']}>{data.endTime}</span>
+                  </>
+                )}
+              </div>
+            )}
           </div>
           <div className={styles['body']}>
             <div className={styles.title}>{data.title}</div>
