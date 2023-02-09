@@ -32,7 +32,7 @@ const validateMessages = {
   },
 };
 
-const InfoModal = (props: any, ref: any) => {
+const RoleModal = (props: any, ref: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -138,4 +138,4 @@ const InfoModal = (props: any, ref: any) => {
   );
 };
 
-export default forwardRef(InfoModal);
+export default forwardRef(RoleModal);

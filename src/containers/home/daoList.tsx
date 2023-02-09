@@ -1,14 +1,19 @@
 import { useEffect, useState } from 'react';
-import { Col, Row, Space } from 'antd';
 import sdk from 'hcstore/sdk';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Item from './daoItem';
 
-import { getDAOList, setDAOList } from '@/store/features/daoSlice';
+// import { getDAOList, setDAOList } from '@/store/features/daoSlice';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
 import { getCookie } from '@/utils/cookie';
 import { debounce } from '@/utils';
+import { Divider, Skeleton } from 'antd';
+import {
+  setLikeDAOs,
+  setDAOList as setMyDAOList,
+} from '@/store/features/daoSlice';
 
 const testData = [
   {
@@ -67,23 +72,26 @@ const DAOList = () => {
   const chainId = Number(getCookie('chainId'));
   const address = getCookie('address');
 
-  const { DAOList } = useAppSelector((store) => store.dao);
+  const { searchText } = useAppSelector((store) => store.common);
   // const DAOList = testData;
   const [width, setWidth] = useState('');
+  const [DAOList, setDAOList] = useState<any>([]);
+  const [pageStart, setPageStart] = useState(0);
+  const [total, setTotal] = useState(-1);
+  const [hasMore, setHasMore] = useState(true);
+  const { isInit } = useAppSelector((store) => store.common);
 
   const onResize = () => {
-    if (DAOList.length > 0) {
-      const el = document.querySelector('.test') as any;
+    const el = document.querySelector('.wrap1') as any;
 
-      const col = Math.floor(el.offsetWidth / (196 + 15));
-      const w = 100 / col;
-      setWidth(w ? w + '%' : 'auto');
-    }
+    const col = Math.floor(el.offsetWidth / (196 + 15));
+    const w = 100 / col;
+    setWidth(w ? w + '%' : 'auto');
   };
 
   useEffect(() => {
     onResize();
-  }, [DAOList]);
+  }, []);
 
   useEffect(() => {
     window.addEventListener('resize', debounce(onResize, 200));
@@ -92,16 +100,86 @@ const DAOList = () => {
     };
   }, []);
 
+  const getData = async () => {
+    const t = await sdk.dao.methods.getAllDAOsTotal({
+      chain: chainId,
+      name: searchText,
+    });
+
+    setTotal(t);
+
+    const res = await sdk.dao.methods.getAllDAOs({
+      chain: chainId,
+      name: searchText,
+      limit: [pageStart, 20],
+      owner: address || '',
+    });
+
+    const nextList = [...DAOList, ...res];
+
+    // if (nextList.length >= t) {
+    //   setHasMore(false);
+    // }
+
+    setPageStart(pageStart + 20);
+    setDAOList(nextList);
+  };
+
+  const resetData = async () => {
+    setDAOList([]);
+
+    const t = await sdk.dao.methods.getAllDAOsTotal({
+      chain: chainId,
+      name: searchText,
+    });
+
+    setTotal(t);
+
+    const list = await sdk.dao.methods.getAllDAOs({
+      chain: chainId,
+      name: searchText,
+      limit: [0, 20],
+      owner: address || '',
+    });
+
+    setPageStart(20);
+    setDAOList(list);
+  };
+
   useEffect(() => {
-    // dispatch(getDAOList({ chain: chainId, owner: address }));
-    const getData = async () => {
-      const res = await sdk.dao.methods.getAllDAOs({ chain: chainId });
-      // console.log('home dao list', res);
-      dispatch(setDAOList(res));
+    resetData();
+  }, [searchText]);
+
+  // useEffect(() => {
+  //   if (searchText) {
+  //     resetData();
+  //   }
+  // }, [searchText]);
+
+  useEffect(() => {
+    const getLikeDAOS = async () => {
+      const res = await sdk.user.methods.getUserLikeDAOs({ chain: chainId });
+
+      dispatch(setLikeDAOs(res));
     };
 
-    getData();
+    getLikeDAOS();
   }, []);
+
+  useEffect(() => {
+    const getDAOList = async () => {
+      const res = await sdk.utils.methods.getDAOsFromOwner({
+        chain: chainId,
+        owner: address,
+      });
+
+      dispatch(setMyDAOList(res));
+    };
+
+    if (address && chainId) {
+      getDAOList();
+    }
+  }, [isInit]);
 
   return (
     <div>
@@ -116,14 +194,28 @@ const DAOList = () => {
         ))}
       </Row> */}
 
-      <div className="test">
-        {width &&
-          DAOList.map((item: any) => (
-            <div className="test2" key={item.id}>
-              <Item data={item} />
-            </div>
-          ))}
-      </div>
+      <InfiniteScroll
+        dataLength={DAOList.length}
+        next={getData}
+        hasMore={DAOList.length < total}
+        // loader={<p style={{ textAlign: 'center' }}>Loading...</p>}
+        loader={<Skeleton paragraph={{ rows: 1 }} active />}
+        // endMessage={
+        //   total >= 0 ? (
+        //     <div style={{ textAlign: 'center' }}>It is all, nothing more</div>
+        //   ) : null
+        // }
+        scrollableTarget="scrollableDiv"
+      >
+        <div className="wrap1">
+          {width &&
+            DAOList.map((item: any) => (
+              <div className="wrap2" key={item.id}>
+                <Item data={item} />
+              </div>
+            ))}
+        </div>
+      </InfiniteScroll>
 
       {/* <Space size={[15, 59]} wrap>
         {DAOList.map((item: any) => (
@@ -149,12 +241,12 @@ const DAOList = () => {
           line-height: 18px;
         }
 
-        .test {
+        .wrap1 {
           display: flex;
           flex-wrap: wrap;
         }
 
-        .test2 {
+        .wrap2 {
           display: flex;
           justify-content: center;
           flex-basis: ${width};

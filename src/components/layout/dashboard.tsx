@@ -4,7 +4,8 @@ import Head from 'next/head';
 import { Layout, Image, Space, Button } from 'antd';
 
 import Header from '@/components/header';
-import Sider from '@/components/sider/dashbordSider';
+import Sider from '@/components/sider/dashboardSider';
+import FollowSider from '@/components/sider/dashboardSiderFollow';
 import Footer from '@/components/footer';
 
 import { getSessionStorage } from '@/utils';
@@ -13,6 +14,7 @@ import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import {
   setCurrentDAO,
   setCurrentMember,
+  setDAOType,
   setUserMembers,
 } from '@/store/features/daoSlice';
 import { useRouter } from 'next/router';
@@ -22,13 +24,14 @@ import { useRouter } from 'next/router';
 export default function BasicLayout({ children }: { children: ReactElement }) {
   const dispatch = useAppDispatch();
   const { address, chainId } = useAppSelector((store) => store.wallet);
-  const { currentMember } = useAppSelector((store) => store.dao);
+  const { currentMember, DAOType } = useAppSelector((store) => store.dao);
   const router = useRouter();
   const [init, setInit] = useState(false);
 
   useEffect(() => {
     const initData = async () => {
       const dao = getSessionStorage('currentDAO');
+      const type = localStorage.getItem('DAOType');
 
       if (!dao || !dao.address) {
         router.push('/');
@@ -36,6 +39,7 @@ export default function BasicLayout({ children }: { children: ReactElement }) {
       }
 
       dispatch(setCurrentDAO(dao));
+      dispatch(setDAOType(type));
 
       const members = await sdk.utils.methods.getMembersFrom({
         chain: chainId,
@@ -63,6 +67,7 @@ export default function BasicLayout({ children }: { children: ReactElement }) {
   if (!init) {
     return null;
   }
+  console.log('DAOType', DAOType);
 
   return (
     <>
@@ -73,7 +78,8 @@ export default function BasicLayout({ children }: { children: ReactElement }) {
         <link rel="icon" href="/icon.png" />
       </Head>
       <Layout hasSider>
-        <Sider />
+        {DAOType === 'join' && <Sider />}
+        {DAOType === 'follow' && <FollowSider />}
         <Layout>
           <Header />
           {children}

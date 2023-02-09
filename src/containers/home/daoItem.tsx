@@ -1,7 +1,15 @@
 import React, { createRef } from 'react';
 import { Image, Typography, Space, Button } from 'antd';
+import sdk from 'hcstore/sdk';
+import { useRouter } from 'next/router';
 
 import InfoModal from '@/components/modal/infoModal';
+import { useJoin, useFollow } from './useHooks';
+
+import { getContract, contractCall, contractSend } from '@/utils/contract';
+import { useAppSelector, useAppDispatch } from '@/store/hooks';
+import { join as joinDAO } from '@/api/member';
+import { setCurrentDAO, setDAOType } from '@/store/features/daoSlice';
 
 const { Title, Paragraph, Text, Link } = Typography;
 
@@ -17,7 +25,16 @@ const statusType2: { [index: number]: string } = {
 };
 
 const DAOItem = (props: any) => {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   const { status1 = 1, status2 = 1 } = props.data;
+
+  const { web3, address, chainId } = useAppSelector((store) => store.wallet);
+  const { userInfo } = useAppSelector((store) => store.user);
+  const { likeDAOs, joinDAOs, DAOList } = useAppSelector((store) => store.dao);
+
+  const { join, setJoin } = useJoin(props.data.id, chainId, joinDAOs, DAOList);
+  const { follow, setFollow } = useFollow(props.data.id, chainId, likeDAOs);
 
   const infoModal: any = createRef();
 
@@ -35,10 +52,26 @@ const DAOItem = (props: any) => {
 
   const showImgs = imgs.slice(0, 4);
 
-  const handleClick = () => {};
+  const handleClick = () => {
+    const type = join ? 'join' : 'follow';
+    dispatch(setDAOType(type));
+    dispatch(setCurrentDAO(props.data));
+    router.push('/dashboard/mine/home');
+  };
 
   const handleJoinClick = () => {
-    infoModal.current.show();
+    // infoModal.current.show();
+
+    joinDAO({ web3, address, currentDAO: props.data, user: userInfo });
+  };
+
+  const handleFollowClick = () => {
+    // sdk.user.methods
+    //   .addLikeDAO({ dao: props.data.id, chain: chainId })
+    //   .then((res) => {
+    //     console.log('addLikeDAO', res);
+    //   });
+    setFollow();
   };
 
   return (
@@ -84,13 +117,18 @@ const DAOItem = (props: any) => {
         <Button
           className="button-light"
           type="primary"
-          disabled={status1 !== 1}
+          disabled={join}
           onClick={handleJoinClick}
         >
-          {statusType1[status1]}
+          {join ? 'Joined' : 'Join'}
         </Button>
-        <Button type="primary" shape="round" disabled={status2 !== 1}>
-          {statusType2[status2]}
+        <Button
+          type="primary"
+          shape="round"
+          disabled={follow}
+          onClick={handleFollowClick}
+        >
+          {follow ? 'Followed' : 'Follow'}
         </Button>
       </div>
 
@@ -141,11 +179,16 @@ const DAOItem = (props: any) => {
           }
 
           .buttons :global(.button-light) {
-            width: 100px;
             font-size: 16px;
             color: #2f4cdd;
             background-color: #ebedfc;
             border: 0;
+          }
+
+          .buttons :global(.button-light:disabled) {
+            color: rgba(0, 0, 0, 0.25);
+            background-color: rgba(0, 0, 0, 0.04);
+            box-shadow: none;
           }
         `}
       </style>
