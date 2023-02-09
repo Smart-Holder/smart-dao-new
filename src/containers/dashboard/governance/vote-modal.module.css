@@ -74,17 +74,37 @@
   line-height: 1;
 }
 
+.exec-time .time + .time {
+  margin-top: 5px;
+}
+
+.exec-user {
+  margin-left: 30px;
+}
+
+.exec-addr {
+  width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  color: #969ba0 !important;
+  margin-left: 0 !important;
+}
+
 .time {
   font-size: 16px;
   font-weight: 400;
   color: #969ba0;
   line-height: 24px;
   margin-top: 28px;
+  display: flex;
+  align-items: center;
 }
 
 .time-value {
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 400;
   color: #546ff6;
   line-height: 24px;
   margin-left: 10px;
