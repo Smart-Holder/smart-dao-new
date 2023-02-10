@@ -7,6 +7,7 @@ import sdk from 'hcstore/sdk';
 import Item from '@/containers/mine/daoItem';
 
 import { getCookie } from '@/utils/cookie';
+import { getMakeDAOStorage } from '@/utils/launch';
 
 export default function List() {
   const dispatch = useAppDispatch();
@@ -21,6 +22,8 @@ export default function List() {
   const [joinDAOs, setJoinDAOs] = useState([]);
 
   const [list, setList] = useState([]) as any;
+
+  const cacheDAO = getMakeDAOStorage('start');
 
   useEffect(() => {
     const getDAOList = async () => {
@@ -88,6 +91,7 @@ export default function List() {
 
       <div className="dao-list">
         <Space size={34}>
+          {cacheDAO && <Item data={cacheDAO} DAOType="cache" />}
           {list.map((item: any) => (
             <Item data={item} DAOType={active} key={item.id} />
           ))}

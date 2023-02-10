@@ -1,11 +1,14 @@
 import React from 'react';
 import { Layout, Space } from 'antd';
+import Image from 'next/image';
 import router from 'next/router';
 import dynamic from 'next/dynamic';
 
 import Search from '@/components/search';
 // import Menu from '@/components/header/menu';
 // import Language from '@/components/header/language';
+
+import logo from '/public/logo.png';
 
 const Menu = dynamic(() => import('@/components/header/menu'), { ssr: false });
 const Language = dynamic(() => import('@/components/header/language'), {
@@ -22,6 +25,7 @@ const Header = () => {
       <Layout.Header className="header">
         <div className="left">
           <div className="logo" onClick={handleClick} />
+          {/* <Image style={{ cursor: 'pointer' }} src={logo} alt="logo" width={85} height={35} onClick={handleClick} /> */}
           <span className="name" onClick={handleClick}>
             SmartDAO
           </span>

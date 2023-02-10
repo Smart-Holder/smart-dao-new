@@ -1,34 +1,33 @@
 import { getContract, contractCall, contractSend } from '@/utils/contract';
-import { abi as MemberABI } from '@/config/abi/Member.json';
+import Member from '@/config/abi/Member.json';
 import DAO from '@/config/abi/DAO.json';
 import { rng } from 'somes/rng';
 import { request } from '@/api';
 import sdk from 'hcstore/sdk';
 import { hexRandomNumber } from '@/utils';
+import store from '@/store';
 
 // 加入 DAO
-export function join({ web3, address, currentDAO, user }: any) {
-  const contract = getContract(web3, MemberABI, currentDAO.member);
+export function join({ contractAddress }: { contractAddress: string }) {
+  const { web3, address } = store.getState().wallet;
+  const { userInfo } = store.getState().user;
 
-  return contractSend(contract, address, 'requestJoin', [
+  const contract = getContract(web3, Member.abi, contractAddress);
+
+  const params = [
     address,
     {
       // id: hexRandomNumber(),
-      // id: currentDAO.id,
       id: '0x' + rng(32).toString('hex'),
-      name: user.nickname,
-      description: user.description,
-      image: user.image,
+      name: userInfo.nickname,
+      description: userInfo.description || 'description',
+      image: userInfo.image,
       votes: 1,
     },
     [0xdc6b0b72, 0x678ea396],
-  ])
-    .then((res) => {
-      console.log('join', res);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+  ];
+
+  return contractSend(contract, address, 'requestJoin', params);
 }
 
 export function setMissionAndDesc({

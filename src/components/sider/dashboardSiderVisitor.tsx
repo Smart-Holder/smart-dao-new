@@ -1,7 +1,8 @@
-import { Layout, Image, Space, Button, Avatar } from 'antd';
+import { Layout, Space, Button, Avatar } from 'antd';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
-import Menu from '@/components/menu/dashboardMenuFollow';
+import Menu from '@/components/menu/dashboardMenuVisitor';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { UserOutlined } from '@ant-design/icons';
@@ -9,6 +10,8 @@ import { formatAddress } from '@/utils';
 
 import RoleModal from '@/components/modal/roleModal';
 import { createRef } from 'react';
+
+import logo from '/public/logo.png';
 
 const App = () => {
   const router = useRouter();
@@ -51,6 +54,14 @@ const App = () => {
       <div className="top">
         <Space size={13}>
           <span className="logo" onClick={handleClick}></span>
+          {/* <Image
+            style={{ cursor: 'pointer' }}
+            src={logo}
+            alt="logo"
+            width={85}
+            height={35}
+            onClick={handleClick}
+          /> */}
           <span className="name" onClick={handleClick}>
             SmartDAO
           </span>

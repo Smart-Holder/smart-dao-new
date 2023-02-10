@@ -5,7 +5,7 @@ import { Layout, Image, Space, Button } from 'antd';
 
 import Header from '@/components/header';
 import Sider from '@/components/sider/dashboardSider';
-import FollowSider from '@/components/sider/dashboardSiderFollow';
+import SiderVisitor from '@/components/sider/dashboardSiderVisitor';
 import Footer from '@/components/footer';
 
 import { getSessionStorage } from '@/utils';
@@ -41,15 +41,17 @@ export default function BasicLayout({ children }: { children: ReactElement }) {
       dispatch(setCurrentDAO(dao));
       dispatch(setDAOType(type));
 
-      const members = await sdk.utils.methods.getMembersFrom({
-        chain: chainId,
-        host: dao.host,
-        owner: address,
-      });
+      if (type === 'join' || type === 'create') {
+        const members = await sdk.utils.methods.getMembersFrom({
+          chain: chainId,
+          host: dao.host,
+          owner: address,
+        });
 
-      if (members && members.length > 0) {
-        dispatch(setUserMembers(members));
-        dispatch(setCurrentMember(members[0]));
+        if (members && members.length > 0) {
+          dispatch(setUserMembers(members));
+          dispatch(setCurrentMember(members[0]));
+        }
       }
 
       setInit(true);
@@ -78,8 +80,8 @@ export default function BasicLayout({ children }: { children: ReactElement }) {
         <link rel="icon" href="/icon.png" />
       </Head>
       <Layout hasSider>
-        {DAOType === 'join' && <Sider />}
-        {DAOType === 'follow' && <FollowSider />}
+        {(DAOType === 'join' || DAOType === 'create') && <Sider />}
+        {DAOType === 'follow' && <SiderVisitor />}
         <Layout>
           <Header />
           {children}
