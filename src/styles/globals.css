@@ -118,3 +118,44 @@ a {
   color: #000;
   border-right: 2px solid var(--color-secondary);
 }
+
+/* ------------ header menu ------------ */
+.language-menu .ant-dropdown-menu {
+  background: #f9faff;
+}
+.connect-menu {
+}
+.connect-menu .ant-dropdown-menu {
+  background: #f9faff;
+}
+.connect-menu .ant-dropdown-menu li:last-child {
+  cursor: default;
+}
+.connect-menu .ant-dropdown-menu li:last-child:hover {
+  background-color: #f9faff;
+}
+.connect-menu-item {
+  display: flex;
+  align-items: center;
+  height: 46px;
+
+  font-size: 16px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #3e4954;
+  line-height: 21px;
+}
+
+.connect-menu-info-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-right: 14px;
+
+  font-size: 12px;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: #3c4369;
+  line-height: 17px;
+}

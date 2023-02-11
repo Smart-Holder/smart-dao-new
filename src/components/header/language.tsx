@@ -50,6 +50,7 @@ const Lang = () => {
       <Dropdown
         menu={{ items: langList, onClick: handleMenuClick }}
         trigger={['click']}
+        overlayClassName="language-menu"
       >
         <Space className="dropdown-trigger" size={3} align="center">
           <GlobalOutlined style={{ fontSize: 22, verticalAlign: 'middle' }} />
