@@ -72,9 +72,11 @@ export async function contractSend(
       .send({ from })
       .then((receipt) => {
         next(receipt)
-          .then(() => resolve(receipt))
-          .catch(reject)
-          .finally(() => {
+          .then(() => {
+            closeLoading();
+            resolve(receipt);
+          })
+          .catch((reject) => {
             closeLoading();
           });
       })

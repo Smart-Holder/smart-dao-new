@@ -90,7 +90,7 @@ export default function List() {
       </Space>
 
       <div className="dao-list">
-        <Space size={34}>
+        <Space size={34} wrap>
           {cacheDAO && <Item data={cacheDAO} DAOType="cache" />}
           {list.map((item: any) => (
             <Item data={item} DAOType={active} key={item.id} />

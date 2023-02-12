@@ -1,13 +1,9 @@
-import { getContract, contractCall, contractSend } from '@/utils/contract';
+import { getContract, contractSend } from '@/utils/contract';
 import Member from '@/config/abi/Member.json';
-import DAO from '@/config/abi/DAO.json';
 import { rng } from 'somes/rng';
-import { request } from '@/api';
-import sdk from 'hcstore/sdk';
-import { hexRandomNumber } from '@/utils';
 import store from '@/store';
 
-// 加入 DAO
+// 首页加入一个 DAO
 export function join({ contractAddress }: { contractAddress: string }) {
   const { web3, address } = store.getState().wallet;
   const { userInfo } = store.getState().user;
@@ -19,9 +15,9 @@ export function join({ contractAddress }: { contractAddress: string }) {
     {
       // id: hexRandomNumber(),
       id: '0x' + rng(32).toString('hex'),
-      name: userInfo.nickname,
-      description: userInfo.description || 'description',
-      image: userInfo.image,
+      name: '',
+      description: '',
+      image: '',
       votes: 1,
     },
     [0xdc6b0b72, 0x678ea396],
@@ -30,29 +26,58 @@ export function join({ contractAddress }: { contractAddress: string }) {
   return contractSend(contract, address, 'requestJoin', params);
 }
 
-export function setMissionAndDesc({
-  web3,
+// 加入 DAO
+export function addNFTP({
   address,
-  host,
-  mission,
+  votes,
+  permissions,
+  name,
   description,
-}: any) {
-  const contract = getContract(web3, DAO.abi, host);
+  image,
+}: {
+  address: string;
+  votes: number;
+  permissions: number[];
+  name?: string;
+  description?: string;
+  image?: string;
+}) {
+  const { web3, address: owner } = store.getState().wallet;
+  const { currentDAO } = store.getState().dao;
 
-  return contractSend(contract, address, 'setMissionAndDesc', [
-    mission,
-    description,
-  ]).then(() => {
-    // dispatch("getDAOList", {
-    //   chain: getters.chain,
-    //   owner: getters.owner,
-    // });
-    // request({
-    //   method: "getDAO",
-    //   name: "utils",
-    //   params: { chain: getters.chain, address: getters.currentDAO.address },
-    // }).then((res) => {
-    //   commit("SET_CURRENT_DAO", res);
-    // });
-  });
+  const contract = getContract(web3, Member.abi, currentDAO.member);
+
+  const params = [
+    address,
+    {
+      id: '0x' + rng(32).toString('hex'),
+      name: name || '',
+      description: description || '',
+      image: image || '',
+      votes,
+    },
+    permissions,
+  ];
+
+  return contractSend(contract, owner, 'requestJoin', params);
+}
+
+export function setMemberInfo({
+  name,
+  image,
+}: {
+  name: string;
+  image: string;
+}) {
+  const { web3, address } = store.getState().wallet;
+  const { currentDAO, currentMember } = store.getState().dao;
+
+  const contract = getContract(web3, Member.abi, currentDAO.member);
+
+  return contractSend(contract, address, 'setMemberInfo', [
+    currentMember.tokenId,
+    name,
+    '',
+    image,
+  ]);
 }

@@ -8,9 +8,6 @@ import icon3 from '/public/images/dashboard/mine/home-icon-3.png';
 import icon4 from '/public/images/dashboard/mine/home-icon-4.png';
 
 const App = () => {
-  const url =
-    'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
-
   const cacheDAO = getMakeDAOStorage('start');
 
   return (

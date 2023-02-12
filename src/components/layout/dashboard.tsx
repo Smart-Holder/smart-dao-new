@@ -81,7 +81,7 @@ export default function BasicLayout({ children }: { children: ReactElement }) {
       </Head>
       <Layout hasSider>
         {(DAOType === 'join' || DAOType === 'create') && <Sider />}
-        {DAOType === 'follow' && <SiderVisitor />}
+        {(DAOType === 'follow' || DAOType === 'visitor') && <SiderVisitor />}
         <Layout>
           <Header />
           {children}

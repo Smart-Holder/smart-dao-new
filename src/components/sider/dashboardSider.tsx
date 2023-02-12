@@ -1,4 +1,4 @@
-import { Layout, Space, Button, Avatar } from 'antd';
+import { Layout, Space, Button, Avatar, Typography } from 'antd';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 
@@ -12,6 +12,8 @@ import RoleModal from '@/components/modal/roleModal';
 import { createRef } from 'react';
 
 import logo from '/public/logo.png';
+
+const { Paragraph } = Typography;
 
 const App = () => {
   const router = useRouter();
@@ -27,7 +29,7 @@ const App = () => {
 
   const { nickname, image } = useAppSelector((store) => store.user.userInfo);
   const { addressFormat } = useAppSelector((store) => store.wallet);
-  const { currentMember } = useAppSelector((store) => store.dao);
+  const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
 
   const handleClick = () => {
     router.push('/');
@@ -68,18 +70,24 @@ const App = () => {
         </Space>
       </div>
 
+      {/* DAO image and name */}
       <div className="user">
-        {image ? (
-          <Space size={16}>
-            <Avatar size={44} src={image} />
-            <span className="username">{nickname}</span>
-          </Space>
-        ) : (
-          <Space size={16}>
-            <Avatar size={44} icon={<UserOutlined />} />
-            <span className="username">{addressFormat}</span>
-          </Space>
-        )}
+        <Space size={16}>
+          {currentDAO.image ? (
+            <Avatar size={44} src={currentDAO.image} />
+          ) : (
+            // <Avatar size={44} icon={<UserOutlined />} />
+            <Avatar size={44} src={userAvatar} />
+          )}
+
+          <span className="username">
+            {currentDAO.name ? (
+              <Paragraph ellipsis={{ rows: 1 }}>{currentDAO.name}</Paragraph>
+            ) : (
+              currentDAO.address
+            )}
+          </span>
+        </Space>
       </div>
 
       <div className="role">
@@ -90,7 +98,11 @@ const App = () => {
             <Avatar size={44} icon={<UserOutlined />} />
           )}
           <span className="rolename">
-            {currentMember.name || formatAddress(currentMember.host)}
+            {currentMember.name ? (
+              <Paragraph ellipsis={{ rows: 1 }}>{currentMember.name}</Paragraph>
+            ) : (
+              formatAddress(currentMember.host)
+            )}
           </span>
           <Button type="primary" onClick={onChange}>
             Change
@@ -138,12 +150,32 @@ const App = () => {
             line-height: 28px;
           }
 
+          .user .username :global(.ant-typography) {
+            width: 130px;
+            margin-bottom: 0;
+            font-size: 16px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #393939;
+            line-height: 22px;
+          }
+
           .role {
             padding: 19px 12px;
             border-top: 1px solid #e5e7e8;
           }
 
           .role .rolename {
+            font-size: 16px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #393939;
+            line-height: 22px;
+          }
+
+          .role .rolename :global(.ant-typography) {
+            width: 80px;
+            margin-bottom: 0;
             font-size: 16px;
             font-family: PingFangSC-Regular, PingFang SC;
             font-weight: 400;

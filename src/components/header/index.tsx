@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Layout, Space } from 'antd';
 import Image from 'next/image';
 import router from 'next/router';

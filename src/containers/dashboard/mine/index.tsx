@@ -46,7 +46,7 @@ const App = () => {
       <div className="top">
         <Avatar
           size={165}
-          src={currentMember.image || img}
+          src={currentDAO.image || img}
           style={{ backgroundColor: '#fff', marginRight: 26 }}
         />
         <div>

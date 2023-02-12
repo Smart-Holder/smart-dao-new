@@ -89,7 +89,7 @@ export const deployAssetSalesDAO = createAsyncThunk(
           members: members.map((e: any) => {
             return {
               owner: e.owner,
-              info: { ...e, image: image },
+              info: { ...e },
               permissions: [0xdc6b0b72, 0x678ea396],
             };
           }),

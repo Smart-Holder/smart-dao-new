@@ -68,7 +68,7 @@ const DAOItem = (props: any) => {
       return;
     }
 
-    const type = join ? 'join' : 'follow';
+    const type = join ? 'join' : follow ? 'follow' : 'visitor';
     dispatch(setDAOType(type));
     dispatch(setCurrentDAO(props.data));
     router.push('/dashboard/mine/home');

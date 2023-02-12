@@ -159,3 +159,13 @@ a {
   color: #3c4369;
   line-height: 17px;
 }
+
+/* ----------------- table ----------------- */
+.ant-table-wrapper .ant-table {
+  border-radius: 12px;
+}
+
+.ant-table-wrapper .ant-table-thead > tr > th,
+.ant-table-wrapper .ant-table-thead > tr > td {
+  background-color: #fff;
+}

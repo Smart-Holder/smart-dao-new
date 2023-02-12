@@ -38,18 +38,18 @@ const validateMessages = {
 const FormGroup: React.FC = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { chainId, address, web3 } = useAppSelector((store) => store.wallet);
+  const { chainId, address } = useAppSelector((store) => store.wallet);
 
   const initialValues = getMakeDAOStorage('start') || {};
 
   const defaultMember = [
     {
       id: hexRandomNumber(),
-      owner: getCookie('address'),
-      votes: 1,
       name: '',
       description: '',
-      avatar: '',
+      image: '',
+      votes: 1,
+      owner: address,
     },
   ];
 
@@ -109,11 +109,11 @@ const FormGroup: React.FC = () => {
           ...members,
           {
             id: hexRandomNumber(),
-            owner: value,
-            votes: 1,
             name: '',
             description: '',
-            avatar: '',
+            image: '',
+            votes: 1,
+            owner: value,
           },
         ];
 
@@ -280,7 +280,10 @@ const FormGroup: React.FC = () => {
             </Form.Item>
 
             <div className="tags">
-              {members.map((item: any) => (
+              <Tag key={address} className="tag">
+                {address}
+              </Tag>
+              {members.slice(1).map((item: any) => (
                 <Tag
                   closable
                   onClose={(e) => {

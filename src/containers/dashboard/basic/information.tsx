@@ -31,7 +31,7 @@ import {
   getDAO,
   getDAOList,
 } from '@/store/features/daoSlice';
-import { setMissionAndDesc } from '@/api/member';
+import { setMissionAndDesc } from '@/api/dao';
 
 const validateMessages = {
   required: '${label} is required!',
@@ -67,7 +67,7 @@ const FormGroup: React.FC = () => {
   //   initialValues.members || defaultMember,
   // );
 
-  const [avatar, setAvatar] = useState(currentMember.image);
+  const [avatar, setAvatar] = useState(currentDAO.image);
   // const [isModalOpen, setIsModalOpen] = useState(false);
 
   // const { formatMessage } = useIntl();
@@ -138,24 +138,24 @@ const FormGroup: React.FC = () => {
   //   return Promise.resolve();
   // };
 
-  // const handleChange: UploadProps['onChange'] = (
-  //   info: UploadChangeParam<UploadFile>,
-  // ) => {
-  //   // if (info.file.status === 'uploading') {
-  //   //   setLoading(true);
-  //   //   return;
-  //   // }
+  const handleChange: UploadProps['onChange'] = (
+    info: UploadChangeParam<UploadFile>,
+  ) => {
+    // if (info.file.status === 'uploading') {
+    //   setLoading(true);
+    //   return;
+    // }
 
-  //   if (info.file.status === 'done') {
-  //     setAvatar(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
-  //   }
-  // };
+    if (info.file.status === 'done') {
+      setAvatar(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+    }
+  };
 
-  // const beforeUpload = (file: RcFile) => {
-  //   const message = validateImage(file);
+  const beforeUpload = (file: RcFile) => {
+    const message = validateImage(file);
 
-  //   return !message;
-  // };
+    return !message;
+  };
 
   // const handleCancel = () => {
   //   setIsModalOpen(false);
@@ -227,21 +227,7 @@ const FormGroup: React.FC = () => {
             </Form.Item>
 
             <Form.Item label="Logo" valuePropName="fileList">
-              {avatar ? (
-                <Img
-                  style={{ borderRadius: 10, cursor: 'pointer' }}
-                  src={avatar}
-                  width={100}
-                  height={100}
-                  preview={false}
-                  alt="image"
-                />
-              ) : (
-                <div>
-                  <PlusOutlined />
-                </div>
-              )}
-              {/* <Space>
+              <Space>
                 <Upload
                   action={process.env.NEXT_PUBLIC_QINIU_UPLOAD_URL}
                   data={{ token: getCookie('qiniuToken') }}
@@ -249,6 +235,7 @@ const FormGroup: React.FC = () => {
                   listType="picture-card"
                   beforeUpload={beforeUpload}
                   onChange={handleChange}
+                  disabled
                 >
                   {avatar ? (
                     <Img
@@ -267,7 +254,7 @@ const FormGroup: React.FC = () => {
                 </Upload>
 
                 <span className="upload-desc">Upload Images: png、jpeg… </span>
-              </Space> */}
+              </Space>
             </Form.Item>
           </div>
 
