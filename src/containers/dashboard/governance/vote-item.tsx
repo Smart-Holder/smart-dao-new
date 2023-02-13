@@ -32,6 +32,7 @@ export type VoteItemType = {
   number: string;
   type: Type;
   description: string;
+  desc?: string;
   endTime: number;
   support: number;
   opposed: number;
@@ -52,6 +53,7 @@ const VoteItem: FC<VoteItemProps> = (props) => {
     number,
     type,
     description,
+    desc,
     endTime,
     className,
     support,
@@ -60,6 +62,8 @@ const VoteItem: FC<VoteItemProps> = (props) => {
     execTime,
     execUser,
   } = props;
+
+  const purpose = desc ? JSON.parse(desc || '')?.purpose : description;
 
   return (
     <div
@@ -72,6 +76,7 @@ const VoteItem: FC<VoteItemProps> = (props) => {
           number,
           type,
           description,
+          desc,
           endTime,
           support,
           opposed,
@@ -115,7 +120,7 @@ const VoteItem: FC<VoteItemProps> = (props) => {
           </div>
         </div>
       </div>
-      <div className={styles.description}>{description}</div>
+      <div className={styles.description}>{purpose}</div>
       <div className={styles.footer}>
         <div className={styles.count}>
           <span>{support}</span>Max

@@ -8,6 +8,7 @@ import {
   Row,
   Col,
   Avatar,
+  message,
 } from 'antd';
 import { Checkbox, Form, Upload, Tag } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -26,6 +27,8 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import type { CheckboxValueType } from 'antd/es/checkbox/Group';
 
 import Slider from '@/components/slider';
+import { createVote } from '@/api/vote';
+import { useRouter } from 'next/router';
 
 const options = [
   { label: 'Apple', value: 'Apple' },
@@ -34,16 +37,43 @@ const options = [
 ];
 
 const App = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const { userInfo } = useAppSelector((store) => store.user);
+  const { address } = useAppSelector((store) => store.wallet);
+  const { loading } = useAppSelector((store) => store.common);
   const [image, setImage] = useState();
 
-  const onFinish = (values: any) => {};
+  const initialValues = {
+    executor: address,
+  };
+
+  const url =
+    'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
+
+  const onFinish = async (values: any) => {
+    console.log('form success:', values);
+
+    const params = {
+      name: values.name,
+      description: JSON.stringify(values),
+    };
+
+    try {
+      await createVote(params);
+      message.success('success');
+      console.log('create success');
+      router.push('/dashboard/governance/votes');
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('form Failed:', errorInfo);
   };
 
+  const onExecutorChange = () => {};
   const handleSubmit = () => {};
 
   return (
@@ -53,6 +83,7 @@ const App = () => {
 
       <Form
         name="basic"
+        initialValues={initialValues}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
@@ -62,38 +93,55 @@ const App = () => {
         validateTrigger="onBlur"
       >
         <Form.Item
-          label="Name"
+          label="提案标题"
           name="name"
           rules={[
             { required: true },
-            { type: 'string', min: 5, max: 12 },
+            { type: 'string', min: 5, max: 30 },
             { validator: validateChinese },
           ]}
         >
-          <Input
-          // className="input"
-          // prefix={<span style={{ color: '#000' }}>Name:</span>}
-          />
+          <Input />
         </Form.Item>
 
-        <Form.Item
-          label="Vision & Mission"
-          name="mission"
-          rules={[{ required: true }, { type: 'string', min: 20, max: 150 }]}
-        >
+        <Form.Item label="提案目的" name="purpose">
+          <Input.TextArea rows={4} />
+        </Form.Item>
+
+        <Form.Item label="提案内容" name="content">
+          <Input.TextArea rows={4} />
+        </Form.Item>
+
+        <Form.Item label="预期结果" name="result">
           <Input.TextArea rows={4} />
         </Form.Item>
 
         <Form.Item
-          label="Itroduction"
-          name="description"
-          rules={[{ required: true }, { type: 'string', min: 20, max: 150 }]}
+          style={{ width: '100%' }}
+          label="执行人"
+          name="executor"
+          rules={[{ required: true }, { validator: validateEthAddress }]}
         >
-          <Input.TextArea rows={4} />
+          <Input className="input" prefix={<Avatar size={30} src={url} />} />
+          {/* <div className="item-group">
+            <Button
+              className="button"
+              type="primary"
+              htmlType="button"
+              onClick={onExecutorChange}
+            >
+              Replace
+            </Button>
+          </div> */}
         </Form.Item>
 
         <Form.Item>
-          <Button className="button-submit" type="primary" htmlType="submit">
+          <Button
+            className="button-submit"
+            type="primary"
+            htmlType="submit"
+            loading={loading}
+          >
             Save
           </Button>
         </Form.Item>
@@ -120,21 +168,22 @@ const App = () => {
             align-items: center;
             height: 18px;
             margin-top: 7px;
+            margin-bottom: 44px;
             font-size: 12px;
             font-family: AppleSystemUIFont;
             color: #969ba0;
             line-height: 18px;
           }
 
-          .wrap :global(.button) {
-            width: 168px;
+          .wrap .item-group {
+            display: flex;
+            align-items: center;
+          }
+
+          .wrap :global(.button-submit) {
+            width: 170px;
             height: 54px;
-            margin-top: 20px;
             font-size: 18px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #ffffff;
-            line-height: 27px;
           }
         `}
       </style>

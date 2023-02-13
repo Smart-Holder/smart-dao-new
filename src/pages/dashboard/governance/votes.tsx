@@ -15,30 +15,38 @@ import { useAppSelector } from '@/store/hooks';
 
 const App = () => {
   const { chainId, address } = useAppSelector((store) => store.wallet);
+  const { currentDAO } = useAppSelector((store) => store.dao);
+
+  const [data, setData] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [currentItem, setCurrentItem] = useState<VoteItemType>();
-  const onClickItem = (item: VoteItemType) => {
-    setCurrentItem(item);
-    setOpenModal(true);
-  };
-  const onCloseModal = () => {
-    setCurrentItem(undefined);
-    setOpenModal(false);
-  };
 
   useEffect(() => {
     const getData = async () => {
       const res = await request({
         method: 'getVoteProposalFrom',
         name: 'utils',
-        params: { chain: chainId, address },
+        params: { chain: chainId, address: currentDAO.root },
       });
 
       console.log('res', res);
+      setData(res);
     };
 
-    getData();
-  }, []);
+    if (currentDAO.root) {
+      getData();
+    }
+  }, [currentDAO]);
+
+  const onClickItem = (item: VoteItemType) => {
+    setCurrentItem(item);
+    setOpenModal(true);
+  };
+
+  const onCloseModal = () => {
+    setCurrentItem(undefined);
+    setOpenModal(false);
+  };
 
   return (
     <DashboardLayout>
@@ -52,6 +60,26 @@ const App = () => {
         </div>
         <div className={`${styles['dashboard-content-body']}`}>
           <div className={styles['vote-list']}>
+            {data.map((item: any) => (
+              <div className={styles['vote-item']} key={item.id}>
+                <VoteItem
+                  status={item.isClose ? 'passed' : 'processing'}
+                  title={item.name}
+                  owner={{
+                    name: 'Willy Wonca',
+                    address: item.origin,
+                  }}
+                  number={`#${item.id}`}
+                  description=""
+                  desc={item.description}
+                  type="normal"
+                  support={item.agreeTotal}
+                  opposed={item.voteTotal - item.agreeTotal}
+                  endTime={1675845670252}
+                  onClick={onClickItem}
+                />
+              </div>
+            ))}
             <div className={styles['vote-item']}>
               <VoteItem
                 status="processing"
