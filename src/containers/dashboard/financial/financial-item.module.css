@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  width: 158px;
+  height: 158px;
+  border-radius: 10px;
+  background-color: #c4c4c4;
+  overflow: hidden;
+}
+
+.title {
+  font-size: 14px;
+  color: #232323;
+  line-height: 20px;
+  max-height: 40px;
+  margin-top: 15px;
+}
+
+.price {
+  font-size: 16px;
+  color: #969ba0;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 10px;
+}
+
+.price .icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -184,6 +184,11 @@
   align-items: center;
 }
 
+.dashboard-content-header-mt {
+  margin-top: 35px;
+  padding: 0 10px;
+}
+
 .dashboard-content-body {
   width: 100%;
   background-color: white;
@@ -236,4 +241,16 @@
   width: 50%;
   box-sizing: border-box;
   padding: 5px 6px;
+}
+
+.financial-list {
+  padding: 23px 30px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.financial-item {
+  width: calc(158px + 24px);
+  box-sizing: border-box;
+  padding: 15px 12px;
 }

@@ -1,0 +1,87 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 30px 25px;
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+.left {
+  display: flex;
+}
+
+.left .logo {
+  width: 71px;
+  height: 71px;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #d8d8d8;
+}
+
+.left .base-info {
+  margin-left: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.left .l1 {
+  display: flex;
+  align-items: baseline;
+}
+
+.left .l2 {
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.left .title {
+  font-size: 22px;
+  font-weight: 500;
+  color: #3c4369;
+  line-height: 30px;
+}
+
+.left .created {
+  font-size: 16px;
+  margin-left: 17px;
+}
+
+.left .created span {
+  color: #969ba0;
+  margin-right: 10px;
+}
+
+.left .amount {
+  font-size: 36px;
+  margin-left: 32px;
+}
+
+.left .amount span {
+  font-size: 16px;
+  color: #969ba0;
+  margin-left: 5px;
+  margin-left: 10px;
+}
+
+.left .addr {
+  font-size: 14px;
+  font-weight: 400;
+  color: #3e4954;
+  line-height: 20px;
+}
+
+.left .desc {
+  font-size: 14px;
+  font-weight: 400;
+  color: #969ba0;
+  line-height: 20px;
+  margin-left: 20px;
+}
+
+.right button + button {
+  margin-left: 10px;
+}
