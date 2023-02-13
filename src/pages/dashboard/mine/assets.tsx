@@ -23,6 +23,7 @@ const Assets = () => {
           <Table
             className={styles['dashboard-content-table']}
             pagination={{ position: ['bottomRight'] }}
+            rowKey="order"
             columns={[
               { title: '订单', dataIndex: 'order', key: 'order' },
               { title: '市场', dataIndex: 'market', key: 'market' },
@@ -42,7 +43,7 @@ const Assets = () => {
                 date: '11/12/2023',
               },
               {
-                order: '#5552351',
+                order: '#5552352',
                 market: '26 March 2020, 12:42 AM',
                 price: 'James WItcwicky',
                 tag: 'Corner Street 5th London',
@@ -50,7 +51,7 @@ const Assets = () => {
                 date: '11/12/2023',
               },
               {
-                order: '#5552351',
+                order: '#5552353',
                 market: '26 March 2020, 12:42 AM',
                 price: 'James WItcwicky',
                 tag: 'Corner Street 5th London',
@@ -58,7 +59,7 @@ const Assets = () => {
                 date: '11/12/2023',
               },
               {
-                order: '#5552351',
+                order: '#5552354',
                 market: '26 March 2020, 12:42 AM',
                 price: 'James WItcwicky',
                 tag: 'Corner Street 5th London',
@@ -66,7 +67,7 @@ const Assets = () => {
                 date: '11/12/2023',
               },
               {
-                order: '#5552351',
+                order: '#5552355',
                 market: '26 March 2020, 12:42 AM',
                 price: 'James WItcwicky',
                 tag: 'Corner Street 5th London',
