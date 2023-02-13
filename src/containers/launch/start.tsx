@@ -219,7 +219,7 @@ const FormGroup: React.FC = () => {
               <Input.TextArea rows={4} />
             </Form.Item>
 
-            <Form.Item label="Upload" valuePropName="fileList">
+            <Form.Item label="Logo" valuePropName="fileList">
               <Space>
                 <Upload
                   action={process.env.NEXT_PUBLIC_QINIU_UPLOAD_URL}

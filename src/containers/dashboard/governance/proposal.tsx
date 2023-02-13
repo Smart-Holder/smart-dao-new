@@ -37,25 +37,67 @@ const App = () => {
   const dispatch = useAppDispatch();
   const { userInfo } = useAppSelector((store) => store.user);
   const [image, setImage] = useState();
-  const url =
-    'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
 
-  const onTaxChange1 = (value: number) => {
-    console.log(value);
-  };
+  const onFinish = (values: any) => {};
 
-  const onTaxChange2 = (value: number) => {
-    console.log(value);
+  const onFinishFailed = (errorInfo: any) => {
+    console.log('form Failed:', errorInfo);
   };
 
   const handleSubmit = () => {};
 
   return (
     <div className="wrap">
-      <div className="h1">Setting Executor</div>
+      <div className="h1">发起普通提案</div>
       <div className="h2">Lorem ipsum dolor sit amet, consectetur</div>
 
-      <div>proposal</div>
+      <Form
+        name="basic"
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
+        labelAlign="left"
+        layout="vertical"
+        requiredMark={false}
+        validateTrigger="onBlur"
+      >
+        <Form.Item
+          label="Name"
+          name="name"
+          rules={[
+            { required: true },
+            { type: 'string', min: 5, max: 12 },
+            { validator: validateChinese },
+          ]}
+        >
+          <Input
+          // className="input"
+          // prefix={<span style={{ color: '#000' }}>Name:</span>}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Vision & Mission"
+          name="mission"
+          rules={[{ required: true }, { type: 'string', min: 20, max: 150 }]}
+        >
+          <Input.TextArea rows={4} />
+        </Form.Item>
+
+        <Form.Item
+          label="Itroduction"
+          name="description"
+          rules={[{ required: true }, { type: 'string', min: 20, max: 150 }]}
+        >
+          <Input.TextArea rows={4} />
+        </Form.Item>
+
+        <Form.Item>
+          <Button className="button-submit" type="primary" htmlType="submit">
+            Save
+          </Button>
+        </Form.Item>
+      </Form>
 
       <style jsx>
         {`

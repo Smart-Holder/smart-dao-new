@@ -17,13 +17,30 @@ export default function List() {
 
   const { isInit } = useAppSelector((store) => store.common);
   const [active, setActive] = useState('create');
-  const { DAOList } = useAppSelector((store) => store.dao);
+  // const { DAOList } = useAppSelector((store) => store.dao);
   const [likeDAOs, setLikeDAOs] = useState([]);
   const [joinDAOs, setJoinDAOs] = useState([]);
+  const [createDAOs, setCreateDAOs] = useState([]);
 
   const [list, setList] = useState([]) as any;
 
   const cacheDAO = getMakeDAOStorage('start');
+
+  useEffect(() => {
+    const getDAOList = async () => {
+      const res = await sdk.utils.methods.getDAOsFromCreateBy({
+        chain: chainId,
+        owner: address,
+      });
+
+      setCreateDAOs(res);
+      setList(res);
+    };
+
+    if (address && chainId) {
+      getDAOList();
+    }
+  }, [isInit]);
 
   useEffect(() => {
     const getDAOList = async () => {
@@ -33,7 +50,7 @@ export default function List() {
       });
 
       dispatch(setDAOList(res));
-      setList(res);
+      setJoinDAOs(res);
     };
 
     if (address && chainId) {
@@ -53,10 +70,11 @@ export default function List() {
 
   const handleClick1 = () => {
     setActive('create');
-    setList(DAOList);
+    setList(createDAOs);
   };
   const handleClick2 = () => {
     setActive('join');
+    setList(joinDAOs);
   };
   const handleClick3 = () => {
     setActive('follow');
@@ -91,7 +109,9 @@ export default function List() {
 
       <div className="dao-list">
         <Space size={34} wrap>
-          {cacheDAO && <Item data={cacheDAO} DAOType="cache" />}
+          {(active === 'create' || active === 'join') && cacheDAO && (
+            <Item data={cacheDAO} DAOType="cache" />
+          )}
           {list.map((item: any) => (
             <Item data={item} DAOType={active} key={item.id} />
           ))}

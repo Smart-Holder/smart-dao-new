@@ -11,13 +11,13 @@ const App = () => {
   return (
     <DashboardLayout>
       <Layout.Content className={styles['dashboard-content']}>
-        <div className={styles['dashboard-content-header']}>
-          <div>
-            <div className={styles.title1}>Basic Settings</div>
-            <div className={styles.title2}>Welcome to SmartDAO</div>
-          </div>
+        <div>
+          <div className={styles.title1}>Basic Settings</div>
+          <div className={styles.title2}>Welcome to SmartDAO</div>
         </div>
-        <div className={`${styles['dashboard-content-body']}`}></div>
+        <div className={styles.box}>
+          <Proposal />
+        </div>
       </Layout.Content>
     </DashboardLayout>
   );

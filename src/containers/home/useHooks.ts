@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAppSelector } from '@/store/hooks';
 import sdk from 'hcstore/sdk';
 import { join as requestJoin } from '@/api/member';
+import { message } from 'antd';
 
 export const useJoin = (
   contractAddress: string,
@@ -25,7 +26,8 @@ export const useJoin = (
     try {
       await requestJoin({ contractAddress });
       setLoading(false);
-      setJoin_(true);
+      message.success('已申请');
+      // setJoin_(true);
     } catch (error) {
       console.error(error);
       setLoading(false);
@@ -43,10 +45,12 @@ export const useFollow = (id: number, chainId: number, isLike: boolean) => {
   const setFollow = () => {
     if (!follow) {
       sdk.user.methods.addLikeDAO({ dao: id, chain: chainId }).then(() => {
+        message.success('已关注');
         setFollow_(true);
       });
     } else {
       sdk.user.methods.deleteLikeDAO({ dao: id, chain: chainId }).then(() => {
+        message.success('取消关注');
         setFollow_(false);
       });
     }

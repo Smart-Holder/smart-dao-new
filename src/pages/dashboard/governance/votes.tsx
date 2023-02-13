@@ -8,9 +8,13 @@ import VoteItem, {
   VoteItemType,
 } from '@/containers/dashboard/governance/vote-item';
 import VoteModal from '@/containers/dashboard/governance/vote-modal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { request } from '@/api';
+
+import { useAppSelector } from '@/store/hooks';
 
 const App = () => {
+  const { chainId, address } = useAppSelector((store) => store.wallet);
   const [openModal, setOpenModal] = useState(false);
   const [currentItem, setCurrentItem] = useState<VoteItemType>();
   const onClickItem = (item: VoteItemType) => {
@@ -21,6 +25,21 @@ const App = () => {
     setCurrentItem(undefined);
     setOpenModal(false);
   };
+
+  useEffect(() => {
+    const getData = async () => {
+      const res = await request({
+        method: 'getVoteProposalFrom',
+        name: 'utils',
+        params: { chain: chainId, address },
+      });
+
+      console.log('res', res);
+    };
+
+    getData();
+  }, []);
+
   return (
     <DashboardLayout>
       <Layout.Content className={styles['dashboard-content']}>

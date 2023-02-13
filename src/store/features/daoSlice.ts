@@ -62,6 +62,7 @@ export const deployAssetSalesDAO = createAsyncThunk(
       assetCirculationTax,
       defaultVoteRate,
       defaultVotePassRate,
+      executor,
       hours,
     } = params;
     const contract = getContract(
@@ -77,9 +78,12 @@ export const deployAssetSalesDAO = createAsyncThunk(
       address,
       'deployAssetSalesDAO',
       [
-        name,
-        mission,
-        description,
+        {
+          name,
+          mission,
+          description,
+          image,
+        },
         address,
         {
           // InitMemberArgs
@@ -93,6 +97,7 @@ export const deployAssetSalesDAO = createAsyncThunk(
               permissions: [0xdc6b0b72, 0x678ea396],
             };
           }),
+          executor,
         },
         {
           //InitVotePoolArgs
@@ -107,7 +112,7 @@ export const deployAssetSalesDAO = createAsyncThunk(
           // InitAssetArgs
           name: name, // string  name;
           description: 'Asset description',
-          image: `${process.env.NEXT_PUBLIC_BASE_URL}/icon.png`,
+          image: image,
           external_link: process.env.NEXT_PUBLIC_BASE_URL,
           seller_fee_basis_points_first: assetIssuanceTax * 100, // 30%
           seller_fee_basis_points_second: assetCirculationTax * 100, // 10%

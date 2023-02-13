@@ -1,4 +1,4 @@
-import React, { useState, useImperativeHandle, forwardRef } from 'react';
+import React, { useState, forwardRef, createRef } from 'react';
 import {
   Button,
   Input,
@@ -27,6 +27,9 @@ import type { CheckboxValueType } from 'antd/es/checkbox/Group';
 import { formatAddress } from '@/utils';
 import { Permissions } from '@/config/enum';
 
+import TransferModal from '@/components/modal/transferModal';
+import PermissionModal from '@/components/modal/permissionModal';
+
 import { setMemberInfo } from '@/api/member';
 
 const options = [
@@ -43,6 +46,9 @@ const App = () => {
   const { loading } = useAppSelector((store) => store.common);
   const [image, setImage] = useState(currentMember.image);
   const [imageMessage, setImageMessage] = useState('');
+
+  const transferModal: any = createRef();
+  const permissionModal: any = createRef();
 
   const url =
     'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
@@ -81,14 +87,18 @@ const App = () => {
   };
 
   // 转让
-  const transfer = () => {};
+  const transfer = () => {
+    transferModal.current.show();
+  };
 
   const onCheckboxChange = (checkedValues: CheckboxValueType[]) => {
     console.log('checked = ', checkedValues);
   };
 
   // 设置权限
-  const setLimit = () => {};
+  const setPermission = () => {
+    permissionModal.current.show();
+  };
 
   return (
     <div className="wrap">
@@ -240,10 +250,13 @@ const App = () => {
       </Checkbox.Group>
 
       <div className="buttons">
-        <Button className="button" type="primary" onClick={setLimit}>
+        <Button className="button" type="primary" onClick={setPermission}>
           Change
         </Button>
       </div>
+
+      <TransferModal ref={transferModal} />
+      <PermissionModal ref={permissionModal} />
 
       <style jsx>
         {`
