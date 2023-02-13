@@ -1,5 +1,6 @@
 import { FC, useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import styles from './financial-header.module.css';
 import { Button } from 'antd';
 import PutModal, { PutModalListItem } from './put-modal';
@@ -20,13 +21,17 @@ export type FinancialDataType = {
 const FinancialHeader: FC<FinancialHeaderProps> = (props) => {
   const { logo, title, createTime, amount, addr, desc } = props;
 
+  const router = useRouter();
+
   const [openModal, setOpenModal] = useState(false);
   const [currentItem, setCurrentItem] = useState<FinancialDataType>();
   const [currentPutList, setCurrentPutList] = useState<PutModalListItem[]>([]);
 
   const onShare = () => {};
 
-  const onCreate = () => {};
+  const onCreate = () => {
+    router.push('/dashboard/financial/assets/issue');
+  };
 
   const onPut = () => {
     setCurrentItem({ logo, title, addr });
