@@ -1,4 +1,5 @@
 // import moment from "moment";
+import dayjs from 'dayjs';
 import { rng } from 'somes/rng';
 
 // 防抖
@@ -44,6 +45,30 @@ export function timeFormat(days = 0, hours = 0, minutes = 0) {
   );
 }
 
+/**
+ * 获取时间戳，参数为 dayjs 格式
+ * @param {Array} time
+ * @returns
+ */
+export function formatDayjsValue(time) {
+  return dayjs(time).valueOf();
+}
+
+/**
+ * 获取时间戳，参数为 dayjs 数组
+ * @param {Array} time
+ * @returns
+ */
+export function formatDayjsValues(time) {
+  if (!time || !Array.isArray(time)) {
+    return null;
+  }
+
+  const [time1, time2] = time;
+
+  return [dayjs(time1).valueOf(), dayjs(time2).valueOf()];
+}
+
 // 256随机数 hex
 export function hexRandomNumber() {
   return '0x' + rng(32).toString('hex');
@@ -72,14 +97,21 @@ export function setSessionStorage(key, value) {
   return sessionStorage.setItem(key, JSON.stringify(value));
 }
 
-// 刷新或关闭页面前，浏览器默认的弹窗提示
+/**
+ * 刷新或关闭页面前，浏览器默认的弹窗提示
+ * @param {*} e
+ * @returns
+ */
 export function beforeUnload(e) {
   e.returnValue = 'loading';
   e.preventDefault();
   return 'loading';
 }
 
-// 禁止页面的 click 事件
+/**
+ * 禁止页面的 click 事件
+ * @param {*} e
+ */
 export function stopClick(e) {
   e.stopPropagation();
   e.preventDefault();

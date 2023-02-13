@@ -4,7 +4,10 @@ import { Layout } from 'antd';
 
 import DashboardLayout from '@/components/layout/dashboard';
 
-const Form = dynamic(() => import('@/containers/launch/form'), { ssr: false });
+const Information = dynamic(
+  () => import('@/containers/dashboard/basic/information'),
+  { ssr: false },
+);
 
 import styles from '@/styles/content.module.css';
 
@@ -17,7 +20,7 @@ const App = () => {
           <div className={styles.title2}>Welcome to SmartDAO</div>
         </div>
         <div className={styles.box}>
-          <Form />
+          <Information />
         </div>
       </Layout.Content>
     </DashboardLayout>

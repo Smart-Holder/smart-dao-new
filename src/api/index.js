@@ -10,6 +10,8 @@ import somes from 'somes';
 import { errorCode } from '@/utils/errorCode';
 import { beforeUnload, stopClick } from '@/utils';
 
+import store from '@/store';
+
 export default sdk;
 
 export function initialize(address) {
@@ -32,25 +34,39 @@ export function initialize(address) {
   });
 }
 
-export function request({ name, method, params, listen = false }) {
-  // clearTimeout(store.getters.loadingTimer);
-  // store.commit("SET_LOADING", true);
+const loading = (listen = false) => {
+  clearTimeout(store.getState().common.loadingTimer);
+  store.dispatch({ type: 'common/setLoading', payload: true });
 
+  // 页面不可点击，不可刷新
   if (listen) {
     window.addEventListener('beforeunload', beforeUnload);
     window.addEventListener('click', stopClick, true);
   }
+};
+
+const closeLoading = (listen = false) => {
+  store.dispatch({
+    type: 'common/setLoadingTimer',
+    payload: setTimeout(() => {
+      store.dispatch({ type: 'common/setLoading', payload: false });
+    }, 100),
+  });
+
+  if (listen) {
+    window.removeEventListener('beforeunload', beforeUnload);
+    window.removeEventListener('click', stopClick, true);
+  }
+};
+
+export function request({ name, method, params, listen = false }) {
+  loading(listen);
 
   return new Promise((resolve, reject) => {
     sdk[name].methods[method](params)
       .then((res) => {
-        console.log('res', res);
-        // store.commit(
-        //   "SET_LOADING_TIMER",
-        //   setTimeout(() => {
-        //     store.commit("SET_LOADING", false);
-        //   }, 100)
-        // );
+        console.log(method, res);
+        closeLoading(listen);
         resolve(res);
       })
       .catch((e) => {
@@ -61,18 +77,7 @@ export function request({ name, method, params, listen = false }) {
           console.error(errorCodeMessage || e.message);
         }
 
-        // store.commit(
-        //   "SET_LOADING_TIMER",
-        //   setTimeout(() => {
-        //     store.commit("SET_LOADING", false);
-        //   }, 100)
-        // );
-
-        if (listen) {
-          window.removeEventListener('beforeunload', beforeUnload);
-          window.removeEventListener('click', stopClick, true);
-        }
-
+        closeLoading(listen);
         reject(e);
       });
   });

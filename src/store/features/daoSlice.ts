@@ -21,22 +21,28 @@ import { clearMakeDAOStorage } from '@/utils/launch';
 import router from 'next/router';
 
 export interface DAOState {
+  DAOType: string; // create/join/follow
   currentDAO: any;
   DAOList: Array<any>;
   currentMember: any;
   userMembers: Array<any>;
   step: number;
   launch: number;
+  likeDAOs: Array<any>;
+  joinDAOs: Array<any>;
 }
 const initialState: DAOState = {
+  DAOType: '',
   // currentDAO: getSessionStorage('currentDAO') || { name: '' },
   currentDAO: { name: '' },
   DAOList: [],
-  currentMember: { naem: '' },
+  currentMember: { name: '' },
   userMembers: [], // 当前用户的所有成员（所有身份）
   // step: Number(localStorage.getItem('step')) || 0,
   step: 0,
   launch: 0,
+  likeDAOs: [],
+  joinDAOs: [],
 };
 
 export const deployAssetSalesDAO = createAsyncThunk(
@@ -83,7 +89,7 @@ export const deployAssetSalesDAO = createAsyncThunk(
           members: members.map((e: any) => {
             return {
               owner: e.owner,
-              info: { ...e, image: image },
+              info: { ...e },
               permissions: [0xdc6b0b72, 0x678ea396],
             };
           }),
@@ -132,7 +138,7 @@ export const deployAssetSalesDAO = createAsyncThunk(
 );
 
 export const getDAOList = createAsyncThunk(
-  'dao/getDAO',
+  'dao/getDAOList_',
   async ({ chain, owner }: { chain: number; owner: string }) => {
     const res = await request({
       method: 'getDAOsFromOwner',
@@ -144,10 +150,27 @@ export const getDAOList = createAsyncThunk(
   },
 );
 
+export const getDAO = createAsyncThunk(
+  'dao/getDAO_',
+  async ({ chain, address }: { chain: number; address: string }) => {
+    const res = await request({
+      method: 'getDAO',
+      name: 'utils',
+      params: { chain, address },
+    });
+
+    return res;
+  },
+);
+
 export const DAOSlice = createSlice({
   name: 'dao',
   initialState,
   reducers: {
+    setDAOType: (state, { payload }) => {
+      state.DAOType = payload;
+      localStorage.setItem('DAOType', payload);
+    },
     setDAOList: (state, { payload }) => {
       state.DAOList = payload;
     },
@@ -180,6 +203,12 @@ export const DAOSlice = createSlice({
     setLaunch: (state, { payload }) => {
       state.launch = payload;
     },
+    setLikeDAOs: (state, { payload }) => {
+      state.likeDAOs = payload;
+    },
+    setJoinDAOs: (state, { payload }) => {
+      state.joinDAOs = payload;
+    },
   },
   extraReducers(builder) {
     builder
@@ -211,12 +240,21 @@ export const DAOSlice = createSlice({
       })
       .addCase(getDAOList.rejected, (state, err) => {
         console.log('getDAOList rejected', err);
+      })
+      .addCase(getDAO.fulfilled, (state, { payload }) => {
+        console.log('getDAO fulfilled', payload);
+        state.currentDAO = payload;
+        sessionStorage.setItem('currentDAO', JSON.stringify(payload));
+      })
+      .addCase(getDAO.rejected, (state, err) => {
+        console.log('getDAO rejected', err);
       });
   },
 });
 
 // 导出方法
 export const {
+  setDAOType,
   setDAOList,
   setCurrentDAO,
   setStep,
@@ -226,6 +264,8 @@ export const {
   setLaunch,
   setCurrentMember,
   setUserMembers,
+  setLikeDAOs,
+  setJoinDAOs,
 } = DAOSlice.actions;
 
 // 默认导出

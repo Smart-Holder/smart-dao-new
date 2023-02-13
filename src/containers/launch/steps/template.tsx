@@ -54,7 +54,7 @@ const App = () => {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            width: 414px;
+            width: 380px;
             height: 414px;
             padding: 32px 38px;
             background: #546ff6;

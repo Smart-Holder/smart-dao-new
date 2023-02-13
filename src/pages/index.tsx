@@ -18,15 +18,10 @@ export default function Home() {
           <div className={styles.title2}>Welcome to SmartDAO</div>
         </div>
         {/* <div className={styles.space}></div> */}
-        <div className={styles.box}>
+        <div className={styles.box} id="scrollableDiv">
           <DAOList />
         </div>
         {/* <div className={styles.space2}></div> */}
-        {/* <div className={styles['box-wrap']}>
-          <div className={styles.box}>
-            <DAOList />
-          </div>
-        </div> */}
       </Content>
     </BasicLayout>
   );

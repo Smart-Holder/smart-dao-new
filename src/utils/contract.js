@@ -2,7 +2,9 @@
 // import wallet from '../store/modules/wallet';
 // import store from '@/store';
 // import { Message } from 'element-ui';
+import sdk from 'hcstore/sdk';
 import { beforeUnload, stopClick } from '@/utils';
+import store from '@/store';
 
 export function getContract(web3, abi, contractAddress) {
   return new web3.eth.Contract(abi, contractAddress);
@@ -12,23 +14,26 @@ export async function contractCall(contract, method, params = []) {
   return await contract.methods[method](...params).call();
 }
 
+const waitBlockNumber = async (receipt) => {
+  if (store.getState().dao.currentDAO) {
+    return await sdk.chain.methods.waitBlockNumber({
+      dao: store.getState().dao.currentDAO.address,
+      chain: store.getState().wallet.chainId,
+      blockNumber: receipt.blockNumber,
+    });
+  }
+};
+
 export async function contractSend(
   contract,
   from,
   method,
   params = [],
-  next = async (receipt) => {
-    // if (store.getters.currentDAO) {
-    //   await api.chain.methods.waitBlockNumber({
-    //     dao: store.getters.currentDAO.address,
-    //     chain: wallet.state.chainId,
-    //     blockNumber: receipt.blockNumber,
-    //   });
-    // }
-  },
+  next = waitBlockNumber,
 ) {
   // clearTimeout(store.getters.loadingTimer);
   // store.commit('SET_LOADING', true);
+  store.dispatch({ type: 'common/setLoading', payload: true });
   window.addEventListener('beforeunload', beforeUnload);
   window.addEventListener('click', stopClick, true);
 
@@ -39,6 +44,7 @@ export async function contractSend(
     //     store.commit('SET_LOADING', false);
     //   }, 100),
     // );
+    store.dispatch({ type: 'common/setLoading', payload: false });
     window.removeEventListener('beforeunload', beforeUnload);
     window.removeEventListener('click', stopClick, true);
   }
@@ -66,9 +72,11 @@ export async function contractSend(
       .send({ from })
       .then((receipt) => {
         next(receipt)
-          .then(() => resolve(receipt))
-          .catch(reject)
-          .finally(() => {
+          .then(() => {
+            closeLoading();
+            resolve(receipt);
+          })
+          .catch((reject) => {
             closeLoading();
           });
       })

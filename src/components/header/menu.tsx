@@ -1,7 +1,7 @@
 import React, { useState, MouseEvent, createRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { Layout, Dropdown, Space, Image as Img, Avatar } from 'antd';
+import { Dropdown, Image as Img, Avatar, Divider, Button } from 'antd';
 import { DownOutlined, GlobalOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { useRouter } from 'next/router';
@@ -12,35 +12,24 @@ import { disconnect } from '@/store/features/walletSlice';
 import WalletModal from '@/components/modal/walletModal';
 import CreateModal from '@/components/modal/createModal';
 import InfoModal from '@/components/modal/infoModal';
-import Search from '@/components/search';
 
 import { getCookie } from '@/utils/cookie';
 import { formatAddress } from '@/utils';
+import { ETH_CHAINS_INFO } from '@/config/chains';
 
 import iconUser from '/public/images/icon-user.png';
 import { setUserInfo } from '@/store/features/userSlice';
 import { setLoading } from '@/store/features/commonSlice';
 
-import sdk from 'hcstore/sdk';
+import iconMetamask from '/public/images/icon-metamask.png';
+import iconWallet from '/public/images/icon-wallet.png';
+import iconAdd from '/public/images/icon-add.png';
 
-const items: MenuProps['items'] = [
-  {
-    label: 'Create DAO',
-    key: 'create',
-  },
-  {
-    label: 'Mine',
-    key: 'mine',
-  },
-  {
-    label: 'Disconnect Wallet',
-    key: 'disconnect',
-  },
-];
+import sdk from 'hcstore/sdk';
 
 const Menu = () => {
   // 通过useSelector直接拿到store中定义的value
-  const { address } = useAppSelector((store) => store.wallet);
+  const { address, chainId } = useAppSelector((store) => store.wallet);
   const { isInit } = useAppSelector((store) => store.common);
   const { nickname, image } = useAppSelector((store) => store.user.userInfo);
   // const address = getCookie('address');
@@ -76,12 +65,18 @@ const Menu = () => {
     if (key === 'mine') {
       router.push('/mine');
     } else if (key === 'disconnect') {
-      dispatch(disconnect());
+      // dispatch(disconnect());
     } else if (key === 'create') {
       createModal.current.show();
     }
 
     setDropdownOpen(false);
+  };
+
+  const disconnectClick = (e: any) => {
+    e.stopPropagation();
+    setDropdownOpen(false);
+    dispatch(disconnect());
   };
 
   // useEffect(() => {
@@ -108,6 +103,58 @@ const Menu = () => {
   //   }
   // }, [address, nickname]);
 
+  const items: MenuProps['items'] = [
+    {
+      label: (
+        <div className="connect-menu-item">
+          <div className="connect-menu-info-left">
+            <Image src={iconMetamask} width={24} height={24} alt="img" />
+            <span>MetaMask</span>
+          </div>
+          <div>{formatAddress(address)}</div>
+        </div>
+      ),
+      key: 'info',
+    },
+
+    {
+      label: (
+        <div className="connect-menu-item">
+          <Image src={iconAdd} width={25} height={25} alt="img" />
+          <span style={{ marginLeft: 20 }}>Create DAO</span>
+        </div>
+      ),
+      key: 'create',
+    },
+
+    {
+      label: (
+        <div className="connect-menu-item">
+          <Image src={iconAdd} width={25} height={25} alt="img" />
+          <span style={{ marginLeft: 20 }}>Mine</span>
+        </div>
+      ),
+      key: 'mine',
+    },
+    // {
+    //   type: 'divider',
+    // },
+    {
+      label: (
+        <div className="connect-menu-item">
+          <Button
+            style={{ width: '100%', height: 46 }}
+            type="primary"
+            onClick={disconnectClick}
+          >
+            Disconnect Wallet
+          </Button>
+        </div>
+      ),
+      key: 'disconnect',
+    },
+  ];
+
   return (
     <div className="wrap">
       <Dropdown
@@ -115,13 +162,10 @@ const Menu = () => {
         trigger={['click']}
         open={isDropdownOpen}
         onOpenChange={handleOpenChange}
-        overlayStyle={{}}
+        overlayClassName="connect-menu"
+        // overlayStyle={{ background: '#F9FAFF' }}
       >
-        <Space
-          className="dropdown-trigger"
-          size={3}
-          onClick={handleDropdownClick}
-        >
+        <div className="dropdown-trigger" onClick={handleDropdownClick}>
           {image ? (
             // <Img
             //   style={{ borderRadius: '50%' }}
@@ -136,10 +180,17 @@ const Menu = () => {
             <Image src={iconUser} alt="user" width={32} height={32} />
           )}
           <span className="dropdown-trigger-content">
-            {address ? formatAddress(address) : 'Connect Wallet'}
+            {address ? (
+              <div className="label">
+                <span>{formatAddress(address)}</span>
+                <span>{ETH_CHAINS_INFO[chainId]?.name}</span>
+              </div>
+            ) : (
+              'Connect Wallet'
+            )}
           </span>
           <DownOutlined />
-        </Space>
+        </div>
       </Dropdown>
 
       <WalletModal ref={walletModal} />
@@ -148,7 +199,11 @@ const Menu = () => {
 
       <style jsx>
         {`
-          .wrap :global(.dropdown-trigger) {
+          .dropdown-trigger {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 200px;
             height: 46px;
             padding: 0 12px 0 7px;
             color: #3e4954;
@@ -158,8 +213,20 @@ const Menu = () => {
             cursor: pointer;
           }
 
-          .wrap :global(.dropdown-trigger-content) {
-            padding: 0 21px 0 10px;
+          .dropdown-trigger-content {
+            flex: 1;
+            padding-left: 10px;
+          }
+
+          .dropdown-trigger-content .label {
+            display: flex;
+            flex-direction: column;
+            padding: 0 13px 0 4px;
+            font-size: 16px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #3e4954;
+            line-height: 21px;
           }
         `}
       </style>

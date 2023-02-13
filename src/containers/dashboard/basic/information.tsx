@@ -26,7 +26,12 @@ import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 import iconSuccess from '/public/images/icon-success.png';
-import { deployAssetSalesDAO } from '@/store/features/daoSlice';
+import {
+  deployAssetSalesDAO,
+  getDAO,
+  getDAOList,
+} from '@/store/features/daoSlice';
+import { setMissionAndDesc } from '@/api/dao';
 
 const validateMessages = {
   required: '${label} is required!',
@@ -38,99 +43,100 @@ const validateMessages = {
 const FormGroup: React.FC = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { chainId, address } = useAppSelector((store) => store.wallet);
+  const { chainId, address, web3 } = useAppSelector((store) => store.wallet);
+  const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
 
-  const initialValues = getMakeDAOStorage('start') || {};
+  const [initialValues, setValues] = useState({
+    name: currentDAO.name,
+    mission: currentDAO.mission,
+    description: currentDAO.description,
+  });
 
-  const defaultMember = [
-    {
-      id: hexRandomNumber(),
-      name: '',
-      description: '',
-      image: '',
-      votes: 1,
-      owner: address,
-    },
-  ];
+  // const defaultMember = [
+  //   {
+  //     id: hexRandomNumber(),
+  //     owner: getCookie('address'),
+  //     votes: 1,
+  //     name: '',
+  //     description: '',
+  //     avatar: '',
+  //   },
+  // ];
 
-  const [members, setMembers] = useState(
-    initialValues.members || defaultMember,
-  );
+  // const [members, setMembers] = useState(
+  //   initialValues.members || defaultMember,
+  // );
 
-  const [avatar, setAvatar] = useState(initialValues.image);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [avatar, setAvatar] = useState(currentDAO.image);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { formatMessage } = useIntl();
+  // const { formatMessage } = useIntl();
 
   const [form] = Form.useForm();
 
-  const onFinish = (values: any) => {
+  const onFinish = async (values: any) => {
     const params = {
-      chain: chainId,
+      web3,
       address: address,
-      // operator: address,
-      // web3: web3,
-      memberBaseName: values.name + '-NFTP',
+      host: currentDAO.host,
       ...values,
-      members,
-      image: avatar,
-
-      // defaultVoteTime: 0,
-      // assetIssuanceTax: 6000,
-      // assetCirculationTax: 1000,
     };
     console.log('form:', params);
 
-    setMakeDAOStorage('start', params);
-    setIsModalOpen(true);
+    const res = await setMissionAndDesc(params);
 
-    // dispatch(deployAssetSalesDAO(params));
+    console.log(res);
+
+    dispatch(getDAOList({ chain: chainId, owner: address }));
+    dispatch(getDAO({ chain: chainId, address: currentDAO.address }));
+    // getDAOList
+    // getCurrent
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('form Failed:', errorInfo);
   };
 
-  const removeMember = (value: string) => {
-    members.splice(
-      members.findIndex((item: any) => item.owner === value),
-      1,
-    );
-    setMembers([...members]);
-  };
+  // const removeMember = (value: string) => {
+  //   members.splice(
+  //     members.findIndex((item: any) => item.owner === value),
+  //     1,
+  //   );
+  //   setMembers([...members]);
+  // };
 
-  const addMember = () => {
-    const value = form.getFieldValue('member');
+  // const addMember = () => {
+  //   const value = form.getFieldValue('member');
 
-    form
-      .validateFields(['member'])
-      .then(() => {
-        const newMembers = [
-          ...members,
-          {
-            id: hexRandomNumber(),
-            name: '',
-            description: '',
-            image: '',
-            votes: 1,
-            owner: value,
-          },
-        ];
+  //   form
+  //     .validateFields(['member'])
+  //     .then(() => {
+  //       const newMembers = [
+  //         ...members,
+  //         {
+  //           id: hexRandomNumber(),
+  //           owner: value,
+  //           votes: 1,
+  //           name: '',
+  //           description: '',
+  //           avatar: '',
+  //         },
+  //       ];
 
-        setMembers(newMembers);
-        form.setFieldValue('member', '');
-      })
-      .catch((errorInfo) => {});
-  };
+  //       setMembers(newMembers);
+  //       form.setFieldValue('member', '');
+  //     })
+  //     .catch((errorInfo) => {});
+  // };
 
-  const validateRepeat = (rule: any, value: string) => {
-    if ((members || []).find((item: any) => item.owner === value)) {
-      // callback(new Error(this.$t("rules.repeat", { name: "address" })));
-      return Promise.reject(new Error('repeat'));
-    }
+  // const validateRepeat = (rule: any, value: string) => {
+  //   if ((members || []).find((item: any) => item.owner === value)) {
+  //     // callback(new Error(this.$t("rules.repeat", { name: "address" })));
+  //     return Promise.reject(new Error('repeat'));
+  //   }
 
-    return Promise.resolve();
-  };
+  //   return Promise.resolve();
+  // };
 
   const handleChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>,
@@ -151,13 +157,13 @@ const FormGroup: React.FC = () => {
     return !message;
   };
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+  // const handleCancel = () => {
+  //   setIsModalOpen(false);
+  // };
 
-  const next = () => {
-    router.push('/launch/setting');
-  };
+  // const next = () => {
+  //   router.push('/launch/setting');
+  // };
 
   return (
     <div className="form-wrap">
@@ -192,8 +198,9 @@ const FormGroup: React.FC = () => {
               ]}
             >
               <Input
-              // className="input"
-              // prefix={<span style={{ color: '#000' }}>Name:</span>}
+                disabled
+                // className="input"
+                // prefix={<span style={{ color: '#000' }}>Name:</span>}
               />
             </Form.Item>
 
@@ -219,7 +226,7 @@ const FormGroup: React.FC = () => {
               <Input.TextArea rows={4} />
             </Form.Item>
 
-            <Form.Item label="Upload" valuePropName="fileList">
+            <Form.Item label="Logo" valuePropName="fileList">
               <Space>
                 <Upload
                   action={process.env.NEXT_PUBLIC_QINIU_UPLOAD_URL}
@@ -228,6 +235,7 @@ const FormGroup: React.FC = () => {
                   listType="picture-card"
                   beforeUpload={beforeUpload}
                   onChange={handleChange}
+                  disabled
                 >
                   {avatar ? (
                     <Img
@@ -250,7 +258,7 @@ const FormGroup: React.FC = () => {
             </Form.Item>
           </div>
 
-          <div className="item-group">
+          {/* <div className="item-group">
             <div className="form-title1">Setting No.1 Member</div>
             <div className="form-title2">
               Lorem ipsum dolor sit amet, consectetur
@@ -266,7 +274,6 @@ const FormGroup: React.FC = () => {
                 { validator: validateRepeat },
               ]}
             >
-              {/* <Input /> */}
               <Space
                 className="input-member"
                 align="baseline"
@@ -280,10 +287,7 @@ const FormGroup: React.FC = () => {
             </Form.Item>
 
             <div className="tags">
-              <Tag key={address} className="tag">
-                {address}
-              </Tag>
-              {members.slice(1).map((item: any) => (
+              {members.map((item: any) => (
                 <Tag
                   closable
                   onClose={(e) => {
@@ -298,7 +302,7 @@ const FormGroup: React.FC = () => {
                 </Tag>
               ))}
             </div>
-          </div>
+          </div> */}
         </div>
 
         <Form.Item>
@@ -308,7 +312,7 @@ const FormGroup: React.FC = () => {
         </Form.Item>
       </Form>
 
-      <Modal
+      {/* <Modal
         width={512}
         open={isModalOpen}
         onCancel={handleCancel}
@@ -324,7 +328,7 @@ const FormGroup: React.FC = () => {
             Done
           </Button>
         </div>
-      </Modal>
+      </Modal> */}
 
       <style jsx>
         {`

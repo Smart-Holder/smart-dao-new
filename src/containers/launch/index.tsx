@@ -1,3 +1,4 @@
+import { getMakeDAOStorage } from '@/utils/launch';
 import { Avatar, Space } from 'antd';
 import Image from 'next/image';
 
@@ -7,33 +8,32 @@ import icon3 from '/public/images/dashboard/mine/home-icon-3.png';
 import icon4 from '/public/images/dashboard/mine/home-icon-4.png';
 
 const App = () => {
-  const url =
-    'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
+  const cacheDAO = getMakeDAOStorage('start');
 
   return (
     <div className="wrap">
       <div className="top">
         <Avatar
           size={165}
-          src={url}
+          src={cacheDAO.image}
           style={{ backgroundColor: '#fff', marginRight: 26 }}
         />
         <div>
-          <div className="name">James Witwitcky</div>
+          <div className="name">{cacheDAO.name}</div>
           <div className="total">
-            成员数: <span>10</span>
+            成员数: <span>0</span>
           </div>
           <Space size={82}>
             <div className="top-item">
-              <span className="num">100</span>
+              <span className="num">0</span>
               <span>提案总数</span>
             </div>
             <div className="top-item">
-              <span className="num">100</span>
+              <span className="num">0</span>
               <span>正在填投票数</span>
             </div>
             <div className="top-item">
-              <span className="num">100</span>
+              <span className="num">0</span>
               <span>已完结投票数</span>
             </div>
           </Space>
@@ -51,7 +51,7 @@ const App = () => {
               alt="img"
             />
             <div className="bottom-item-right">
-              <span className="num">100 ETH</span>
+              <span className="num">0 ETH</span>
               <span>资产总价值</span>
             </div>
           </div>
@@ -64,7 +64,7 @@ const App = () => {
               alt="img"
             />
             <div className="bottom-item-right">
-              <span className="num">100</span>
+              <span className="num">0</span>
               <span>资产总数</span>
             </div>
           </div>
@@ -77,7 +77,7 @@ const App = () => {
               alt="img"
             />
             <div className="bottom-item-right">
-              <span className="num">100</span>
+              <span className="num">0</span>
               <span>订单总数</span>
             </div>
           </div>
@@ -90,7 +90,7 @@ const App = () => {
               alt="img"
             />
             <div className="bottom-item-right">
-              <span className="num">100 ETH</span>
+              <span className="num">0 ETH</span>
               <span>总收入</span>
             </div>
           </div>

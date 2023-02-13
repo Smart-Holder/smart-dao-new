@@ -1,5 +1,14 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
-import { Button, Input, Space, Typography, Image, Row, Col } from 'antd';
+import {
+  Button,
+  Input,
+  Space,
+  Typography,
+  Image,
+  Row,
+  Col,
+  message,
+} from 'antd';
 import { Checkbox, Form, Upload, Tag } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
@@ -16,6 +25,9 @@ import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import type { CheckboxValueType } from 'antd/es/checkbox/Group';
 import { formatAddress } from '@/utils';
+import { Permissions } from '@/config/enum';
+
+import { setMemberInfo } from '@/api/member';
 
 const options = [
   { label: 'Apple', value: 'Apple' },
@@ -28,39 +40,37 @@ const App = () => {
   const { userInfo } = useAppSelector((store) => store.user);
   const { addressFormat } = useAppSelector((store) => store.wallet);
   const { currentMember } = useAppSelector((store) => store.dao);
-  const [image, setImage] = useState();
+  const { loading } = useAppSelector((store) => store.common);
+  const [image, setImage] = useState(currentMember.image);
+  const [imageMessage, setImageMessage] = useState('');
+
   const url =
     'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
 
-  const onFinish = (values: any) => {
+  const onFinish = async (values: any) => {
     console.log('validate Success:', values);
 
-    if (image) {
-      const params = {
-        ...userInfo,
-        image,
-        nickname: values.nickname,
-      };
-
-      sdk.user.methods.setUser(params).then(() => {
-        sdk.user.methods.getUser().then((res) => {
-          if (res && res.nickname) {
-            dispatch(setUserInfo(res));
-          }
-        });
-      });
+    if (!image) {
+      setImageMessage('Image is required');
+      return;
     }
+
+    await setMemberInfo({ ...values, image });
+
+    message.success('success');
+    window.location.reload();
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('validate Failed:', errorInfo);
   };
 
-  const handleChange: UploadProps['onChange'] = (
+  const onImageChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>,
   ) => {
     if (info.file.status === 'done') {
       setImage(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+      setImageMessage('');
     }
   };
 
@@ -70,11 +80,15 @@ const App = () => {
     return !message;
   };
 
-  const handleSubmit = () => {};
+  // 转让
+  const transfer = () => {};
 
   const onCheckboxChange = (checkedValues: CheckboxValueType[]) => {
     console.log('checked = ', checkedValues);
   };
+
+  // 设置权限
+  const setLimit = () => {};
 
   return (
     <div className="wrap">
@@ -100,7 +114,7 @@ const App = () => {
         validateTrigger="onBlur"
       >
         <Form.Item
-          name="nickname"
+          name="name"
           rules={[
             { required: true },
             { type: 'string', min: 5, max: 12 },
@@ -113,7 +127,10 @@ const App = () => {
           />
         </Form.Item>
 
-        <Form.Item valuePropName="fileList">
+        <Form.Item
+          valuePropName="fileList"
+          extra={<span style={{ color: 'red' }}>{imageMessage}</span>}
+        >
           <Space>
             <Upload
               action={process.env.NEXT_PUBLIC_QINIU_UPLOAD_URL}
@@ -121,12 +138,12 @@ const App = () => {
               showUploadList={false}
               listType="picture-card"
               beforeUpload={beforeUpload}
-              onChange={handleChange}
+              onChange={onImageChange}
             >
-              {currentMember.image ? (
+              {image ? (
                 <Image
                   style={{ borderRadius: 10, cursor: 'pointer' }}
-                  src={currentMember.image}
+                  src={image}
                   width={100}
                   height={100}
                   preview={false}
@@ -164,15 +181,15 @@ const App = () => {
               className="button"
               type="primary"
               htmlType="submit"
-              onClick={handleSubmit}
+              loading={loading}
             >
               Save
             </Button>
             <Button
               className="button"
               type="primary"
-              htmlType="submit"
-              onClick={handleSubmit}
+              htmlType="button"
+              onClick={transfer}
             >
               Transfer
             </Button>
@@ -187,38 +204,43 @@ const App = () => {
 
       <Checkbox.Group
         className="checkbox-group"
-        defaultValue={['1', '2']}
+        defaultValue={currentMember.permissions || []}
         onChange={onCheckboxChange}
       >
         <Row style={{ width: '100%' }} gutter={[20, 48]}>
           <Col span={6}>
-            <Checkbox value="1">投票</Checkbox>
+            <Checkbox value={Permissions.Action_VotePool_Vote}>投票</Checkbox>
           </Col>
           <Col span={6}>
-            <Checkbox value="2">发起提案</Checkbox>
+            <Checkbox value={Permissions.Action_VotePool_Create}>
+              发起提案
+            </Checkbox>
           </Col>
           <Col span={6}>
-            <Checkbox value="3">添加NFTP</Checkbox>
+            <Checkbox value={Permissions.Action_Member_Create}>
+              添加NFTP
+            </Checkbox>
           </Col>
           <Col span={6}>
-            <Checkbox value="4">发行资产</Checkbox>
+            <Checkbox value={Permissions.Action_Asset_SafeMint}>
+              发行资产
+            </Checkbox>
           </Col>
           <Col span={6}>
-            <Checkbox value="5">上架资产</Checkbox>
+            <Checkbox value={Permissions.Action_Asset_Shell_Withdraw}>
+              上架资产
+            </Checkbox>
           </Col>
           <Col span={12}>
-            <Checkbox value="6">修改DAO的基础设置</Checkbox>
+            <Checkbox value={Permissions.Action_DAO_Settings}>
+              修改DAO的基础设置
+            </Checkbox>
           </Col>
         </Row>
       </Checkbox.Group>
 
       <div className="buttons">
-        <Button
-          className="button"
-          type="primary"
-          htmlType="submit"
-          onClick={handleSubmit}
-        >
+        <Button className="button" type="primary" onClick={setLimit}>
           Change
         </Button>
       </div>

@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Space, Button, Divider } from 'antd';
-import { getDAOList } from '@/store/features/daoSlice';
+import { getDAOList, setDAOList } from '@/store/features/daoSlice';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
+import sdk from 'hcstore/sdk';
 
 import Item from '@/containers/mine/daoItem';
 
 import { getCookie } from '@/utils/cookie';
+import { getMakeDAOStorage } from '@/utils/launch';
 
 export default function List() {
   const dispatch = useAppDispatch();
@@ -13,45 +15,73 @@ export default function List() {
   const chainId = Number(getCookie('chainId'));
   const address = getCookie('address');
 
-  const [active, setActive] = useState(1);
-  const { DAOList } = useAppSelector((store) => store.dao);
   const { isInit } = useAppSelector((store) => store.common);
+  const [active, setActive] = useState('create');
+  const { DAOList } = useAppSelector((store) => store.dao);
+  const [likeDAOs, setLikeDAOs] = useState([]);
+  const [joinDAOs, setJoinDAOs] = useState([]);
+
+  const [list, setList] = useState([]) as any;
+
+  const cacheDAO = getMakeDAOStorage('start');
 
   useEffect(() => {
+    const getDAOList = async () => {
+      const res = await sdk.utils.methods.getDAOsFromOwner({
+        chain: chainId,
+        owner: address,
+      });
+
+      dispatch(setDAOList(res));
+      setList(res);
+    };
+
     if (address && chainId) {
-      dispatch(getDAOList({ chain: chainId, owner: address }));
+      getDAOList();
     }
   }, [isInit]);
 
+  useEffect(() => {
+    const getLikeDAOS = async () => {
+      const res = await sdk.user.methods.getUserLikeDAOs({ chain: chainId });
+
+      setLikeDAOs(res);
+    };
+
+    getLikeDAOS();
+  }, []);
+
   const handleClick1 = () => {
-    setActive(1);
+    setActive('create');
+    setList(DAOList);
   };
   const handleClick2 = () => {
-    setActive(2);
+    setActive('join');
   };
   const handleClick3 = () => {
-    setActive(3);
+    setActive('follow');
+    setList(likeDAOs);
   };
 
   return (
     <div className="dao-list-wrap">
       <Space size={50} split={<Divider className="divider" type="vertical" />}>
         <Button
-          className={`list-button ${active === 1 ? 'active' : ''}`}
+          className={`list-button ${active === 'create' ? 'active' : ''}`}
           type="link"
           onClick={handleClick1}
         >
           我创建的
         </Button>
         <Button
-          className={`list-button ${active === 2 ? 'active' : ''}`}
+          className={`list-button ${active === 'join' ? 'active' : ''}`}
           type="link"
           onClick={handleClick2}
         >
           我加入的
         </Button>
         <Button
-          className={`list-button ${active === 3 ? 'active' : ''}`}
+          className={`list-button ${active === 'follow' ? 'active' : ''}`}
           type="link"
           onClick={handleClick3}
         >
@@ -60,9 +90,10 @@ export default function List() {
       </Space>
 
       <div className="dao-list">
-        <Space size={34}>
-          {DAOList.map((item) => (
-            <Item data={item} key={item.id} />
+        <Space size={34} wrap>
+          {cacheDAO && <Item data={cacheDAO} DAOType="cache" />}
+          {list.map((item: any) => (
+            <Item data={item} DAOType={active} key={item.id} />
           ))}
           {/* <Item data={{ name: '123' }} />
           <Item data={{ name: '123' }} />
