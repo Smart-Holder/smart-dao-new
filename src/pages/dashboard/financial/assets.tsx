@@ -28,6 +28,7 @@ const Assets = () => {
             createTime={123123123}
             amount={199}
             desc="xxxxxxx"
+            logo="https://storage.nfte.ai/icon/currency/eth.svg"
           />
         </div>
         <div
@@ -45,7 +46,7 @@ const Assets = () => {
         </div>
         <div className={styles['dashboard-content-body']}>
           <div className={styles['financial-list']}>
-            {new Array(20).fill().map((item, i) => {
+            {new Array(20).fill({}).map((item, i) => {
               return (
                 <div key={i} className={styles['financial-item']}>
                   <FinancialItem

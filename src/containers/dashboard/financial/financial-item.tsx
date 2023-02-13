@@ -2,11 +2,14 @@ import { FC, ReactNode } from 'react';
 import Image from 'next/image';
 import styles from './financial-item.module.css';
 
-type FinancialItemProps = {
+type FinancialItemProps = FinancialItemType & {
+  priceIcon?: ReactNode;
+};
+
+export type FinancialItemType = {
   logo: string;
   title: string;
   price: number;
-  priceIcon?: ReactNode;
 };
 
 const FinancialItem: FC<FinancialItemProps> = (props) => {
