@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-import { Layout, Tabs } from 'antd';
-const { Content } = Layout;
+import { Layout as AntdLayout, Tabs } from 'antd';
 import styles from '@/styles/content.module.css';
 import { getCookie } from '@/utils/cookie';
 import type { TabsProps } from 'antd';
@@ -11,8 +10,11 @@ import { Divider, Space, Button } from 'antd';
 import { getDAOList } from '@/store/features/daoSlice';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
-import BasicLayout from '@/components/layout/basic';
 import Mine from '@/containers/mine';
+
+import Layout from '@/components/layout';
+import type { ReactElement } from 'react';
+import type { NextPageWithLayout } from '@/pages/_app';
 
 // const items: TabsProps['items'] = [
 //   {
@@ -27,7 +29,7 @@ import Mine from '@/containers/mine';
 //   },
 // ];
 
-export default function App() {
+const App: NextPageWithLayout = () => {
   const dispatch = useAppDispatch();
 
   // const { chainId, address } = useAppSelector((store) => store.wallet);
@@ -57,18 +59,20 @@ export default function App() {
   };
 
   return (
-    <BasicLayout>
-      <Content className={styles.content}>
-        <div>
-          <div className={styles.title1}>
-            Welcome! Discovery the hole magic worlds !
-          </div>
-          <div className={styles.title2}>Welcome to SmartDAO</div>
+    <AntdLayout.Content className={styles.content}>
+      <div>
+        <div className={styles.title1}>
+          Welcome! Discovery the hole magic worlds !
         </div>
-        <div className={styles.box}>
-          <Mine />
-        </div>
-      </Content>
-    </BasicLayout>
+        <div className={styles.title2}>Welcome to SmartDAO</div>
+      </div>
+      <div className={styles.box}>
+        <Mine />
+      </div>
+    </AntdLayout.Content>
   );
-}
+};
+
+App.getLayout = (page: ReactElement) => <Layout type="basic">{page}</Layout>;
+
+export default App;

@@ -26,21 +26,21 @@ export default function List() {
 
   const cacheDAO = getMakeDAOStorage('start');
 
-  useEffect(() => {
-    const getDAOList = async () => {
-      const res = await sdk.utils.methods.getDAOsFromCreateBy({
-        chain: chainId,
-        owner: address,
-      });
+  // useEffect(() => {
+  //   const getDAOList = async () => {
+  //     const res = await sdk.utils.methods.getDAOsFromCreateBy({
+  //       chain: chainId,
+  //       owner: address,
+  //     });
 
-      setCreateDAOs(res);
-      setList(res);
-    };
+  //     setCreateDAOs(res);
+  //     setList(res);
+  //   };
 
-    if (address && chainId) {
-      getDAOList();
-    }
-  }, [isInit]);
+  //   if (address && chainId) {
+  //     getDAOList();
+  //   }
+  // }, [isInit]);
 
   useEffect(() => {
     const getDAOList = async () => {

@@ -1,6 +1,9 @@
-import { Layout } from 'antd';
+import { Layout as AntdLayout } from 'antd';
 
-import DashboardLayout from '@/components/layout/dashboard';
+import Layout from '@/components/layout';
+import type { ReactElement } from 'react';
+import type { NextPageWithLayout } from '@/pages/_app';
+
 import styles from '@/styles/content.module.css';
 import FinancialHeader from '@/containers/dashboard/financial/financial-header';
 import Counts from '@/containers/dashboard/mine/counts';
@@ -17,52 +20,52 @@ const PriceIcon = () => (
   />
 );
 
-const Assets = () => {
+const App: NextPageWithLayout = () => {
   return (
-    <DashboardLayout>
-      <Layout.Content className={styles['dashboard-content']}>
-        <div className={styles['dashboard-content-header']}>
-          <FinancialHeader
-            title="DAO名称"
-            addr="0xC……4F5C"
-            createTime={123123123}
-            amount={199}
-            desc="xxxxxxx"
-            logo="https://storage.nfte.ai/icon/currency/eth.svg"
-          />
+    <AntdLayout.Content className={styles['dashboard-content']}>
+      <div className={styles['dashboard-content-header']}>
+        <FinancialHeader
+          title="DAO名称"
+          addr="0xC……4F5C"
+          createTime={123123123}
+          amount={199}
+          desc="xxxxxxx"
+          logo="https://storage.nfte.ai/icon/currency/eth.svg"
+        />
+      </div>
+      <div
+        className={`${styles['dashboard-content-header']} ${styles['dashboard-content-header-mt']}`}
+      >
+        <Counts
+          items={[
+            { num: 12456, title: 'All Acounts' },
+            { num: 31232, title: 'All Acounts' },
+            { num: 31232, title: 'All Acounts' },
+            { num: 31232, title: 'All Acounts' },
+          ]}
+        />
+        <Filters />
+      </div>
+      <div className={styles['dashboard-content-body']}>
+        <div className={styles['financial-list']}>
+          {new Array(20).fill({}).map((item, i) => {
+            return (
+              <div key={i} className={styles['financial-item']}>
+                <FinancialItem
+                  title="Medium Spicy Pizza with Kemangi Leaf"
+                  logo="/next.svg"
+                  price={100}
+                  priceIcon={<PriceIcon />}
+                />
+              </div>
+            );
+          })}
         </div>
-        <div
-          className={`${styles['dashboard-content-header']} ${styles['dashboard-content-header-mt']}`}
-        >
-          <Counts
-            items={[
-              { num: 12456, title: 'All Acounts' },
-              { num: 31232, title: 'All Acounts' },
-              { num: 31232, title: 'All Acounts' },
-              { num: 31232, title: 'All Acounts' },
-            ]}
-          />
-          <Filters />
-        </div>
-        <div className={styles['dashboard-content-body']}>
-          <div className={styles['financial-list']}>
-            {new Array(20).fill({}).map((item, i) => {
-              return (
-                <div key={i} className={styles['financial-item']}>
-                  <FinancialItem
-                    title="Medium Spicy Pizza with Kemangi Leaf"
-                    logo="/next.svg"
-                    price={100}
-                    priceIcon={<PriceIcon />}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </Layout.Content>
-    </DashboardLayout>
+      </div>
+    </AntdLayout.Content>
   );
 };
 
-export default Assets;
+App.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
+
+export default App;

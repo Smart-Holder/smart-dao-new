@@ -1,18 +1,21 @@
-import { Layout } from 'antd';
+import { Layout as AntdLayout } from 'antd';
 
-import DashboardLayout from '@/components/layout/dashboard';
+import Layout from '@/components/layout';
+import type { ReactElement } from 'react';
+import type { NextPageWithLayout } from '@/pages/_app';
+
 import NFTP from '@/containers/dashboard/member/nftp';
 
 import styles from '@/styles/content.module.css';
 
-const App = () => {
+const App: NextPageWithLayout = () => {
   return (
-    <DashboardLayout>
-      <Layout.Content className={styles['dashboard-content']}>
-        <NFTP />
-      </Layout.Content>
-    </DashboardLayout>
+    <AntdLayout.Content className={styles['dashboard-content']}>
+      <NFTP />
+    </AntdLayout.Content>
   );
 };
+
+App.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
 
 export default App;

@@ -1,28 +1,28 @@
-import { Layout } from 'antd';
+import { Layout as AntdLayout } from 'antd';
+import Layout from '@/components/layout';
+import type { ReactElement } from 'react';
+import type { NextPageWithLayout } from '@/pages/_app';
 
-import BasicLayout from '@/components/layout/basic';
 import styles from '@/styles/content.module.css';
 
 import DAOList from '@/containers/home/daoList';
 
-const { Content } = Layout;
-
-export default function Home() {
+const App: NextPageWithLayout = () => {
   return (
-    <BasicLayout>
-      <Content className={styles['content-home']}>
-        <div>
-          <div className={styles.title1}>
-            Welcome! Discovery the hole magic worlds !
-          </div>
-          <div className={styles.title2}>Welcome to SmartDAO</div>
+    <AntdLayout.Content className={styles['content-home']}>
+      <div>
+        <div className={styles.title1}>
+          Welcome! Discovery the hole magic worlds !
         </div>
-        {/* <div className={styles.space}></div> */}
-        <div className={styles.box} id="scrollableDiv">
-          <DAOList />
-        </div>
-        {/* <div className={styles.space2}></div> */}
-      </Content>
-    </BasicLayout>
+        <div className={styles.title2}>Welcome to SmartDAO</div>
+      </div>
+      <div className={styles.box} id="scrollableDiv">
+        <DAOList />
+      </div>
+    </AntdLayout.Content>
   );
-}
+};
+
+App.getLayout = (page: ReactElement) => <Layout type="basic">{page}</Layout>;
+
+export default App;

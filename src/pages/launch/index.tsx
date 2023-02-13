@@ -1,26 +1,29 @@
-import { Layout } from 'antd';
+import { Layout as AntdLayout } from 'antd';
 
-import LaunchLayout from '@/components/layout/launch';
+import Layout from '@/components/layout';
+import type { ReactElement } from 'react';
+import type { NextPageWithLayout } from '@/pages/_app';
+
 import Index from '@/containers/launch';
 
 import styles from '@/styles/content.module.css';
 
-const Home = () => {
+const App: NextPageWithLayout = () => {
   return (
-    <LaunchLayout>
-      <Layout.Content className={styles['launch-content']}>
-        <div>
-          <div className={styles.title1}>
-            Welcome! Discovery the hole magic worlds !
-          </div>
-          <div className={styles.title2}>Welcome to SmartDAO</div>
+    <AntdLayout.Content className={styles['launch-content']}>
+      <div>
+        <div className={styles.title1}>
+          Welcome! Discovery the hole magic worlds !
         </div>
-        <div className={styles.box}>
-          <Index />
-        </div>
-      </Layout.Content>
-    </LaunchLayout>
+        <div className={styles.title2}>Welcome to SmartDAO</div>
+      </div>
+      <div className={styles.box}>
+        <Index />
+      </div>
+    </AntdLayout.Content>
   );
 };
 
-export default Home;
+App.getLayout = (page: ReactElement) => <Layout type="launch">{page}</Layout>;
+
+export default App;

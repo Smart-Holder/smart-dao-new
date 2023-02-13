@@ -4,12 +4,13 @@ import Image from 'next/image';
 import router from 'next/router';
 import dynamic from 'next/dynamic';
 
-import Search from '@/components/search';
+// import Search from '@/components/search';
 // import Menu from '@/components/header/menu';
 // import Language from '@/components/header/language';
 
 import logo from '/public/logo.png';
 
+const Search = dynamic(() => import('@/components/search'), { ssr: false });
 const Menu = dynamic(() => import('@/components/header/menu'), { ssr: false });
 const Language = dynamic(() => import('@/components/header/language'), {
   ssr: false,
