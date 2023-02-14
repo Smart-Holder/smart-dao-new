@@ -1,4 +1,4 @@
-import { useEffect, useState, createRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Table, Button, DatePicker, Form, Select } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -46,7 +46,7 @@ const App = () => {
   const [total, setTotal] = useState(0);
   const [data, setData] = useState([]);
 
-  const nftpModal: any = createRef();
+  const nftpModal: any = useRef(null);
 
   const showModal = () => {
     nftpModal.current.show();
@@ -114,7 +114,7 @@ const App = () => {
   return (
     <div className="wrap">
       <div className={styles['dashboard-content-header']}>
-        <Counts items={[{ num: 100, title: '全部NFTP' }]} />
+        <Counts items={[{ num: total, title: '全部NFTP' }]} />
 
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <Form

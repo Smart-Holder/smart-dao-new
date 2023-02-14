@@ -1,8 +1,11 @@
-import { Avatar } from 'antd';
+import { Avatar, Statistic, Typography } from 'antd';
 import { FC } from 'react';
 import styles from './vote-item.module.css';
 import iconUser from '/public/images/icon-user.png';
 import Image from 'next/image';
+
+const { Countdown } = Statistic;
+const { Paragraph } = Typography;
 
 export enum StatusKeyMap {
   processing = '投票中',
@@ -12,10 +15,10 @@ export enum StatusKeyMap {
 }
 
 export enum TypeKeyMap {
-  normal = '普通',
-  finance = '财务',
-  member = '成员',
-  basic = '基础',
+  normal = '普通提案',
+  finance = '财务管理',
+  member = '成员管理',
+  basic = '基础设置',
 }
 
 export type StatusType = keyof typeof StatusKeyMap;
@@ -38,6 +41,9 @@ export type VoteItemType = {
   opposed: number;
   execTime?: number;
   execUser?: { avatar?: string; name: string; address: string };
+  votes: number;
+  proposal_id: string;
+  data?: any;
 };
 
 type VoteItemProps = {
@@ -61,6 +67,9 @@ const VoteItem: FC<VoteItemProps> = (props) => {
     onClick,
     execTime,
     execUser,
+    votes,
+    proposal_id,
+    data,
   } = props;
 
   const purpose = desc ? JSON.parse(desc || '')?.purpose : description;
@@ -82,6 +91,9 @@ const VoteItem: FC<VoteItemProps> = (props) => {
           opposed,
           execTime,
           execUser,
+          votes,
+          proposal_id,
+          data,
         })
       }
     >
@@ -90,7 +102,7 @@ const VoteItem: FC<VoteItemProps> = (props) => {
           {StatusKeyMap[status]}
         </div>
         <div className={styles.info}>
-          <div className={`${styles.tag} ${styles[type]}`}>
+          <div className={`${styles.tag} ${styles[status]}`}>
             {TypeKeyMap[type]}
           </div>
           <div className={styles.title}>{title}</div>
@@ -120,7 +132,9 @@ const VoteItem: FC<VoteItemProps> = (props) => {
           </div>
         </div>
       </div>
-      <div className={styles.description}>{purpose}</div>
+      <div className={styles.description}>
+        <Paragraph ellipsis={{ rows: 2 }}>{purpose}</Paragraph>
+      </div>
       <div className={styles.footer}>
         <div className={styles.count}>
           <span>{support}</span>Max
@@ -129,7 +143,15 @@ const VoteItem: FC<VoteItemProps> = (props) => {
           <span>{opposed}</span>Mix
         </div>
         <div className={styles.time}>
-          {Date.now() > endTime ? '投票已经结束' : `Times: ${endTime}`}
+          {Date.now() > endTime ? (
+            '投票已经结束'
+          ) : (
+            <Countdown
+              className={styles.countdown}
+              title="Times: "
+              value={endTime}
+            />
+          )}
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React, { useState, MouseEvent, createRef, useEffect } from 'react';
+import React, { useState, MouseEvent, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { Dropdown, Image as Img, Avatar, Divider, Button } from 'antd';
@@ -18,14 +18,10 @@ import { formatAddress } from '@/utils';
 import { ETH_CHAINS_INFO } from '@/config/chains';
 
 import iconUser from '/public/images/icon-user.png';
-import { setUserInfo } from '@/store/features/userSlice';
-import { setLoading } from '@/store/features/commonSlice';
 
 import iconMetamask from '/public/images/icon-metamask.png';
 import iconWallet from '/public/images/icon-wallet.png';
 import iconAdd from '/public/images/icon-add.png';
-
-import sdk from 'hcstore/sdk';
 
 const Menu = () => {
   // 通过useSelector直接拿到store中定义的value
@@ -39,9 +35,9 @@ const Menu = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const walletModal: any = createRef();
-  const createModal: any = createRef();
-  const infoModal: any = createRef();
+  const walletModal: any = useRef(null);
+  const createModal: any = useRef(null);
+  const infoModal: any = useRef(null);
 
   const handleDropdownClick = (e: MouseEvent) => {
     e.preventDefault();

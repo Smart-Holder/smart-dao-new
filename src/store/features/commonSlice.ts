@@ -34,6 +34,7 @@ export const CommonSlice = createSlice({
       state.loadingTimer = payload;
     },
     setSearchText: (state, { payload }) => {
+      console.log('setSearchText---------', payload);
       state.searchText = payload;
     },
   },

@@ -1,4 +1,9 @@
-import React, { useState, useImperativeHandle, forwardRef } from 'react';
+import React, {
+  useState,
+  useImperativeHandle,
+  forwardRef,
+  useEffect,
+} from 'react';
 import {
   Button,
   Input,
@@ -27,6 +32,8 @@ import type { CheckboxValueType } from 'antd/es/checkbox/Group';
 
 import Slider from '@/components/slider';
 
+import { getLifespan } from '@/api/vote';
+
 const options = [
   { label: 'Apple', value: 'Apple' },
   { label: 'Pear', value: 'Pear' },
@@ -37,8 +44,23 @@ const App = () => {
   const dispatch = useAppDispatch();
   const { userInfo } = useAppSelector((store) => store.user);
   const [image, setImage] = useState();
+  const { currentDAO } = useAppSelector((store) => store.dao);
   const url =
     'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
+
+  const [min, setMin] = useState(0);
+
+  useEffect(() => {
+    getLifespan()
+      .then((res) => {
+        setMin(Math.floor(res / 3600) || 12);
+      })
+      .catch((err) => {
+        setMin(12);
+      });
+
+    getLifespan();
+  }, []);
 
   const onTaxChange1 = (value: number) => {
     console.log(value);
@@ -50,40 +72,49 @@ const App = () => {
 
   const handleSubmit = () => {};
 
+  const value = currentDAO.defaultVoteTime
+    ? Math.floor(currentDAO.defaultVoteTime / 3600)
+    : 0;
+
+  if (!min) {
+    return null;
+  }
+
   return (
     <div className="wrap">
       <div className="h1">Setting Executor</div>
       <div className="h2">Lorem ipsum dolor sit amet, consectetur</div>
 
-      <Slider
-        style={{ paddingTop: 23 }}
-        defaultValue={60}
+      {/* <Slider
+        value={60}
         label="Issuance Tax"
         color="#FF6D4C"
         onAfterChange={onTaxChange1}
       />
       <Slider
-        defaultValue={30}
+        value={30}
         label="Circulation Tax"
         color="#2AC154"
         onAfterChange={onTaxChange2}
-      />
+      /> */}
       <Slider
-        defaultValue={30}
+        value={value}
         label="投票期"
         unit="hr"
-        max={200}
-        onAfterChange={onTaxChange2}
+        min={min}
+        max={720}
+        readOnly
+        // onAfterChange={onTaxChange2}
       />
 
-      <Button
+      {/* <Button
         className="button"
         type="primary"
         htmlType="submit"
         onClick={handleSubmit}
       >
         Change
-      </Button>
+      </Button> */}
 
       <style jsx>
         {`
@@ -106,6 +137,7 @@ const App = () => {
             align-items: center;
             height: 18px;
             margin-top: 7px;
+            margin-bottom: 23px;
             font-size: 12px;
             font-family: AppleSystemUIFont;
             color: #969ba0;

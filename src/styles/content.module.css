@@ -150,6 +150,10 @@
   text-align: left;
 }
 
+.dashboard-content-scroll {
+  height: calc(100vh - 148px);
+}
+
 .dashboard-content .title1 {
   height: 42px;
   font-size: 24px;
@@ -190,6 +194,7 @@
 }
 
 .dashboard-content-body {
+  overflow-y: auto;
   width: 100%;
   background-color: white;
   flex: 1;
@@ -232,7 +237,7 @@
 }
 
 .vote-list {
-  padding: 38px 16px;
+  /* padding: 38px 16px; */
   display: flex;
   flex-wrap: wrap;
 }

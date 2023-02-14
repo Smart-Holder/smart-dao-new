@@ -68,7 +68,23 @@
   bottom: 0;
 }
 
-.tag.normal {
+.tag.processing {
+  background-color: #2ac154;
+}
+
+.tag.passed {
+  background-color: #546ff6;
+}
+
+.tag.rejected {
+  background-color: #c92929;
+}
+
+.tag.executed {
+  background-color: #ee6b2a;
+}
+
+/* .tag.normal {
   background-color: #546ff6;
 }
 .tag.finance {
@@ -79,7 +95,7 @@
 }
 .tag.basic {
   background-color: #f65492;
-}
+} */
 
 .title {
   font-size: 18px;
@@ -136,7 +152,7 @@
   font-weight: 400;
   color: #3c4369;
   line-height: 20px;
-  max-height: 40px;
+  height: 44px;
   width: 100%;
   margin-top: 25px;
 }
@@ -145,6 +161,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
+  margin-top: 10px;
   font-size: 14px;
   font-weight: 400;
   color: #969ba0;
@@ -168,4 +185,31 @@
   color: #969ba0;
   line-height: 24px;
   margin-left: 5px;
+}
+
+.footer .time .countdown {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-size: 14px;
+  font-weight: 400;
+  color: #969ba0;
+  line-height: 24px;
+  margin-left: 5px;
+}
+
+.footer .time .countdown div {
+  margin-bottom: 0;
+
+  font-size: 14px;
+  font-weight: 400;
+  color: #969ba0;
+  line-height: 24px;
+  margin-left: 5px;
+}
+
+.footer .time .countdown div:last-child {
+  width: 72px;
+  /* text-align: right; */
 }

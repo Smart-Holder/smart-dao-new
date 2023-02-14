@@ -1,4 +1,4 @@
-import { createRef } from 'react';
+import { useRef } from 'react';
 import { Layout, Space, Button, Avatar, Typography } from 'antd';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -18,7 +18,7 @@ const { Paragraph } = Typography;
 const App = () => {
   const router = useRouter();
 
-  const roleModal: any = createRef();
+  const roleModal: any = useRef(null);
 
   const storageValues = getMakeDAOStorage('start') || {};
 

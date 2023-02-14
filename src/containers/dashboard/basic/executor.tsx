@@ -34,9 +34,13 @@ const options = [
 const App = () => {
   const dispatch = useAppDispatch();
   const { userInfo } = useAppSelector((store) => store.user);
+  const { currentDAO } = useAppSelector((store) => store.dao);
+  const { loading } = useAppSelector((store) => store.common);
   const [image, setImage] = useState();
   const url =
     'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
+
+  const initialValues = { executor: currentDAO.executor };
 
   const onFinish = (values: any) => {
     console.log('validate Success:', values);
@@ -87,14 +91,15 @@ const App = () => {
       <div className="h1">Setting Executor</div>
       <div className="h2">Lorem ipsum dolor sit amet, consectetur</div>
 
-      <div style={{ marginTop: 15 }}>
+      {/* <div style={{ marginTop: 15 }}>
         <span className="label">User Name:</span>
         <span className="value">abc</span>
-      </div>
+      </div> */}
 
       <Form
         style={{ marginTop: 16 }}
         name="info"
+        initialValues={initialValues}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
@@ -105,16 +110,17 @@ const App = () => {
       >
         <Form.Item
           style={{ width: '100%' }}
-          name="nickname"
+          name="address"
           rules={[{ required: true }, { validator: validateEthAddress }]}
         >
           <div className="item-group">
-            <Input className="input" prefix={<Avatar size={30} src={url} />} />
+            {/* <Input className="input" prefix={<Avatar size={30} src={url} />} /> */}
+            <Input className="input" />
             <Button
               className="button"
               type="primary"
               htmlType="submit"
-              onClick={handleSubmit}
+              loading={loading}
             >
               Replace
             </Button>

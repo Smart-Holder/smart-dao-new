@@ -81,3 +81,16 @@ export function setMemberInfo({
     image,
   ]);
 }
+
+export function setExecutor({ id }: { id: number }) {
+  const { web3, address } = store.getState().wallet;
+  const { currentDAO, currentMember } = store.getState().dao;
+
+  const contract = getContract(web3, Member.abi, currentDAO.member);
+
+  return contractSend(contract, address, 'setExecutor', [
+    currentMember.tokenId,
+    name,
+    '',
+  ]);
+}

@@ -55,6 +55,8 @@ const App = () => {
         defaultValue={assetIssuanceTax}
         label="Issuance Tax"
         color="#FF6D4C"
+        min={1}
+        max={99}
         onAfterChange={onTaxChange1}
       />
       <Slider
@@ -62,6 +64,8 @@ const App = () => {
         defaultValue={assetCirculationTax}
         label="Circulation Tax"
         color="#2AC154"
+        min={1}
+        max={99}
         onAfterChange={onTaxChange2}
       />
 

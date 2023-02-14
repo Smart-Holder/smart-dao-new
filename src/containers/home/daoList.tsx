@@ -37,7 +37,7 @@ const DAOList = () => {
   const [width, setWidth] = useState('');
   const [DAOList, setDAOList] = useState<any>([]);
   const [pageStart, setPageStart] = useState(0);
-  const [total, setTotal] = useState(-1);
+  const [total, setTotal] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const defaultChain = process.env.NEXT_PUBLIC_DEFAULT_CHAIN;
 
@@ -55,9 +55,11 @@ const DAOList = () => {
   }, []);
 
   useEffect(() => {
-    window.addEventListener('resize', debounce(onResize, 200));
+    const resize = debounce(onResize, 200);
+
+    window.addEventListener('resize', resize);
     return () => {
-      window.removeEventListener('resize', debounce(onResize, 200));
+      window.removeEventListener('resize', resize);
     };
   }, []);
 
@@ -87,7 +89,7 @@ const DAOList = () => {
   };
 
   const resetData = async () => {
-    setDAOList([]);
+    // setDAOList([]);
 
     const t = await sdk.dao.methods.getAllDAOsTotal({
       chain: chainId || defaultChain,
@@ -108,7 +110,8 @@ const DAOList = () => {
   };
 
   useEffect(() => {
-    console.log('resetData');
+    setDAOList([]);
+    setTotal(0);
     resetData();
   }, [isInit, searchText, address, chainId]);
 

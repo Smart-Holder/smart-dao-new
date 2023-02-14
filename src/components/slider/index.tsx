@@ -8,6 +8,7 @@ type Params = {
   color?: string;
   label?: string;
   unit?: string;
+  min?: number;
   max?: number;
   readOnly?: boolean;
   onAfterChange?: (value: number) => void;
@@ -20,7 +21,8 @@ const App = ({
   color = '#546FF6',
   label,
   unit,
-  max,
+  min = 0,
+  max = 100,
   readOnly = false,
   onAfterChange,
 }: Params) => {
@@ -48,8 +50,8 @@ const App = ({
       <Slider
         value={value}
         defaultValue={defaultValue}
-        min={1}
-        max={max || 99}
+        min={min}
+        max={max}
         onChange={handleChange}
         onAfterChange={onAfterChange}
       />

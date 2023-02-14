@@ -36,6 +36,7 @@ const options = [
 const App = () => {
   const dispatch = useAppDispatch();
   const { userInfo } = useAppSelector((store) => store.user);
+  const { currentDAO } = useAppSelector((store) => store.dao);
   const [image, setImage] = useState();
   const url =
     'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
@@ -57,27 +58,29 @@ const App = () => {
 
       <Slider
         style={{ padding: '23px 0' }}
-        defaultValue={60}
+        value={currentDAO.assetIssuanceTax / 100}
         label="Issuance Tax"
         color="#FF6D4C"
-        onAfterChange={onTaxChange1}
+        readOnly
+        // onAfterChange={onTaxChange1}
       />
       <Slider
         style={{ padding: '23px 0' }}
-        defaultValue={30}
+        value={currentDAO.assetCirculationTax / 100}
         label="Circulation Tax"
         color="#2AC154"
-        onAfterChange={onTaxChange2}
+        readOnly
+        // onAfterChange={onTaxChange2}
       />
 
-      <Button
+      {/* <Button
         className="button"
         type="primary"
         htmlType="submit"
         onClick={handleSubmit}
       >
         Change
-      </Button>
+      </Button> */}
 
       <style jsx>
         {`

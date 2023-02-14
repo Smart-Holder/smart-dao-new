@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, createRef } from 'react';
+import React, { useState, forwardRef, useRef } from 'react';
 import {
   Button,
   Input,
@@ -47,8 +47,8 @@ const App = () => {
   const [image, setImage] = useState(currentMember.image);
   const [imageMessage, setImageMessage] = useState('');
 
-  const transferModal: any = createRef();
-  const permissionModal: any = createRef();
+  const transferModal: any = useRef(null);
+  const permissionModal: any = useRef(null);
 
   const url =
     'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';

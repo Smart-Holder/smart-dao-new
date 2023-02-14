@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
@@ -8,31 +8,63 @@ import { useAppDispatch } from '@/store/hooks';
 
 import { debounce } from '@/utils';
 
+// import type { InputRef } from 'antd';
+
 // 有搜索框的页面
-const searchList = ['/', '/dashboard/member/nftp'];
+const searchList = [
+  '/',
+  '/dashboard/mine/assets',
+  '/dashboard/mine/order',
+  '/dashboard/mine/income',
+  '/dashboard/governance/votes',
+  '/dashboard/financial/assets',
+  '/dashboard/financial/order',
+  '/dashboard/financial/income',
+  '/dashboard/member/nftp',
+];
 
 const Search: React.FC = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  // const inputRef = useRef<InputRef>(null);
 
+  const [value, setValue] = useState('');
   const [show, setShow] = useState(false);
+  const [timer, setTimer] = useState() as any;
+  // let timer: any;
 
-  const onSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log('searchText:', e.target.value);
-    dispatch(setSearchText(e.target.value));
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+
+    // debounceSearch();
+
+    clearTimeout(timer);
+    setTimer(
+      setTimeout(() => {
+        dispatch(setSearchText(e.target.value));
+      }, 1000),
+    );
   };
 
-  const debounceSearch = debounce(onSearch, 1000);
+  // const setSearchState = () => {
+  //   dispatch(setSearchText(v));
+  // };
 
-  useEffect(() => {
-    return () => {
-      dispatch(setSearchText(''));
-    };
-  }, []);
+  // const debounceSearch = useCallback(debounce(setSearchState, 1000), []);
+
+  // useEffect(() => {
+  //   return () => {
+  //     dispatch(setSearchText(''));
+  //   };
+  // }, []);
 
   useEffect(() => {
     if (searchList.includes(router.pathname)) {
+      setValue('');
+      dispatch(setSearchText(''));
       setShow(true);
+    } else {
+      setShow(false);
     }
   }, [router]);
 
@@ -43,11 +75,15 @@ const Search: React.FC = () => {
   return (
     <div className="input-wrap">
       <Input
+        id="abc"
+        value={value}
         className="search-input"
         placeholder="input search text"
+        autoComplete="off"
         allowClear
         suffix={<SearchOutlined style={{ fontSize: 24, color: '#a3a3a3' }} />}
-        onChange={debounceSearch}
+        // onChange={debounceSearch}
+        onChange={onChange}
       />
       <style jsx>
         {`

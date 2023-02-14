@@ -17,6 +17,7 @@ import {
   setDAOType,
   setUserMembers,
 } from '@/store/features/daoSlice';
+import { setSearchText } from '@/store/features/commonSlice';
 import { useRouter } from 'next/router';
 
 // const Header = dynamic(() => import('@/components/header'), { ssr: false });
@@ -61,6 +62,11 @@ export default function BasicLayout({ children }: { children: ReactElement }) {
   }, []);
 
   // useEffect(() => {
+  //   console.log('????');
+  //   dispatch(setSearchText(''));
+  // }, [router]);
+
+  // useEffect(() => {
   //   if (currentMember) {
 
   //   }
@@ -69,6 +75,7 @@ export default function BasicLayout({ children }: { children: ReactElement }) {
   if (!init) {
     return null;
   }
+
   console.log('DAOType', DAOType);
 
   return (

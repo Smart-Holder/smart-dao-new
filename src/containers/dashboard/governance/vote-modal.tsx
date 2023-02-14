@@ -1,9 +1,12 @@
-import { Avatar, Button, Modal } from 'antd';
+import { Avatar, Button, Modal, Statistic } from 'antd';
 import { FC, useEffect, useState } from 'react';
 import { StatusKeyMap, TypeKeyMap, VoteItemType } from './vote-item';
 import Image from 'next/image';
 import iconUser from '/public/images/icon-user.png';
 import styles from './vote-modal.module.css';
+import { setVote } from '@/api/vote';
+
+const { Countdown } = Statistic;
 
 type VoteModalProps = {
   open?: boolean;
@@ -14,8 +17,33 @@ type VoteModalProps = {
 const VoteModal: FC<VoteModalProps> = (props) => {
   const { open = false, onClose, data } = props;
   const [show, setShow] = useState(false);
+  const [loading1, setLoading1] = useState(false);
+  const [loading2, setLoading2] = useState(false);
 
   useEffect(() => setShow(open), [open]);
+
+  const onOk = async () => {
+    try {
+      setLoading1(true);
+      await setVote({ vote: true, proposal_id: data?.proposal_id });
+      setLoading1(false);
+      window.location.reload();
+    } catch (error) {
+      setLoading1(false);
+    }
+  };
+  const onCancel = async () => {
+    try {
+      setLoading2(true);
+      await setVote({ vote: false, proposal_id: data?.proposal_id });
+      setLoading2(false);
+      window.location.reload();
+    } catch (error) {
+      setLoading2(false);
+    }
+  };
+
+  let desc = data?.desc ? JSON.parse(data.desc || '{}') : {};
 
   return (
     <Modal
@@ -27,7 +55,7 @@ const VoteModal: FC<VoteModalProps> = (props) => {
         setShow(false);
       }}
       footer={null}
-      maskClosable={false}
+      // maskClosable={false}
     >
       {data && (
         <div className={styles['content']}>
@@ -79,8 +107,13 @@ const VoteModal: FC<VoteModalProps> = (props) => {
                   '投票已经结束'
                 ) : (
                   <>
-                    Times:
-                    <span className={styles['time-value']}>{data.endTime}</span>
+                    距结束:
+                    <span className={styles['time-value']}>
+                      <Countdown
+                        className={styles.countdown}
+                        value={data.endTime}
+                      />
+                    </span>
                   </>
                 )}
               </div>
@@ -117,36 +150,56 @@ const VoteModal: FC<VoteModalProps> = (props) => {
             </div>
             <div className={styles['main-item']}>
               <div className={styles['main-title']}>提案目的</div>
-              <div className={styles['main-content']}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
-                euismod bibendum laoreet. Proin gravida dolor sit amet lacus
-                accumsan et viverra justo commodo. Proin sodales pulvinar sic
-                tempor. Sociis natoque penatibus et magnis dis parturient
-                montes, nascetur ridiculus mus.
-              </div>
+              <div className={styles['main-content']}>{desc?.purpose}</div>
             </div>
             <div className={styles['main-item']}>
               <div className={styles['main-title']}>提案内容</div>
-              <div className={styles['main-content']}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
-                euismod bibendum laoreet. Proin gravida dolor sit amet lacus
-                accumsan et viverra justo commodo. Proin sodales pulvinar sic
-                tempor. Sociis natoque penatibus et magnis dis parturient
-                montes, nascetur ridiculus mus. Nam fermentum, nulla luctus
-                pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin
-                sapien nunc accuan eget.
-              </div>
+              <div className={styles['main-content']}>{desc.content}</div>
             </div>
             <div className={styles['main-item']}>
               <div className={styles['main-title']}>预期结果</div>
-              <div className={styles['main-content']}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean
-                euismod bibendum laoreet. Proin gravida
-              </div>
+              <div className={styles['main-content']}>{desc.result}</div>
             </div>
+          </div>
+          <div className="footer">
+            <Button
+              className="button"
+              type="primary"
+              onClick={onOk}
+              loading={loading1}
+            >
+              支持
+            </Button>
+            <Button
+              style={{ marginLeft: 20 }}
+              className="button"
+              type="primary"
+              onClick={onCancel}
+              loading={loading2}
+            >
+              反对
+            </Button>
           </div>
         </div>
       )}
+      <style jsx>
+        {`
+          .footer {
+            margin-top: 20px;
+            text-align: center;
+          }
+
+          .footer :global(.button) {
+            width: 170px;
+            height: 54px;
+            font-size: 18px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #ffffff;
+            line-height: 27px;
+          }
+        `}
+      </style>
     </Modal>
   );
 };
