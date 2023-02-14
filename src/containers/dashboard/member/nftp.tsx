@@ -40,7 +40,7 @@ const App = () => {
   const { currentDAO } = useAppSelector((store) => store.dao);
   const { loading, searchText } = useAppSelector((store) => store.common);
 
-  const pageSize = 1;
+  const pageSize = 20;
   const [values, setValues] = useState({});
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);

@@ -1,37 +1,17 @@
-import { Layout as AntdLayout, PaginationProps } from 'antd';
+import { Layout as AntdLayout, Table, PaginationProps, Image } from 'antd';
+import { EllipsisOutlined } from '@ant-design/icons';
+
 import Layout from '@/components/layout';
 import { ReactElement, useCallback, useEffect, useState } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
+
 import styles from '@/styles/content.module.css';
 import Counts from '@/containers/dashboard/mine/counts';
 import Filters from '@/containers/dashboard/mine/filters';
-import FinancialItem from '@/containers/dashboard/financial/financial-item';
-import Image from 'next/image';
+import { request } from '@/api';
 import { useAppSelector } from '@/store/hooks';
 import { getCookie } from '@/utils/cookie';
-import { request } from '@/api';
-
-const PriceIcon = () => (
-  <Image
-    src="https://storage.nfte.ai/icon/currency/eth.svg"
-    alt="eth"
-    width={15}
-    height={15}
-  />
-);
-
-type ItemProperty = {
-  trait_type: string;
-  value: string | number;
-};
-
-type ItemType = {
-  name: string;
-  author: string;
-  id: string;
-  mediaOrigin: string;
-  properties: ItemProperty[];
-};
+import { formatAddress } from '@/utils';
 
 const App: NextPageWithLayout = () => {
   const pageSize = 20;
@@ -41,7 +21,7 @@ const App: NextPageWithLayout = () => {
 
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [data, setData] = useState<ItemType[]>([]);
+  const [data, setData] = useState([]);
 
   const getData = useCallback(
     async (page = 1) => {
@@ -68,12 +48,11 @@ const App: NextPageWithLayout = () => {
       params: {
         chain: chainId,
         host: currentDAO.host,
-        owner: address,
       },
     });
 
     setTotal(res);
-  }, [address, chainId, currentDAO.host]);
+  }, [chainId, currentDAO.host]);
 
   const onPageChange: PaginationProps['onChange'] = (p) => {
     setPage(p);
@@ -89,27 +68,59 @@ const App: NextPageWithLayout = () => {
   return (
     <AntdLayout.Content className={styles['dashboard-content']}>
       <div className={styles['dashboard-content-header']}>
-        <Counts items={[{ num: total, title: 'All Counts' }]} />
+        <Counts items={[{ num: total, title: 'All Acounts' }]} />
         <Filters />
       </div>
       <div className={styles['dashboard-content-body']}>
-        <div className={styles['financial-list']}>
-          {data.map((item, i) => {
-            return (
-              <div key={i} className={styles['financial-item']}>
-                <FinancialItem
-                  title={item.name}
-                  logo={item.mediaOrigin}
-                  price={
-                    item.properties.find((item) => item.trait_type === 'price')
-                      ?.value || ''
-                  }
-                  priceIcon={<PriceIcon />}
+        <Table
+          className={styles['dashboard-content-table']}
+          pagination={{
+            position: ['bottomRight'],
+            current: page,
+            pageSize,
+            total,
+            onChange: onPageChange,
+          }}
+          rowKey="order"
+          columns={[
+            { title: 'ID', dataIndex: 'id', key: 'id' },
+            { title: 'Name', dataIndex: 'name', key: 'name' },
+            {
+              title: 'Creator',
+              dataIndex: 'author',
+              key: 'author',
+              render: (str) => formatAddress(str),
+            },
+            { title: 'Tag', dataIndex: 'tag', key: 'tag' },
+            {
+              title: 'Media',
+              dataIndex: 'mediaOrigin',
+              key: 'mediaOrigin',
+              render: (url, item: { name: string; properties: any[] }) => (
+                <Image
+                  src={url}
+                  alt={item.name}
+                  preview={false}
+                  width={30}
+                  height={30}
                 />
-              </div>
-            );
-          })}
-        </div>
+              ),
+            },
+            {
+              title: 'Selling Price',
+              dataIndex: 'sellPrice',
+              key: 'sellPrice',
+            },
+            {
+              title: 'Blockchain',
+              key: 'blockchain',
+              render: (_, item: { name: string; properties: any[] }) =>
+                item.properties[1].value,
+            },
+            { key: 'action', render: () => <EllipsisOutlined /> },
+          ]}
+          dataSource={[...data]}
+        />
       </div>
     </AntdLayout.Content>
   );
