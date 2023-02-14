@@ -53,6 +53,7 @@ const App: NextPageWithLayout = () => {
           host: currentDAO.host,
           limit: [(page - 1) * pageSize, pageSize],
           owner: address,
+          state: 0,
         },
       });
 
@@ -69,6 +70,7 @@ const App: NextPageWithLayout = () => {
         chain: chainId,
         host: currentDAO.host,
         owner: address,
+        state: 0,
       },
     });
 
