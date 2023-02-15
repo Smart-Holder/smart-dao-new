@@ -22,6 +22,9 @@ const externals = function ({ context, request }, callback) {
 
 const nextConfig = {
   reactStrictMode: false,
+  images: {
+    domains: ['smart-dao-res.stars-mine.com'],
+  },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Important: return the modified config
     if (config.externals) {
