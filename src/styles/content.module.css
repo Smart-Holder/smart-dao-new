@@ -231,6 +231,16 @@
   color: #fff;
 }
 
+.dashboard-content-pagination {
+  display: flex;
+  padding: 20px;
+  justify-content: center;
+}
+
+.detail-content {
+  padding: 30px 25px;
+}
+
 .vote-list {
   padding: 38px 16px;
   display: flex;

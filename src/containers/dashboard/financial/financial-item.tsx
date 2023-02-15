@@ -10,12 +10,13 @@ export type FinancialItemType = {
   logo: string;
   title: string;
   price: number | string;
+  onClick?: () => void;
 };
 
 const FinancialItem: FC<FinancialItemProps> = (props) => {
-  const { title, priceIcon, price, logo } = props;
+  const { title, priceIcon, price, logo, onClick } = props;
   return (
-    <div className={styles['container']}>
+    <div className={styles['container']} onClick={onClick}>
       <div className={styles['logo']}>
         <Image src={logo} preview={false} alt="logo" width={158} height={158} />
       </div>

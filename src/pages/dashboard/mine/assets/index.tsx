@@ -1,4 +1,4 @@
-import { Layout as AntdLayout, PaginationProps } from 'antd';
+import { Layout as AntdLayout, Pagination, PaginationProps } from 'antd';
 import Layout from '@/components/layout';
 import { ReactElement, useCallback, useEffect, useState } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { useAppSelector } from '@/store/hooks';
 import { getCookie } from '@/utils/cookie';
 import { request } from '@/api';
+import { useRouter } from 'next/router';
 
 const PriceIcon = () => (
   <Image
@@ -34,6 +35,7 @@ type ItemType = {
 };
 
 const App: NextPageWithLayout = () => {
+  const router = useRouter();
   const pageSize = 20;
   const { chainId } = useAppSelector((store) => store.wallet);
   const { currentDAO } = useAppSelector((store) => store.dao);
@@ -107,10 +109,23 @@ const App: NextPageWithLayout = () => {
                       ?.value || ''
                   }
                   priceIcon={<PriceIcon />}
+                  onClick={() => {
+                    router.push(`assets/detail?id=${item.id}`);
+                  }}
                 />
               </div>
             );
           })}
+        </div>
+        <div className={styles['dashboard-content-pagination']}>
+          <Pagination
+            simple
+            defaultCurrent={1}
+            current={page}
+            total={total}
+            pageSize={pageSize}
+            onChange={onPageChange}
+          />
         </div>
       </div>
     </AntdLayout.Content>
