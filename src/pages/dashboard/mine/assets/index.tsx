@@ -45,39 +45,55 @@ const App: NextPageWithLayout = () => {
   const [total, setTotal] = useState(0);
   const [data, setData] = useState<ItemType[]>([]);
 
+  const [type, setType] = useState('');
+  const [orderBy, setOrderBy] = useState('');
+
+  const getDataParams = useCallback(() => {
+    let params = {
+      chain: chainId,
+      host: currentDAO.host,
+      state: 0,
+    } as {
+      author?: string;
+      owner?: string;
+      orderBy?: string;
+    };
+    if (type === '1') {
+      params.author = address;
+    } else if (type === '2') {
+      params.owner = address;
+    }
+    if (orderBy === '1') {
+      params.orderBy = 'sellPrice';
+    }
+    return params;
+  }, [address, chainId, currentDAO.host, type, orderBy]);
+
   const getData = useCallback(
     async (page = 1) => {
       const res = await request({
         name: 'utils',
         method: 'getAssetFrom',
         params: {
-          chain: chainId,
-          host: currentDAO.host,
+          ...getDataParams(),
           limit: [(page - 1) * pageSize, pageSize],
-          owner: address,
-          state: 0,
         },
       });
 
       setData(res);
     },
-    [address, chainId, currentDAO.host],
+    [getDataParams],
   );
 
   const getTotal = useCallback(async () => {
     const res = await request({
       name: 'utils',
       method: 'getAssetTotalFrom',
-      params: {
-        chain: chainId,
-        host: currentDAO.host,
-        owner: address,
-        state: 0,
-      },
+      params: getDataParams(),
     });
 
     setTotal(res);
-  }, [address, chainId, currentDAO.host]);
+  }, [getDataParams]);
 
   const onPageChange: PaginationProps['onChange'] = (p) => {
     setPage(p);
@@ -90,11 +106,59 @@ const App: NextPageWithLayout = () => {
     getTotal();
   }, [getData, getTotal]);
 
+  const onSelectType = (value: string) => {
+    setType(value);
+    setPage(1);
+    getData(1);
+    getTotal();
+  };
+  // const onSelectTag = (value: string) => {};
+  const onSelectOrderby = (value: string) => {
+    setOrderBy(value);
+    setPage(1);
+    getData(1);
+    getTotal();
+  };
+
   return (
     <AntdLayout.Content className={styles['dashboard-content']}>
       <div className={styles['dashboard-content-header']}>
         <Counts items={[{ num: total, title: 'All Counts' }]} />
-        <Filters />
+        <Filters
+          items={[
+            {
+              defaultValue: '',
+              options: [
+                { value: '', label: '全部类型' },
+                { value: '1', label: '我创建的' },
+                { value: '2', label: '我的' },
+              ],
+              onSelect: onSelectType,
+            },
+            // {
+            //   defaultValue: '',
+            //   options: [
+            //     { value: '', label: '全部标签' },
+            //     { value: '1', label: '标签1' },
+            //     { value: '2', label: '标签2' },
+            //   ],
+            //   onSelect: onSelectTag,
+            // },
+            {
+              defaultValue: '0',
+              options: [
+                { value: '0', label: '价格从高到低' },
+                { value: '1', label: '价格从低到高' },
+                { value: '2', label: 'offer从低到高' },
+                { value: '3', label: 'offer从高到低' },
+                { value: '4', label: '最近上架' },
+                { value: '5', label: '最近创建' },
+                { value: '6', label: '最近卖出' },
+              ],
+              onSelect: onSelectOrderby,
+            },
+          ]}
+        />
       </div>
       <div className={styles['dashboard-content-body']}>
         <div className={styles['financial-list']}>
