@@ -11,7 +11,7 @@ import { request } from '@/api';
 import styles from '@/styles/content.module.css';
 import { useAppSelector } from '@/store/hooks';
 
-import { formatDayjsValues } from '@/utils';
+import { formatAddress, formatDayjsValues } from '@/utils';
 
 import type { PaginationProps } from 'antd';
 
@@ -21,12 +21,25 @@ dayjs.extend(customParseFormat);
 
 const columns = [
   {
-    title: 'NFTP',
-    dataIndex: 'name',
-    key: 'name',
-    render: (text: string) => text || '-',
+    title: '订单ID',
+    dataIndex: 'id',
+    key: 'id',
   },
-  { title: '份数', dataIndex: 'votes', key: 'votes' },
+  { title: '市场', dataIndex: 'votes', key: 'votes' },
+  { title: '金额', dataIndex: ['asset', 'sellPrice'], key: 'asset.id' },
+  { title: '标签', dataIndex: 'votes', key: 'votes' },
+  {
+    title: '发送方',
+    dataIndex: 'fromAddres',
+    key: 'fromAddres',
+    render: (text: string) => formatAddress(text),
+  },
+  {
+    title: '接收方',
+    dataIndex: 'toAddress',
+    key: 'toAddress',
+    render: (text: string) => formatAddress(text),
+  },
   {
     title: '加入日期',
     dataIndex: 'time',
@@ -46,6 +59,8 @@ const App = () => {
   const [total, setTotal] = useState(0);
   const [data, setData] = useState([]);
 
+  const [amount, setAmount] = useState({ total: 0, amount: '0' });
+
   const nftpModal: any = useRef(null);
 
   const showModal = () => {
@@ -55,7 +70,7 @@ const App = () => {
   const getData = async (page = 1) => {
     const res = await request({
       name: 'utils',
-      method: 'getMembersFrom',
+      method: 'getAssetOrderFrom',
       params: {
         chain: chainId,
         host: currentDAO.host,
@@ -74,7 +89,7 @@ const App = () => {
 
     const res = await request({
       name: 'utils',
-      method: 'getMembersTotalFrom',
+      method: 'getAssetOrderTotalFrom',
       params: {
         chain: chainId,
         host: currentDAO.host,
@@ -106,6 +121,23 @@ const App = () => {
   };
 
   useEffect(() => {
+    const getAmount = async () => {
+      const res = await request({
+        name: 'utils',
+        method: 'getOrderTotalAmount',
+        params: { chain: chainId, host: currentDAO.host },
+      });
+
+      console.log('amount', res);
+      if (res) {
+        setAmount(res);
+      }
+    };
+
+    getAmount();
+  }, []);
+
+  useEffect(() => {
     setPage(1);
     getData(1);
     getTotal();
@@ -114,7 +146,12 @@ const App = () => {
   return (
     <div className="wrap">
       <div className={styles['dashboard-content-header']}>
-        <Counts items={[{ num: total, title: '全部NFTP' }]} />
+        <Counts
+          items={[
+            { num: amount.total, title: '订单总数' },
+            { num: Number(amount.amount), title: '总交易额' },
+          ]}
+        />
 
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <Form
@@ -153,9 +190,9 @@ const App = () => {
             </Form.Item>
           </Form>
 
-          <Button type="primary" onClick={showModal}>
+          {/* <Button type="primary" onClick={showModal}>
             添加NFTP
-          </Button>
+          </Button> */}
         </div>
       </div>
 
