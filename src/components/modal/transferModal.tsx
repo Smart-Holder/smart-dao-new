@@ -1,6 +1,6 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
 import { useRouter } from 'next/router';
-import { Button, Input, Modal, Typography, Image } from 'antd';
+import { Button, Input, Modal, Typography, Image, message } from 'antd';
 import { Checkbox, Form, Upload, Tag, Space } from 'antd';
 import Icon, { RightCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
@@ -17,6 +17,7 @@ import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 import sdk from 'hcstore/sdk';
+import { transfer } from '@/api/asset';
 
 const { Link } = Typography;
 
@@ -34,7 +35,7 @@ const App = (props: any, ref: any) => {
 
   const { userInfo } = useAppSelector((store) => store.user);
 
-  const [image, setImage] = useState();
+  const [loading, setLoading] = useState(false);
 
   useImperativeHandle(ref, () => ({
     show: () => {
@@ -46,24 +47,17 @@ const App = (props: any, ref: any) => {
     setIsModalOpen(false);
   };
 
-  const onFinish = (values: any) => {
+  const onFinish = async (values: any) => {
     console.log('validate Success:', values);
 
-    if (image) {
-      const params = {
-        ...userInfo,
-        image,
-        nickname: values.nickname,
-      };
-
-      sdk.user.methods.setUser(params).then(() => {
-        handleCancel();
-        sdk.user.methods.getUser().then((res) => {
-          if (res && res.nickname) {
-            dispatch(setUserInfo(res));
-          }
-        });
-      });
+    try {
+      setLoading(true);
+      await transfer({ to: values.address });
+      setLoading(false);
+      message.success('success');
+      // router.push('/');
+    } catch (error) {
+      setLoading(false);
     }
   };
 
@@ -71,25 +65,14 @@ const App = (props: any, ref: any) => {
     console.log('validate Failed:', errorInfo);
   };
 
-  const handleChange: UploadProps['onChange'] = (
-    info: UploadChangeParam<UploadFile>,
-  ) => {
-    if (info.file.status === 'done') {
-      console.log('upload', info.file);
-      setImage(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
-    }
-  };
-
-  const beforeUpload = (file: RcFile) => {
-    const message = validateImage(file);
-
-    return !message;
-  };
-
-  const handleSubmit = () => {};
-
   return (
-    <Modal width={512} open={isModalOpen} onCancel={handleCancel} footer={null}>
+    <Modal
+      width={512}
+      open={isModalOpen}
+      onCancel={handleCancel}
+      footer={null}
+      destroyOnClose
+    >
       <div className="content">
         <div className="h1">转让NFTP</div>
         <div className="h2">将您的身份与权利转让给他人</div>
@@ -105,7 +88,7 @@ const App = (props: any, ref: any) => {
           validateTrigger="onBlur"
         >
           <Form.Item
-            name="nickname"
+            name="address"
             label="受让方地址"
             rules={[{ required: true }, { validator: validateEthAddress }]}
           >
@@ -113,7 +96,12 @@ const App = (props: any, ref: any) => {
           </Form.Item>
 
           <Form.Item style={{ margin: '60px 0 0', textAlign: 'center' }}>
-            <Button className="button-submit" type="primary" htmlType="submit">
+            <Button
+              className="button-submit"
+              type="primary"
+              htmlType="submit"
+              loading={loading}
+            >
               转让
             </Button>
           </Form.Item>
@@ -145,7 +133,7 @@ const App = (props: any, ref: any) => {
 
           .content :global(.input) {
             height: 76px;
-            font-size: 18px;
+            font-size: 16px;
           }
 
           .content :global(.button-submit) {

@@ -21,29 +21,29 @@ const App = () => {
   const [defaultVotePassRate, setDefaultVotePassRate] = useState(
     storageValues.defaultVotePassRate || 10,
   );
-  const [hours, setHours] = useState(storageValues.hours || 0);
-  const [min, setMin] = useState(0);
+  const [hours, setHours] = useState(storageValues.hours || 12);
+  const [min, setMin] = useState(12);
 
-  useEffect(() => {
-    getLifespan()
-      .then((res) => {
-        const r = Math.floor(res / 3600) || 12;
-        setMin(r);
+  // useEffect(() => {
+  //   getLifespan()
+  //     .then((res) => {
+  //       const r = Math.floor(res / 3600) || 12;
+  //       setMin(r);
 
-        if (!storageValues.hours) {
-          setHours(r);
-        }
-      })
-      .catch(() => {
-        setMin(12);
+  //       if (!storageValues.hours) {
+  //         setHours(r);
+  //       }
+  //     })
+  //     .catch(() => {
+  //       setMin(12);
 
-        if (!storageValues.hours) {
-          setHours(12);
-        }
-      });
+  //       if (!storageValues.hours) {
+  //         setHours(12);
+  //       }
+  //     });
 
-    getLifespan();
-  }, []);
+  //   getLifespan();
+  // }, []);
 
   const onChange1 = (value: number) => {
     setDefaultVoteRate(value);

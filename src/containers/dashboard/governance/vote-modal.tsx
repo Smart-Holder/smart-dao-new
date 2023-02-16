@@ -1,11 +1,19 @@
 import { Avatar, Button, Modal, Statistic } from 'antd';
 import { FC, useEffect, useState } from 'react';
-import { StatusKeyMap, TypeKeyMap, VoteItemType } from './vote-item';
+import { StatusKeyMap, TypeKeyMap, VoteItemType, Type } from './vote-item';
 import Image from 'next/image';
 import iconUser from '/public/images/icon-user.png';
 import styles from './vote-modal.module.css';
 import { setVote } from '@/api/vote';
+import { request } from '@/api';
+import { useAppSelector } from '@/store/hooks';
 
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+import { formatAddress } from '@/utils';
+
+dayjs.extend(customParseFormat);
 const { Countdown } = Statistic;
 
 type VoteModalProps = {
@@ -16,16 +24,57 @@ type VoteModalProps = {
 
 const VoteModal: FC<VoteModalProps> = (props) => {
   const { open = false, onClose, data } = props;
+  // console.log('data', data);
+
+  const { chainId, address, web3 } = useAppSelector((store) => store.wallet);
+  const { currentDAO } = useAppSelector((store) => store.dao);
+
   const [show, setShow] = useState(false);
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
+  const [isVote, setIsVote] = useState(true);
+  const [yourVote, setYourVote] = useState(0);
+
+  let desc = data?.desc ? JSON.parse(data.desc || '{}') : {};
+  const type: Type = desc.type;
 
   useEffect(() => setShow(open), [open]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const res = await request({
+        name: 'utils',
+        method: 'getVotesFrom',
+        params: {
+          chain: chainId,
+          address: currentDAO.root,
+          proposal_id: data?.proposal_id,
+        },
+      });
+
+      if (res && res.length > 0) {
+        setIsVote(true);
+        setYourVote(res[0].votes);
+      } else {
+        setIsVote(false);
+        setYourVote(0);
+      }
+      console.log(res);
+    };
+
+    if (data) {
+      getData();
+    }
+  }, [data]);
 
   const onOk = async () => {
     try {
       setLoading1(true);
-      await setVote({ vote: true, proposal_id: data?.proposal_id });
+      await setVote({
+        vote: true,
+        proposal_id: data?.proposal_id,
+        type: type,
+      });
       setLoading1(false);
       window.location.reload();
     } catch (error) {
@@ -35,15 +84,17 @@ const VoteModal: FC<VoteModalProps> = (props) => {
   const onCancel = async () => {
     try {
       setLoading2(true);
-      await setVote({ vote: false, proposal_id: data?.proposal_id });
+      await setVote({
+        vote: false,
+        proposal_id: data?.proposal_id,
+        type: type,
+      });
       setLoading2(false);
       window.location.reload();
     } catch (error) {
       setLoading2(false);
     }
   };
-
-  let desc = data?.desc ? JSON.parse(data.desc || '{}') : {};
 
   return (
     <Modal
@@ -53,6 +104,8 @@ const VoteModal: FC<VoteModalProps> = (props) => {
       onCancel={() => {
         onClose?.();
         setShow(false);
+        setIsVote(true);
+        setYourVote(0);
       }}
       footer={null}
       // maskClosable={false}
@@ -79,7 +132,30 @@ const VoteModal: FC<VoteModalProps> = (props) => {
                 <span className={styles['g']}>Mix</span>
               </div>
             </div>
-            {data.status === 'executed' ? (
+            {data.data?.isClose && (
+              <div className={styles['time']}>
+                结束时间:
+                <span className={styles['time-value']}>
+                  {dayjs(data.data.modify).format('A HH:mm, MM/DD/YYYY')}
+                </span>
+                <span className={styles['time-value']}>（投票已经结束）</span>
+                {/* {Date.now() > data.endTime && (
+                  <span className={styles['time-value']}>（投票已经结束）</span>
+                )} */}
+              </div>
+            )}
+            {!data.data?.isClose && (
+              <div className={styles['time']}>
+                距结束:
+                <span className={styles['time-value']}>
+                  <Countdown
+                    className={styles.countdown}
+                    value={data.data.expiry * 1000}
+                  />
+                </span>
+              </div>
+            )}
+            {/* {data.status === 'executed' ? (
               <div className={styles['exec-time']}>
                 <div className={styles['time']}>
                   结束时间:
@@ -117,13 +193,13 @@ const VoteModal: FC<VoteModalProps> = (props) => {
                   </>
                 )}
               </div>
-            )}
+            )} */}
           </div>
           <div className={styles['body']}>
             <div className={styles.title}>{data.title}</div>
             <div className={styles.options}>
               <div className={styles.owner}>
-                <div className={styles.avatar}>
+                {/* <div className={styles.avatar}>
                   {data.owner ? (
                     <Avatar
                       size={22}
@@ -140,46 +216,59 @@ const VoteModal: FC<VoteModalProps> = (props) => {
                       height={22}
                     />
                   )}
+                </div> */}
+                <div style={{ marginLeft: 0 }} className={styles.name}>
+                  {formatAddress(data.data.origin)}
                 </div>
-                <div className={styles.name}>{data.owner.name}</div>
               </div>
               <div className={styles.number}>{data.number}</div>
-              <div className={`${styles.tag} ${styles[data.type]}`}>
-                {TypeKeyMap[data.type]}
+              <div className={`${styles.tag} ${styles[type]}`}>
+                {TypeKeyMap[type]}
               </div>
             </div>
-            <div className={styles['main-item']}>
-              <div className={styles['main-title']}>提案目的</div>
-              <div className={styles['main-content']}>{desc?.purpose}</div>
-            </div>
-            <div className={styles['main-item']}>
-              <div className={styles['main-title']}>提案内容</div>
-              <div className={styles['main-content']}>{desc.content}</div>
-            </div>
-            <div className={styles['main-item']}>
-              <div className={styles['main-title']}>预期结果</div>
-              <div className={styles['main-content']}>{desc.result}</div>
-            </div>
+            {desc?.purpose && (
+              <div className={styles['main-item']}>
+                <div className={styles['main-title']}>提案目的</div>
+                <div className={styles['main-content']}>{desc?.purpose}</div>
+              </div>
+            )}
+
+            {desc.content && (
+              <div className={styles['main-item']}>
+                <div className={styles['main-title']}>提案内容</div>
+                <div className={styles['main-content']}>{desc.content}</div>
+              </div>
+            )}
+
+            {desc.result && (
+              <div className={styles['main-item']}>
+                <div className={styles['main-title']}>预期结果</div>
+                <div className={styles['main-content']}>{desc.result}</div>
+              </div>
+            )}
           </div>
-          <div className="footer">
-            <Button
-              className="button"
-              type="primary"
-              onClick={onOk}
-              loading={loading1}
-            >
-              支持
-            </Button>
-            <Button
-              style={{ marginLeft: 20 }}
-              className="button"
-              type="primary"
-              onClick={onCancel}
-              loading={loading2}
-            >
-              反对
-            </Button>
-          </div>
+
+          {!isVote && (
+            <div className="footer">
+              <Button
+                className="button"
+                type="primary"
+                onClick={onOk}
+                loading={loading1}
+              >
+                支持
+              </Button>
+              <Button
+                style={{ marginLeft: 20 }}
+                className="button"
+                type="primary"
+                onClick={onCancel}
+                loading={loading2}
+              >
+                反对
+              </Button>
+            </div>
+          )}
         </div>
       )}
       <style jsx>

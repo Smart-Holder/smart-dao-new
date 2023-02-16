@@ -52,7 +52,7 @@ const App: NextPageWithLayout = () => {
         chain: chainId,
         address: currentDAO.root,
         limit: [(page - 1) * pageSize, pageSize],
-        name: searchText,
+        // proposal_id: searchText,
         ...values,
       },
     });
@@ -68,7 +68,7 @@ const App: NextPageWithLayout = () => {
       params: {
         chain: chainId,
         address: currentDAO.root,
-        name: searchText,
+        // proposal_id: searchText,
         ...values,
       },
     });
@@ -82,7 +82,7 @@ const App: NextPageWithLayout = () => {
         chain: chainId,
         address: currentDAO.root,
         limit: [0, pageSize],
-        name: searchText,
+        // proposal_id: searchText,
         ...values,
       },
     });
@@ -184,7 +184,17 @@ const App: NextPageWithLayout = () => {
             requiredMark={false}
             validateTrigger="onBlur"
           >
-            <Form.Item name="mine" valuePropName="checked">
+            <Form.Item name="orderBy">
+              <Select
+                style={{ width: 140 }}
+                placeholder="排序"
+                options={[
+                  { value: '', label: '默认' },
+                  { value: 'id', label: 'ID升序' },
+                ]}
+              />
+            </Form.Item>
+            {/* <Form.Item name="mine" valuePropName="checked">
               <Checkbox value="1">与我相关</Checkbox>
             </Form.Item>
             <Form.Item name="status">
@@ -200,7 +210,7 @@ const App: NextPageWithLayout = () => {
                 ]}
               />
             </Form.Item>
-            <Form.Item name="sortTime">
+            <Form.Item name="orderBy">
               <Select
                 style={{ width: 140 }}
                 placeholder="排序"
@@ -224,7 +234,7 @@ const App: NextPageWithLayout = () => {
                   { value: '4', label: '普通提案' },
                 ]}
               />
-            </Form.Item>
+            </Form.Item> */}
           </Form>
         </div>
       </div>
@@ -256,7 +266,8 @@ const App: NextPageWithLayout = () => {
                   type="normal"
                   support={item.agreeTotal}
                   opposed={item.voteTotal - item.agreeTotal}
-                  endTime={item.expiry * 1000}
+                  // endTime={item.expiry * 1000}
+                  endTime={item.modify}
                   onClick={onClickItem}
                   votes={item.votes}
                   proposal_id={item.proposal_id}

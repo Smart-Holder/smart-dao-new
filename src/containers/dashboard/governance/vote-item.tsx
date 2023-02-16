@@ -4,6 +4,8 @@ import styles from './vote-item.module.css';
 import iconUser from '/public/images/icon-user.png';
 import Image from 'next/image';
 
+import { formatAddress } from '@/utils';
+
 const { Countdown } = Statistic;
 const { Paragraph } = Typography;
 
@@ -20,6 +22,13 @@ export enum TypeKeyMap {
   member = '成员管理',
   basic = '基础设置',
 }
+
+const types: any = {
+  normal: '普通提案',
+  finance: '财务管理',
+  member: '成员管理',
+  basic: '基础设置',
+};
 
 export type StatusType = keyof typeof StatusKeyMap;
 export type Type = keyof typeof TypeKeyMap;
@@ -72,7 +81,10 @@ const VoteItem: FC<VoteItemProps> = (props) => {
     data,
   } = props;
 
-  const purpose = desc ? JSON.parse(desc || '')?.purpose : description;
+  const extra = desc ? JSON.parse(desc || '{}') : {};
+  // console.log('extra', extra);
+  // console.log('-----------------', extra.type);
+  const purpose = extra?.purpose;
 
   return (
     <div
@@ -103,12 +115,12 @@ const VoteItem: FC<VoteItemProps> = (props) => {
         </div>
         <div className={styles.info}>
           <div className={`${styles.tag} ${styles[status]}`}>
-            {TypeKeyMap[type]}
+            {types[extra.type || 'normal']}
           </div>
           <div className={styles.title}>{title}</div>
           <div className={styles.options}>
             <div className={styles.owner}>
-              <div className={styles.avatar}>
+              {/* <div className={styles.avatar}>
                 {owner ? (
                   <Avatar
                     size={22}
@@ -125,8 +137,11 @@ const VoteItem: FC<VoteItemProps> = (props) => {
                     height={22}
                   />
                 )}
+              </div> */}
+              {/* <div className={styles.name}>{owner.name}</div> */}
+              <div style={{ marginLeft: 0 }} className={styles.name}>
+                {formatAddress(data.origin)}
               </div>
-              <div className={styles.name}>{owner.name}</div>
             </div>
             <div className={styles.number}>{number}</div>
           </div>
@@ -143,13 +158,13 @@ const VoteItem: FC<VoteItemProps> = (props) => {
           <span>{opposed}</span>Mix
         </div>
         <div className={styles.time}>
-          {Date.now() > endTime ? (
+          {data.isClose ? (
             '投票已经结束'
           ) : (
             <Countdown
               className={styles.countdown}
               title="Times: "
-              value={endTime}
+              value={data.expiry * 1000}
             />
           )}
         </div>

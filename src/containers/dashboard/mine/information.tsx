@@ -40,12 +40,17 @@ const options = [
 
 const App = () => {
   const dispatch = useAppDispatch();
+
   const { userInfo } = useAppSelector((store) => store.user);
   const { addressFormat } = useAppSelector((store) => store.wallet);
   const { currentMember } = useAppSelector((store) => store.dao);
-  const { loading } = useAppSelector((store) => store.common);
+  // const { loading } = useAppSelector((store) => store.common);
+
+  const [loading, setLoading] = useState(false);
+  const [transferLoading, setTransferLoading] = useState(false);
   const [image, setImage] = useState(currentMember.image);
   const [imageMessage, setImageMessage] = useState('');
+  const [permissions, setPermissions] = useState(currentMember.permissions);
 
   const transferModal: any = useRef(null);
   const permissionModal: any = useRef(null);
@@ -61,8 +66,11 @@ const App = () => {
       return;
     }
 
+    setLoading(true);
+
     await setMemberInfo({ ...values, image });
 
+    setLoading(false);
     message.success('success');
     window.location.reload();
   };
@@ -87,17 +95,18 @@ const App = () => {
   };
 
   // 转让
-  const transfer = () => {
+  const showTransferModal = () => {
     transferModal.current.show();
   };
 
   const onCheckboxChange = (checkedValues: CheckboxValueType[]) => {
-    console.log('checked = ', checkedValues);
+    // console.log('checked = ', checkedValues);
+    setPermissions(checkedValues);
   };
 
   // 设置权限
-  const setPermission = () => {
-    permissionModal.current.show();
+  const showPermissionModal = () => {
+    permissionModal.current.show(permissions);
   };
 
   return (
@@ -199,7 +208,7 @@ const App = () => {
               className="button"
               type="primary"
               htmlType="button"
-              onClick={transfer}
+              onClick={showTransferModal}
             >
               Transfer
             </Button>
@@ -214,35 +223,37 @@ const App = () => {
 
       <Checkbox.Group
         className="checkbox-group"
-        defaultValue={currentMember.permissions || []}
+        defaultValue={permissions || []}
         onChange={onCheckboxChange}
       >
         <Row style={{ width: '100%' }} gutter={[20, 48]}>
           <Col span={6}>
-            <Checkbox value={Permissions.Action_VotePool_Vote}>投票</Checkbox>
+            <Checkbox disabled value={Permissions.Action_VotePool_Vote}>
+              投票
+            </Checkbox>
           </Col>
           <Col span={6}>
-            <Checkbox value={Permissions.Action_VotePool_Create}>
+            <Checkbox disabled value={Permissions.Action_VotePool_Create}>
               发起提案
             </Checkbox>
           </Col>
           <Col span={6}>
-            <Checkbox value={Permissions.Action_Member_Create}>
+            <Checkbox disabled value={Permissions.Action_Member_Create}>
               添加NFTP
             </Checkbox>
           </Col>
           <Col span={6}>
-            <Checkbox value={Permissions.Action_Asset_SafeMint}>
+            <Checkbox disabled value={Permissions.Action_Asset_SafeMint}>
               发行资产
             </Checkbox>
           </Col>
-          <Col span={6}>
+          {/* <Col span={6}>
             <Checkbox value={Permissions.Action_Asset_Shell_Withdraw}>
               上架资产
             </Checkbox>
-          </Col>
+          </Col> */}
           <Col span={12}>
-            <Checkbox value={Permissions.Action_DAO_Settings}>
+            <Checkbox disabled value={Permissions.Action_DAO_Settings}>
               修改DAO的基础设置
             </Checkbox>
           </Col>
@@ -250,7 +261,7 @@ const App = () => {
       </Checkbox.Group>
 
       <div className="buttons">
-        <Button className="button" type="primary" onClick={setPermission}>
+        <Button className="button" type="primary" onClick={showPermissionModal}>
           Change
         </Button>
       </div>

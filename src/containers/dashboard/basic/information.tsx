@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import {
@@ -11,6 +11,7 @@ import {
   Space,
   Modal,
   Image as Img,
+  message,
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useIntl } from 'react-intl';
@@ -30,8 +31,13 @@ import {
   deployAssetSalesDAO,
   getDAO,
   getDAOList,
+  setCurrentDAO,
 } from '@/store/features/daoSlice';
 import { setMissionAndDesc } from '@/api/dao';
+import { Permissions } from '@/config/enum';
+import { rng } from 'somes/rng';
+import { createVote } from '@/api/vote';
+import { request } from '@/api';
 
 const validateMessages = {
   required: '${label} is required!',
@@ -45,12 +51,32 @@ const FormGroup: React.FC = () => {
   const router = useRouter();
   const { chainId, address, web3 } = useAppSelector((store) => store.wallet);
   const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
+  const { loading } = useAppSelector((store) => store.common);
 
-  const [initialValues, setValues] = useState({
-    name: currentDAO.name,
-    mission: currentDAO.mission,
-    description: currentDAO.description,
-  });
+  const [initialValues, setInitialValues] = useState() as any;
+
+  useEffect(() => {
+    const getDAO = async () => {
+      try {
+        const res = await request({
+          name: 'utils',
+          method: 'getDAO',
+          params: { chain: chainId, address: currentDAO.address },
+        });
+
+        if (res) {
+          dispatch(setCurrentDAO(res));
+          setInitialValues({
+            name: res.name,
+            mission: res.mission,
+            description: res.description,
+          });
+        }
+      } catch (error) {}
+    };
+
+    getDAO();
+  }, []);
 
   // const defaultMember = [
   //   {
@@ -74,7 +100,7 @@ const FormGroup: React.FC = () => {
 
   const [form] = Form.useForm();
 
-  const onFinish = async (values: any) => {
+  const setInfo = async (values: any) => {
     const params = {
       web3,
       address: address,
@@ -89,8 +115,45 @@ const FormGroup: React.FC = () => {
 
     dispatch(getDAOList({ chain: chainId, owner: address }));
     dispatch(getDAO({ chain: chainId, address: currentDAO.address }));
-    // getDAOList
-    // getCurrent
+  };
+
+  const createProposal = async (values: any) => {
+    const params = {
+      name: '基础设置',
+      description: JSON.stringify({
+        type: 'basic',
+        purpose: `Vision & Mission: ${values.mission} Itroduction: ${values.description}`,
+      }),
+      extra: [
+        {
+          abi: 'dao',
+          method: 'setMissionAndDesc',
+          params: [values.mission, values.description],
+        },
+      ],
+    };
+
+    try {
+      await createVote(params);
+      message.success('生成提案');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onFinish = async (values: any) => {
+    const permission = currentMember.permissions.includes(
+      Permissions.Action_DAO_Settings,
+    );
+
+    // 没有权限，则创建提案
+    if (!permission) {
+      // message.warning('没有权限');
+      createProposal(values);
+      return;
+    }
+
+    setInfo(values);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -164,6 +227,10 @@ const FormGroup: React.FC = () => {
   // const next = () => {
   //   router.push('/launch/setting');
   // };
+
+  if (!initialValues) {
+    return null;
+  }
 
   return (
     <div className="form-wrap">
@@ -306,7 +373,12 @@ const FormGroup: React.FC = () => {
         </div>
 
         <Form.Item>
-          <Button className="button-submit" type="primary" htmlType="submit">
+          <Button
+            className="button-submit"
+            type="primary"
+            htmlType="submit"
+            loading={loading}
+          >
             Save
           </Button>
         </Form.Item>

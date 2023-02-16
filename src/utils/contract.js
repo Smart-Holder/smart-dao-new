@@ -5,6 +5,7 @@
 import sdk from 'hcstore/sdk';
 import { beforeUnload, stopClick } from '@/utils';
 import store from '@/store';
+import { message } from 'antd';
 
 export function getContract(web3, abi, contractAddress) {
   return new web3.eth.Contract(abi, contractAddress);
@@ -63,6 +64,7 @@ export async function contractSend(
     }
     // Message.error({ message: msg_0 });
     console.error(msg_0);
+    message.error(msg_0);
     closeLoading();
     throw error;
   }
@@ -85,6 +87,9 @@ export async function contractSend(
         //   message: error?.message || `send contract method error, ${method}`,
         // });
         console.error(
+          error?.message || `send contract method error, ${method}`,
+        );
+        message.error(
           error?.message || `send contract method error, ${method}`,
         );
         closeLoading();

@@ -8,7 +8,7 @@ import { useJoin, useFollow } from './useHooks';
 
 import { getContract, contractCall, contractSend } from '@/utils/contract';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
-import { join as joinDAO } from '@/api/member';
+import { getMemberId, join as joinDAO } from '@/api/member';
 import { setCurrentDAO, setDAOType } from '@/store/features/daoSlice';
 
 import WalletModal from '@/components/modal/walletModal';
@@ -32,12 +32,13 @@ const DAOItem = (props: any) => {
   const { status1 = 1, status2 = 1, id, isJoin, isLike, isMember } = props.data;
 
   const { web3, address, chainId } = useAppSelector((store) => store.wallet);
-  const { userInfo } = useAppSelector((store) => store.user);
+  const { nickname } = useAppSelector((store) => store.user.userInfo);
   const { likeDAOs, joinDAOs, DAOList } = useAppSelector((store) => store.dao);
   const { isInit } = useAppSelector((store) => store.common);
 
   const { join, setJoin, loading } = useJoin(
     props.data.member,
+    address,
     isJoin,
     isMember,
   );
@@ -63,8 +64,14 @@ const DAOItem = (props: any) => {
   const avatars = imgs.slice(0, Math.min(props.data.members || 1, 4));
 
   const handleClick = () => {
+    // getMemberId(); // test
     if (!isInit) {
       walletModal.current.show();
+      return;
+    }
+
+    if (!nickname) {
+      infoModal.current.show();
       return;
     }
 
@@ -75,8 +82,19 @@ const DAOItem = (props: any) => {
   };
 
   const handleJoinClick = () => {
+    if (!isInit) {
+      walletModal.current.show();
+      return;
+    }
+
+    if (!nickname) {
+      infoModal.current.show();
+      return;
+    }
+
     // infoModal.current.show();
-    dispatch(setCurrentDAO(props.data)); // waitBlockNumber用到
+    // dispatch(setCurrentDAO(props.data)); // waitBlockNumber用到
+    dispatch(setCurrentDAO(props.data)); // 要加入的 DAO 中创建提案
 
     setJoin();
 
@@ -92,19 +110,25 @@ const DAOItem = (props: any) => {
     // }
   };
 
-  // const handleFollowClick = () => {
-  //   sdk.user.methods
-  //     .addLikeDAO({ dao: props.data.id, chain: chainId })
-  //     .then((res) => {
-  //       console.log('addLikeDAO', res);
-  //     });
-  // };
+  const handleFollowClick = () => {
+    if (!isInit) {
+      walletModal.current.show();
+      return;
+    }
+
+    if (!nickname) {
+      infoModal.current.show();
+      return;
+    }
+
+    setFollow();
+  };
 
   return (
     <div className="item">
       <Image
         style={{ borderRadius: 10, cursor: 'pointer' }}
-        src={props.data.avatar || img}
+        src={props.data.image || img}
         width={196}
         height={196}
         preview={false}
@@ -149,7 +173,7 @@ const DAOItem = (props: any) => {
         >
           {join ? 'Joined' : 'Join'}
         </Button>
-        <Button type="primary" shape="round" onClick={setFollow}>
+        <Button type="primary" shape="round" onClick={handleFollowClick}>
           {follow ? 'Followed' : 'Follow'}
         </Button>
       </div>

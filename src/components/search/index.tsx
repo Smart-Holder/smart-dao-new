@@ -20,7 +20,7 @@ const searchList = [
   '/dashboard/financial/assets',
   '/dashboard/financial/order',
   '/dashboard/financial/income',
-  '/dashboard/member/nftp',
+  // '/dashboard/member/nftp',
 ];
 
 const Search: React.FC = () => {

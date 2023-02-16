@@ -107,19 +107,43 @@ export const walletSlice = createSlice({
     builder
       .addCase(connectWallet.fulfilled, (state, { payload }) => {
         console.log('connect fulfilled', payload);
-        const { provider, chainId, address, connectType } = payload;
+        const { provider, chainId, address, connectType: type } = payload;
 
         // initApi(address, chainId);
 
         setCookie('address', address, 30);
         setCookie('chainId', chainId, 30);
-        setCookie('connectType', connectType, 30);
+        setCookie('connectType', type, 30);
 
         state.provider = provider;
         state.web3 = new Web3(provider);
         state.address = address;
         state.chainId = Number(chainId);
-        state.connectType = connectType;
+        state.connectType = type;
+
+        // 钱包监听
+        if (type === connectType.MetaMask) {
+          window?.ethereum.on('chainChanged', (res: any) => {
+            console.log('-----chainChanged-----', res);
+
+            clearCookie('address');
+            clearCookie('chainId');
+            clearCookie('connectType');
+            localStorage.removeItem('step');
+            sessionStorage.clear();
+            router.reload();
+          });
+
+          window?.ethereum.on('accountsChanged', (res: any) => {
+            console.log('-----accountsChanged-----', res);
+            clearCookie('address');
+            clearCookie('chainId');
+            clearCookie('connectType');
+            localStorage.removeItem('step');
+            sessionStorage.clear();
+            router.reload();
+          });
+        }
       })
       .addCase(connectWallet.rejected, (state, err) => {
         console.log('connect rejected', err);

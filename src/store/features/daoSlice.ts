@@ -73,53 +73,55 @@ export const deployAssetSalesDAO = createAsyncThunk(
     const baseURI = `${process.env.VUE_APP_HCSTORE_URL}/utils/printJSON`;
     let addr = '';
 
+    const param = [
+      {
+        name,
+        mission,
+        description,
+        image,
+      },
+      address,
+      {
+        // InitMemberArgs
+        name: memberBaseName,
+        description: memberBaseName,
+        baseURI: baseURI,
+        members: members.map((e: any) => {
+          return {
+            owner: e.owner,
+            info: { ...e, image: '' },
+            permissions: [0xdc6b0b72, 0x678ea396],
+          };
+        }),
+        executor,
+      },
+      {
+        //InitVotePoolArgs
+        description: 'VotePool description',
+        lifespan: Math.max(hours, 7 * 24 /*7 days*/) * 60 * 60,
+      },
+      {
+        // InitLedgerArgs
+        description: 'Ledger description',
+      },
+      {
+        // InitAssetArgs
+        name: name, // string  name;
+        description: 'Asset description',
+        image: image,
+        external_link: process.env.NEXT_PUBLIC_BASE_URL,
+        seller_fee_basis_points_first: assetIssuanceTax * 100, // 30%
+        seller_fee_basis_points_second: assetCirculationTax * 100, // 10%
+        fee_recipient: '0x0000000000000000000000000000000000000000', // auto set
+        contractURIPrefix: baseURI,
+      },
+    ];
+
     const res = await contractSend(
       contract,
       address,
       'deployAssetSalesDAO',
-      [
-        {
-          name,
-          mission,
-          description,
-          image,
-        },
-        address,
-        {
-          // InitMemberArgs
-          name: memberBaseName,
-          description: memberBaseName,
-          baseURI: baseURI,
-          members: members.map((e: any) => {
-            return {
-              owner: e.owner,
-              info: { ...e },
-              permissions: [0xdc6b0b72, 0x678ea396],
-            };
-          }),
-          executor,
-        },
-        {
-          //InitVotePoolArgs
-          description: 'VotePool description',
-          lifespan: Math.max(hours, 7 * 24 /*7 days*/) * 60 * 60,
-        },
-        {
-          // InitLedgerArgs
-          description: 'Ledger description',
-        },
-        {
-          // InitAssetArgs
-          name: name, // string  name;
-          description: 'Asset description',
-          image: image,
-          external_link: process.env.NEXT_PUBLIC_BASE_URL,
-          seller_fee_basis_points_first: assetIssuanceTax * 100, // 30%
-          seller_fee_basis_points_second: assetCirculationTax * 100, // 10%
-          fee_recipient: '0x0000000000000000000000000000000000000000', // auto set
-          contractURIPrefix: baseURI,
-        },
-      ],
+      param,
       async (receipt) => {
         addr = await contract.methods.get(name).call();
         await waitBlockNumber(receipt.blockNumber, addr, chain, 2);
@@ -230,14 +232,13 @@ export const DAOSlice = createSlice({
         clearMakeDAOStorage();
         state.step = 0;
         state.currentDAO = payload;
+        state.DAOType = 'create';
+        sessionStorage.setItem('currentDAO', JSON.stringify(payload));
         router.push('/dashboard/mine/home');
         // state.DAOList = payload;
       })
       .addCase(deployAssetSalesDAO.rejected, (state, err) => {
         console.log('deployAssetSalesDAO rejected', err);
-      })
-      .addCase(getDAOList.pending, (state) => {
-        console.log('getDAOList pending!');
       })
       .addCase(getDAOList.fulfilled, (state, { payload }) => {
         console.log('getDAOList fulfilled', payload);

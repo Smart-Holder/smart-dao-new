@@ -126,18 +126,18 @@ const App = () => {
             requiredMark={false}
             validateTrigger="onBlur"
           >
-            <Form.Item name="sortTime">
+            <Form.Item name="orderBy">
               <Select
                 style={{ width: 140 }}
                 placeholder="加入时间排序"
                 options={[
                   { value: '', label: '默认' },
-                  { value: '1', label: '加入时间降序' },
-                  { value: '0', label: '加入时间升序' },
+                  // { value: '1', label: '加入时间降序' },
+                  { value: 'id', label: '加入时间升序' },
                 ]}
               />
             </Form.Item>
-            <Form.Item name="sortVotes">
+            {/* <Form.Item name="sortVotes">
               <Select
                 style={{ width: 140 }}
                 placeholder="份数排序"
@@ -147,7 +147,7 @@ const App = () => {
                   { value: '0', label: '份数升序' },
                 ]}
               />
-            </Form.Item>
+            </Form.Item> */}
             <Form.Item name="time" label="Time">
               <RangePicker format="MM/DD/YYYY" />
             </Form.Item>

@@ -1,6 +1,7 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
 import { Button, Input, Modal, Row, Col, message } from 'antd';
 import { Checkbox, Form } from 'antd';
+import { rng } from 'somes/rng';
 
 import { useAppSelector } from '@/store/hooks';
 
@@ -8,6 +9,7 @@ import { Permissions } from '@/config/enum';
 
 import { validateEthAddress } from '@/utils/validator';
 import { addNFTP } from '@/api/member';
+import { createVote } from '@/api/vote';
 
 const validateMessages = {
   required: '${label} is required!',
@@ -33,11 +35,40 @@ const App = (props: any, ref: any) => {
 
   const onFinish = async (values: any) => {
     console.log('validate Success:', values);
+    const { address, votes, permissions } = values;
+
+    const extra = [
+      {
+        abi: 'member',
+        method: 'create',
+        params: [
+          address,
+          {
+            id: '0x' + rng(32).toString('hex'),
+            name: '',
+            description: '',
+            image: '',
+            votes: votes || 1,
+          },
+          permissions,
+        ],
+      },
+    ];
+
+    const params = {
+      name: '增加成员',
+      description: JSON.stringify({
+        type: 'member',
+        purpose: `将${address}增加为DAO成员`,
+      }),
+      extra,
+    };
 
     try {
       await addNFTP({ ...values, votes: Number(values.votes) });
-      message.success('success');
-      window.location.reload();
+      // await createVote(params);
+      message.success('生成提案');
+      // window.location.reload();
       hideModal();
     } catch (error) {
       console.error(error);
@@ -131,12 +162,12 @@ const App = (props: any, ref: any) => {
                     发行资产
                   </Checkbox>
                 </Col>
-                <Col span={8}>
+                {/* <Col span={8}>
                   <Checkbox value={Permissions.Action_Asset_Shell_Withdraw}>
                     上架资产
                   </Checkbox>
-                </Col>
-                <Col span={8}>
+                </Col> */}
+                <Col span={16}>
                   <Checkbox value={Permissions.Action_DAO_Settings}>
                     修改DAO的基础设置
                   </Checkbox>

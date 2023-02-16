@@ -4,8 +4,11 @@
 // import router from "@/router";
 import { connectType } from '@/config/enum';
 // import i18n from "@/plugins/i18n";
+import dynamic from 'next/dynamic';
 // import store from '@/store';
 // import { setProvider } from '@/store/features/walletSlice';
+
+const store = dynamic(() => import('@/store'), { ssr: false });
 
 export async function connect() {
   if (typeof window.ethereum !== 'undefined') {
@@ -23,18 +26,17 @@ export async function connect() {
       console.log('---connect metamask---', chainId, accounts[0]);
 
       // 只清空 sessionStorage, 重新连接
-      window.ethereum.on('chainChanged', (res) => {
-        console.log('-----chainChanged-----', res);
-        // store.dispatch("disconnect");
-        // store.dispatch("connect", connectType.MetaMask);
-      });
+      // window.ethereum.on('chainChanged', (res) => {
+      //   console.log('-----chainChanged-----', res);
+      //   store.dispatch({ type: 'wallet/disconnect', payload: null });
+      // });
 
-      // 清空所有登录信息，重新连接
-      window.ethereum.on('accountsChanged', (res) => {
-        console.log('-----accountsChanged-----', res);
-        // store.dispatch("disconnect");
-        // store.dispatch("connect", connectType.MetaMask);
-      });
+      // // 清空所有登录信息，重新连接
+      // window.ethereum.on('accountsChanged', (res) => {
+      //   console.log('store', store);
+      //   console.log('-----accountsChanged-----', res);
+      //   store.dispatch({ type: 'wallet/disconnect', payload: null });
+      // });
 
       return {
         address: accounts[0],

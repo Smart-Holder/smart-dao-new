@@ -1,19 +1,30 @@
-import { getContract, contractSend } from '@/utils/contract';
+import { getContract, contractSend, contractCall } from '@/utils/contract';
 import Member from '@/config/abi/Member.json';
 import { rng } from 'somes/rng';
 import store from '@/store';
 
+export function getMemberId() {
+  const { web3, address } = store.getState().wallet;
+  const { currentDAO, currentMember } = store.getState().dao;
+
+  console.log('currentDAO', currentDAO);
+
+  const contract = getContract(web3, Member.abi, currentDAO.member);
+
+  return contractCall(contract, 'executor').then((res) => {
+    console.log('eeeee', res);
+  });
+}
+
 // 首页加入一个 DAO
 export function join({ contractAddress }: { contractAddress: string }) {
   const { web3, address } = store.getState().wallet;
-  const { userInfo } = store.getState().user;
 
   const contract = getContract(web3, Member.abi, contractAddress);
 
   const params = [
     address,
     {
-      // id: hexRandomNumber(),
       id: '0x' + rng(32).toString('hex'),
       name: '',
       description: '',
@@ -59,7 +70,7 @@ export function addNFTP({
     permissions,
   ];
 
-  return contractSend(contract, owner, 'requestJoin', params);
+  return contractSend(contract, owner, 'create', params);
 }
 
 export function setMemberInfo({
@@ -82,15 +93,12 @@ export function setMemberInfo({
   ]);
 }
 
-export function setExecutor({ id }: { id: number }) {
+export function setExecutor({ id }: { id: string }) {
+  console.log('id', id);
   const { web3, address } = store.getState().wallet;
-  const { currentDAO, currentMember } = store.getState().dao;
+  const { currentDAO } = store.getState().dao;
 
   const contract = getContract(web3, Member.abi, currentDAO.member);
 
-  return contractSend(contract, address, 'setExecutor', [
-    currentMember.tokenId,
-    name,
-    '',
-  ]);
+  return contractSend(contract, address, 'setExecutor', [id]);
 }

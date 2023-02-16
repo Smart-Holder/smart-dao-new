@@ -13,6 +13,7 @@ import { setMakeDAOStorage, getMakeDAOStorage } from '@/utils/launch';
 const App = () => {
   const dispatch = useAppDispatch();
 
+  const startValues = getMakeDAOStorage('start') || {};
   const storageValues = getMakeDAOStorage('executor') || {};
 
   const [form] = Form.useForm();
@@ -29,8 +30,16 @@ const App = () => {
 
   const next = () => {
     form.validateFields().then((res) => {
-      console.log('form:', res);
-      setMakeDAOStorage('executor', res);
+      const values = { ...res };
+
+      const member = (startValues?.members || []).find(
+        (item: any) =>
+          item.owner.toLowerCase() === values.address.toLowerCase(),
+      );
+
+      values.executor = member?.id || 0;
+
+      setMakeDAOStorage('executor', values);
       dispatch(nextStep());
     });
   };
@@ -51,7 +60,7 @@ const App = () => {
         validateTrigger="onBlur"
       >
         <Form.Item
-          name="executor"
+          name="address"
           rules={[{ required: true }, { validator: validateEthAddress }]}
         >
           <Input

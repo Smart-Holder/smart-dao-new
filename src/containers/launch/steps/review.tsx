@@ -19,7 +19,9 @@ const App = () => {
   const { start, tax, vote, executor } = storageValues;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const { web3 } = useAppSelector((store) => store.wallet);
+  const { loading } = useAppSelector((store) => store.common);
 
   const prev = () => {
     dispatch(prevStep());
@@ -36,7 +38,7 @@ const App = () => {
       ...start,
       ...tax,
       ...vote,
-      ...executor,
+      executor: executor.executor,
     };
   };
 
@@ -73,7 +75,7 @@ const App = () => {
         readOnly
       />
 
-      <Slider
+      {/* <Slider
         style={{ padding: '10px 0' }}
         value={vote?.defaultVoteRate}
         label="Issuance Tax"
@@ -86,7 +88,7 @@ const App = () => {
         label="Circulation Tax"
         color="#2AC154"
         readOnly
-      />
+      /> */}
       <Slider
         style={{ padding: '10px 0' }}
         value={vote?.hours}
@@ -98,7 +100,7 @@ const App = () => {
 
       <Input
         className="input"
-        defaultValue={executor?.executor}
+        defaultValue={executor?.address}
         prefix={<span style={{ color: '#000' }}>Address:</span>}
         readOnly
       />
@@ -121,7 +123,12 @@ const App = () => {
             <Button className="button" type="primary" onClick={handleCancel}>
               再考虑一下
             </Button>
-            <Button className="button" type="primary" onClick={handleSubmit}>
+            <Button
+              className="button"
+              type="primary"
+              onClick={handleSubmit}
+              loading={loading}
+            >
               Done
             </Button>
           </div>

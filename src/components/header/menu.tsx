@@ -59,10 +59,20 @@ const Menu = () => {
 
   const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
     if (key === 'mine') {
+      if (!nickname) {
+        infoModal.current.show();
+        setDropdownOpen(false);
+        return;
+      }
       router.push('/mine');
     } else if (key === 'disconnect') {
       // dispatch(disconnect());
     } else if (key === 'create') {
+      if (!nickname) {
+        infoModal.current.show();
+        setDropdownOpen(false);
+        return;
+      }
       createModal.current.show();
     }
 

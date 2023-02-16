@@ -56,7 +56,10 @@ const App = () => {
 
     const params = {
       name: values.name,
-      description: JSON.stringify(values),
+      description: JSON.stringify({
+        type: 'normal',
+        ...values,
+      }),
     };
 
     try {

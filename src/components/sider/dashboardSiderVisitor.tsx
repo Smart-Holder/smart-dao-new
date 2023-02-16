@@ -15,6 +15,9 @@ import { join } from '@/api/member';
 import logo from '/public/logo.png';
 import { setDAOType } from '@/store/features/daoSlice';
 import { request } from '@/api';
+import { createDAOVote } from '@/api/vote';
+import { Permissions } from '@/config/enum';
+import { rng } from 'somes/rng';
 
 const { Paragraph } = Typography;
 
@@ -27,7 +30,9 @@ const App = () => {
   const roleModal: any = useRef(null);
 
   const { nickname, image } = useAppSelector((store) => store.user.userInfo);
-  const { addressFormat, chainId } = useAppSelector((store) => store.wallet);
+  const { addressFormat, chainId, address } = useAppSelector(
+    (store) => store.wallet,
+  );
   const { currentDAO, DAOType } = useAppSelector((store) => store.dao);
 
   const [loading, setLoading] = useState(false);
@@ -38,12 +43,41 @@ const App = () => {
 
   const setJoin = async () => {
     try {
-      setLoading(true);
-      await join({ contractAddress: currentDAO.member });
+      const params = {
+        name: '增加成员',
+        description: JSON.stringify({
+          type: 'member',
+          purpose: `将${address}增加为DAO成员`,
+        }),
+        extra: [
+          {
+            abi: 'member',
+            method: 'requestJoin',
+            params: [
+              address,
+              {
+                id: '0x' + rng(32).toString('hex'),
+                name: '',
+                description: '',
+                image: '',
+                votes: 1,
+              },
+              [
+                Permissions.Action_VotePool_Vote,
+                Permissions.Action_VotePool_Create,
+              ],
+            ],
+          },
+        ],
+      };
 
-      message.success('success');
+      setLoading(true);
+      // await join({ contractAddress: currentDAO.member });
+      // message.success('success');
+      await createDAOVote(params);
+      message.success('生成提案');
       setLoading(false);
-      dispatch(setDAOType('joining'));
+      // dispatch(setDAOType('joining'));
       // window.location.reload();
     } catch (error: any) {
       setLoading(false);

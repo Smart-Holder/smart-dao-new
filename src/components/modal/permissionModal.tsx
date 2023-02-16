@@ -1,6 +1,15 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
 import { useRouter } from 'next/router';
-import { Button, Input, Modal, Typography, Image, Row, Col } from 'antd';
+import {
+  Button,
+  Input,
+  Modal,
+  Typography,
+  Image,
+  Row,
+  Col,
+  message,
+} from 'antd';
 import { Checkbox, Form, Upload, Tag, Space } from 'antd';
 import Icon, { RightCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
@@ -21,6 +30,7 @@ import sdk from 'hcstore/sdk';
 import { Permissions } from '@/config/enum';
 
 import type { CheckboxValueType } from 'antd/es/checkbox/Group';
+import { createVote } from '@/api/vote';
 
 const { Link } = Typography;
 
@@ -31,6 +41,14 @@ const validateMessages = {
   },
 };
 
+const PermissionMap: { [index: number]: string } = {
+  0x22a25870: '添加NFTP',
+  0xdc6b0b72: '发起提案',
+  0x678ea396: '投票',
+  0x59baef2a: '发行资产',
+  0xd0a4ad96: '修改DAO的基础设置',
+};
+
 const App = (props: any, ref: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
@@ -39,11 +57,13 @@ const App = (props: any, ref: any) => {
   const { userInfo } = useAppSelector((store) => store.user);
   const { currentMember } = useAppSelector((store) => store.dao);
 
-  const [image, setImage] = useState();
+  const [loading, setLoading] = useState(false);
+  const [initialValues, setInitialValues] = useState({});
 
   useImperativeHandle(ref, () => ({
-    show: () => {
+    show: (permissions: number[]) => {
       setIsModalOpen(true);
+      setInitialValues({ permissions });
     },
   }));
 
@@ -51,24 +71,65 @@ const App = (props: any, ref: any) => {
     setIsModalOpen(false);
   };
 
-  const onFinish = (values: any) => {
+  const onFinish = async (values: any) => {
     console.log('validate Success:', values);
 
-    if (image) {
-      const params = {
-        ...userInfo,
-        image,
-        nickname: values.nickname,
-      };
+    const add: any = []; // 添加的权限
+    const remove: any = []; // 删除的权限
 
-      sdk.user.methods.setUser(params).then(() => {
-        handleCancel();
-        sdk.user.methods.getUser().then((res) => {
-          if (res && res.nickname) {
-            dispatch(setUserInfo(res));
-          }
-        });
+    values.permissions.forEach((v: any) => {
+      if (!currentMember.permissions.includes(v)) {
+        add.push(v);
+      }
+    });
+
+    currentMember.permissions.forEach((v: any) => {
+      if (!values.permissions.includes(v)) {
+        remove.push(v);
+      }
+    });
+
+    const extra = [];
+
+    if (add.length > 0) {
+      extra.push({
+        abi: 'member',
+        method: 'addPermissions',
+        params: [[currentMember.tokenId], add],
       });
+    }
+
+    if (remove.length > 0) {
+      extra.push({
+        abi: 'member',
+        method: 'removePermissions',
+        params: [[currentMember.tokenId], remove],
+      });
+    }
+
+    // 权限名称
+    const labels = values.permissions.map((v: number) => PermissionMap[v]);
+
+    const params = {
+      name: '变更权限',
+      description: JSON.stringify({
+        type: 'basic',
+        purpose: `变更权限: ${labels.valueOf()}`,
+      }),
+      extra,
+    };
+
+    try {
+      setLoading(true);
+      await createVote(params);
+      message.success('生成提案');
+      console.log('create success');
+      setLoading(false);
+      handleCancel();
+      // router.push('/dashboard/governance/votes');
+    } catch (error) {
+      setLoading(false);
+      console.error(error);
     }
   };
 
@@ -76,35 +137,21 @@ const App = (props: any, ref: any) => {
     console.log('validate Failed:', errorInfo);
   };
 
-  const handleChange: UploadProps['onChange'] = (
-    info: UploadChangeParam<UploadFile>,
-  ) => {
-    if (info.file.status === 'done') {
-      console.log('upload', info.file);
-      setImage(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
-    }
-  };
-
-  const beforeUpload = (file: RcFile) => {
-    const message = validateImage(file);
-
-    return !message;
-  };
-
-  const onCheckboxChange = (checkedValues: CheckboxValueType[]) => {
-    console.log('checked = ', checkedValues);
-  };
-
-  const handleSubmit = () => {};
-
   return (
-    <Modal width={512} open={isModalOpen} onCancel={handleCancel} footer={null}>
+    <Modal
+      width={512}
+      open={isModalOpen}
+      onCancel={handleCancel}
+      footer={null}
+      destroyOnClose
+    >
       <div className="content">
         <div className="h1">变更权利</div>
         {/* <div className="h2"></div> */}
 
         <Form
           name="info"
+          initialValues={initialValues}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
@@ -116,7 +163,7 @@ const App = (props: any, ref: any) => {
           <Form.Item name="permissions" label="权限设置">
             <Checkbox.Group
               className="checkbox-group"
-              defaultValue={currentMember.permissions || []}
+              // defaultValue={currentMember.permissions || []}
             >
               <Row style={{ width: '100%' }} gutter={[0, 10]}>
                 <Col span={8}>
@@ -139,12 +186,12 @@ const App = (props: any, ref: any) => {
                     发行资产
                   </Checkbox>
                 </Col>
-                <Col span={8}>
+                {/* <Col span={8}>
                   <Checkbox value={Permissions.Action_Asset_Shell_Withdraw}>
                     上架资产
                   </Checkbox>
-                </Col>
-                <Col span={8}>
+                </Col> */}
+                <Col span={16}>
                   <Checkbox value={Permissions.Action_DAO_Settings}>
                     修改DAO的基础设置
                   </Checkbox>

@@ -1,4 +1,9 @@
-import React, { useState, useImperativeHandle, forwardRef } from 'react';
+import React, {
+  useState,
+  useImperativeHandle,
+  forwardRef,
+  useEffect,
+} from 'react';
 import {
   Button,
   Input,
@@ -8,7 +13,9 @@ import {
   Row,
   Col,
   Avatar,
+  message,
 } from 'antd';
+import { rng } from 'somes/rng';
 import { Checkbox, Form, Upload, Tag } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
@@ -24,6 +31,11 @@ import { validateChinese, validateEthAddress } from '@/utils/validator';
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import type { CheckboxValueType } from 'antd/es/checkbox/Group';
+import { request } from '@/api';
+import { setExecutor } from '@/api/member';
+import { setCurrentDAO } from '@/store/features/daoSlice';
+import { Permissions } from '@/config/enum';
+import { createVote } from '@/api/vote';
 
 const options = [
   { label: 'Apple', value: 'Apple' },
@@ -33,58 +45,134 @@ const options = [
 
 const App = () => {
   const dispatch = useAppDispatch();
-  const { userInfo } = useAppSelector((store) => store.user);
-  const { currentDAO } = useAppSelector((store) => store.dao);
-  const { loading } = useAppSelector((store) => store.common);
-  const [image, setImage] = useState();
+  const { chainId, address } = useAppSelector((store) => store.wallet);
+  const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
+  // const { loading } = useAppSelector((store) => store.common);
+  const [loading, setLoading] = useState(false);
+  const [members, setMembers] = useState([]);
+  const [initialValues, setInitialValues] = useState(null) as any;
   const url =
     'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
 
-  const initialValues = { executor: currentDAO.executor };
+  useEffect(() => {
+    const getMembers = async () => {
+      const members = await request({
+        name: 'utils',
+        method: 'getMembersFrom',
+        params: { chain: chainId, host: currentDAO.host },
+      });
 
-  const onFinish = (values: any) => {
+      setMembers(members);
+      const member = members.find(
+        (item: any) => item.tokenId === currentDAO.executor,
+      );
+
+      const values = { address: '', executor: '' };
+
+      if (member) {
+        values.address = member.owner;
+        values.executor = member.tokenId;
+      }
+
+      console.log('values', values);
+
+      setInitialValues(values);
+    };
+
+    if (chainId && currentDAO.host) {
+      getMembers();
+    }
+  }, []);
+
+  const onFinish = async (values: any) => {
     console.log('validate Success:', values);
 
-    if (image) {
+    const member: any = members.find(
+      (item: any) => item.owner.toLowerCase() === values.address.toLowerCase(),
+    );
+
+    if (member?.tokenId) {
+      // 提案通过后执行 setExecutor
+      const extra = [
+        {
+          abi: 'member',
+          method: 'setExecutor',
+          params: [member.tokenId],
+        },
+      ];
+
+      // 生成提案的参数
       const params = {
-        ...userInfo,
-        image,
-        nickname: values.nickname,
+        name: '更换执行人',
+        description: JSON.stringify({
+          type: 'member',
+          purpose: `将执行人更换为${values.address}`,
+        }),
+        extra,
       };
 
-      sdk.user.methods.setUser(params).then(() => {
-        sdk.user.methods.getUser().then((res) => {
-          if (res && res.nickname) {
-            dispatch(setUserInfo(res));
-          }
-        });
-      });
+      try {
+        setLoading(true);
+        // await setExecutor({ id: member.tokenId });
+        await createVote(params);
+        message.success('success');
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
+    } else {
+      message.error('没有该成员');
     }
   };
+
+  // const onFinish = async (values: any) => {
+  //   const permission = currentMember.permissions.includes(
+  //     Permissions.Action_DAO_Settings,
+  //   );
+
+  //   if (!permission) {
+  //     message.warning('没有权限');
+  //     return;
+  //   }
+
+  //   console.log('validate Success:', values);
+  //   setLoading(true);
+
+  //   const member: any = members.find(
+  //     (item: any) => item.owner.toLowerCase() === values.address.toLowerCase(),
+  //   );
+
+  //   if (member?.tokenId) {
+  //     await setExecutor({ id: member.tokenId });
+  //     message.success('success');
+
+  //     const dao = await request({
+  //       method: 'getDAO',
+  //       name: 'utils',
+  //       params: { chain: chainId, address: currentDAO.address },
+  //     });
+
+  //     setLoading(false);
+
+  //     if (dao) {
+  //       dispatch(setCurrentDAO(dao));
+  //       sessionStorage.setItem('currentDAO', JSON.stringify(dao));
+  //       // window.location.reload();
+  //     }
+  //   } else {
+  //     message.error('没有该成员');
+  //     setLoading(false);
+  //   }
+  // };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('validate Failed:', errorInfo);
   };
 
-  const handleChange: UploadProps['onChange'] = (
-    info: UploadChangeParam<UploadFile>,
-  ) => {
-    if (info.file.status === 'done') {
-      setImage(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
-    }
-  };
-
-  const beforeUpload = (file: RcFile) => {
-    const message = validateImage(file);
-
-    return !message;
-  };
-
-  const handleSubmit = () => {};
-
-  const onCheckboxChange = (checkedValues: CheckboxValueType[]) => {
-    console.log('checked = ', checkedValues);
-  };
+  if (!initialValues) {
+    return null;
+  }
 
   return (
     <div className="wrap">
@@ -109,22 +197,22 @@ const App = () => {
         layout="inline"
       >
         <Form.Item
-          style={{ width: '100%' }}
+          style={{ width: 480 }}
           name="address"
           rules={[{ required: true }, { validator: validateEthAddress }]}
         >
-          <div className="item-group">
-            {/* <Input className="input" prefix={<Avatar size={30} src={url} />} /> */}
-            <Input className="input" />
-            <Button
-              className="button"
-              type="primary"
-              htmlType="submit"
-              loading={loading}
-            >
-              Replace
-            </Button>
-          </div>
+          {/* <Input className="input" prefix={<Avatar size={30} src={url} />} /> */}
+          <Input className="input" />
+        </Form.Item>
+        <Form.Item>
+          <Button
+            className="button"
+            type="primary"
+            htmlType="submit"
+            loading={loading}
+          >
+            Replace
+          </Button>
         </Form.Item>
       </Form>
 
@@ -185,7 +273,7 @@ const App = () => {
           }
 
           .wrap :global(.button) {
-            width: 168px;
+            width: 140px;
             height: 54px;
             margin-left: 20px;
             font-size: 18px;
