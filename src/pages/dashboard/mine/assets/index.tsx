@@ -55,6 +55,7 @@ const App: NextPageWithLayout = () => {
       state: 0,
     } as {
       author?: string;
+      author_not?: string;
       owner?: string;
       orderBy?: string;
     };
@@ -62,9 +63,18 @@ const App: NextPageWithLayout = () => {
       params.author = address;
     } else if (type === '2') {
       params.owner = address;
+      params.author_not = address;
     }
-    if (orderBy === '1') {
-      params.orderBy = 'sellPrice';
+    if (orderBy === '0') {
+      params.orderBy = 'sellPrice desc';
+    } else if (orderBy === '1') {
+      params.orderBy = 'sellPrice asc';
+    } else if (orderBy === '2') {
+      params.orderBy = 'sellingTime desc';
+    } else if (orderBy === '3') {
+      params.orderBy = 'blockNumber desc';
+    } else if (orderBy === '4') {
+      params.orderBy = 'soldTime desc';
     }
     return params;
   }, [address, chainId, currentDAO.host, type, orderBy]);
@@ -130,8 +140,8 @@ const App: NextPageWithLayout = () => {
               defaultValue: '',
               options: [
                 { value: '', label: '全部类型' },
-                { value: '1', label: '我创建的' },
-                { value: '2', label: '我的' },
+                { value: '1', label: '我发行的' },
+                { value: '2', label: '我购买的' },
               ],
               onSelect: onSelectType,
             },
@@ -149,11 +159,11 @@ const App: NextPageWithLayout = () => {
               options: [
                 { value: '0', label: '价格从高到低' },
                 { value: '1', label: '价格从低到高' },
-                { value: '2', label: 'offer从低到高' },
-                { value: '3', label: 'offer从高到低' },
-                { value: '4', label: '最近上架' },
-                { value: '5', label: '最近创建' },
-                { value: '6', label: '最近卖出' },
+                // { value: '2', label: 'offer从低到高' },
+                // { value: '3', label: 'offer从高到低' },
+                { value: '2', label: '最近上架' },
+                { value: '3', label: '最近创建' },
+                { value: '4', label: '最近卖出' },
               ],
               onSelect: onSelectOrderby,
             },
