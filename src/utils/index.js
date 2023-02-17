@@ -1,20 +1,20 @@
 // import moment from "moment";
 import dayjs from 'dayjs';
 import { rng } from 'somes/rng';
-// import BigNumber from 'bignumber.js';
+import BigNumber from 'bignumber.js';
 
-// export function fromToken(number, precision = 18, decimal = 4) {
-//   if (typeof Number(number) === 'number') {
-//     const amount = new BigNumber(number)
-//       .shiftedBy(-precision)
-//       .decimalPlaces(decimal)
-//       .toFormat();
-//     if (amount === 'NaN') return '--';
-//     return amount;
-//   } else {
-//     return '--';
-//   }
-// }
+export function fromToken(number, precision = 18, decimal = 4) {
+  if (typeof Number(number) === 'number') {
+    const amount = new BigNumber(number)
+      .shiftedBy(-precision)
+      .decimalPlaces(decimal)
+      .toFormat();
+    if (amount === 'NaN') return '--';
+    return amount;
+  } else {
+    return '--';
+  }
+}
 
 // 防抖
 export const debounce = (fn, time) => {

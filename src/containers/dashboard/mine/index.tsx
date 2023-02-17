@@ -8,6 +8,7 @@ import icon1 from '/public/images/dashboard/mine/home-icon-1.png';
 import icon2 from '/public/images/dashboard/mine/home-icon-2.png';
 import icon3 from '/public/images/dashboard/mine/home-icon-3.png';
 import icon4 from '/public/images/dashboard/mine/home-icon-4.png';
+import { fromToken } from '@/utils';
 
 const App = () => {
   const url =
@@ -75,20 +76,22 @@ const App = () => {
         <Space size={[39, 46]} wrap>
           <div className="bottom-item">
             <Image
-              style={{ marginRight: 28 }}
+              style={{ marginRight: 24 }}
               src={icon1}
               width={84}
               height={84}
               alt="img"
             />
             <div className="bottom-item-right">
-              <span className="num">{DAOInfo.assetAmountTotal} ETH</span>
+              <span className="num">
+                {fromToken(DAOInfo.assetAmountTotal)} ETH
+              </span>
               <span>资产总价值</span>
             </div>
           </div>
           <div className="bottom-item">
             <Image
-              style={{ marginRight: 28 }}
+              style={{ marginRight: 24 }}
               src={icon2}
               width={84}
               height={84}
@@ -101,7 +104,7 @@ const App = () => {
           </div>
           <div className="bottom-item">
             <Image
-              style={{ marginRight: 28 }}
+              style={{ marginRight: 24 }}
               src={icon3}
               width={84}
               height={84}
@@ -114,7 +117,7 @@ const App = () => {
           </div>
           <div className="bottom-item">
             <Image
-              style={{ marginRight: 28 }}
+              style={{ marginRight: 24 }}
               src={icon4}
               width={84}
               height={84}
@@ -212,7 +215,7 @@ const App = () => {
 
           .bottom-item .num {
             height: 55px;
-            font-size: 40px;
+            font-size: 36px;
             font-family: PingFangSC-Regular, PingFang SC;
             font-weight: 400;
             color: #0e0e0e;

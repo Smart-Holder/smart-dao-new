@@ -21,6 +21,12 @@ const externals = function ({ context, request }, callback) {
 };
 
 const nextConfig = {
+  // exportPathMap: () => {
+  //   return {
+  //     '/': { page: '/' },
+  //   };
+  // },
+  distDir: 'build',
   reactStrictMode: false,
   images: {
     domains: ['smart-dao-res.stars-mine.com'],
