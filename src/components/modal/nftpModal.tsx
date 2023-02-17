@@ -65,8 +65,8 @@ const App = (props: any, ref: any) => {
     };
 
     try {
-      await addNFTP({ ...values, votes: Number(values.votes) });
-      // await createVote(params);
+      // await addNFTP({ ...values, votes: Number(values.votes) });
+      await createVote(params);
       message.success('生成提案');
       // window.location.reload();
       hideModal();

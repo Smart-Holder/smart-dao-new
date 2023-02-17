@@ -143,7 +143,7 @@ export function setVote({
   const params = [
     proposal_id,
     currentMember.tokenId,
-    vote ? currentMember.votes : -1,
+    vote ? Number(currentMember.votes) : -1,
     // type !== 'normal',
     // false,
     true,

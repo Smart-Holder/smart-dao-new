@@ -169,8 +169,8 @@ const App = () => {
                 placeholder="加入时间排序"
                 options={[
                   { value: '', label: '默认' },
-                  // { value: '1', label: '加入时间降序' },
-                  { value: 'id', label: '加入时间升序' },
+                  { value: 'time desc', label: '加入时间降序' },
+                  { value: 'time', label: '加入时间升序' },
                 ]}
               />
             </Form.Item>
