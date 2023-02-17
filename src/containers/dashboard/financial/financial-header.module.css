@@ -11,6 +11,7 @@
 
 .left {
   display: flex;
+  flex: 1;
 }
 
 .left .logo {
@@ -25,6 +26,7 @@
   margin-left: 15px;
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 .left .l1 {
@@ -75,6 +77,7 @@
 }
 
 .left .desc {
+  flex: 1;
   font-size: 14px;
   font-weight: 400;
   color: #969ba0;

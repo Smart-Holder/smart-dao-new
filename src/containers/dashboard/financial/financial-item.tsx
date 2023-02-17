@@ -1,6 +1,7 @@
 import { FC, ReactNode } from 'react';
 import { Image } from 'antd';
 import styles from './financial-item.module.css';
+import { fromToken } from '@/utils';
 
 type FinancialItemProps = FinancialItemType & {
   priceIcon?: ReactNode;
@@ -23,7 +24,8 @@ const FinancialItem: FC<FinancialItemProps> = (props) => {
       <div className={styles['title']}>{title}</div>
       <div className={styles['price']}>
         {priceIcon && <div className={styles['icon']}>{priceIcon}</div>}
-        {price && +price / 1e18}
+        {/* {price && +price / 1e18} */}
+        {price && fromToken(price)}
       </div>
     </div>
   );

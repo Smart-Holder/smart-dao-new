@@ -1,8 +1,8 @@
 import { rng } from 'somes/rng';
-import abi from 'web3-eth-abi';
 
 import { getContract, contractSend } from '@/utils/contract';
 import Asset from '@/config/abi/Asset.json';
+import Ledger from '@/config/abi/Ledger.json';
 
 import store from '@/store';
 
@@ -39,4 +39,14 @@ export function safeMint({ _tokenURI }: { _tokenURI: string }) {
       [address, '10000000000000000' /*min price 0.01 eth*/],
     ),
   ]);
+}
+
+// 收入分配
+export function release() {
+  const { web3, address } = store.getState().wallet;
+  const { currentDAO } = store.getState().dao;
+
+  const contract = getContract(web3, Ledger.abi, currentDAO.ledger);
+
+  return contractSend(contract, address, 'release', []);
 }

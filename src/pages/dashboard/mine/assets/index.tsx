@@ -172,18 +172,19 @@ const App: NextPageWithLayout = () => {
       </div>
       <div className={styles['dashboard-content-body']}>
         <div className={styles['financial-list']}>
-          {data.map((item, i) => {
+          {data.map((item: any, i) => {
             return (
               <div key={i} className={styles['financial-item']}>
                 <FinancialItem
-                  title={item.name}
+                  title={`${item.name} #${item.id}`}
                   logo={item.mediaOrigin}
                   price={
-                    item.properties.find((item) => item.trait_type === 'price')
+                    item.properties.find((i: any) => i.trait_type === 'price')
                       ?.value || ''
                   }
                   priceIcon={<PriceIcon />}
                   onClick={() => {
+                    localStorage.setItem('asset', JSON.stringify(item));
                     router.push(`assets/detail?id=${item.id}`);
                   }}
                 />

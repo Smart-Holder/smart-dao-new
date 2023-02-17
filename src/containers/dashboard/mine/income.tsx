@@ -11,9 +11,10 @@ import { request } from '@/api';
 import styles from '@/styles/content.module.css';
 import { useAppSelector } from '@/store/hooks';
 
-import { formatAddress, formatDayjsValues } from '@/utils';
+import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
 
 import type { PaginationProps } from 'antd';
+import { release } from '@/api/asset';
 
 const { RangePicker } = DatePicker;
 
@@ -25,19 +26,20 @@ const columns = [
     dataIndex: 'id',
     key: 'id',
   },
-  { title: '标签', dataIndex: 'votes', key: 'votes' },
+  // { title: '标签', dataIndex: 'votes', key: 'votes' },
   {
     title: '资产',
     dataIndex: ['asset', 'id'],
     key: 'asset.id',
     render: (text: string) => '#' + text,
   },
-  { title: '市场', dataIndex: 'votes', key: 'votes' },
+  // { title: '市场', dataIndex: 'votes', key: 'votes' },
   { title: '收入类型', dataIndex: 'votes', key: 'votes' },
   {
     title: '收入金额',
-    dataIndex: ['asset', 'sellPrice'],
-    key: 'asset.sellPrice',
+    dataIndex: 'price',
+    key: 'price',
+    render: (text: string) => fromToken(text),
   },
   {
     title: '日期',
@@ -123,7 +125,14 @@ const App = () => {
     getData(p);
   };
 
-  const onDone = () => {};
+  const onDone = async () => {
+    try {
+      await release();
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     const getAmount = async () => {
@@ -153,10 +162,10 @@ const App = () => {
       <div className={styles['dashboard-content-header']}>
         <Counts
           items={[
-            { num: amount.total, title: '累计收入' },
-            { num: Number(amount.amount), title: '累计发行税收入' },
-            { num: Number(amount.amount), title: '累计交易税收入' },
-            { num: Number(amount.amount), title: '未分配收入' },
+            { num: fromToken(amount.amount) + ' ETH', title: '累计收入' },
+            { num: fromToken(amount.amount) + ' ETH', title: '累计发行税收入' },
+            { num: fromToken(amount.amount) + ' ETH', title: '累计交易税收入' },
+            { num: fromToken(amount.amount) + ' ETH', title: '未分配收入' },
           ]}
         />
 
@@ -174,28 +183,28 @@ const App = () => {
             requiredMark={false}
             validateTrigger="onBlur"
           >
-            {/* <Form.Item name="orderBy">
+            <Form.Item name="orderBy">
               <Select
                 style={{ width: 140 }}
-                placeholder="加入时间排序"
+                placeholder="排序"
                 options={[
                   { value: '', label: '默认' },
-                  // { value: '1', label: '加入时间降序' },
-                  { value: 'id', label: '加入时间升序' },
+                  { value: 'value desc', label: '收入金额降序' },
+                  { value: 'value', label: '收入金额升序' },
                 ]}
               />
-            </Form.Item> */}
-            {/* <Form.Item name="sortVotes">
+            </Form.Item>
+            <Form.Item name="type">
               <Select
                 style={{ width: 140 }}
-                placeholder="份数排序"
+                placeholder="全部收入类型"
                 options={[
                   { value: '', label: '默认' },
-                  { value: '1', label: '份数降序' },
-                  { value: '0', label: '份数升序' },
+                  { value: '1', label: '发行税收入' },
+                  { value: '2', label: '交易税收入' },
                 ]}
               />
-            </Form.Item> */}
+            </Form.Item>
             <Form.Item name="time" label="Time">
               <RangePicker format="MM/DD/YYYY" />
             </Form.Item>
@@ -241,6 +250,7 @@ const App = () => {
             type="primary"
             className={styles['dashboard-modal-button']}
             onClick={onDone}
+            loading={loading}
           >
             Done
           </Button>

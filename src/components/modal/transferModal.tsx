@@ -137,7 +137,6 @@ const App = (props: any, ref: any) => {
           }
 
           .content :global(.button-submit) {
-            width: 170px;
             height: 54px;
             font-size: 18px;
             font-family: PingFangSC-Regular, PingFang SC;

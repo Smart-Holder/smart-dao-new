@@ -47,7 +47,6 @@ const App = () => {
   // const { loading } = useAppSelector((store) => store.common);
 
   const [loading, setLoading] = useState(false);
-  const [transferLoading, setTransferLoading] = useState(false);
   const [image, setImage] = useState(currentMember.image);
   const [imageMessage, setImageMessage] = useState('');
   const [permissions, setPermissions] = useState(currentMember.permissions);

@@ -201,7 +201,12 @@ const App = (props: any, ref: any) => {
           </Form.Item>
 
           <Form.Item style={{ margin: '60px 0 0', textAlign: 'center' }}>
-            <Button className="button-submit" type="primary" htmlType="submit">
+            <Button
+              className="button-submit"
+              type="primary"
+              htmlType="submit"
+              loading={loading}
+            >
               变更并生成提案
             </Button>
           </Form.Item>

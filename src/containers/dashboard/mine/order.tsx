@@ -11,7 +11,7 @@ import { request } from '@/api';
 import styles from '@/styles/content.module.css';
 import { useAppSelector } from '@/store/hooks';
 
-import { formatAddress, formatDayjsValues } from '@/utils';
+import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
 
 import type { PaginationProps } from 'antd';
 
@@ -25,19 +25,29 @@ const columns = [
     dataIndex: 'id',
     key: 'id',
   },
-  { title: '标签', dataIndex: 'votes', key: 'votes' },
+  // {
+  //   title: '标签',
+  //   dataIndex: 'tags',
+  //   key: 'tags',
+  //   render: (text: string, { asset: { properties } }: any) => {
+  //     const arr = properties.find((item: any) => item.trait_type === 'tags');
+  //     return arr?.value || '';
+  //   },
+  // },
   {
     title: '资产',
-    dataIndex: ['asset', 'id'],
-    key: 'asset.id',
+    // dataIndex: ['asset', 'name'],
+    dataIndex: 'asset_id',
+    key: 'asset_id',
     render: (text: string) => '#' + text,
   },
-  { title: '市场', dataIndex: 'votes', key: 'votes' },
+  // { title: '市场', dataIndex: 'votes', key: 'votes' },
   { title: '收入类型', dataIndex: 'votes', key: 'votes' },
   {
     title: '收入金额',
-    dataIndex: ['asset', 'sellPrice'],
-    key: 'asset.sellPrice',
+    dataIndex: 'value',
+    key: 'value',
+    render: (text: string) => fromToken(text),
   },
   {
     title: '加入日期',
@@ -153,16 +163,22 @@ const App = () => {
       <div className={styles['dashboard-content-header']}>
         <Counts
           items={[
-            { num: amount.total, title: '累计收入' },
-            { num: Number(amount.amount), title: '累计发行税收入' },
-            { num: Number(amount.amount), title: '累计交易税收入' },
-            { num: Number(amount.amount), title: '未分配收入' },
+            { num: amount.total, title: '订单总数' },
+            { num: fromToken(amount.amount || 0) + ' ETH', title: '总交易额' },
           ]}
         />
+        {/* <Counts
+          items={[
+            { num: fromToken(amount.amount) + ' ETH', title: '累计收入' },
+            { num: fromToken(amount.amount) + ' ETH', title: '累计发行税收入' },
+            { num: fromToken(amount.amount) + ' ETH', title: '累计交易税收入' },
+            { num: fromToken(amount.amount) + ' ETH', title: '未分配收入' },
+          ]}
+        /> */}
 
-        <Button type="primary" onClick={showModal}>
+        {/* <Button type="primary" onClick={showModal}>
           分配
-        </Button>
+        </Button> */}
 
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <Form
@@ -174,25 +190,25 @@ const App = () => {
             requiredMark={false}
             validateTrigger="onBlur"
           >
-            {/* <Form.Item name="orderBy">
+            <Form.Item name="orderBy">
               <Select
                 style={{ width: 140 }}
-                placeholder="加入时间排序"
+                placeholder="排序"
                 options={[
                   { value: '', label: '默认' },
-                  // { value: '1', label: '加入时间降序' },
-                  { value: 'id', label: '加入时间升序' },
+                  { value: 'value desc', label: '收入金额降序' },
+                  { value: 'value', label: '收入金额升序' },
                 ]}
               />
-            </Form.Item> */}
+            </Form.Item>
             {/* <Form.Item name="sortVotes">
               <Select
                 style={{ width: 140 }}
-                placeholder="份数排序"
+                placeholder="收入类型"
                 options={[
-                  { value: '', label: '默认' },
-                  { value: '1', label: '份数降序' },
-                  { value: '0', label: '份数升序' },
+                  { value: '', label: '全部收入类型' },
+                  { value: '1', label: '发行税收入' },
+                  { value: '0', label: '交易税收入' },
                 ]}
               />
             </Form.Item> */}

@@ -6,7 +6,7 @@ type CountsProps = {
 };
 
 type CountItem = {
-  num: number;
+  num: number | string;
   title: string;
 };
 

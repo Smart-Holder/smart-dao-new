@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { Table, Button, DatePicker, Form, Select } from 'antd';
+import { Table, Button, DatePicker, Form, Select, message } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
@@ -11,13 +11,26 @@ import { request } from '@/api';
 import styles from '@/styles/content.module.css';
 import { useAppSelector } from '@/store/hooks';
 
-import { formatAddress, formatDayjsValues } from '@/utils';
+import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
 
 import type { PaginationProps } from 'antd';
+import { CopyOutlined } from '@ant-design/icons';
 
 const { RangePicker } = DatePicker;
 
 dayjs.extend(customParseFormat);
+
+const copy = (str: string) => {
+  const input = document.createElement('input');
+  document.body.appendChild(input);
+  input.setAttribute('value', str);
+  input.select();
+  if (document.execCommand('copy')) {
+    document.execCommand('copy');
+  }
+  document.body.removeChild(input);
+  message.success('copy');
+};
 
 const columns = [
   {
@@ -25,20 +38,47 @@ const columns = [
     dataIndex: 'id',
     key: 'id',
   },
-  { title: '市场', dataIndex: 'votes', key: 'votes' },
-  { title: '金额', dataIndex: ['asset', 'sellPrice'], key: 'asset.id' },
-  { title: '标签', dataIndex: 'votes', key: 'votes' },
+  // { title: '市场', dataIndex: 'votes', key: 'votes' },
+  {
+    title: '金额',
+    dataIndex: 'value',
+    key: 'value',
+    render: (text: string) => fromToken(text),
+  },
+  // { title: '标签', dataIndex: 'votes', key: 'votes' },
   {
     title: '发送方',
     dataIndex: 'fromAddres',
     key: 'fromAddres',
-    render: (text: string) => formatAddress(text),
+    render: (text: string) => {
+      return (
+        <>
+          <span style={{ marginRight: 4 }}>{formatAddress(text)}</span>
+          <CopyOutlined
+            onClick={() => {
+              copy(text);
+            }}
+          />
+        </>
+      );
+    },
   },
   {
     title: '接收方',
     dataIndex: 'toAddress',
     key: 'toAddress',
-    render: (text: string) => formatAddress(text),
+    render: (text: string) => {
+      return (
+        <>
+          <span style={{ marginRight: 4 }}>{formatAddress(text)}</span>
+          <CopyOutlined
+            onClick={() => {
+              copy(text);
+            }}
+          />
+        </>
+      );
+    },
   },
   {
     title: '加入日期',
@@ -149,7 +189,7 @@ const App = () => {
         <Counts
           items={[
             { num: amount.total, title: '订单总数' },
-            { num: Number(amount.amount), title: '总交易额' },
+            { num: fromToken(amount.amount || 0) + ' ETH', title: '总交易额' },
           ]}
         />
 
@@ -166,11 +206,13 @@ const App = () => {
             <Form.Item name="orderBy">
               <Select
                 style={{ width: 140 }}
-                placeholder="加入时间排序"
+                placeholder="排序"
                 options={[
                   { value: '', label: '默认' },
-                  { value: 'time desc', label: '加入时间降序' },
-                  { value: 'time', label: '加入时间升序' },
+                  { value: 'time desc', label: '时间降序' },
+                  { value: 'time', label: '时间升序' },
+                  { value: 'value desc', label: '订单金额降序' },
+                  { value: 'value', label: '订单金额升序' },
                 ]}
               />
             </Form.Item>

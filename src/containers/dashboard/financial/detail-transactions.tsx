@@ -4,6 +4,10 @@ import contentStyles from '@/styles/content.module.css';
 import { Select, Table } from 'antd';
 import { formatAddress } from '@/utils';
 import Image from 'next/image';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+dayjs.extend(customParseFormat);
 
 type DetailTransactionsProps = {
   data: DetailTransactionItem[];
@@ -31,7 +35,7 @@ const DetailTransactions: FC<DetailTransactionsProps> = (props) => {
           <div>交易历史</div>
           <span className={styles['s']}>Transactions</span>
         </div>
-        <div className={styles['filter']}>
+        {/* <div className={styles['filter']}>
           <Select
             defaultValue="All Times"
             style={{ width: 120 }}
@@ -40,55 +44,62 @@ const DetailTransactions: FC<DetailTransactionsProps> = (props) => {
               { value: '1', label: '1' },
             ]}
           />
-        </div>
+        </div> */}
       </div>
       <div className={styles['items']}>
         <Table
           className={contentStyles['dashboard-content-table']}
-          pagination={{
-            position: ['bottomRight'],
-            current: currentPage,
-            pageSize,
-            total,
-            onChange: onPageChange,
-          }}
+          // pagination={{
+          //   position: ['bottomRight'],
+          //   current: currentPage,
+          //   pageSize,
+          //   total,
+          //   onChange: onPageChange,
+          // }}
+          pagination={false}
           rowKey="order"
           columns={[
-            { title: '市场', dataIndex: 'market', key: 'market' },
-            { title: '事件', dataIndex: 'event', key: 'event' },
+            // { title: '市场', dataIndex: 'market', key: 'market' },
+            {
+              title: '事件',
+              dataIndex: 'event',
+              key: 'event',
+              render: (str) => str || '--',
+            },
             {
               title: '金额',
-              dataIndex: 'price',
-              key: 'price',
+              dataIndex: 'value',
+              key: 'value',
               render: (value) => (
                 <div className={styles['price']}>
-                  <Image
+                  {/* <Image
                     src="https://storage.nfte.ai/icon/currency/eth.svg"
                     alt="eth"
                     width={15}
                     height={15}
-                  />
+                  /> */}
                   {value / 1e18}
                 </div>
               ),
             },
             {
               title: '发送方',
-              dataIndex: 'from',
-              key: 'from',
+              dataIndex: 'fromAddres',
+              key: 'fromAddres',
               render: (str) => formatAddress(str),
             },
 
             {
               title: '接收方',
-              dataIndex: 'to',
-              key: 'to',
+              dataIndex: 'toAddress',
+              key: 'toAddress',
               render: (str) => formatAddress(str),
             },
             {
               title: 'Date',
-              dataIndex: 'date',
-              key: 'date',
+              dataIndex: 'time',
+              key: 'time',
+              render: (text: string) => dayjs(text).format('MM/DD/YYYY'),
             },
           ]}
           dataSource={[...data]}

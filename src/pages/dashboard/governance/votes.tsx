@@ -247,7 +247,7 @@ const App: NextPageWithLayout = () => {
           dataLength={data.length}
           next={getData}
           hasMore={data.length < total}
-          loader={<Skeleton paragraph={{ rows: 1 }} active />}
+          loader={loading && <Skeleton paragraph={{ rows: 1 }} active />}
           scrollableTarget="scrollableVotes"
         >
           <div className={styles['vote-list']}>

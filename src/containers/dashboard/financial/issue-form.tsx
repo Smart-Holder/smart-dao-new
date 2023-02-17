@@ -36,9 +36,11 @@ const testTags = [
 
 const IssueForm: FC<IssueFormProps> = () => {
   const { chainId } = useAppSelector((store) => store.wallet);
-  const { loading } = useAppSelector((store) => store.common);
 
-  const [image, setImage] = useState();
+  const [form] = Form.useForm();
+
+  const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState('');
   const [imageMessage, setImageMessage] = useState('');
   const [chainData, setChainData] = useState({ name: '' }) as any;
 
@@ -78,12 +80,15 @@ const IssueForm: FC<IssueFormProps> = () => {
         { trait_type: 'tags', value: values.tags.toString() },
         {
           trait_type: 'attr',
-          value: `${values.label},${values.value},${values.rate}`,
+          value: values.label
+            ? `${values.label},${values.value},${values.rate}`
+            : '',
         },
       ],
     };
 
     console.log('params', params);
+    setLoading(true);
 
     try {
       const _tokenURI = await request({
@@ -92,12 +97,19 @@ const IssueForm: FC<IssueFormProps> = () => {
         params,
       });
 
-      if (_tokenURI) {
-        await safeMint({ _tokenURI });
-        message.success('success');
+      if (!_tokenURI) {
+        setLoading(false);
+        return;
       }
+
+      await safeMint({ _tokenURI });
+      message.success('success');
+      setLoading(false);
+      form.resetFields();
+      setImage('');
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
 
     // if (image) {
@@ -143,6 +155,7 @@ const IssueForm: FC<IssueFormProps> = () => {
   return (
     <Form
       name="info"
+      form={form}
       initialValues={initialValues}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
@@ -199,7 +212,7 @@ const IssueForm: FC<IssueFormProps> = () => {
             action={process.env.NEXT_PUBLIC_QINIU_UPLOAD_URL}
             data={{ token: getCookie('qiniuToken') }}
             showUploadList={false}
-            className={styles['upload-box']}
+            listType="picture-card"
             beforeUpload={beforeUpload}
             onChange={onImageChange}
           >

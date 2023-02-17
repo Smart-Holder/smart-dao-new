@@ -9,10 +9,10 @@ export function fromToken(number, precision = 18, decimal = 4) {
       .shiftedBy(-precision)
       .decimalPlaces(decimal)
       .toFormat();
-    if (amount === 'NaN') return '--';
-    return amount;
+    if (amount === 'NaN') return 0;
+    return Number(amount);
   } else {
-    return '--';
+    return 0;
   }
 }
 
@@ -24,8 +24,8 @@ export const debounce = (fn, time) => {
     clearTimeout(timer);
 
     timer = setTimeout(() => {
-      // fn.apply(this, arguments);
-      console.log('???????');
+      fn.apply(this, arguments);
+      // console.log('???????');
     }, time);
   };
 };
