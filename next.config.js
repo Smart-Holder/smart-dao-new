@@ -24,6 +24,7 @@ const nextConfig = {
   reactStrictMode: false,
   images: {
     domains: ['smart-dao-res.stars-mine.com'],
+    unoptimized: true,
   },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Important: return the modified config
