@@ -2,12 +2,14 @@ import { getContract, contractSend, contractCall } from '@/utils/contract';
 import Vote from '@/config/abi/VotePool.json';
 import DAO from '@/config/abi/DAO.json';
 import Member from '@/config/abi/Member.json';
+import Ledger from '@/config/abi/Ledger.json';
 import { rng } from 'somes/rng';
 import store from '@/store';
 
 const abiList: any = {
   member: Member,
   dao: DAO,
+  ledger: Ledger,
 };
 
 export function getLifespan() {

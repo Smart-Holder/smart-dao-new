@@ -6,9 +6,9 @@ type DetailAttributesProps = {
 };
 
 export type AttributeItem = {
-  key: string;
+  trait_type: string;
   value: string;
-  ratio: number;
+  ratio?: number;
 };
 
 const DetailAttributes: FC<DetailAttributesProps> = (props) => {
@@ -21,12 +21,17 @@ const DetailAttributes: FC<DetailAttributesProps> = (props) => {
       </div>
       <div className={styles['items']}>
         {items?.map((item, i) => {
+          if (item.trait_type === 'tags') {
+            return null;
+          }
           return (
             <div className={styles['item']} key={i}>
               <div className={styles['b']}>
-                <div className={styles['t']}>{item.key}</div>
+                <div className={styles['t']}>{item.trait_type}</div>
                 <div className={styles['v']}>{item.value}</div>
-                <div className={styles['r']}>{item.ratio}%拥有此属性</div>
+                {item.ratio && (
+                  <div className={styles['r']}>{item.ratio}%拥有此属性</div>
+                )}
               </div>
             </div>
           );

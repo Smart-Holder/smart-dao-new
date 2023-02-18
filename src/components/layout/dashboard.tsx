@@ -25,7 +25,9 @@ import { useRouter } from 'next/router';
 export default function BasicLayout({ children }: { children: ReactElement }) {
   const dispatch = useAppDispatch();
   const { address, chainId } = useAppSelector((store) => store.wallet);
-  const { currentMember, DAOType } = useAppSelector((store) => store.dao);
+  const { currentDAO, currentMember, DAOType } = useAppSelector(
+    (store) => store.dao,
+  );
   const router = useRouter();
   const [init, setInit] = useState(false);
 
@@ -60,6 +62,29 @@ export default function BasicLayout({ children }: { children: ReactElement }) {
 
     initData();
   }, []);
+
+  useEffect(() => {
+    const onDAOChange = async () => {
+      console.log('currentDAO', currentDAO);
+      const members = await sdk.utils.methods.getMembersFrom({
+        chain: chainId,
+        host: currentDAO.host,
+        owner: address,
+      });
+
+      if (members && members.length > 0) {
+        dispatch(setUserMembers(members));
+        dispatch(setCurrentMember(members[0]));
+      } else {
+        dispatch(setUserMembers([]));
+        dispatch(setCurrentMember({ name: '' }));
+      }
+    };
+
+    if (currentDAO?.host) {
+      onDAOChange();
+    }
+  }, [currentDAO]);
 
   // useEffect(() => {
   //   console.log('????');

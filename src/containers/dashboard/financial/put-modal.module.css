@@ -22,12 +22,13 @@
 .list {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .item {
-  width: calc(93px + 60px);
+  /* width: calc(93px + 60px); */
   box-sizing: border-box;
-  padding: 15px 30px;
+  margin: 15px 30px;
   cursor: pointer;
 }
 

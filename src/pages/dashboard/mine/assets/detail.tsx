@@ -61,9 +61,10 @@ const App: NextPageWithLayout = () => {
             title={`${storageData.name} #${storageData.id}`}
             logo={storageData.imageOrigin}
           />
-          {attr && attr.length > 0 && (
+          {storageData.properties && (
             <DetailAttributes
-              items={[{ key: attr[0], value: attr[1], ratio: attr[2] }]}
+              // items={[{ key: attr[0], value: attr[1], ratio: attr[2] }]}
+              items={storageData.properties}
             />
           )}
           <DetailTransactions

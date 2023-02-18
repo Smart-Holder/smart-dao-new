@@ -27,7 +27,7 @@ const VoteModal: FC<VoteModalProps> = (props) => {
   // console.log('data', data);
 
   const { chainId, address, web3 } = useAppSelector((store) => store.wallet);
-  const { currentDAO } = useAppSelector((store) => store.dao);
+  const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
 
   const [show, setShow] = useState(false);
   const [loading1, setLoading1] = useState(false);
@@ -248,7 +248,7 @@ const VoteModal: FC<VoteModalProps> = (props) => {
             )}
           </div>
 
-          {!isVote && (
+          {currentMember.tokenId && !isVote && (
             <div className="footer">
               <Button
                 className="button"

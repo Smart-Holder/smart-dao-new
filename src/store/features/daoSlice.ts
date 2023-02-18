@@ -21,7 +21,7 @@ import { clearMakeDAOStorage } from '@/utils/launch';
 import router from 'next/router';
 
 export interface DAOState {
-  DAOType: string; // create/join/follow
+  DAOType: string; // create/join/follow/visitor
   currentDAO: any;
   DAOList: Array<any>;
   currentMember: any;
@@ -223,6 +223,7 @@ export const DAOSlice = createSlice({
         console.log('disconnect extraReducer: delete dao');
         state.DAOList = [];
         state.currentDAO = { name: '' };
+        state.DAOType = '';
       })
       .addCase(deployAssetSalesDAO.pending, (state) => {
         console.log('deployAssetSalesDAO pending!');

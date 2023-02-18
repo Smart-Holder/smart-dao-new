@@ -57,7 +57,7 @@ const DetailTransactions: FC<DetailTransactionsProps> = (props) => {
           //   onChange: onPageChange,
           // }}
           pagination={false}
-          rowKey="order"
+          rowKey="id"
           columns={[
             // { title: '市场', dataIndex: 'market', key: 'market' },
             {

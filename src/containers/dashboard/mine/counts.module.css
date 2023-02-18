@@ -19,6 +19,11 @@
   line-height: 42px;
 }
 
+.count-item .num-hover:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .count-item .title {
   font-size: 14px;
   font-weight: 400;

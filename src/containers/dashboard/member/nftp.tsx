@@ -37,7 +37,7 @@ const columns = [
 
 const App = () => {
   const { chainId } = useAppSelector((store) => store.wallet);
-  const { currentDAO } = useAppSelector((store) => store.dao);
+  const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
   const { loading, searchText } = useAppSelector((store) => store.common);
 
   const pageSize = 10;
@@ -153,9 +153,11 @@ const App = () => {
             </Form.Item>
           </Form>
 
-          <Button type="primary" onClick={showModal}>
-            添加NFTP
-          </Button>
+          {currentMember.tokenId && (
+            <Button type="primary" onClick={showModal}>
+              添加NFTP
+            </Button>
+          )}
         </div>
       </div>
 

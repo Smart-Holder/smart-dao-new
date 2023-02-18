@@ -36,6 +36,7 @@ const testTags = [
 
 const IssueForm: FC<IssueFormProps> = () => {
   const { chainId } = useAppSelector((store) => store.wallet);
+  const { currentDAO } = useAppSelector((store) => store.dao);
 
   const [form] = Form.useForm();
 
@@ -79,10 +80,9 @@ const IssueForm: FC<IssueFormProps> = () => {
         { trait_type: 'decimals', value: chainData.decimals },
         { trait_type: 'tags', value: values.tags.toString() },
         {
-          trait_type: 'attr',
-          value: values.label
-            ? `${values.label},${values.value},${values.rate}`
-            : '',
+          trait_type: values.label,
+          value: values.value,
+          ratio: values.ratio,
         },
       ],
     };
@@ -161,7 +161,7 @@ const IssueForm: FC<IssueFormProps> = () => {
       onFinishFailed={onFinishFailed}
       autoComplete="off"
       layout="vertical"
-      requiredMark={false}
+      requiredMark={true}
       validateTrigger="onBlur"
       className={styles['container']}
     >
@@ -205,6 +205,7 @@ const IssueForm: FC<IssueFormProps> = () => {
       <Form.Item
         valuePropName="fileList"
         label="Origin Image"
+        required
         extra={<span style={{ color: 'red' }}>{imageMessage}</span>}
       >
         <Space>
@@ -255,7 +256,7 @@ const IssueForm: FC<IssueFormProps> = () => {
           />
         </Form.Item>
         <Form.Item
-          name="rate"
+          name="ratio"
           rules={[
             {
               pattern: /^([1-9][0-9]?|100)$/,
@@ -282,8 +283,8 @@ const IssueForm: FC<IssueFormProps> = () => {
       </Form.Item>
       <Form.Item name="tax" label="Tax">
         <Row gutter={15}>
-          <Col span={6}>发行税: 3%</Col>
-          <Col span={6}>流通税: 0.25%</Col>
+          <Col span={6}>发行税: {currentDAO.assetIssuanceTax / 100}%</Col>
+          <Col span={6}>流通税: {currentDAO.assetCirculationTax / 100}%</Col>
         </Row>
       </Form.Item>
       <Form.Item>

@@ -76,7 +76,7 @@ const App = () => {
         <Space size={[39, 46]} wrap>
           <div className="bottom-item">
             <Image
-              style={{ marginRight: 24 }}
+              style={{ marginRight: 18 }}
               src={icon1}
               width={84}
               height={84}
@@ -91,7 +91,7 @@ const App = () => {
           </div>
           <div className="bottom-item">
             <Image
-              style={{ marginRight: 24 }}
+              style={{ marginRight: 18 }}
               src={icon2}
               width={84}
               height={84}
@@ -104,7 +104,7 @@ const App = () => {
           </div>
           <div className="bottom-item">
             <Image
-              style={{ marginRight: 24 }}
+              style={{ marginRight: 18 }}
               src={icon3}
               width={84}
               height={84}
@@ -117,7 +117,7 @@ const App = () => {
           </div>
           <div className="bottom-item">
             <Image
-              style={{ marginRight: 24 }}
+              style={{ marginRight: 18 }}
               src={icon4}
               width={84}
               height={84}
@@ -194,7 +194,7 @@ const App = () => {
             box-sizing: border-box;
             width: 339px;
             height: 168px;
-            padding: 51px 10px 33px 30px;
+            padding: 51px 10px 33px 20px;
             background: #ffffff;
             box-shadow: 0px 12px 23px 0px rgba(62, 73, 84, 0.04);
           }

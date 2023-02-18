@@ -37,6 +37,10 @@ const App: NextPageWithLayout = () => {
   const { searchText, loading } = useAppSelector((store) => store.common);
 
   const [chainData, setChainData] = useState({ name: '' }) as any;
+  const [summary, setSummary] = useState({
+    assetOrderAmountTotal: 0,
+    assetTotal: 0,
+  });
   const [values, setValues] = useState({});
 
   const pageSize = 20;
@@ -47,6 +51,24 @@ const App: NextPageWithLayout = () => {
   useEffect(() => {
     if (ETH_CHAINS_INFO[chainId]) {
       setChainData(ETH_CHAINS_INFO[chainId]);
+    }
+  }, []);
+
+  useEffect(() => {
+    const getData = async () => {
+      const res = await request({
+        name: 'dao',
+        method: 'getDAOSummarys',
+        params: { chain: chainId, host: currentDAO.host },
+      });
+
+      if (res) {
+        setSummary(res);
+      }
+    };
+
+    if (currentDAO.host) {
+      getData();
     }
   }, []);
 
@@ -121,6 +143,10 @@ const App: NextPageWithLayout = () => {
     // getTotal();
   }, [searchText, values]);
 
+  const onCountClick = () => {
+    router.push('/dashboard/financial/order');
+  };
+
   return (
     <AntdLayout.Content
       className={`${styles['dashboard-content']} ${styles['dashboard-content-scroll']}`}
@@ -141,13 +167,17 @@ const App: NextPageWithLayout = () => {
       >
         <Counts
           items={[
-            { num: 12456 + ' ETH', title: '总交易量' },
-            { num: 31232, title: '地板价' },
-            { num: 31232, title: '版税' },
-            { num: 31232, title: '资产数' },
-            { num: 31232, title: '所有者' },
-            { num: 31232, title: '挂单率' },
-            { num: 31232, title: '交易市场' },
+            {
+              num: `${fromToken(summary?.assetOrderAmountTotal || 0)} ETH`,
+              title: '总交易量',
+              onClick: onCountClick,
+            },
+            // { num: 31232, title: '地板价' },
+            { num: '3%', title: '版税' },
+            { num: summary?.assetTotal || 0, title: '资产数' },
+            // { num: 31232, title: '所有者' },
+            // { num: 31232, title: '挂单率' },
+            // { num: 31232, title: '交易市场' },
           ]}
         />
 

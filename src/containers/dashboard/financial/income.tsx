@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { Table, Button, DatePicker, Form, Select, Modal } from 'antd';
+import { Table, Button, DatePicker, Form, Select, Modal, message } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
@@ -14,7 +14,8 @@ import { useAppSelector } from '@/store/hooks';
 import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
 
 import type { PaginationProps } from 'antd';
-import { release } from '@/api/asset';
+import { getBalance, release } from '@/api/asset';
+import { createVote } from '@/api/vote';
 
 const { RangePicker } = DatePicker;
 
@@ -60,6 +61,8 @@ const App = () => {
   const [total, setTotal] = useState(0);
   const [data, setData] = useState([]);
 
+  const [balance, setBalance] = useState(0);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [amount, setAmount] = useState({ total: 0, amount: '0' });
@@ -67,9 +70,22 @@ const App = () => {
   const nftpModal: any = useRef(null);
 
   const showModal = () => {
-    setIsModalOpen(true);
-    // nftpModal.current.show();
+    if (balance > 0) {
+      setIsModalOpen(true);
+    } else {
+      message.warning('没有未分配的收入');
+    }
   };
+
+  const getBalanceData = async () => {
+    const res = await getBalance();
+    console.log('balance', res);
+    setBalance(res || 0);
+  };
+
+  useEffect(() => {
+    getBalanceData();
+  }, []);
 
   const getData = async (page = 1) => {
     const res = await request({
@@ -125,13 +141,41 @@ const App = () => {
     getData(p);
   };
 
+  // 收入分配
   const onDone = async () => {
+    const params = {
+      name: '财务管理',
+      description: JSON.stringify({
+        type: 'finance',
+        purpose: `分配收入`,
+      }),
+      extra: [
+        {
+          abi: 'ledger',
+          method: 'release',
+          params: [balance, 'description'],
+        },
+      ],
+    };
+
     try {
-      await release();
-      setIsModalOpen(false);
+      await createVote(params);
+      message.success('生成提案');
+      // window.location.reload();
+      hideModal();
+      getBalanceData();
     } catch (error) {
       console.error(error);
     }
+
+    // try {
+    //   await release({ amount: balance, description: 'description' });
+    //   setIsModalOpen(false);
+    //   message.success('success');
+    //   getBalanceData();
+    // } catch (error) {
+    //   console.error(error);
+    // }
   };
 
   useEffect(() => {
@@ -155,7 +199,11 @@ const App = () => {
     setPage(1);
     getData(1);
     getTotal();
-  }, [searchText, values]);
+  }, [searchText, values, balance]);
+
+  const hideModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="wrap">
@@ -163,15 +211,17 @@ const App = () => {
         <Counts
           items={[
             { num: fromToken(amount.amount) + ' ETH', title: '累计收入' },
-            { num: fromToken(amount.amount) + ' ETH', title: '累计发行税收入' },
-            { num: fromToken(amount.amount) + ' ETH', title: '累计交易税收入' },
-            { num: fromToken(amount.amount) + ' ETH', title: '未分配收入' },
+            // { num: fromToken(amount.amount) + ' ETH', title: '累计发行税收入' },
+            // { num: fromToken(amount.amount) + ' ETH', title: '累计交易税收入' },
+            { num: fromToken(balance || 0) + ' ETH', title: '未分配收入' },
           ]}
         />
 
-        <Button type="primary" onClick={showModal}>
-          分配
-        </Button>
+        {currentMember.tokenId && (
+          <Button type="primary" onClick={showModal}>
+            分配
+          </Button>
+        )}
 
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <Form
@@ -233,12 +283,7 @@ const App = () => {
 
       <NftpModal ref={nftpModal} />
 
-      <Modal
-        width={512}
-        open={isModalOpen}
-        onCancel={() => setIsModalOpen(false)}
-        footer={null}
-      >
+      <Modal width={512} open={isModalOpen} onCancel={hideModal} footer={null}>
         <div className={styles['dashboard-modal-content']}>
           <div className={styles['dashboard-modal-title']}>
             分配收益并自动提交提案
