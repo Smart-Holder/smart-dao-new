@@ -1,4 +1,5 @@
 import { Button } from 'antd';
+import { useIntl } from 'react-intl';
 
 type Params = {
   prev: () => void;
@@ -7,14 +8,16 @@ type Params = {
 };
 
 const App = ({ prev, next, nextLabel }: Params) => {
+  const { formatMessage } = useIntl();
+
   return (
     <div className="buttons">
       <Button className="button" type="primary" onClick={prev}>
-        Back
+        {formatMessage({ id: 'launch.back' })}
       </Button>
 
       <Button className="button" type="primary" onClick={next}>
-        {nextLabel || 'Next'}
+        {nextLabel || formatMessage({ id: 'launch.next' })}
       </Button>
 
       <style jsx>

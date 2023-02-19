@@ -72,6 +72,8 @@ const Lang = () => {
           }
 
           .wrap :global(.dropdown-trigger-content) {
+            display: inline-block;
+            width: 70px;
             padding: 0 10px 0 4px;
           }
         `}

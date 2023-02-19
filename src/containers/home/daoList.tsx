@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import sdk from 'hcstore/sdk';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useIntl } from 'react-intl';
 
 import Item from './daoItem';
 
@@ -27,6 +28,7 @@ const testData = [
 ];
 
 const DAOList = () => {
+  const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
 
   const chainId = Number(getCookie('chainId'));
@@ -148,16 +150,13 @@ const DAOList = () => {
 
   return (
     <div>
-      <div className="h1">Discovery! Most Favorites Items</div>
-      <div className="h2">Lorem ipsum dolor sit amet, consectetur</div>
-
-      {/* <Row justify="center" gutter={[30, 59]}>
-        {DAOList.map((item: any) => (
-          <Col key={item.id}>
-            <Item data={item} />
-          </Col>
-        ))}
-      </Row> */}
+      <div className="h1-2">
+        <div className="h1-2-content">
+          {formatMessage({ id: 'home.explore' })}
+        </div>
+      </div>
+      {/* <div className="h1">Discovery! Most Favorites Items</div> */}
+      {/* <div className="h2">Lorem ipsum dolor sit amet, consectetur</div> */}
 
       <InfiniteScroll
         dataLength={DAOList.length}
@@ -189,6 +188,21 @@ const DAOList = () => {
       </Space> */}
 
       <style jsx>{`
+        .h1-2 {
+          width: ${width};
+          height: 30px;
+          margin-bottom: 44px;
+        }
+
+        .h1-2-content {
+          width: 196px;
+          margin: 0 auto;
+          font-size: 20px;
+          font-weight: 400;
+          color: #000000;
+          line-height: 30px;
+        }
+
         .h1 {
           height: 30px;
           font-size: 20px;

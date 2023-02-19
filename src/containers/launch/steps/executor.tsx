@@ -9,8 +9,10 @@ import { prevStep, nextStep } from '@/store/features/daoSlice';
 
 import { validateEthAddress } from '@/utils/validator';
 import { setMakeDAOStorage, getMakeDAOStorage } from '@/utils/launch';
+import { useIntl } from 'react-intl';
 
 const App = () => {
+  const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
 
   const startValues = getMakeDAOStorage('start') || {};
@@ -46,10 +48,9 @@ const App = () => {
 
   return (
     <div className="wrap">
-      <div className="h1">SGE ZHI NIDE SHUISHOU GUIZI !</div>
+      <div className="h1">{formatMessage({ id: 'launch.executor.title' })}</div>
       <div className="h2">
-        Fast, professional and friendly service, we ordered the six course
-        tasting menu and every dish was spectacular
+        {formatMessage({ id: 'launch.executor.subtitle' })}
       </div>
 
       <Form
@@ -65,12 +66,18 @@ const App = () => {
         >
           <Input
             className="input"
-            prefix={<span style={{ color: '#000' }}>Address:</span>}
+            prefix={
+              <span style={{ color: '#000' }}>
+                {formatMessage({ id: 'launch.executor.address' })}:
+              </span>
+            }
           />
         </Form.Item>
       </Form>
 
-      <div className="desc">Fast, professional and friendly service, </div>
+      <div className="desc">
+        {formatMessage({ id: 'launch.executor.info' })}
+      </div>
 
       <Footer prev={prev} next={next} />
 

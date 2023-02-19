@@ -3,6 +3,7 @@ import { MailOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Menu } from 'antd';
 import Router, { useRouter } from 'next/router';
+import { useIntl } from 'react-intl';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -26,39 +27,6 @@ function getItem(
   } as MenuItem;
 }
 
-const items: MenuProps['items'] = [
-  {
-    label: 'Home',
-    key: '/dashboard/mine/home',
-    icon: <MailOutlined />,
-  },
-  {
-    label: '投票站',
-    key: '/dashboard/governance/votes',
-    icon: <MailOutlined />,
-  },
-  {
-    label: '资产',
-    key: '/dashboard/financial/assets',
-    icon: <MailOutlined />,
-  },
-  {
-    label: '订单',
-    key: '/dashboard/financial/order',
-    icon: <MailOutlined />,
-  },
-  {
-    label: '收入',
-    key: '/dashboard/financial/income',
-    icon: <MailOutlined />,
-  },
-  {
-    label: 'NFTP',
-    key: '/dashboard/member/nftp',
-    icon: <MailOutlined />,
-  },
-];
-
 const rootSubmenuKeys = [
   '/dashboard/mine',
   '/dashboard/basic',
@@ -68,8 +36,42 @@ const rootSubmenuKeys = [
 ];
 
 const App: React.FC = () => {
+  const { formatMessage } = useIntl();
   const router = useRouter();
   const { pathname } = router;
+
+  const items: MenuProps['items'] = [
+    {
+      label: formatMessage({ id: 'sider.visitor.home' }),
+      key: '/dashboard/mine/home',
+      // icon: <MailOutlined />,
+    },
+    {
+      label: formatMessage({ id: 'sider.visitor.votes' }),
+      key: '/dashboard/governance/votes',
+      // icon: <MailOutlined />,
+    },
+    {
+      label: formatMessage({ id: 'sider.visitor.asset' }),
+      key: '/dashboard/financial/assets',
+      // icon: <MailOutlined />,
+    },
+    {
+      label: formatMessage({ id: 'sider.visitor.order' }),
+      key: '/dashboard/financial/order',
+      // icon: <MailOutlined />,
+    },
+    {
+      label: formatMessage({ id: 'sider.visitor.income' }),
+      key: '/dashboard/financial/income',
+      // icon: <MailOutlined />,
+    },
+    {
+      label: formatMessage({ id: 'sider.visitor.nftp' }),
+      key: '/dashboard/member/nftp',
+      // icon: <MailOutlined />,
+    },
+  ];
 
   // const openKey = rootSubmenuKeys.find((key) => pathname.indexOf(key) >= 0);
 

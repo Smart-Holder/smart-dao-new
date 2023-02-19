@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { Button, Modal, Typography } from 'antd';
 import Icon, { RightCircleOutlined } from '@ant-design/icons';
+import { useIntl } from 'react-intl';
 
 import { useAppDispatch } from '@/store/hooks';
 import { connectWallet } from '@/store/features/walletSlice';
@@ -15,6 +16,7 @@ import iconWallet from '/public/images/icon-wallet.png';
 const { Link } = Typography;
 
 const ConnectModal = (props: any, ref: any) => {
+  const { formatMessage } = useIntl();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
 
@@ -39,8 +41,8 @@ const ConnectModal = (props: any, ref: any) => {
   return (
     <Modal width={512} open={isModalOpen} onCancel={handleCancel} footer={null}>
       <div className="create-wrap">
-        <div className="h1">Welcome to SmartDAO Launch</div>
-        <div className="h2">Create your own DAO in a few minutes!</div>
+        <div className="h1">{formatMessage({ id: 'home.welcome' })}</div>
+        <div className="h2">{formatMessage({ id: 'home.createOwnDAO' })}</div>
 
         <Button
           type="primary"
@@ -50,25 +52,26 @@ const ConnectModal = (props: any, ref: any) => {
         >
           <div className="button-content">
             <div className="button-content-left">
-              <span>Create an DAO</span>
-              <span>Start your DAO with SmartDAO launch</span>
+              <span>{formatMessage({ id: 'home.createDAO' })}</span>
+              <span>{formatMessage({ id: 'home.openDAO' })}</span>
             </div>
             <RightCircleOutlined style={{ fontSize: 40 }} />
           </div>
         </Button>
-        <div className="footer">
+        {/* <div className="footer">
           <Link
             href="https://smartdao.gitbook.io/smartdao/guides/shu-zi-qian-bao-cha-jian-zhun-bei"
             target="_blank"
           >
             Don&apos;t have an account?
           </Link>
-        </div>
+        </div> */}
 
         <style jsx>
           {`
             .create-wrap {
               padding-top: 78px;
+              padding-bottom: 62px;
               text-align: center;
             }
 

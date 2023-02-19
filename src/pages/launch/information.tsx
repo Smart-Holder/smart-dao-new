@@ -6,16 +6,23 @@ import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
 
 import styles from '@/styles/content.module.css';
+import { useIntl } from 'react-intl';
 
 const Start = dynamic(() => import('@/containers/launch/start'), {
   ssr: false,
 });
 
 const App: NextPageWithLayout = () => {
+  const { formatMessage } = useIntl();
+
   return (
     <AntdLayout.Content className={styles['launch-content']}>
-      <div className={styles.title1}>Welcome! Tianxie nide gerenxinxi!</div>
-      <div className={styles.title2}>Welcome to SmartDAO</div>
+      <div className={styles.title1}>
+        {formatMessage({ id: 'home.welcome' })}
+      </div>
+      <div className={styles.title2}>
+        {formatMessage({ id: 'home.createOwnDAO' })}
+      </div>
       <div className={styles.box}>
         <Start />
       </div>

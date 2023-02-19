@@ -9,8 +9,10 @@ import icon2 from '/public/images/dashboard/mine/home-icon-2.png';
 import icon3 from '/public/images/dashboard/mine/home-icon-3.png';
 import icon4 from '/public/images/dashboard/mine/home-icon-4.png';
 import { fromToken } from '@/utils';
+import { useIntl } from 'react-intl';
 
 const App = () => {
+  const { formatMessage } = useIntl();
   const url =
     'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
 
@@ -53,20 +55,21 @@ const App = () => {
         <div>
           <div className="name">{currentDAO.name}</div>
           <div className="total">
-            成员数: <span>{DAOInfo.membersTotal}</span>
+            {formatMessage({ id: 'my.summary.total.member' })}:{' '}
+            <span>{DAOInfo.membersTotal}</span>
           </div>
           <Space size={82}>
             <div className="top-item">
               <span className="num">{DAOInfo.voteProposalTotal}</span>
-              <span>提案总数</span>
+              <span>{formatMessage({ id: 'my.summary.total.member' })}</span>
             </div>
             <div className="top-item">
               <span className="num">{DAOInfo.voteProposalPendingTotal}</span>
-              <span>正在填投票数</span>
+              <span>{formatMessage({ id: 'my.summary.total.member' })}</span>
             </div>
             <div className="top-item">
               <span className="num">{DAOInfo.voteProposalResolveTotal}</span>
-              <span>已完结投票数</span>
+              <span>{formatMessage({ id: 'my.summary.total.member' })}</span>
             </div>
           </Space>
         </div>
@@ -86,7 +89,7 @@ const App = () => {
               <span className="num">
                 {fromToken(DAOInfo.assetAmountTotal)} ETH
               </span>
-              <span>资产总价值</span>
+              <span>{formatMessage({ id: 'my.summary.total.member' })}</span>
             </div>
           </div>
           <div className="bottom-item">
@@ -99,7 +102,7 @@ const App = () => {
             />
             <div className="bottom-item-right">
               <span className="num">{DAOInfo.assetTotal}</span>
-              <span>资产总数</span>
+              <span>{formatMessage({ id: 'my.summary.total.member' })}</span>
             </div>
           </div>
           <div className="bottom-item">
@@ -112,7 +115,7 @@ const App = () => {
             />
             <div className="bottom-item-right">
               <span className="num">{DAOInfo.assetOrderTotal}</span>
-              <span>订单总数</span>
+              <span>{formatMessage({ id: 'my.summary.total.member' })}</span>
             </div>
           </div>
           <div className="bottom-item">
@@ -125,7 +128,7 @@ const App = () => {
             />
             <div className="bottom-item-right">
               <span className="num">{DAOInfo.assetLedgerIncomeTotal} ETH</span>
-              <span>总收入</span>
+              <span>{formatMessage({ id: 'my.summary.total.member' })}</span>
             </div>
           </div>
         </Space>

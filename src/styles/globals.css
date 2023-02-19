@@ -69,6 +69,10 @@ a {
   background: #f8f8f8;
 }
 
+.ant-layout .ant-layout-footer {
+  background: #f8f8f8;
+}
+
 .ant-modal .ant-modal-content {
   border-radius: 30px;
 }
@@ -168,4 +172,13 @@ a {
 .ant-table-wrapper .ant-table-thead > tr > th,
 .ant-table-wrapper .ant-table-thead > tr > td {
   background-color: #fff;
+}
+
+/* -------------- Sider Menu ---------------- */
+.ant-menu .ant-menu-submenu-title {
+  padding-left: 48px !important;
+}
+
+.ant-menu .ant-menu-item {
+  padding-left: 58px !important;
 }

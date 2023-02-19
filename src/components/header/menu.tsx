@@ -23,7 +23,10 @@ import iconMetamask from '/public/images/icon-metamask.png';
 import iconWallet from '/public/images/icon-wallet.png';
 import iconAdd from '/public/images/icon-add.png';
 
+import { useIntl } from 'react-intl';
+
 const Menu = () => {
+  const { formatMessage } = useIntl();
   // 通过useSelector直接拿到store中定义的value
   const { address, chainId } = useAppSelector((store) => store.wallet);
   const { isInit } = useAppSelector((store) => store.common);
@@ -127,7 +130,9 @@ const Menu = () => {
       label: (
         <div className="connect-menu-item">
           <Image src={iconAdd} width={25} height={25} alt="img" />
-          <span style={{ marginLeft: 20 }}>Create DAO</span>
+          <span style={{ marginLeft: 20 }}>
+            {formatMessage({ id: 'home.create' })}
+          </span>
         </div>
       ),
       key: 'create',
@@ -137,7 +142,9 @@ const Menu = () => {
       label: (
         <div className="connect-menu-item">
           <Image src={iconAdd} width={25} height={25} alt="img" />
-          <span style={{ marginLeft: 20 }}>Mine</span>
+          <span style={{ marginLeft: 20 }}>
+            {formatMessage({ id: 'home.my' })}
+          </span>
         </div>
       ),
       key: 'mine',
@@ -192,7 +199,7 @@ const Menu = () => {
                 <span>{ETH_CHAINS_INFO[chainId]?.name}</span>
               </div>
             ) : (
-              'Connect Wallet'
+              formatMessage({ id: 'home.connectWallet' })
             )}
           </span>
           <DownOutlined />

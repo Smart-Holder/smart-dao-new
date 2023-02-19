@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Image, Typography, Space, Button } from 'antd';
 import sdk from 'hcstore/sdk';
 import { useRouter } from 'next/router';
+import { useIntl } from 'react-intl';
 
 import InfoModal from '@/components/modal/infoModal';
 import { useJoin, useFollow } from './useHooks';
@@ -27,6 +28,7 @@ const statusType2: { [index: number]: string } = {
 };
 
 const DAOItem = (props: any) => {
+  const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { status1 = 1, status2 = 1, id, isJoin, isLike, isMember } = props.data;
@@ -160,7 +162,12 @@ const DAOItem = (props: any) => {
               key={index}
             />
           ))}
-          <span className="total">({props.data.members || 1} revies)</span>
+          <span className="total">
+            {formatMessage(
+              { id: 'home.total.member' },
+              { value: props.data.members || 1 },
+            )}
+          </span>
         </Space>
       </div>
       <div className="buttons">
@@ -171,7 +178,7 @@ const DAOItem = (props: any) => {
           onClick={handleJoinClick}
           loading={loading}
         >
-          {join ? 'Joined' : 'Join'}
+          {formatMessage({ id: join ? 'dao.joined' : 'dao.join' })}
         </Button>
         <Button type="primary" shape="round" onClick={handleFollowClick}>
           {follow ? 'Followed' : 'Follow'}

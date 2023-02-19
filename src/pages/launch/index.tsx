@@ -7,15 +7,20 @@ import type { NextPageWithLayout } from '@/pages/_app';
 import Index from '@/containers/launch';
 
 import styles from '@/styles/content.module.css';
+import { useIntl } from 'react-intl';
 
 const App: NextPageWithLayout = () => {
+  const { formatMessage } = useIntl();
+
   return (
     <AntdLayout.Content className={styles['launch-content']}>
       <div>
         <div className={styles.title1}>
-          Welcome! Discovery the hole magic worlds !
+          {formatMessage({ id: 'home.welcome' })}
         </div>
-        <div className={styles.title2}>Welcome to SmartDAO</div>
+        <div className={styles.title2}>
+          {formatMessage({ id: 'home.createOwnDAO' })}
+        </div>
       </div>
       <div className={styles.box}>
         <Index />

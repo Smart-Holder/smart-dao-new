@@ -200,6 +200,7 @@
   flex: 1;
   border-radius: 12px;
   margin-top: 30px;
+  padding: 20px;
 }
 
 .dashboard-content-table .ant-table-cell {

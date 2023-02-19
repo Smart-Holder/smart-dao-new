@@ -10,8 +10,10 @@ import { prevStep, nextStep } from '@/store/features/daoSlice';
 
 import { setMakeDAOStorage, getMakeDAOStorage } from '@/utils/launch';
 import { deployAssetSalesDAO } from '@/store/features/daoSlice';
+import { useIntl } from 'react-intl';
 
 const App = () => {
+  const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
 
   const storageValues = getMakeDAOStorage() || {};
@@ -54,23 +56,22 @@ const App = () => {
 
   return (
     <div className="wrap">
-      <div className="h1">SGE ZHI NIDE SHUISHOU GUIZI !</div>
+      <div className="h1">{formatMessage({ id: 'launch.review.title' })}</div>
       <div className="h2">
-        Fast, professional and friendly service, we ordered the six course
-        tasting menu and every dish was spectacular
+        {formatMessage({ id: 'launch.review.subtitle' })}
       </div>
 
       <Slider
         style={{ padding: '23px 0 10px' }}
         value={tax?.assetIssuanceTax}
-        label="Issuance Tax"
+        label={formatMessage({ id: 'launch.tax.publish' })}
         color="#FF6D4C"
         readOnly
       />
       <Slider
         style={{ padding: '10px 0' }}
         value={tax?.assetCirculationTax}
-        label="Circulation Tax"
+        label={formatMessage({ id: 'launch.tax.circulation' })}
         color="#2AC154"
         readOnly
       />
@@ -92,7 +93,7 @@ const App = () => {
       <Slider
         style={{ padding: '10px 0' }}
         value={vote?.hours}
-        label="投票期"
+        label={formatMessage({ id: 'launch.vote.period' })}
         unit="hr"
         max={720}
         readOnly
@@ -101,11 +102,19 @@ const App = () => {
       <Input
         className="input"
         defaultValue={executor?.address}
-        prefix={<span style={{ color: '#000' }}>Address:</span>}
+        prefix={
+          <span style={{ color: '#000' }}>
+            {formatMessage({ id: 'launch.executor.address' })}:
+          </span>
+        }
         readOnly
       />
 
-      <Footer prev={prev} next={next} nextLabel="Launch" />
+      <Footer
+        prev={prev}
+        next={next}
+        nextLabel={formatMessage({ id: 'launch.release' })}
+      />
 
       <Modal
         width={512}
@@ -116,12 +125,12 @@ const App = () => {
         <div className="modal-content">
           <ExclamationOutlined style={{ fontSize: 88 }} />
           <div style={{ marginTop: 55 }} className="modal-content-text">
-            Acation!
+            {formatMessage({ id: 'launch.warning' })}
           </div>
-          <div className="modal-content-text">Initialization successful!</div>
+          {/* <div className="modal-content-text">Initialization successful!</div> */}
           <div className="buttons">
             <Button className="button" type="primary" onClick={handleCancel}>
-              再考虑一下
+              {formatMessage({ id: 'launch.think' })}
             </Button>
             <Button
               className="button"
@@ -129,7 +138,7 @@ const App = () => {
               onClick={handleSubmit}
               loading={loading}
             >
-              Done
+              {formatMessage({ id: 'launch.determine' })}
             </Button>
           </div>
         </div>

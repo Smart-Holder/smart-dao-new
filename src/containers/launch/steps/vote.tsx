@@ -9,8 +9,10 @@ import { prevStep, nextStep } from '@/store/features/daoSlice';
 
 import { setMakeDAOStorage, getMakeDAOStorage } from '@/utils/launch';
 import { getLifespan } from '@/api/vote';
+import { useIntl } from 'react-intl';
 
 const App = () => {
+  const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
 
   const storageValues = getMakeDAOStorage('vote') || {};
@@ -76,11 +78,8 @@ const App = () => {
 
   return (
     <div className="wrap">
-      <div className="h1">SGE ZHI NIDE SHUISHOU GUIZI !</div>
-      <div className="h2">
-        Fast, professional and friendly service, we ordered the six course
-        tasting menu and every dish was spectacular
-      </div>
+      <div className="h1">{formatMessage({ id: 'launch.tax.title' })}</div>
+      <div className="h2">{formatMessage({ id: 'launch.vote.subtitle' })}</div>
 
       {/* <Slider
         defaultValue={defaultVoteRate}
@@ -100,7 +99,7 @@ const App = () => {
       /> */}
       <Slider
         defaultValue={hours}
-        label="投票期"
+        label={formatMessage({ id: 'launch.vote.period' })}
         unit="hr"
         min={min}
         max={720}

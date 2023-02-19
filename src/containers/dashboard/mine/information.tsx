@@ -11,6 +11,7 @@ import {
 } from 'antd';
 import { Checkbox, Form, Upload, Tag } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import { useIntl } from 'react-intl';
 
 import sdk from 'hcstore/sdk';
 
@@ -39,6 +40,7 @@ const options = [
 ];
 
 const App = () => {
+  const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
 
   const { userInfo } = useAppSelector((store) => store.user);
@@ -110,9 +112,9 @@ const App = () => {
 
   return (
     <div className="wrap">
-      <div className="h1">个人信息</div>
+      <div className="h1">{formatMessage({ id: 'sider.my.information' })}</div>
       <div className="h2">
-        Lorem ipsum dolor sit amet, consectetur
+        {/* Lorem ipsum dolor sit amet, consectetur */}
         <div className="h2-item">
           Address: <span>{addressFormat}</span>
         </div>
@@ -285,7 +287,6 @@ const App = () => {
 
           .h2 {
             display: flex;
-            justify-content: space-between;
             align-items: center;
             height: 18px;
             margin-top: 7px;
@@ -299,6 +300,7 @@ const App = () => {
             display: flex;
             align-items: center;
             height: 21px;
+            margin-right: 20px;
             font-size: 14px;
             font-family: PingFangSC-Regular, PingFang SC;
             font-weight: 400;

@@ -170,8 +170,8 @@ const App: NextPageWithLayout = () => {
     >
       <div className={styles['dashboard-content-header']}>
         <div>
-          <div className={styles.title1}>Governance</div>
-          <div className={styles.title2}>Welcome to SmartDAO</div>
+          {/* <div className={styles.title1}>Governance</div> */}
+          {/* <div className={styles.title2}>Welcome to SmartDAO</div> */}
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center' }}>

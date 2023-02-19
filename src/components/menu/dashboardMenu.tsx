@@ -3,6 +3,7 @@ import { MailOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Menu } from 'antd';
 import Router, { useRouter } from 'next/router';
+import { useIntl } from 'react-intl';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -15,7 +16,7 @@ function getItem(
 ): MenuItem {
   return {
     key,
-    icon,
+    // icon,
     children,
     label,
     type,
@@ -26,34 +27,6 @@ function getItem(
   } as MenuItem;
 }
 
-const items: MenuProps['items'] = [
-  getItem('Mine', '/dashboard/mine', <MailOutlined />, [
-    getItem('Home', '/dashboard/mine/home'),
-    getItem('Information', '/dashboard/mine/information'),
-    getItem('Assets', '/dashboard/mine/assets'),
-    getItem('Order', '/dashboard/mine/order'),
-    getItem('Income', '/dashboard/mine/income'),
-  ]),
-  getItem('Basic Settings', '/dashboard/basic', <MailOutlined />, [
-    getItem('Information', '/dashboard/basic/information'),
-    getItem('Executor', '/dashboard/basic/executor'),
-    getItem('Tax', '/dashboard/basic/tax'),
-    getItem('Vote', '/dashboard/basic/vote'),
-  ]),
-  getItem('Governance', '/dashboard/governance', <MailOutlined />, [
-    getItem('发起提案', '/dashboard/governance/proposal'),
-    getItem('投票站', '/dashboard/governance/votes'),
-  ]),
-  getItem('财务管理', '/dashboard/financial', <MailOutlined />, [
-    getItem('Assets', '/dashboard/financial/assets'),
-    getItem('Order', '/dashboard/financial/order'),
-    getItem('Income', '/dashboard/financial/income'),
-  ]),
-  getItem('Member', '/dashboard/member', <MailOutlined />, [
-    getItem('NFTP List', '/dashboard/member/nftp'),
-  ]),
-];
-
 const rootSubmenuKeys = [
   '/dashboard/mine',
   '/dashboard/basic',
@@ -63,6 +36,7 @@ const rootSubmenuKeys = [
 ];
 
 const App: React.FC = () => {
+  const { formatMessage } = useIntl();
   const router = useRouter();
   const { pathname } = router;
 
@@ -70,6 +44,101 @@ const App: React.FC = () => {
 
   const [openKeys, setOpenKeys] = useState([openKey || '']);
   // const [selectedKeys, setSelectedKeys] = useState([pathname]);
+
+  const items: MenuProps['items'] = [
+    getItem(
+      formatMessage({ id: 'sider.my' }),
+      '/dashboard/mine',
+      <MailOutlined />,
+      [
+        getItem(formatMessage({ id: 'sider.my.home' }), '/dashboard/mine/home'),
+        getItem(
+          formatMessage({ id: 'sider.my.information' }),
+          '/dashboard/mine/information',
+        ),
+        getItem(
+          formatMessage({ id: 'sider.my.asset' }),
+          '/dashboard/mine/assets',
+        ),
+        getItem(
+          formatMessage({ id: 'sider.my.order' }),
+          '/dashboard/mine/order',
+        ),
+        getItem(
+          formatMessage({ id: 'sider.my.income' }),
+          '/dashboard/mine/income',
+        ),
+      ],
+    ),
+    getItem(
+      formatMessage({ id: 'sider.basic' }),
+      '/dashboard/basic',
+      <MailOutlined />,
+      [
+        getItem(
+          formatMessage({ id: 'sider.basic.information' }),
+          '/dashboard/basic/information',
+        ),
+        getItem(
+          formatMessage({ id: 'sider.basic.executor' }),
+          '/dashboard/basic/executor',
+        ),
+        getItem(
+          formatMessage({ id: 'sider.basic.tax' }),
+          '/dashboard/basic/tax',
+        ),
+        getItem(
+          formatMessage({ id: 'sider.basic.vote' }),
+          '/dashboard/basic/vote',
+        ),
+      ],
+    ),
+    getItem(
+      formatMessage({ id: 'sider.governance' }),
+      '/dashboard/governance',
+      <MailOutlined />,
+      [
+        getItem(
+          formatMessage({ id: 'sider.governance.proposal' }),
+          '/dashboard/governance/proposal',
+        ),
+        getItem(
+          formatMessage({ id: 'sider.governance.votes' }),
+          '/dashboard/governance/votes',
+        ),
+      ],
+    ),
+    getItem(
+      formatMessage({ id: 'sider.financial' }),
+      '/dashboard/financial',
+      <MailOutlined />,
+      [
+        getItem(
+          formatMessage({ id: 'sider.financial.asset' }),
+          '/dashboard/financial/assets',
+        ),
+        getItem(
+          formatMessage({ id: 'sider.financial.order' }),
+          '/dashboard/financial/order',
+        ),
+        getItem(
+          formatMessage({ id: 'sider.financial.income' }),
+          '/dashboard/financial/income',
+        ),
+      ],
+    ),
+    getItem(
+      formatMessage({ id: 'sider.member' }),
+      '/dashboard/member',
+      <MailOutlined />,
+      [
+        getItem(
+          formatMessage({ id: 'sider.member.nftp' }),
+          '/dashboard/member/nftp',
+        ),
+      ],
+    ),
+  ];
 
   const onOpenChange: MenuProps['onOpenChange'] = useCallback(
     (keys: any) => {

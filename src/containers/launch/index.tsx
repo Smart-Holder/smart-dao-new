@@ -1,6 +1,7 @@
 import { getMakeDAOStorage } from '@/utils/launch';
 import { Avatar, Space } from 'antd';
 import Image from 'next/image';
+import { useIntl } from 'react-intl';
 
 import icon1 from '/public/images/dashboard/mine/home-icon-1.png';
 import icon2 from '/public/images/dashboard/mine/home-icon-2.png';
@@ -8,6 +9,7 @@ import icon3 from '/public/images/dashboard/mine/home-icon-3.png';
 import icon4 from '/public/images/dashboard/mine/home-icon-4.png';
 
 const App = () => {
+  const { formatMessage } = useIntl();
   const cacheDAO = getMakeDAOStorage('start');
 
   return (
@@ -21,20 +23,20 @@ const App = () => {
         <div>
           <div className="name">{cacheDAO.name}</div>
           <div className="total">
-            成员数: <span>0</span>
+            {formatMessage({ id: 'my.summary.total.member' })}:<span>0</span>
           </div>
           <Space size={82}>
             <div className="top-item">
               <span className="num">0</span>
-              <span>提案总数</span>
+              <span>{formatMessage({ id: 'my.summary.total.proposal' })}</span>
             </div>
             <div className="top-item">
               <span className="num">0</span>
-              <span>正在填投票数</span>
+              <span>{formatMessage({ id: 'my.summary.total.voting' })}</span>
             </div>
             <div className="top-item">
               <span className="num">0</span>
-              <span>已完结投票数</span>
+              <span>{formatMessage({ id: 'my.summary.total.complete' })}</span>
             </div>
           </Space>
         </div>
@@ -52,7 +54,9 @@ const App = () => {
             />
             <div className="bottom-item-right">
               <span className="num">0 ETH</span>
-              <span>资产总价值</span>
+              <span>
+                {formatMessage({ id: 'my.summary.total.assetAmount' })}
+              </span>
             </div>
           </div>
           <div className="bottom-item">
@@ -65,7 +69,7 @@ const App = () => {
             />
             <div className="bottom-item-right">
               <span className="num">0</span>
-              <span>资产总数</span>
+              <span>{formatMessage({ id: 'my.summary.total.asset' })}</span>
             </div>
           </div>
           <div className="bottom-item">
@@ -78,7 +82,7 @@ const App = () => {
             />
             <div className="bottom-item-right">
               <span className="num">0</span>
-              <span>订单总数</span>
+              <span>{formatMessage({ id: 'my.summary.total.order' })}</span>
             </div>
           </div>
           <div className="bottom-item">
@@ -91,7 +95,7 @@ const App = () => {
             />
             <div className="bottom-item-right">
               <span className="num">0 ETH</span>
-              <span>总收入</span>
+              <span>{formatMessage({ id: 'my.summary.total.income' })}</span>
             </div>
           </div>
         </Space>

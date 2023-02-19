@@ -15,9 +15,12 @@ import { connectType } from '@/config/enum';
 import iconMetamask from '/public/images/icon-metamask.png';
 import iconWallet from '/public/images/icon-wallet.png';
 
+import { useIntl } from 'react-intl';
+
 const { Link } = Typography;
 
 const ConnectModal = (props: any, ref: any) => {
+  const { formatMessage } = useIntl();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // 通过useDispatch 派发事件
@@ -47,7 +50,7 @@ const ConnectModal = (props: any, ref: any) => {
     <Modal width={512} open={isModalOpen} onCancel={handleCancel} footer={null}>
       <div className="wallet">
         <div className="h1">
-          <span>Select Network</span>
+          <span>{formatMessage({ id: 'home.selectNetwork' })}</span>
         </div>
         <Space size={30} className="types">
           <Button shape="round">Ethereum</Button>
@@ -55,7 +58,7 @@ const ConnectModal = (props: any, ref: any) => {
         </Space>
 
         <div className="h1">
-          <span>Select Wallet</span>
+          <span>{formatMessage({ id: 'home.selectWallet' })}</span>
         </div>
         <div className="buttons">
           <div className="button" onClick={handleMetaMask}>
@@ -73,7 +76,7 @@ const ConnectModal = (props: any, ref: any) => {
             href="https://smartdao.gitbook.io/smartdao/guides/shu-zi-qian-bao-cha-jian-zhun-bei"
             target="_blank"
           >
-            Don&apos;t have an account?
+            {formatMessage({ id: 'home.noAccount' })}
           </Link>
         </div>
 

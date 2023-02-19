@@ -32,12 +32,10 @@ const Header = () => {
           </span>
           <Search />
         </div>
-        <div>
-          <Space size={26}>
-            <Menu />
-            <Language />
-          </Space>
-        </div>
+        <Space size={26}>
+          <Menu />
+          <Language />
+        </Space>
       </Layout.Header>
 
       <style jsx>

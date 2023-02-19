@@ -3,6 +3,7 @@ import { MailOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Menu } from 'antd';
 import { useRouter } from 'next/router';
+import { useIntl } from 'react-intl';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -15,23 +16,30 @@ function getItem(
 ): MenuItem {
   return {
     key,
-    icon,
+    // icon,
     children,
     label,
     type,
   } as MenuItem;
 }
 
-const items: MenuProps['items'] = [
-  getItem('基础设置', 'sub1', <MailOutlined />, [
-    getItem('欢迎页', '/launch'),
-    getItem('基础信息', '/launch/information'),
-    getItem('业务模版', '/launch/setting'),
-  ]),
-];
-
 const App: React.FC = () => {
+  const { formatMessage } = useIntl();
   const router = useRouter();
+
+  const items: MenuProps['items'] = [
+    getItem(formatMessage({ id: 'sider.launch' }), 'sub1', <MailOutlined />, [
+      getItem(formatMessage({ id: 'sider.launch.home' }), '/launch'),
+      getItem(
+        formatMessage({ id: 'sider.launch.information' }),
+        '/launch/information',
+      ),
+      getItem(
+        formatMessage({ id: 'sider.launch.template' }),
+        '/launch/setting',
+      ),
+    ]),
+  ];
 
   const [key, setKey] = useState(
     router.pathname.indexOf('/launch/setting') >= 0

@@ -5,8 +5,10 @@ import { nextStep, resetStep } from '@/store/features/daoSlice';
 
 import { setMakeDAOStorage } from '@/utils/launch';
 import { useEffect } from 'react';
+import { useIntl } from 'react-intl';
 
 const App = () => {
+  const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
 
   const handleClick1 = () => {
@@ -22,28 +24,18 @@ const App = () => {
   return (
     <Space size={70} wrap>
       <div className="item" onClick={handleClick1}>
-        <div className="h1">Titles: SST 01</div>
+        <div className="h1">SST 01</div>
         <div>
           <div className="text">
-            This was not just great cooking but exceptional cooking using only
-            the best ingredients.
-            <br />
-            <br />
-            Fast, professional and friendly service, we ordered the six course
-            tasting menu and every dish was spectacular
+            {formatMessage({ id: 'launch.template.dao1' })}
           </div>
         </div>
       </div>
       <div className="item">
-        <div className="h1">Titles: SST 02</div>
+        <div className="h1">SST 02</div>
         <div>
           <div className="text">
-            This was not just great cooking but exceptional cooking using only
-            the best ingredients.
-            <br />
-            <br />
-            Fast, professional and friendly service, we ordered the six course
-            tasting menu and every dish was spectacular
+            {formatMessage({ id: 'launch.template.dao2' })}
           </div>
         </div>
       </div>

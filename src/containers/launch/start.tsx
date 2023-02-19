@@ -177,13 +177,14 @@ const FormGroup: React.FC = () => {
         <div className="wrap">
           {/* <Space size={0} wrap align="start" style={{ justifyContent: 'center' }}> */}
           <div className="item-group">
-            <div className="form-title1">Set Basic Information</div>
+            <div className="form-title1">
+              {formatMessage({ id: 'start.basic' })}
+            </div>
             <div className="form-title2">
-              The basic information of dao is poblicy viable to anyone and will
-              be used for display on the website
+              {formatMessage({ id: 'start.desc' })}
             </div>
             <Form.Item
-              label="Name"
+              label={formatMessage({ id: 'start.name' })}
               name="name"
               rules={[
                 { required: true },
@@ -198,7 +199,7 @@ const FormGroup: React.FC = () => {
             </Form.Item>
 
             <Form.Item
-              label="Vision & Mission"
+              label={formatMessage({ id: 'start.mission' })}
               name="mission"
               rules={[
                 { required: true },
@@ -209,7 +210,7 @@ const FormGroup: React.FC = () => {
             </Form.Item>
 
             <Form.Item
-              label="Itroduction"
+              label={formatMessage({ id: 'start.introduce' })}
               name="description"
               rules={[
                 { required: true },
@@ -245,19 +246,23 @@ const FormGroup: React.FC = () => {
                   )}
                 </Upload>
 
-                <span className="upload-desc">Upload Images: png、jpeg… </span>
+                <span className="upload-desc">
+                  {formatMessage({ id: 'start.upload' })}
+                </span>
               </Space>
             </Form.Item>
           </div>
 
           <div className="item-group">
-            <div className="form-title1">Setting No.1 Member</div>
+            <div className="form-title1">
+              {formatMessage({ id: 'start.members' })}
+            </div>
             <div className="form-title2">
-              Lorem ipsum dolor sit amet, consectetur
+              {formatMessage({ id: 'start.members.desc' })}
             </div>
 
             <Form.Item
-              label="Name"
+              label={formatMessage({ id: 'name' })}
               name="member"
               labelCol={{ span: 3 }}
               wrapperCol={{ span: 21 }}
@@ -274,7 +279,7 @@ const FormGroup: React.FC = () => {
               >
                 <Input />
                 <Button type="primary" onClick={addMember}>
-                  Add
+                  {formatMessage({ id: 'start.add' })}
                 </Button>
               </Space>
             </Form.Item>
@@ -303,7 +308,7 @@ const FormGroup: React.FC = () => {
 
         <Form.Item>
           <Button className="button-submit" type="primary" htmlType="submit">
-            Save
+            {formatMessage({ id: 'start.release' })}
           </Button>
         </Form.Item>
       </Form>
@@ -317,11 +322,11 @@ const FormGroup: React.FC = () => {
         <div className="modal-content">
           <Image src={iconSuccess} width={88} height={88} alt="success" />
           <div style={{ marginTop: 55 }} className="modal-content-text">
-            SmartDAO
+            {formatMessage({ id: 'start.success' })}
           </div>
-          <div className="modal-content-text">Initialization successful!</div>
+          {/* <div className="modal-content-text">Initialization successful!</div> */}
           <Button className="button-done" type="primary" onClick={next}>
-            Done
+            {formatMessage({ id: 'start.determine' })}
           </Button>
         </div>
       </Modal>
