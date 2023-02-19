@@ -97,6 +97,7 @@ export const walletSlice = createSlice({
       clearCookie('chainId');
       clearCookie('connectType');
       localStorage.removeItem('step');
+      localStorage.removeItem('walletconnect');
       sessionStorage.clear();
       router.push('/');
     },
@@ -130,6 +131,7 @@ export const walletSlice = createSlice({
             clearCookie('chainId');
             clearCookie('connectType');
             localStorage.removeItem('step');
+            localStorage.removeItem('walletconnect');
             sessionStorage.clear();
             router.reload();
           });
@@ -140,6 +142,7 @@ export const walletSlice = createSlice({
             clearCookie('chainId');
             clearCookie('connectType');
             localStorage.removeItem('step');
+            localStorage.removeItem('walletconnect');
             sessionStorage.clear();
             router.reload();
           });

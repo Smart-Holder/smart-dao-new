@@ -1,7 +1,7 @@
 import WalletConnect from '@walletconnect/client';
 import QRCodeModal from '@walletconnect/qrcode-modal';
-import store from '@/store/index';
-// import { setCookie, clearCookie } from "@/utils/cookie";
+// import store from '@/store/index';
+import { clearCookie } from '@/utils/cookie';
 import { connectType } from '@/config/enum';
 // import { initialize as initApi } from "@/api";
 
@@ -46,12 +46,13 @@ export const connect = async () => {
       });
     } else {
       const { accounts, chainId } = connector;
-      store.commit('SET_PROVIDER', new WalletConnectPROVIDER(connector));
-      // store.commit("SET_ADDRESS", accounts[0]);
-      // store.commit("SET_CHAINID", chainId);
-      // store.dispatch("getDAO", { chain: chainId, address: accounts[0] });
-      // store.dispatch("getDAOList", { chain: chainId, owner: accounts[0] });
-      resolve({ chainId, address: accounts[0] });
+      console.log('----connection is already established----');
+      // store.commit('SET_PROVIDER', new WalletConnectPROVIDER(connector));
+      resolve({
+        address: accounts[0],
+        chainId: Number(chainId).toString(),
+        provider: new WalletConnectPROVIDER(connector),
+      });
     }
 
     // Subscribe to connection events
@@ -67,20 +68,15 @@ export const connect = async () => {
 
       // Get provided accounts and chainId
       const { accounts, chainId } = payload.params[0];
-      // clearCookie("address");
-      // clearCookie("connectType");
-      // setCookie("address", accounts[0], 30);
-      // setCookie("connectType", connectType.WalletConnect, 30);
-
-      // store.commit("SET_ADDRESS", accounts[0]);
-      // store.commit("SET_CHAINID", chainId);
-      // store.dispatch("getDAO", { chain: chainId, address: accounts[0] });
-      // store.dispatch("getDAOList", { chain: chainId, owner: accounts[0] });
-      // resolve(connector);
 
       console.log('---WalletConnect success---', payload);
-      store.commit('SET_PROVIDER', new WalletConnectPROVIDER(connector));
-      resolve({ chainId, address: accounts[0] });
+      // store.commit('SET_PROVIDER', new WalletConnectPROVIDER(connector));
+      // resolve({ chainId, address: accounts[0] });
+      resolve({
+        address: accounts[0],
+        chainId: Number(chainId).toString(),
+        provider: new WalletConnectPROVIDER(connector),
+      });
     });
 
     connector.on('session_update', (error, payload) => {
@@ -90,15 +86,16 @@ export const connect = async () => {
         throw error;
       }
       console.log('---session_update---', payload);
-      // Get updated accounts and chainId
-      // const { accounts, chainId } = payload.params[0];
 
-      store.dispatch('disconnect');
-      // store.commit("SET_ADDRESS", accounts[0]);
-      // store.commit("SET_CHAINID", chainId);
-      store.dispatch('connect', connectType.WalletConnect);
-      // store.dispatch("getDAO", { chain: chainId, address: accounts[0] });
-      // store.dispatch("getDAOList", { chain: chainId, owner: accounts[0] });
+      // store.dispatch('disconnect');
+      // store.dispatch('connect', connectType.WalletConnect);
+      clearCookie('address');
+      clearCookie('chainId');
+      clearCookie('connectType');
+      localStorage.removeItem('walletconnect');
+      localStorage.removeItem('step');
+      sessionStorage.clear();
+      window.location.reload();
     });
 
     connector.on('disconnect', (error, payload) => {
@@ -108,6 +105,13 @@ export const connect = async () => {
         throw error;
       }
       // store.dispatch("disconnect");
+      clearCookie('address');
+      clearCookie('chainId');
+      clearCookie('connectType');
+      localStorage.removeItem('walletconnect');
+      localStorage.removeItem('step');
+      sessionStorage.clear();
+      window.location.reload();
     });
   });
 };

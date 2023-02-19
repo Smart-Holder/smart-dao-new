@@ -178,7 +178,7 @@ const DAOItem = (props: any) => {
           onClick={handleJoinClick}
           loading={loading}
         >
-          {formatMessage({ id: join ? 'dao.joined' : 'dao.join' })}
+          {formatMessage({ id: join ? 'home.joined' : 'home.join' })}
         </Button>
         <Button type="primary" shape="round" onClick={handleFollowClick}>
           {follow ? 'Followed' : 'Follow'}

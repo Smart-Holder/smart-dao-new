@@ -8,7 +8,7 @@ import dynamic from 'next/dynamic';
 // import store from '@/store';
 // import { setProvider } from '@/store/features/walletSlice';
 
-const store = dynamic(() => import('@/store'), { ssr: false });
+// const store = dynamic(() => import('@/store'), { ssr: false });
 
 export async function connect() {
   if (typeof window.ethereum !== 'undefined') {
