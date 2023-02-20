@@ -25,6 +25,8 @@ import { ETH_CHAINS_INFO } from '@/config/chains';
 import { request } from '@/api';
 import { safeMint } from '@/api/asset';
 import { fromToken } from '@/utils';
+import { useIntl } from 'react-intl';
+
 const { Option } = Select;
 type IssueFormProps = {};
 
@@ -35,6 +37,7 @@ const testTags = [
 ];
 
 const IssueForm: FC<IssueFormProps> = () => {
+  const { formatMessage } = useIntl();
   const { chainId } = useAppSelector((store) => store.wallet);
   const { currentDAO } = useAppSelector((store) => store.dao);
 
@@ -67,7 +70,7 @@ const IssueForm: FC<IssueFormProps> = () => {
       return;
     }
 
-    const params = {
+    const params: any = {
       name: values.name,
       image,
       description: values.description,
@@ -79,13 +82,16 @@ const IssueForm: FC<IssueFormProps> = () => {
         { trait_type: 'chainId', value: chainId },
         { trait_type: 'decimals', value: chainData.decimals },
         { trait_type: 'tags', value: values.tags.toString() },
-        {
-          trait_type: values.label,
-          value: values.value,
-          ratio: values.ratio,
-        },
       ],
     };
+
+    if (values.label && values.value) {
+      params.attributes.push({
+        trait_type: values.label,
+        value: values.value,
+        ratio: values.ratio,
+      });
+    }
 
     console.log('params', params);
     setLoading(true);
@@ -167,12 +173,16 @@ const IssueForm: FC<IssueFormProps> = () => {
     >
       <Form.Item
         name="name"
+        label={formatMessage({ id: 'name' })}
         rules={[{ required: true }, { type: 'string', min: 1, max: 30 }]}
-        label="Name"
       >
-        <Input className={styles['input']} placeholder="Write here" />
+        <Input className={styles['input']} placeholder="" />
       </Form.Item>
-      <Form.Item name="tags" rules={[{ required: true }]} label="Label">
+      <Form.Item
+        name="tags"
+        rules={[{ required: true }]}
+        label={formatMessage({ id: 'financial.asset.tagname' })}
+      >
         {/* <Row gutter={15}>
           <Col span={20}>
             <Input className={styles['input']} placeholder="Write here" />
@@ -187,7 +197,7 @@ const IssueForm: FC<IssueFormProps> = () => {
           size="large"
           mode="tags"
           style={{ width: '100%' }}
-          placeholder="Tags Mode"
+          placeholder=""
           options={tags}
         />
       </Form.Item>
@@ -196,15 +206,11 @@ const IssueForm: FC<IssueFormProps> = () => {
         rules={[{ type: 'string', max: 1000 }]}
         label="Introduction"
       >
-        <Input.TextArea
-          className={styles['input']}
-          placeholder="Write here"
-          rows={4}
-        />
+        <Input.TextArea className={styles['input']} placeholder="" rows={4} />
       </Form.Item>
       <Form.Item
         valuePropName="fileList"
-        label="Origin Image"
+        label="Image"
         required
         extra={<span style={{ color: 'red' }}>{imageMessage}</span>}
       >
@@ -232,7 +238,7 @@ const IssueForm: FC<IssueFormProps> = () => {
           </Upload>
 
           <span className={styles['upload-desc']}>
-            Upload Images: png、jpeg…
+            {formatMessage({ id: 'start.upload' })}
           </span>
         </Space>
       </Form.Item>
@@ -244,14 +250,12 @@ const IssueForm: FC<IssueFormProps> = () => {
         >
           <Input
             className={styles['input']}
-            placeholder="Write here"
-            prefix={<span style={{ color: '#000' }}>属性象:</span>}
+            prefix={<span style={{ color: '#000' }}>属性项:</span>}
           />
         </Form.Item>
         <Form.Item name="value" rules={[{ type: 'string', max: 20 }]}>
           <Input
             className={styles['input']}
-            placeholder="Write here"
             prefix={<span style={{ color: '#000' }}>属性值:</span>}
           />
         </Form.Item>
@@ -266,7 +270,6 @@ const IssueForm: FC<IssueFormProps> = () => {
         >
           <Input
             className={styles['input']}
-            placeholder="Write here"
             prefix={<span style={{ color: '#000' }}>特征比例:</span>}
           />
         </Form.Item>

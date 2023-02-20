@@ -15,13 +15,15 @@ import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
 
 import type { PaginationProps } from 'antd';
 
+import { useIntl, FormattedMessage } from 'react-intl';
+
 const { RangePicker } = DatePicker;
 
 dayjs.extend(customParseFormat);
 
 const columns = [
   {
-    title: '订单ID',
+    title: <FormattedMessage id="my.order.id" />,
     dataIndex: 'id',
     key: 'id',
   },
@@ -35,22 +37,26 @@ const columns = [
   //   },
   // },
   {
-    title: '资产',
+    title: <FormattedMessage id="my.order.asset" />,
     // dataIndex: ['asset', 'name'],
     dataIndex: 'asset_id',
     key: 'asset_id',
     render: (text: string) => '#' + text,
   },
   // { title: '市场', dataIndex: 'votes', key: 'votes' },
-  { title: '收入类型', dataIndex: 'votes', key: 'votes' },
   {
-    title: '收入金额',
+    title: <FormattedMessage id="my.order.type" />,
+    dataIndex: 'votes',
+    key: 'votes',
+  },
+  {
+    title: <FormattedMessage id="my.order.amount" />,
     dataIndex: 'value',
     key: 'value',
     render: (text: string) => fromToken(text),
   },
   {
-    title: '加入日期',
+    title: <FormattedMessage id="my.order.date" />,
     dataIndex: 'time',
     key: 'time',
     render: (text: string) => dayjs(text).format('MM/DD/YYYY'),
@@ -58,6 +64,7 @@ const columns = [
 ];
 
 const App = () => {
+  const { formatMessage } = useIntl();
   const { chainId } = useAppSelector((store) => store.wallet);
   const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
   const { loading, searchText } = useAppSelector((store) => store.common);
@@ -163,8 +170,18 @@ const App = () => {
       <div className={styles['dashboard-content-header']}>
         <Counts
           items={[
-            { num: amount.total, title: '订单总数' },
-            { num: fromToken(amount.amount || 0) + ' ETH', title: '总交易额' },
+            {
+              num: amount.total,
+              title: formatMessage({
+                id: 'my.order.total',
+              }),
+            },
+            {
+              num: fromToken(amount.amount || 0) + ' ETH',
+              title: formatMessage({
+                id: 'my.order.amount',
+              }),
+            },
           ]}
         />
         {/* <Counts
@@ -193,11 +210,21 @@ const App = () => {
             <Form.Item name="orderBy">
               <Select
                 style={{ width: 140 }}
-                placeholder="排序"
+                placeholder="Sort"
                 options={[
-                  { value: '', label: '默认' },
-                  { value: 'value desc', label: '收入金额降序' },
-                  { value: 'value', label: '收入金额升序' },
+                  { value: '', label: 'Default' },
+                  {
+                    value: 'value desc',
+                    label: formatMessage({
+                      id: 'my.order.sort.amount.desc',
+                    }),
+                  },
+                  {
+                    value: 'value',
+                    label: formatMessage({
+                      id: 'my.order.sort.amount',
+                    }),
+                  },
                 ]}
               />
             </Form.Item>
@@ -238,9 +265,9 @@ const App = () => {
         />
       </div>
 
-      <NftpModal ref={nftpModal} />
+      {/* <NftpModal ref={nftpModal} /> */}
 
-      <Modal
+      {/* <Modal
         width={512}
         open={isModalOpen}
         onCancel={() => setIsModalOpen(false)}
@@ -261,7 +288,7 @@ const App = () => {
             Done
           </Button>
         </div>
-      </Modal>
+      </Modal> */}
     </div>
   );
 };

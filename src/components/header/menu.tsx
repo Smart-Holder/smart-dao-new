@@ -16,6 +16,7 @@ import InfoModal from '@/components/modal/infoModal';
 import { getCookie } from '@/utils/cookie';
 import { formatAddress } from '@/utils';
 import { ETH_CHAINS_INFO } from '@/config/chains';
+import { connectType as type } from '@/config/enum';
 
 import iconUser from '/public/images/icon-user.png';
 
@@ -28,7 +29,9 @@ import { useIntl } from 'react-intl';
 const Menu = () => {
   const { formatMessage } = useIntl();
   // 通过useSelector直接拿到store中定义的value
-  const { address, chainId } = useAppSelector((store) => store.wallet);
+  const { address, chainId, connectType } = useAppSelector(
+    (store) => store.wallet,
+  );
   const { isInit } = useAppSelector((store) => store.common);
   const { nickname, image } = useAppSelector((store) => store.user.userInfo);
   // const address = getCookie('address');
@@ -116,10 +119,18 @@ const Menu = () => {
     {
       label: (
         <div className="connect-menu-item">
-          <div className="connect-menu-info-left">
-            <Image src={iconMetamask} width={24} height={24} alt="img" />
-            <span>MetaMask</span>
-          </div>
+          {type.MetaMask === connectType && (
+            <div className="connect-menu-info-left">
+              <Image src={iconMetamask} width={24} height={24} alt="img" />
+              <span>MetaMask</span>
+            </div>
+          )}
+          {type.WalletConnect === connectType && (
+            <div className="connect-menu-info-left">
+              <Image src={iconWallet} width={24} height={24} alt="img" />
+              <span>WalletConnect</span>
+            </div>
+          )}
           <div>{formatAddress(address)}</div>
         </div>
       ),

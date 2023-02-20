@@ -13,6 +13,8 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 import { formatAddress } from '@/utils';
 
+import { useIntl } from 'react-intl';
+
 dayjs.extend(customParseFormat);
 const { Countdown } = Statistic;
 
@@ -23,6 +25,7 @@ type VoteModalProps = {
 };
 
 const VoteModal: FC<VoteModalProps> = (props) => {
+  const { formatMessage } = useIntl();
   const { open = false, onClose, data } = props;
   // console.log('data', data);
 
@@ -134,11 +137,13 @@ const VoteModal: FC<VoteModalProps> = (props) => {
             </div>
             {data.data?.isClose && (
               <div className={styles['time']}>
-                结束时间:
+                {formatMessage({ id: 'governance.votes.endtime' })}:
                 <span className={styles['time-value']}>
                   {dayjs(data.data.modify).format('A HH:mm, MM/DD/YYYY')}
                 </span>
-                <span className={styles['time-value']}>（投票已经结束）</span>
+                <span className={styles['time-value']}>
+                  ({formatMessage({ id: 'governance.votes.ended' })})
+                </span>
                 {/* {Date.now() > data.endTime && (
                   <span className={styles['time-value']}>（投票已经结束）</span>
                 )} */}
@@ -146,7 +151,7 @@ const VoteModal: FC<VoteModalProps> = (props) => {
             )}
             {!data.data?.isClose && (
               <div className={styles['time']}>
-                距结束:
+                {formatMessage({ id: 'governance.votes.fromEnd' })}:
                 <span className={styles['time-value']}>
                   <Countdown
                     className={styles.countdown}
@@ -228,21 +233,27 @@ const VoteModal: FC<VoteModalProps> = (props) => {
             </div>
             {desc?.purpose && (
               <div className={styles['main-item']}>
-                <div className={styles['main-title']}>提案目的</div>
+                <div className={styles['main-title']}>
+                  {formatMessage({ id: 'governance.proposal.purpose' })}
+                </div>
                 <div className={styles['main-content']}>{desc?.purpose}</div>
               </div>
             )}
 
             {desc.content && (
               <div className={styles['main-item']}>
-                <div className={styles['main-title']}>提案内容</div>
+                <div className={styles['main-title']}>
+                  {formatMessage({ id: 'governance.proposal.content' })}
+                </div>
                 <div className={styles['main-content']}>{desc.content}</div>
               </div>
             )}
 
             {desc.result && (
               <div className={styles['main-item']}>
-                <div className={styles['main-title']}>预期结果</div>
+                <div className={styles['main-title']}>
+                  {formatMessage({ id: 'governance.proposal.result' })}
+                </div>
                 <div className={styles['main-content']}>{desc.result}</div>
               </div>
             )}
@@ -256,7 +267,7 @@ const VoteModal: FC<VoteModalProps> = (props) => {
                 onClick={onOk}
                 loading={loading1}
               >
-                支持
+                {formatMessage({ id: 'governance.votes.support' })}
               </Button>
               <Button
                 style={{ marginLeft: 20 }}
@@ -265,7 +276,7 @@ const VoteModal: FC<VoteModalProps> = (props) => {
                 onClick={onCancel}
                 loading={loading2}
               >
-                反对
+                {formatMessage({ id: 'governance.votes.against' })}
               </Button>
             </div>
           )}

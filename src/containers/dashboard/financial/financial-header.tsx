@@ -6,6 +6,7 @@ import { Button, Typography } from 'antd';
 // import PutModal, { PutModalListItem } from './put-modal';
 import { FinancialItemType } from './financial-item';
 import { useAppSelector } from '@/store/hooks';
+import { useIntl } from 'react-intl';
 
 const { Paragraph, Text } = Typography;
 
@@ -23,6 +24,7 @@ export type FinancialDataType = {
 };
 
 const FinancialHeader: FC<FinancialHeaderProps> = (props) => {
+  const { formatMessage } = useIntl();
   const { logo, title, createTime, amount, addr, desc, chain } = props;
 
   const { currentMember } = useAppSelector((store) => store.dao);
@@ -72,7 +74,9 @@ const FinancialHeader: FC<FinancialHeaderProps> = (props) => {
             <div className={styles['l1']}>
               <div className={styles['title']}>{title}</div>
               <div className={styles['created']}>
-                <span>创建时间:</span>
+                <span>
+                  {formatMessage({ id: 'financial.asset.time.create' })}:
+                </span>
                 {createTime}
               </div>
               <div className={styles['amount']}>
@@ -87,7 +91,8 @@ const FinancialHeader: FC<FinancialHeaderProps> = (props) => {
                   style={{ width: '80%', marginBottom: 0 }}
                   ellipsis={true}
                 >
-                  描述: {desc}
+                  {/* 描述: {desc} */}
+                  {desc}
                 </Paragraph>
               </div>
             </div>
@@ -95,8 +100,10 @@ const FinancialHeader: FC<FinancialHeaderProps> = (props) => {
         </div>
         {currentMember.tokenId && (
           <div className={styles['right']}>
-            <Button onClick={onShare}>分享</Button>
-            <Button onClick={onCreate}>发行</Button>
+            {/* <Button onClick={onShare}>分享</Button> */}
+            <Button onClick={onCreate}>
+              {formatMessage({ id: 'financial.asset.publish' })}
+            </Button>
             {/* <Button onClick={onPut}>上架交易</Button> */}
             {/* <Button onClick={onEdit}>编辑</Button> */}
           </div>

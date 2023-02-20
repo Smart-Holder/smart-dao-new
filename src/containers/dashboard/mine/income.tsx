@@ -16,6 +16,7 @@ import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
 import type { PaginationProps } from 'antd';
 import { getBalance, release } from '@/api/asset';
 import { createVote } from '@/api/vote';
+import { useIntl, FormattedMessage } from 'react-intl';
 
 const { RangePicker } = DatePicker;
 
@@ -23,27 +24,31 @@ dayjs.extend(customParseFormat);
 
 const columns = [
   {
-    title: '订单ID',
+    title: <FormattedMessage id="my.income.id" />,
     dataIndex: 'id',
     key: 'id',
   },
   // { title: '标签', dataIndex: 'votes', key: 'votes' },
   {
-    title: '资产',
+    title: <FormattedMessage id="my.income.asset" />,
     dataIndex: ['asset', 'id'],
     key: 'asset.id',
     render: (text: string) => '#' + text,
   },
   // { title: '市场', dataIndex: 'votes', key: 'votes' },
-  { title: '收入类型', dataIndex: 'votes', key: 'votes' },
   {
-    title: '收入金额',
+    title: <FormattedMessage id="my.income.type" />,
+    dataIndex: 'votes',
+    key: 'votes',
+  },
+  {
+    title: <FormattedMessage id="my.income.amount" />,
     dataIndex: 'price',
     key: 'price',
     render: (text: string) => fromToken(text),
   },
   {
-    title: '日期',
+    title: <FormattedMessage id="my.income.date" />,
     dataIndex: 'time',
     key: 'time',
     render: (text: string) => dayjs(text).format('MM/DD/YYYY'),
@@ -51,6 +56,7 @@ const columns = [
 ];
 
 const App = () => {
+  const { formatMessage } = useIntl();
   const { chainId } = useAppSelector((store) => store.wallet);
   const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
   const { loading, searchText } = useAppSelector((store) => store.common);
@@ -160,7 +166,7 @@ const App = () => {
 
     try {
       await createVote(params);
-      message.success('生成提案');
+      message.success('success');
       // window.location.reload();
       hideModal();
       getBalanceData();
@@ -201,15 +207,21 @@ const App = () => {
       <div className={styles['dashboard-content-header']}>
         <Counts
           items={[
-            { num: fromToken(amount.amount) + ' ETH', title: '累计收入' },
+            {
+              num: fromToken(amount.amount) + ' ETH',
+              title: formatMessage({ id: 'my.income.total' }),
+            },
             // { num: fromToken(amount.amount) + ' ETH', title: '累计发行税收入' },
             // { num: fromToken(amount.amount) + ' ETH', title: '累计交易税收入' },
-            { num: fromToken(balance || 0) + ' ETH', title: '未分配收入' },
+            {
+              num: fromToken(balance || 0) + ' ETH',
+              title: formatMessage({ id: 'my.income.total.balance' }),
+            },
           ]}
         />
 
         <Button type="primary" onClick={showModal}>
-          分配
+          {formatMessage({ id: 'financial.income.allocation' })}
         </Button>
 
         <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -225,20 +237,30 @@ const App = () => {
             <Form.Item name="orderBy">
               <Select
                 style={{ width: 140 }}
-                placeholder="排序"
+                placeholder="Sort"
                 options={[
-                  { value: '', label: '默认' },
-                  { value: 'value desc', label: '收入金额降序' },
-                  { value: 'value', label: '收入金额升序' },
+                  { value: '', label: 'Default' },
+                  {
+                    value: 'value desc',
+                    label: formatMessage({
+                      id: 'my.income.sort.income.desc',
+                    }),
+                  },
+                  {
+                    value: 'value',
+                    label: formatMessage({
+                      id: 'my.income.sort.income',
+                    }),
+                  },
                 ]}
               />
             </Form.Item>
             <Form.Item name="type">
               <Select
                 style={{ width: 140 }}
-                placeholder="全部收入类型"
+                placeholder={formatMessage({ id: 'my.income.type' })}
                 options={[
-                  { value: '', label: '默认' },
+                  { value: '', label: 'Default' },
                   { value: '1', label: '发行税收入' },
                   { value: '2', label: '交易税收入' },
                 ]}
@@ -275,18 +297,18 @@ const App = () => {
       <Modal width={512} open={isModalOpen} onCancel={hideModal} footer={null}>
         <div className={styles['dashboard-modal-content']}>
           <div className={styles['dashboard-modal-title']}>
-            分配收益并自动提交提案
+            {formatMessage({ id: 'financial.income.auto' })}
           </div>
-          <div className={styles['dashboard-modal-subtitle']}>
+          {/* <div className={styles['dashboard-modal-subtitle']}>
             Create your own DAO in a few minutes!
-          </div>
+          </div> */}
           <Button
             type="primary"
             className={styles['dashboard-modal-button']}
             onClick={onDone}
             loading={loading}
           >
-            Done
+            {formatMessage({ id: 'financial.income.submit' })}
           </Button>
         </div>
       </Modal>

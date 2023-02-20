@@ -6,6 +6,7 @@ import { Button, message, Modal, Space } from 'antd';
 import { formatAddress, fromToken } from '@/utils';
 import { useAppSelector } from '@/store/hooks';
 import PutModal, { PutModalListItem } from './put-modal';
+import { useIntl } from 'react-intl';
 
 type DetailHeaderProps = {
   logo: string;
@@ -18,6 +19,7 @@ import { shelves } from '@/api/asset';
 const list = [{ name: 'OpenSea', image: openseaIcon }];
 
 const DetailHeader: FC<DetailHeaderProps> = (props) => {
+  const { formatMessage } = useIntl();
   const { logo, title } = props;
 
   const { currentMember } = useAppSelector((store) => store.dao);
@@ -44,7 +46,7 @@ const DetailHeader: FC<DetailHeaderProps> = (props) => {
 
     try {
       await shelves(params);
-      message.success('生成提案');
+      message.success('success');
       // window.location.reload();
       hideModal();
     } catch (error) {
@@ -73,8 +75,10 @@ const DetailHeader: FC<DetailHeaderProps> = (props) => {
           </div>
           {currentMember.tokenId && (
             <Space size={10}>
-              <Button onClick={onShare}>分享</Button>
-              <Button onClick={showModal}>上架交易</Button>
+              {/* <Button onClick={onShare}>分享</Button> */}
+              <Button onClick={showModal}>
+                {formatMessage({ id: 'financial.asset.listing' })}
+              </Button>
             </Space>
           )}
         </div>
@@ -84,16 +88,24 @@ const DetailHeader: FC<DetailHeaderProps> = (props) => {
           </div>
           <div className={styles['right']}>
             <div className={styles['item']}>
-              合约地址: {formatAddress(storageData.token)}
+              {formatMessage({ id: 'financial.asset.address' })}:{' '}
+              {formatAddress(storageData.token)}
             </div>
             <div className={styles['item']}>
-              代币ID: {formatAddress(storageData.tokenId)}
+              {formatMessage({ id: 'financial.asset.tokenId' })}:{' '}
+              {formatAddress(storageData.tokenId)}
             </div>
-            <div className={styles['item']}>链: {blockchain?.value}</div>
             <div className={styles['item']}>
-              原数据: {formatAddress(storageData.uri, 8)}
+              {formatMessage({ id: 'financial.asset.chain' })}:{' '}
+              {blockchain?.value}
             </div>
-            <div className={styles['item']}>版税: 3%</div>
+            <div className={styles['item']}>
+              {formatMessage({ id: 'financial.asset.metadata' })}:{' '}
+              {formatAddress(storageData.uri, 8)}
+            </div>
+            <div className={styles['item']}>
+              {formatMessage({ id: 'financial.asset.royalties' })}: 3%
+            </div>
           </div>
         </div>
       </div>
@@ -106,10 +118,12 @@ const DetailHeader: FC<DetailHeaderProps> = (props) => {
         destroyOnClose
       >
         <div className={modalStyles['content']}>
-          <div className={modalStyles['title']}>选择交易市场</div>
-          <div className={modalStyles['sub-title']}>
-            Create your own DAO in a few minutes!
+          <div className={modalStyles['title']}>
+            {formatMessage({ id: 'financial.asset.tradingMarket' })}
           </div>
+          {/* <div className={modalStyles['sub-title']}>
+            Create your own DAO in a few minutes!
+          </div> */}
           <div className={modalStyles['list']}>
             {list.map((item, i) => (
               <div

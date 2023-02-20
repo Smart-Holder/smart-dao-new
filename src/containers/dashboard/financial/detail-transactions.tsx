@@ -6,6 +6,7 @@ import { formatAddress } from '@/utils';
 import Image from 'next/image';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { useIntl } from 'react-intl';
 
 dayjs.extend(customParseFormat);
 
@@ -27,13 +28,16 @@ export type DetailTransactionItem = {
 };
 
 const DetailTransactions: FC<DetailTransactionsProps> = (props) => {
+  const { formatMessage } = useIntl();
   const { data, currentPage = 1, pageSize, total, onPageChange } = props;
   return (
     <div className={styles['container']}>
       <div className={styles['header']}>
         <div className={styles['title']}>
-          <div>交易历史</div>
-          <span className={styles['s']}>Transactions</span>
+          <div>
+            {formatMessage({ id: 'financial.asset.transaction.history' })}
+          </div>
+          {/* <span className={styles['s']}>Transactions</span> */}
         </div>
         {/* <div className={styles['filter']}>
           <Select
@@ -61,13 +65,13 @@ const DetailTransactions: FC<DetailTransactionsProps> = (props) => {
           columns={[
             // { title: '市场', dataIndex: 'market', key: 'market' },
             {
-              title: '事件',
+              title: formatMessage({ id: 'financial.asset.event' }),
               dataIndex: 'event',
               key: 'event',
               render: (str) => str || '--',
             },
             {
-              title: '金额',
+              title: formatMessage({ id: 'financial.asset.price' }),
               dataIndex: 'value',
               key: 'value',
               render: (value) => (
@@ -83,20 +87,20 @@ const DetailTransactions: FC<DetailTransactionsProps> = (props) => {
               ),
             },
             {
-              title: '发送方',
+              title: formatMessage({ id: 'financial.asset.sender' }),
               dataIndex: 'fromAddres',
               key: 'fromAddres',
               render: (str) => formatAddress(str),
             },
 
             {
-              title: '接收方',
+              title: formatMessage({ id: 'financial.asset.recipient' }),
               dataIndex: 'toAddress',
               key: 'toAddress',
               render: (str) => formatAddress(str),
             },
             {
-              title: 'Date',
+              title: formatMessage({ id: 'financial.asset.date' }),
               dataIndex: 'time',
               key: 'time',
               render: (text: string) => dayjs(text).format('MM/DD/YYYY'),

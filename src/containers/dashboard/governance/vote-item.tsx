@@ -3,6 +3,7 @@ import { FC } from 'react';
 import styles from './vote-item.module.css';
 import iconUser from '/public/images/icon-user.png';
 import Image from 'next/image';
+import { useIntl, FormattedMessage } from 'react-intl';
 
 import { formatAddress } from '@/utils';
 
@@ -22,6 +23,13 @@ export enum TypeKeyMap {
   member = '成员管理',
   basic = '基础设置',
 }
+
+const statusMap: any = {
+  processing: <FormattedMessage id="governance.votes.sort.voting" />,
+  passed: <FormattedMessage id="governance.votes.sort.voting" />,
+  rejected: <FormattedMessage id="governance.votes.sort.voting" />,
+  executed: <FormattedMessage id="governance.votes.sort.voting" />,
+};
 
 const types: any = {
   normal: '普通提案',
@@ -61,6 +69,8 @@ type VoteItemProps = {
 } & VoteItemType;
 
 const VoteItem: FC<VoteItemProps> = (props) => {
+  const { formatMessage } = useIntl();
+
   const {
     status,
     title,

@@ -15,6 +15,7 @@ import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
 
 import type { PaginationProps } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
+import { useIntl, FormattedMessage } from 'react-intl';
 
 const { RangePicker } = DatePicker;
 
@@ -34,20 +35,20 @@ const copy = (str: string) => {
 
 const columns = [
   {
-    title: '订单ID',
+    title: <FormattedMessage id="financial.order.id" />,
     dataIndex: 'id',
     key: 'id',
   },
   // { title: '市场', dataIndex: 'votes', key: 'votes' },
   {
-    title: '金额',
+    title: <FormattedMessage id="financial.order.amount" />,
     dataIndex: 'value',
     key: 'value',
     render: (text: string) => fromToken(text),
   },
   // { title: '标签', dataIndex: 'votes', key: 'votes' },
   {
-    title: '发送方',
+    title: <FormattedMessage id="financial.order.sender" />,
     dataIndex: 'fromAddres',
     key: 'fromAddres',
     render: (text: string) => {
@@ -64,7 +65,7 @@ const columns = [
     },
   },
   {
-    title: '接收方',
+    title: <FormattedMessage id="financial.order.recipient" />,
     dataIndex: 'toAddress',
     key: 'toAddress',
     render: (text: string) => {
@@ -81,7 +82,7 @@ const columns = [
     },
   },
   {
-    title: '加入日期',
+    title: <FormattedMessage id="financial.order.date" />,
     dataIndex: 'time',
     key: 'time',
     render: (text: string) => dayjs(text).format('MM/DD/YYYY'),
@@ -89,6 +90,7 @@ const columns = [
 ];
 
 const App = () => {
+  const { formatMessage } = useIntl();
   const { chainId } = useAppSelector((store) => store.wallet);
   const { currentDAO } = useAppSelector((store) => store.dao);
   const { loading, searchText } = useAppSelector((store) => store.common);
@@ -188,8 +190,18 @@ const App = () => {
       <div className={styles['dashboard-content-header']}>
         <Counts
           items={[
-            { num: amount.total, title: '订单总数' },
-            { num: fromToken(amount.amount || 0) + ' ETH', title: '总交易额' },
+            {
+              num: amount.total,
+              title: formatMessage({
+                id: 'financial.order.total',
+              }),
+            },
+            {
+              num: fromToken(amount.amount || 0) + ' ETH',
+              title: formatMessage({
+                id: 'financial.order.total.amount',
+              }),
+            },
           ]}
         />
 
@@ -205,14 +217,34 @@ const App = () => {
           >
             <Form.Item name="orderBy">
               <Select
-                style={{ width: 140 }}
-                placeholder="排序"
+                style={{ width: 220 }}
+                placeholder="Sort"
                 options={[
-                  { value: '', label: '默认' },
-                  { value: 'time desc', label: '时间降序' },
-                  { value: 'time', label: '时间升序' },
-                  { value: 'value desc', label: '订单金额降序' },
-                  { value: 'value', label: '订单金额升序' },
+                  { value: '', label: 'Default' },
+                  {
+                    value: 'time desc',
+                    label: formatMessage({
+                      id: 'financial.order.sort.time.desc',
+                    }),
+                  },
+                  {
+                    value: 'time',
+                    label: formatMessage({
+                      id: 'financial.order.sort.time',
+                    }),
+                  },
+                  {
+                    value: 'value desc',
+                    label: formatMessage({
+                      id: 'financial.order.sort.amount.desc',
+                    }),
+                  },
+                  {
+                    value: 'value',
+                    label: formatMessage({
+                      id: 'financial.order.sort.amount',
+                    }),
+                  },
                 ]}
               />
             </Form.Item>

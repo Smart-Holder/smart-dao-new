@@ -188,11 +188,20 @@ const App: NextPageWithLayout = () => {
           >
             <Form.Item name="orderBy">
               <Select
-                style={{ width: 140 }}
-                placeholder="排序"
+                style={{ width: 200 }}
+                placeholder="Sort"
                 options={[
-                  { value: '', label: '默认' },
-                  { value: 'id', label: 'ID升序' },
+                  { value: '', label: 'Default' },
+                  {
+                    value: 'time',
+                    label: formatMessage({ id: 'governance.votes.sort.time' }),
+                  },
+                  {
+                    value: 'time desc',
+                    label: formatMessage({
+                      id: 'governance.votes.sort.time.desc',
+                    }),
+                  },
                 ]}
               />
             </Form.Item>

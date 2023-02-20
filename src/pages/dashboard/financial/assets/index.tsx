@@ -18,6 +18,7 @@ import { ETH_CHAINS_INFO } from '@/config/chains';
 import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
 import { request } from '@/api';
 import { useRouter } from 'next/router';
+import { useIntl } from 'react-intl';
 
 dayjs.extend(customParseFormat);
 
@@ -31,6 +32,7 @@ const PriceIcon = () => (
 );
 
 const App: NextPageWithLayout = () => {
+  const { formatMessage } = useIntl();
   const router = useRouter();
   const { currentDAO } = useAppSelector((store) => store.dao);
   const { chainId } = useAppSelector((store) => store.wallet);
@@ -169,12 +171,18 @@ const App: NextPageWithLayout = () => {
           items={[
             {
               num: `${fromToken(summary?.assetOrderAmountTotal || 0)} ETH`,
-              title: '总交易量',
+              title: formatMessage({ id: 'financial.asset.total.trading' }),
               onClick: onCountClick,
             },
             // { num: 31232, title: '地板价' },
-            { num: '3%', title: '版税' },
-            { num: summary?.assetTotal || 0, title: '资产数' },
+            {
+              num: '3%',
+              title: formatMessage({ id: 'financial.asset.royalties' }),
+            },
+            {
+              num: summary?.assetTotal || 0,
+              title: formatMessage({ id: 'financial.asset.total' }),
+            },
             // { num: 31232, title: '所有者' },
             // { num: 31232, title: '挂单率' },
             // { num: 31232, title: '交易市场' },
@@ -193,14 +201,31 @@ const App: NextPageWithLayout = () => {
           <Form.Item name="orderBy">
             <Select
               style={{ width: 140 }}
-              placeholder="排序"
+              placeholder="Sort"
               options={[
-                { value: '', label: '默认' },
-                { value: 'sellPrice', label: '价格从低到高' },
-                { value: 'sellPrice desc', label: '价格从高到低' },
-                { value: 'sellingTime desc', label: '最近上架' },
-                { value: 'blockNumber desc', label: '最近创建' },
-                { value: 'soldTime desc', label: '最近卖出' },
+                { value: '', label: 'Default' },
+                {
+                  value: 'sellPrice',
+                  label: formatMessage({ id: 'financial.asset.sort.price' }),
+                },
+                {
+                  value: 'sellPrice desc',
+                  label: formatMessage({
+                    id: 'financial.asset.sort.price.desc',
+                  }),
+                },
+                {
+                  value: 'sellingTime desc',
+                  label: formatMessage({ id: 'financial.asset.sort.released' }),
+                },
+                {
+                  value: 'blockNumber desc',
+                  label: formatMessage({ id: 'financial.asset.sort.created' }),
+                },
+                {
+                  value: 'soldTime desc',
+                  label: formatMessage({ id: 'financial.asset.sort.sold' }),
+                },
               ]}
             />
           </Form.Item>
