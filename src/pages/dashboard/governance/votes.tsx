@@ -14,6 +14,7 @@ import Layout from '@/components/layout';
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
 
+import { useIntl } from 'react-intl';
 import Filters from '@/containers/dashboard/mine/filters';
 
 import styles from '@/styles/content.module.css';
@@ -31,6 +32,7 @@ import { useAppSelector } from '@/store/hooks';
 dayjs.extend(customParseFormat);
 
 const App: NextPageWithLayout = () => {
+  const { formatMessage } = useIntl();
   const { chainId, address } = useAppSelector((store) => store.wallet);
   const { currentDAO } = useAppSelector((store) => store.dao);
   const { loading, searchText } = useAppSelector((store) => store.common);

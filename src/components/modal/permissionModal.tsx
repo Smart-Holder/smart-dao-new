@@ -1,38 +1,14 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
 import { useRouter } from 'next/router';
-import {
-  Button,
-  Input,
-  Modal,
-  Typography,
-  Image,
-  Row,
-  Col,
-  message,
-} from 'antd';
-import { Checkbox, Form, Upload, Tag, Space } from 'antd';
-import Icon, { RightCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Modal, Row, Col, message } from 'antd';
+import { Checkbox, Form } from 'antd';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
-import { setUserInfo } from '@/store/features/userSlice';
-
-import { connectType } from '@/config/enum';
-
-import { validateChinese, validateEthAddress } from '@/utils/validator';
-import { getCookie } from '@/utils/cookie';
-import { validateImage, getBase64 } from '@/utils/image';
-
-import type { UploadChangeParam } from 'antd/es/upload';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-
-import sdk from 'hcstore/sdk';
 
 import { Permissions } from '@/config/enum';
 
-import type { CheckboxValueType } from 'antd/es/checkbox/Group';
 import { createVote } from '@/api/vote';
-
-const { Link } = Typography;
+import { useIntl } from 'react-intl';
 
 const validateMessages = {
   required: '${label} is required!',
@@ -50,6 +26,7 @@ const PermissionMap: { [index: number]: string } = {
 };
 
 const App = (props: any, ref: any) => {
+  const { formatMessage } = useIntl();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -122,7 +99,7 @@ const App = (props: any, ref: any) => {
     try {
       setLoading(true);
       await createVote(params);
-      message.success('生成提案');
+      message.success('success');
       console.log('create success');
       setLoading(false);
       handleCancel();
@@ -146,7 +123,9 @@ const App = (props: any, ref: any) => {
       destroyOnClose
     >
       <div className="content">
-        <div className="h1">变更权利</div>
+        <div className="h1">
+          {formatMessage({ id: 'my.information.rights' })}
+        </div>
         {/* <div className="h2"></div> */}
 
         <Form
@@ -160,40 +139,41 @@ const App = (props: any, ref: any) => {
           requiredMark={false}
           validateTrigger="onBlur"
         >
-          <Form.Item name="permissions" label="权限设置">
+          {/* <Form.Item name="permissions" label="权限设置"> */}
+          <Form.Item name="permissions">
             <Checkbox.Group
               className="checkbox-group"
               // defaultValue={currentMember.permissions || []}
             >
               <Row style={{ width: '100%' }} gutter={[0, 10]}>
-                <Col span={8}>
+                <Col span={12}>
                   <Checkbox value={Permissions.Action_VotePool_Vote}>
-                    投票
+                    {formatMessage({ id: 'my.information.rights.vote' })}
                   </Checkbox>
                 </Col>
-                <Col span={8}>
+                <Col span={12}>
                   <Checkbox value={Permissions.Action_VotePool_Create}>
-                    发起提案
+                    {formatMessage({ id: 'my.information.rights.proposal' })}
                   </Checkbox>
                 </Col>
-                <Col span={8}>
+                <Col span={12}>
                   <Checkbox value={Permissions.Action_Member_Create}>
-                    添加NFTP
+                    {formatMessage({ id: 'my.information.rights.add' })}
                   </Checkbox>
                 </Col>
-                <Col span={8}>
+                <Col span={12}>
                   <Checkbox value={Permissions.Action_Asset_SafeMint}>
-                    发行资产
+                    {formatMessage({ id: 'my.information.rights.publish' })}
                   </Checkbox>
                 </Col>
-                {/* <Col span={8}>
+                {/* <Col span={12}>
                   <Checkbox value={Permissions.Action_Asset_Shell_Withdraw}>
                     上架资产
                   </Checkbox>
                 </Col> */}
                 <Col span={16}>
                   <Checkbox value={Permissions.Action_DAO_Settings}>
-                    修改DAO的基础设置
+                    {formatMessage({ id: 'my.information.rights.basic' })}
                   </Checkbox>
                 </Col>
               </Row>
@@ -207,7 +187,7 @@ const App = (props: any, ref: any) => {
               htmlType="submit"
               loading={loading}
             >
-              变更并生成提案
+              {formatMessage({ id: 'my.information.change' })}
             </Button>
           </Form.Item>
         </Form>

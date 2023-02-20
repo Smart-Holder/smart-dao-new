@@ -27,12 +27,7 @@ import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 import iconSuccess from '/public/images/icon-success.png';
-import {
-  deployAssetSalesDAO,
-  getDAO,
-  getDAOList,
-  setCurrentDAO,
-} from '@/store/features/daoSlice';
+import { getDAO, getDAOList, setCurrentDAO } from '@/store/features/daoSlice';
 import { setMissionAndDesc } from '@/api/dao';
 import { Permissions } from '@/config/enum';
 import { rng } from 'somes/rng';
@@ -96,7 +91,7 @@ const FormGroup: React.FC = () => {
   const [avatar, setAvatar] = useState(currentDAO.image);
   // const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // const { formatMessage } = useIntl();
+  const { formatMessage } = useIntl();
 
   const [form] = Form.useForm();
 
@@ -135,7 +130,7 @@ const FormGroup: React.FC = () => {
 
     try {
       await createVote(params);
-      message.success('生成提案');
+      message.success('success');
     } catch (error) {
       console.error(error);
     }
@@ -250,13 +245,14 @@ const FormGroup: React.FC = () => {
         <div className="wrap">
           {/* <Space size={0} wrap align="start" style={{ justifyContent: 'center' }}> */}
           <div className="item-group">
-            <div className="form-title1">Set Basic Information</div>
+            <div className="form-title1">
+              {formatMessage({ id: 'start.basic' })}
+            </div>
             <div className="form-title2">
-              The basic information of dao is poblicy viable to anyone and will
-              be used for display on the website
+              {formatMessage({ id: 'start.desc' })}
             </div>
             <Form.Item
-              label="Name"
+              label={formatMessage({ id: 'start.name' })}
               name="name"
               rules={[
                 { required: true },
@@ -272,7 +268,7 @@ const FormGroup: React.FC = () => {
             </Form.Item>
 
             <Form.Item
-              label="Vision & Mission"
+              label={formatMessage({ id: 'start.mission' })}
               name="mission"
               rules={[
                 { required: true },
@@ -283,7 +279,7 @@ const FormGroup: React.FC = () => {
             </Form.Item>
 
             <Form.Item
-              label="Itroduction"
+              label={formatMessage({ id: 'start.introduce' })}
               name="description"
               rules={[
                 { required: true },
@@ -320,7 +316,9 @@ const FormGroup: React.FC = () => {
                   )}
                 </Upload>
 
-                <span className="upload-desc">Upload Images: png、jpeg… </span>
+                <span className="upload-desc">
+                  {formatMessage({ id: 'start.upload' })}
+                </span>
               </Space>
             </Form.Item>
           </div>
@@ -379,7 +377,7 @@ const FormGroup: React.FC = () => {
             htmlType="submit"
             loading={loading}
           >
-            Save
+            {formatMessage({ id: 'save' })}
           </Button>
         </Form.Item>
       </Form>

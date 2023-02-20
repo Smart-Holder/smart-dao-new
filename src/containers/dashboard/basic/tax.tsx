@@ -14,6 +14,7 @@ import { PlusOutlined } from '@ant-design/icons';
 
 import sdk from 'hcstore/sdk';
 
+import { useIntl } from 'react-intl';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { setUserInfo } from '@/store/features/userSlice';
 
@@ -34,6 +35,7 @@ const options = [
 ];
 
 const App = () => {
+  const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
   const { userInfo } = useAppSelector((store) => store.user);
   const { currentDAO } = useAppSelector((store) => store.dao);
@@ -53,13 +55,13 @@ const App = () => {
 
   return (
     <div className="wrap">
-      <div className="h1">Setting Executor</div>
-      <div className="h2">Lorem ipsum dolor sit amet, consectetur</div>
+      <div className="h1">{formatMessage({ id: 'basic.tax.title' })}</div>
+      <div className="h2">{formatMessage({ id: 'basic.tax.subtitle' })}</div>
 
       <Slider
         style={{ padding: '23px 0' }}
         value={currentDAO.assetIssuanceTax / 100}
-        label="Issuance Tax"
+        label={formatMessage({ id: 'basic.tax.publish' })}
         color="#FF6D4C"
         readOnly
         // onAfterChange={onTaxChange1}
@@ -67,7 +69,7 @@ const App = () => {
       <Slider
         style={{ padding: '23px 0' }}
         value={currentDAO.assetCirculationTax / 100}
-        label="Circulation Tax"
+        label={formatMessage({ id: 'basic.tax.circulation' })}
         color="#2AC154"
         readOnly
         // onAfterChange={onTaxChange2}

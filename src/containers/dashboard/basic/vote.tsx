@@ -18,6 +18,7 @@ import { Checkbox, Form, Upload, Tag } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 import sdk from 'hcstore/sdk';
+import { useIntl } from 'react-intl';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { setUserInfo } from '@/store/features/userSlice';
@@ -41,6 +42,7 @@ const options = [
 ];
 
 const App = () => {
+  const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
   const { userInfo } = useAppSelector((store) => store.user);
   const [image, setImage] = useState();
@@ -82,8 +84,8 @@ const App = () => {
 
   return (
     <div className="wrap">
-      <div className="h1">Setting Executor</div>
-      <div className="h2">Lorem ipsum dolor sit amet, consectetur</div>
+      <div className="h1">{formatMessage({ id: 'basic.vote.title' })}</div>
+      <div className="h2">{formatMessage({ id: 'basic.vote.subtitle' })}</div>
 
       {/* <Slider
         value={60}
@@ -99,7 +101,7 @@ const App = () => {
       /> */}
       <Slider
         value={value}
-        label="投票期"
+        label={formatMessage({ id: 'basic.vote.period' })}
         unit="hr"
         min={min}
         max={720}

@@ -181,7 +181,8 @@ const DAOItem = (props: any) => {
           {formatMessage({ id: join ? 'home.joined' : 'home.join' })}
         </Button>
         <Button type="primary" shape="round" onClick={handleFollowClick}>
-          {follow ? 'Followed' : 'Follow'}
+          {/* {follow ? 'Followed' : 'Follow'} */}
+          {formatMessage({ id: follow ? 'home.followed' : 'home.follow' })}
         </Button>
       </div>
 

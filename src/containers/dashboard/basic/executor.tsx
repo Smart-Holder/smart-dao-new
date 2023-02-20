@@ -15,27 +15,17 @@ import {
   Avatar,
   message,
 } from 'antd';
-import { rng } from 'somes/rng';
 import { Checkbox, Form, Upload, Tag } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-
-import sdk from 'hcstore/sdk';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { setUserInfo } from '@/store/features/userSlice';
 
-import { getCookie } from '@/utils/cookie';
-import { validateImage, getBase64 } from '@/utils/image';
 import { validateChinese, validateEthAddress } from '@/utils/validator';
 
-import type { UploadChangeParam } from 'antd/es/upload';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import type { CheckboxValueType } from 'antd/es/checkbox/Group';
 import { request } from '@/api';
 import { setExecutor } from '@/api/member';
-import { setCurrentDAO } from '@/store/features/daoSlice';
-import { Permissions } from '@/config/enum';
 import { createVote } from '@/api/vote';
+import { useIntl } from 'react-intl';
 
 const options = [
   { label: 'Apple', value: 'Apple' },
@@ -44,6 +34,7 @@ const options = [
 ];
 
 const App = () => {
+  const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
   const { chainId, address } = useAppSelector((store) => store.wallet);
   const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
@@ -176,8 +167,10 @@ const App = () => {
 
   return (
     <div className="wrap">
-      <div className="h1">Setting Executor</div>
-      <div className="h2">Lorem ipsum dolor sit amet, consectetur</div>
+      <div className="h1">{formatMessage({ id: 'basic.executor.title' })}</div>
+      <div className="h2">
+        {formatMessage({ id: 'basic.executor.subtitle' })}
+      </div>
 
       {/* <div style={{ marginTop: 15 }}>
         <span className="label">User Name:</span>
@@ -211,7 +204,7 @@ const App = () => {
             htmlType="submit"
             loading={loading}
           >
-            Replace
+            {formatMessage({ id: 'basic.executor.replace' })}
           </Button>
         </Form.Item>
       </Form>

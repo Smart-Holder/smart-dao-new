@@ -10,6 +10,7 @@ import { Permissions } from '@/config/enum';
 import { validateEthAddress } from '@/utils/validator';
 import { addNFTP } from '@/api/member';
 import { createVote } from '@/api/vote';
+import { useIntl } from 'react-intl';
 
 const validateMessages = {
   required: '${label} is required!',
@@ -19,6 +20,7 @@ const validateMessages = {
 };
 
 const App = (props: any, ref: any) => {
+  const { formatMessage } = useIntl();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { loading } = useAppSelector((store) => store.common);
@@ -67,7 +69,7 @@ const App = (props: any, ref: any) => {
     try {
       // await addNFTP({ ...values, votes: Number(values.votes) });
       await createVote(params);
-      message.success('生成提案');
+      message.success('success');
       // window.location.reload();
       hideModal();
     } catch (error) {
@@ -81,7 +83,11 @@ const App = (props: any, ref: any) => {
 
   return (
     <Modal
-      title={<span style={{ paddingLeft: 16, fontSize: 26 }}>添加NFTP</span>}
+      title={
+        <span style={{ paddingLeft: 16, fontSize: 26 }}>
+          {formatMessage({ id: 'member.nftp.addNFTP' })}
+        </span>
+      }
       width={512}
       open={isModalOpen}
       onCancel={hideModal}
@@ -110,7 +116,7 @@ const App = (props: any, ref: any) => {
         >
           <Form.Item
             name="address"
-            label="Address"
+            label={formatMessage({ id: 'address' })}
             rules={[{ required: true }, { validator: validateEthAddress }]}
           >
             <Input className="input" />
@@ -122,7 +128,7 @@ const App = (props: any, ref: any) => {
 
           <Form.Item
             name="votes"
-            label="份数"
+            label={formatMessage({ id: 'member.nftp.copies' })}
             // rules={[{ required: true }, { type: 'number', min: 1, max: 100 }]}
             rules={[
               { required: true },
@@ -139,37 +145,40 @@ const App = (props: any, ref: any) => {
             /> */}
           </Form.Item>
 
-          <Form.Item label="设置权限" name="permissions">
+          <Form.Item
+            label={formatMessage({ id: 'my.information.rights' })}
+            name="permissions"
+          >
             <Checkbox.Group className="checkbox-group">
               <Row style={{ width: '100%' }} gutter={[0, 10]}>
-                <Col span={8}>
+                <Col span={12}>
                   <Checkbox value={Permissions.Action_VotePool_Vote}>
-                    投票
+                    {formatMessage({ id: 'my.information.rights.vote' })}
                   </Checkbox>
                 </Col>
-                <Col span={8}>
+                <Col span={12}>
                   <Checkbox value={Permissions.Action_VotePool_Create}>
-                    发起提案
+                    {formatMessage({ id: 'my.information.rights.proposal' })}
                   </Checkbox>
                 </Col>
-                <Col span={8}>
+                <Col span={12}>
                   <Checkbox value={Permissions.Action_Member_Create}>
-                    添加NFTP
+                    {formatMessage({ id: 'my.information.rights.add' })}
                   </Checkbox>
                 </Col>
-                <Col span={8}>
+                <Col span={12}>
                   <Checkbox value={Permissions.Action_Asset_SafeMint}>
-                    发行资产
+                    {formatMessage({ id: 'my.information.rights.publish' })}
                   </Checkbox>
                 </Col>
-                {/* <Col span={8}>
+                {/* <Col span={12}>
                   <Checkbox value={Permissions.Action_Asset_Shell_Withdraw}>
                     上架资产
                   </Checkbox>
                 </Col> */}
                 <Col span={16}>
                   <Checkbox value={Permissions.Action_DAO_Settings}>
-                    修改DAO的基础设置
+                    {formatMessage({ id: 'my.information.rights.basic' })}
                   </Checkbox>
                 </Col>
               </Row>
@@ -183,7 +192,7 @@ const App = (props: any, ref: any) => {
               htmlType="submit"
               loading={loading}
             >
-              添加并生成提案
+              {formatMessage({ id: 'member.nftp.submit' })}
             </Button>
           </Form.Item>
         </Form>

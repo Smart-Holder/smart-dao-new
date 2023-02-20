@@ -1,6 +1,7 @@
 {
   "name": "名称",
   "address": "アドレス",
+  "save": "保存",
 
   "home.connectWallet": "ウォレット接続",
   "home.selectNetwork": "ネットワークを選択",
@@ -15,7 +16,7 @@
   "home.search": "DAOを検索",
   "home.total.member": "メンバ{value}名",
   "home.join": "加入",
-  "home.focusOn": "フォロー",
+  "home.follow": "フォロー",
   "home.selectIdentity": "ID選択",
   "home.loadMore": "読み込む",
   "home.joined": "加入済み",
@@ -147,6 +148,7 @@
   "my.information.rights.publish": "資産を発行する",
   "my.information.rights.listed": "資産を公開する",
   "my.information.rights.basic": "DAOの基本設定を変更する",
+  "my.information.change": "ユーザー切替",
 
   "my.asset.total": "合計資産",
   "my.asset.total.pending": "未決注文資産数",

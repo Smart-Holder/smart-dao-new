@@ -14,6 +14,7 @@ import { Checkbox, Form, Upload, Tag } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 import sdk from 'hcstore/sdk';
+import { useIntl } from 'react-intl';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { setUserInfo } from '@/store/features/userSlice';
@@ -37,6 +38,7 @@ const options = [
 ];
 
 const App = () => {
+  const { formatMessage } = useIntl();
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { userInfo } = useAppSelector((store) => store.user);
@@ -81,8 +83,12 @@ const App = () => {
 
   return (
     <div className="wrap">
-      <div className="h1">发起普通提案</div>
-      <div className="h2">Lorem ipsum dolor sit amet, consectetur</div>
+      <div className="h1" style={{ marginBottom: 44 }}>
+        {formatMessage({ id: 'governance.proposal.title' })}
+      </div>
+      {/* <div className="h2">
+        {formatMessage({ id: 'governance.proposal.subtitle' })}
+      </div> */}
 
       <Form
         name="basic"
@@ -92,11 +98,11 @@ const App = () => {
         autoComplete="off"
         labelAlign="left"
         layout="vertical"
-        requiredMark={false}
+        requiredMark={true}
         validateTrigger="onBlur"
       >
         <Form.Item
-          label="提案标题"
+          label={formatMessage({ id: 'governance.proposal.name' })}
           name="name"
           rules={[
             { required: true },
@@ -104,24 +110,52 @@ const App = () => {
             { validator: validateChinese },
           ]}
         >
-          <Input />
+          <Input
+            placeholder={formatMessage({
+              id: 'governance.proposal.name.placeholder',
+            })}
+          />
         </Form.Item>
 
-        <Form.Item label="提案目的" name="purpose">
-          <Input.TextArea rows={4} />
+        <Form.Item
+          label={formatMessage({ id: 'governance.proposal.purpose' })}
+          name="purpose"
+        >
+          <Input.TextArea
+            rows={4}
+            placeholder={formatMessage({
+              id: 'governance.proposal.purpose.placeholder',
+            })}
+          />
         </Form.Item>
 
-        <Form.Item label="提案内容" name="content">
-          <Input.TextArea rows={4} />
+        <Form.Item
+          label={formatMessage({ id: 'governance.proposal.content' })}
+          name="content"
+        >
+          <Input.TextArea
+            rows={4}
+            placeholder={formatMessage({
+              id: 'governance.proposal.content.placeholder',
+            })}
+          />
         </Form.Item>
 
-        <Form.Item label="预期结果" name="result">
-          <Input.TextArea rows={4} />
+        <Form.Item
+          label={formatMessage({ id: 'governance.proposal.result' })}
+          name="result"
+        >
+          <Input.TextArea
+            rows={4}
+            placeholder={formatMessage({
+              id: 'governance.proposal.result.placeholder',
+            })}
+          />
         </Form.Item>
 
         <Form.Item
           style={{ width: '100%' }}
-          label="执行人"
+          label={formatMessage({ id: 'governance.proposal.executor' })}
           name="executor"
           rules={[{ required: true }, { validator: validateEthAddress }]}
         >
@@ -145,7 +179,7 @@ const App = () => {
             htmlType="submit"
             loading={loading}
           >
-            Save
+            {formatMessage({ id: 'save' })}
           </Button>
         </Form.Item>
       </Form>

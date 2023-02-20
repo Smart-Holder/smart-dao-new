@@ -191,7 +191,7 @@ const App = () => {
         }
 
         .modal-content :global(.button) {
-          width: 169px;
+          min-width: 120px;
           height: 54px;
           font-size: 18px;
           font-family: PingFangSC-Regular, PingFang SC;

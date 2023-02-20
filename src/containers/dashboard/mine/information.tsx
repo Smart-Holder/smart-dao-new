@@ -116,10 +116,12 @@ const App = () => {
       <div className="h2">
         {/* Lorem ipsum dolor sit amet, consectetur */}
         <div className="h2-item">
-          Address: <span>{addressFormat}</span>
+          {formatMessage({ id: 'my.information.address' })}:{' '}
+          <span>{addressFormat}</span>
         </div>
         <div className="h2-item">
-          User ID: <span>{userInfo.id}</span>
+          {formatMessage({ id: 'my.information.id' })}:{' '}
+          <span>{userInfo.id}</span>
         </div>
       </div>
 
@@ -143,7 +145,11 @@ const App = () => {
         >
           <Input
             className="input"
-            prefix={<span style={{ color: '#000' }}>Name:</span>}
+            prefix={
+              <span style={{ color: '#000' }}>
+                {formatMessage({ id: 'name' })}:
+              </span>
+            }
           />
         </Form.Item>
 
@@ -176,7 +182,9 @@ const App = () => {
               )}
             </Upload>
 
-            <span className="upload-desc">Upload Images: png、jpeg… </span>
+            <span className="upload-desc">
+              {formatMessage({ id: 'my.information.upload' })}
+            </span>
           </Space>
         </Form.Item>
 
@@ -191,7 +199,9 @@ const App = () => {
           </div>
           <div className="item">
             <span>{currentMember.votes}</span>
-            <span className="label">份数</span>
+            <span className="label">
+              {formatMessage({ id: 'my.information.copies' })}
+            </span>
           </div>
         </div>
 
@@ -203,7 +213,7 @@ const App = () => {
               htmlType="submit"
               loading={loading}
             >
-              Save
+              {formatMessage({ id: 'my.information.save' })}
             </Button>
             <Button
               className="button"
@@ -211,16 +221,16 @@ const App = () => {
               htmlType="button"
               onClick={showTransferModal}
             >
-              Transfer
+              {formatMessage({ id: 'my.information.transfer' })}
             </Button>
           </div>
         </Form.Item>
       </Form>
 
       <div className="h1" style={{ marginTop: 30 }}>
-        NFTP Rights
+        {formatMessage({ id: 'my.information.rights' })}
       </div>
-      <div className="h2">Lorem ipsum dolor sit amet, consectetur</div>
+      {/* <div className="h2">Lorem ipsum dolor sit amet, consectetur</div> */}
 
       <Checkbox.Group
         className="checkbox-group"
@@ -228,34 +238,34 @@ const App = () => {
         onChange={onCheckboxChange}
       >
         <Row style={{ width: '100%' }} gutter={[20, 48]}>
-          <Col span={6}>
+          <Col span={8}>
             <Checkbox disabled value={Permissions.Action_VotePool_Vote}>
-              投票
+              {formatMessage({ id: 'my.information.rights.vote' })}
             </Checkbox>
           </Col>
-          <Col span={6}>
+          <Col span={8}>
             <Checkbox disabled value={Permissions.Action_VotePool_Create}>
-              发起提案
+              {formatMessage({ id: 'my.information.rights.proposal' })}
             </Checkbox>
           </Col>
-          <Col span={6}>
+          <Col span={8}>
             <Checkbox disabled value={Permissions.Action_Member_Create}>
-              添加NFTP
+              {formatMessage({ id: 'my.information.rights.add' })}
             </Checkbox>
           </Col>
-          <Col span={6}>
+          <Col span={8}>
             <Checkbox disabled value={Permissions.Action_Asset_SafeMint}>
-              发行资产
+              {formatMessage({ id: 'my.information.rights.publish' })}
             </Checkbox>
           </Col>
-          {/* <Col span={6}>
+          {/* <Col span={8}>
             <Checkbox value={Permissions.Action_Asset_Shell_Withdraw}>
               上架资产
             </Checkbox>
           </Col> */}
           <Col span={12}>
             <Checkbox disabled value={Permissions.Action_DAO_Settings}>
-              修改DAO的基础设置
+              {formatMessage({ id: 'my.information.rights.basic' })}
             </Checkbox>
           </Col>
         </Row>
@@ -263,7 +273,7 @@ const App = () => {
 
       <div className="buttons">
         <Button className="button" type="primary" onClick={showPermissionModal}>
-          Change
+          {formatMessage({ id: 'my.information.change' })}
         </Button>
       </div>
 

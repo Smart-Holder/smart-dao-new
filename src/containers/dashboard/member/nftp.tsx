@@ -12,6 +12,7 @@ import styles from '@/styles/content.module.css';
 import { useAppSelector } from '@/store/hooks';
 
 import { formatDayjsValues } from '@/utils';
+import { useIntl } from 'react-intl';
 
 import type { PaginationProps } from 'antd';
 
@@ -19,23 +20,8 @@ const { RangePicker } = DatePicker;
 
 dayjs.extend(customParseFormat);
 
-const columns = [
-  {
-    title: 'NFTP',
-    dataIndex: 'name',
-    key: 'name',
-    render: (text: string) => text || '-',
-  },
-  { title: '份数', dataIndex: 'votes', key: 'votes' },
-  {
-    title: '加入日期',
-    dataIndex: 'time',
-    key: 'time',
-    render: (text: string) => dayjs(text).format('MM/DD/YYYY'),
-  },
-];
-
 const App = () => {
+  const { formatMessage } = useIntl();
   const { chainId } = useAppSelector((store) => store.wallet);
   const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
   const { loading, searchText } = useAppSelector((store) => store.common);
@@ -47,6 +33,26 @@ const App = () => {
   const [data, setData] = useState([]);
 
   const nftpModal: any = useRef(null);
+
+  const columns = [
+    {
+      title: 'NFTP',
+      dataIndex: 'name',
+      key: 'name',
+      render: (text: string) => text || '-',
+    },
+    {
+      title: formatMessage({ id: 'member.nftp.copies' }),
+      dataIndex: 'votes',
+      key: 'votes',
+    },
+    {
+      title: formatMessage({ id: 'member.nftp.date' }),
+      dataIndex: 'time',
+      key: 'time',
+      render: (text: string) => dayjs(text).format('MM/DD/YYYY'),
+    },
+  ];
 
   const showModal = () => {
     nftpModal.current.show();
@@ -114,7 +120,11 @@ const App = () => {
   return (
     <div className="wrap">
       <div className={styles['dashboard-content-header']}>
-        <Counts items={[{ num: total, title: '全部NFTP' }]} />
+        <Counts
+          items={[
+            { num: total, title: formatMessage({ id: 'member.nftp.total' }) },
+          ]}
+        />
 
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <Form
@@ -128,12 +138,28 @@ const App = () => {
           >
             <Form.Item name="orderBy">
               <Select
-                style={{ width: 140 }}
-                placeholder="加入时间排序"
+                style={{ width: 220 }}
+                placeholder="Sort"
                 options={[
-                  { value: '', label: '默认' },
-                  // { value: '1', label: '加入时间降序' },
-                  { value: 'id', label: '加入时间升序' },
+                  { value: '', label: 'Default' },
+                  {
+                    value: 'time desc',
+                    label: formatMessage({ id: 'member.nftp.sort.time.desc' }),
+                  },
+                  {
+                    value: 'time',
+                    label: formatMessage({ id: 'member.nftp.sort.time' }),
+                  },
+                  {
+                    value: 'votes desc',
+                    label: formatMessage({
+                      id: 'member.nftp.sort.copies.desc',
+                    }),
+                  },
+                  {
+                    value: 'votes',
+                    label: formatMessage({ id: 'member.nftp.sort.copies' }),
+                  },
                 ]}
               />
             </Form.Item>
@@ -155,7 +181,7 @@ const App = () => {
 
           {currentMember.tokenId && (
             <Button type="primary" onClick={showModal}>
-              添加NFTP
+              {formatMessage({ id: 'member.nftp.addNFTP' })}
             </Button>
           )}
         </div>
