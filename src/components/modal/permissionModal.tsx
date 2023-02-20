@@ -88,10 +88,12 @@ const App = (props: any, ref: any) => {
     const labels = values.permissions.map((v: number) => PermissionMap[v]);
 
     const params = {
-      name: '变更权限',
+      name: formatMessage({ id: 'proposal.basic.rights' }),
       description: JSON.stringify({
         type: 'basic',
-        purpose: `变更权限: ${labels.valueOf()}`,
+        purpose: `${formatMessage({
+          id: 'proposal.basic.rights',
+        })}: ${labels.valueOf()}`,
       }),
       extra,
     };

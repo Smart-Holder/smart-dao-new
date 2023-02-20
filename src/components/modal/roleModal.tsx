@@ -22,6 +22,7 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 import sdk from 'hcstore/sdk';
 import { formatAddress } from '@/utils';
+import { useIntl } from 'react-intl';
 
 const { Link } = Typography;
 
@@ -33,6 +34,7 @@ const validateMessages = {
 };
 
 const RoleModal = (props: any, ref: any) => {
+  const { formatMessage } = useIntl();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -60,8 +62,8 @@ const RoleModal = (props: any, ref: any) => {
   return (
     <Modal width={512} open={isModalOpen} onCancel={handleCancel} footer={null}>
       <div className="content">
-        <div className="h1">选择身份</div>
-        <div className="h2">Create your own DAO</div>
+        <div className="h1">{formatMessage({ id: 'home.selectIdentity' })}</div>
+        {/* <div className="h2">Create your own DAO</div> */}
 
         <div className="roles">
           {userMembers.map((item) => (

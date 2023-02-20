@@ -7,21 +7,27 @@ import React, {
 import Image from 'next/image';
 import { Modal, Space, Button, Typography } from 'antd';
 
-import { useAppDispatch } from '@/store/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { connectWallet } from '@/store/features/walletSlice';
 
-import { connectType } from '@/config/enum';
+import { connectType as types } from '@/config/enum';
 
 import iconMetamask from '/public/images/icon-metamask.png';
 import iconWallet from '/public/images/icon-wallet.png';
 
 import { useIntl } from 'react-intl';
+import { ETH_CHAINS_INFO } from '@/config/chains';
 
 const { Link } = Typography;
 
 const ConnectModal = (props: any, ref: any) => {
   const { formatMessage } = useIntl();
+  const { connectType, chainId } = useAppSelector((store) => store.wallet);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const chainData = ETH_CHAINS_INFO[chainId];
+
+  const [active, setActive] = useState(chainData?.name);
 
   // 通过useDispatch 派发事件
   const dispatch = useAppDispatch();
@@ -37,12 +43,12 @@ const ConnectModal = (props: any, ref: any) => {
   };
 
   const handleMetaMask = () => {
-    dispatch(connectWallet(connectType.MetaMask));
+    dispatch(connectWallet(types.MetaMask));
     handleCancel();
   };
 
   const handleWallet = () => {
-    dispatch(connectWallet(connectType.WalletConnect));
+    dispatch(connectWallet(types.WalletConnect));
     handleCancel();
   };
 
@@ -53,8 +59,24 @@ const ConnectModal = (props: any, ref: any) => {
           <span>{formatMessage({ id: 'home.selectNetwork' })}</span>
         </div>
         <Space size={30} className="types">
-          <Button shape="round">Ethereum</Button>
-          <Button shape="round">Goerli</Button>
+          <Button
+            className={active === 'Ethereum' ? 'active' : ''}
+            shape="round"
+            onClick={() => {
+              setActive('Ethereum');
+            }}
+          >
+            Ethereum
+          </Button>
+          <Button
+            className={active === 'Goerli' ? 'active' : ''}
+            shape="round"
+            onClick={() => {
+              setActive('Goerli');
+            }}
+          >
+            Goerli
+          </Button>
         </Space>
 
         <div className="h1">
@@ -158,6 +180,11 @@ const ConnectModal = (props: any, ref: any) => {
 
             border-radius: 8px;
             cursor: pointer;
+          }
+
+          .wallet :global(.types .active) {
+            background: #546ff6;
+            color: #fff;
           }
 
           .footer {

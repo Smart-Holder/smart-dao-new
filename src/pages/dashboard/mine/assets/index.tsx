@@ -11,6 +11,7 @@ import { useAppSelector } from '@/store/hooks';
 import { getCookie } from '@/utils/cookie';
 import { request } from '@/api';
 import { useRouter } from 'next/router';
+import { useIntl } from 'react-intl';
 
 const PriceIcon = () => (
   <Image
@@ -35,6 +36,7 @@ type ItemType = {
 };
 
 const App: NextPageWithLayout = () => {
+  const { formatMessage } = useIntl();
   const router = useRouter();
   const pageSize = 20;
   const { chainId } = useAppSelector((store) => store.wallet);
@@ -133,15 +135,28 @@ const App: NextPageWithLayout = () => {
   return (
     <AntdLayout.Content className={styles['dashboard-content']}>
       <div className={styles['dashboard-content-header']}>
-        <Counts items={[{ num: total, title: 'All Counts' }]} />
+        <Counts
+          items={[
+            { num: total, title: formatMessage({ id: 'my.asset.total' }) },
+          ]}
+        />
         <Filters
           items={[
             {
               defaultValue: '',
               options: [
-                { value: '', label: '全部类型' },
-                { value: '1', label: '我发行的' },
-                { value: '2', label: '我购买的' },
+                {
+                  value: '',
+                  label: formatMessage({ id: 'my.asset.allTypes' }),
+                },
+                {
+                  value: '1',
+                  label: formatMessage({ id: 'my.asset.published' }),
+                },
+                {
+                  value: '2',
+                  label: formatMessage({ id: 'my.asset.purchased' }),
+                },
               ],
               onSelect: onSelectType,
             },
@@ -157,13 +172,28 @@ const App: NextPageWithLayout = () => {
             {
               defaultValue: '0',
               options: [
-                { value: '0', label: '价格从高到低' },
-                { value: '1', label: '价格从低到高' },
+                {
+                  value: '0',
+                  label: formatMessage({ id: 'my.asset.sort.price.desc' }),
+                },
+                {
+                  value: '1',
+                  label: formatMessage({ id: 'my.asset.sort.price' }),
+                },
                 // { value: '2', label: 'offer从低到高' },
                 // { value: '3', label: 'offer从高到低' },
-                { value: '2', label: '最近上架' },
-                { value: '3', label: '最近创建' },
-                { value: '4', label: '最近卖出' },
+                {
+                  value: '2',
+                  label: formatMessage({ id: 'my.asset.sort.release' }),
+                },
+                {
+                  value: '3',
+                  label: formatMessage({ id: 'my.asset.sort.created' }),
+                },
+                {
+                  value: '4',
+                  label: formatMessage({ id: 'my.asset.sort.sold' }),
+                },
               ],
               onSelect: onSelectOrderby,
             },

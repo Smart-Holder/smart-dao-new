@@ -19,7 +19,7 @@ const Filters: FC<FiltersProps> = (props) => {
             key={index}
             disabled={item.disabled}
             defaultValue={item.defaultValue}
-            style={{ width: 120 }}
+            style={{ width: 200 }}
             options={item.options}
             onSelect={item.onSelect}
             onChange={item.onChange}

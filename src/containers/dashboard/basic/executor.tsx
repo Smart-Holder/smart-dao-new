@@ -1,24 +1,8 @@
-import React, {
-  useState,
-  useImperativeHandle,
-  forwardRef,
-  useEffect,
-} from 'react';
-import {
-  Button,
-  Input,
-  Space,
-  Typography,
-  Image,
-  Row,
-  Col,
-  Avatar,
-  message,
-} from 'antd';
-import { Checkbox, Form, Upload, Tag } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Button, Input, Image, Avatar, message } from 'antd';
+import { Form } from 'antd';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
-import { setUserInfo } from '@/store/features/userSlice';
 
 import { validateChinese, validateEthAddress } from '@/utils/validator';
 
@@ -94,10 +78,12 @@ const App = () => {
 
       // 生成提案的参数
       const params = {
-        name: '更换执行人',
+        name: formatMessage({ id: 'proposal.basic.executor' }),
         description: JSON.stringify({
           type: 'member',
-          purpose: `将执行人更换为${values.address}`,
+          purpose: `${formatMessage({
+            id: 'proposal.basic.executor',
+          })}: ${values.address}`,
         }),
         extra,
       };
@@ -106,7 +92,7 @@ const App = () => {
         setLoading(true);
         // await setExecutor({ id: member.tokenId });
         await createVote(params);
-        message.success('success');
+        message.success(formatMessage({ id: 'governance.proposal.success' }));
         setLoading(false);
       } catch (error) {
         console.log(error);

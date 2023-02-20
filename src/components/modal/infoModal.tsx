@@ -17,6 +17,7 @@ import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 import sdk from 'hcstore/sdk';
+import { useIntl } from 'react-intl';
 
 const { Link } = Typography;
 
@@ -28,6 +29,7 @@ const validateMessages = {
 };
 
 const InfoModal = (props: any, ref: any) => {
+  const { formatMessage } = useIntl();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -91,8 +93,10 @@ const InfoModal = (props: any, ref: any) => {
   return (
     <Modal width={512} open={isModalOpen} onCancel={handleCancel} footer={null}>
       <div className="content">
-        <div className="h1">Personal Information</div>
-        <div className="h2">Lorem ipsum dolor sit amet, consectetur</div>
+        <div className="h1">
+          {formatMessage({ id: 'my.information.title' })}
+        </div>
+        {/* <div className="h2">Lorem ipsum dolor sit amet, consectetur</div> */}
 
         <Form
           name="info"
@@ -115,7 +119,11 @@ const InfoModal = (props: any, ref: any) => {
           >
             <Input
               className="input"
-              prefix={<span style={{ color: '#000' }}>Name:</span>}
+              prefix={
+                <span style={{ color: '#000' }}>
+                  {formatMessage({ id: 'name' })}:
+                </span>
+              }
             />
           </Form.Item>
 
@@ -145,7 +153,9 @@ const InfoModal = (props: any, ref: any) => {
                 )}
               </Upload>
 
-              <span className="upload-desc">Upload Images: png、jpeg… </span>
+              <span className="upload-desc">
+                {formatMessage({ id: 'my.information.upload' })}
+              </span>
             </Space>
           </Form.Item>
 
@@ -156,7 +166,7 @@ const InfoModal = (props: any, ref: any) => {
               htmlType="submit"
               onClick={handleSubmit}
             >
-              Save
+              {formatMessage({ id: 'save' })}
             </Button>
           </Form.Item>
         </Form>

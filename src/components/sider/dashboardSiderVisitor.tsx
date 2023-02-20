@@ -18,10 +18,12 @@ import { request } from '@/api';
 import { createDAOVote } from '@/api/vote';
 import { Permissions } from '@/config/enum';
 import { rng } from 'somes/rng';
+import { useIntl } from 'react-intl';
 
 const { Paragraph } = Typography;
 
 const App = () => {
+  const { formatMessage } = useIntl();
   const router = useRouter();
   const dispatch = useAppDispatch();
   const userAvatar =
@@ -44,10 +46,12 @@ const App = () => {
   const setJoin = async () => {
     try {
       const params = {
-        name: '增加成员',
+        name: formatMessage({ id: 'proposal.basic.addNFTP' }),
         description: JSON.stringify({
           type: 'member',
-          purpose: `将${address}增加为DAO成员`,
+          purpose: `${formatMessage({
+            id: 'proposal.basic.addNFTP',
+          })}: ${address}`,
         }),
         extra: [
           {
@@ -75,7 +79,7 @@ const App = () => {
       // await join({ contractAddress: currentDAO.member });
       // message.success('success');
       await createDAOVote(params);
-      message.success('生成提案');
+      message.success(formatMessage({ id: 'governance.proposal.success' }));
       setLoading(false);
       // dispatch(setDAOType('joining'));
       // window.location.reload();

@@ -169,7 +169,7 @@ const VoteItem: FC<VoteItemProps> = (props) => {
         </div>
         <div className={styles.time}>
           {data.isClose ? (
-            '投票已经结束'
+            formatMessage({ id: 'governance.votes.ended' })
           ) : (
             <Countdown
               className={styles.countdown}

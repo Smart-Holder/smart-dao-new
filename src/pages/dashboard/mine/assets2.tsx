@@ -16,7 +16,6 @@ import type { NextPageWithLayout } from '@/pages/_app';
 
 import styles from '@/styles/content.module.css';
 import Counts from '@/containers/dashboard/mine/counts';
-import Filters from '@/containers/dashboard/mine/filters';
 import { request } from '@/api';
 import { useAppSelector } from '@/store/hooks';
 import { getCookie } from '@/utils/cookie';

@@ -6,6 +6,7 @@ import { message } from 'antd';
 import { rng } from 'somes/rng';
 import { createDAOVote } from '@/api/vote';
 import { Permissions } from '@/config/enum';
+import { useIntl } from 'react-intl';
 
 export const useJoin = (
   contractAddress: string,
@@ -13,6 +14,7 @@ export const useJoin = (
   isJoin: boolean,
   isMember: boolean,
 ) => {
+  const { formatMessage } = useIntl();
   // const index = (joinDAOs || []).findIndex((item: any) => item.id === id);
   // const index2 = (DAOList || []).findIndex((item: any) => item.id === id);
   // const [join, setJoin_] = useState(index >= 0 || index2 >= 0);
@@ -27,10 +29,12 @@ export const useJoin = (
 
     try {
       const params = {
-        name: '增加成员',
+        name: formatMessage({ id: 'proposal.basic.addNFTP' }),
         description: JSON.stringify({
           type: 'member',
-          purpose: `将${address}增加为DAO成员`,
+          purpose: `${formatMessage({
+            id: 'proposal.basic.addNFTP',
+          })}: ${address}`,
         }),
         extra: [
           {
@@ -58,7 +62,7 @@ export const useJoin = (
       // await requestJoin({ contractAddress });
       await createDAOVote(params);
       setLoading(false);
-      message.success('生成提案');
+      message.success(formatMessage({ id: 'governance.proposal.success' }));
       // setJoin_(true);
     } catch (error) {
       console.error(error);

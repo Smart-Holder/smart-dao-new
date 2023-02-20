@@ -8,8 +8,10 @@ import Item from '@/containers/mine/daoItem';
 
 import { getCookie } from '@/utils/cookie';
 import { getMakeDAOStorage } from '@/utils/launch';
+import { useIntl } from 'react-intl';
 
 export default function List() {
+  const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
 
   const chainId = Number(getCookie('chainId'));
@@ -89,21 +91,21 @@ export default function List() {
           type="link"
           onClick={handleClick1}
         >
-          我创建的
+          {formatMessage({ id: 'my.home.dao.create' })}
         </Button>
         <Button
           className={`list-button ${active === 'join' ? 'active' : ''}`}
           type="link"
           onClick={handleClick2}
         >
-          我加入的
+          {formatMessage({ id: 'my.home.dao.join' })}
         </Button>
         <Button
           className={`list-button ${active === 'follow' ? 'active' : ''}`}
           type="link"
           onClick={handleClick3}
         >
-          我关注的
+          {formatMessage({ id: 'my.home.dao.follow' })}
         </Button>
       </Space>
 

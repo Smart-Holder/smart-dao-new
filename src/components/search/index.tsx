@@ -7,6 +7,7 @@ import { setSearchText } from '@/store/features/commonSlice';
 import { useAppDispatch } from '@/store/hooks';
 
 import { debounce } from '@/utils';
+import { useIntl } from 'react-intl';
 
 // import type { InputRef } from 'antd';
 
@@ -24,6 +25,7 @@ const searchList = [
 ];
 
 const Search: React.FC = () => {
+  const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
   const router = useRouter();
   // const inputRef = useRef<InputRef>(null);
@@ -78,7 +80,7 @@ const Search: React.FC = () => {
         id="abc"
         value={value}
         className="search-input"
-        placeholder="input search text"
+        placeholder={formatMessage({ id: 'search' })}
         autoComplete="off"
         allowClear
         suffix={<SearchOutlined style={{ fontSize: 24, color: '#a3a3a3' }} />}

@@ -14,7 +14,6 @@ import {
   message,
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { useIntl } from 'react-intl';
 
 import { validateChinese, validateEthAddress } from '@/utils/validator';
 import { getCookie } from '@/utils/cookie';
@@ -33,6 +32,7 @@ import { Permissions } from '@/config/enum';
 import { rng } from 'somes/rng';
 import { createVote } from '@/api/vote';
 import { request } from '@/api';
+import { useIntl } from 'react-intl';
 
 const validateMessages = {
   required: '${label} is required!',
@@ -42,6 +42,7 @@ const validateMessages = {
 };
 
 const FormGroup: React.FC = () => {
+  const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { chainId, address, web3 } = useAppSelector((store) => store.wallet);
@@ -91,8 +92,6 @@ const FormGroup: React.FC = () => {
   const [avatar, setAvatar] = useState(currentDAO.image);
   // const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { formatMessage } = useIntl();
-
   const [form] = Form.useForm();
 
   const setInfo = async (values: any) => {
@@ -114,7 +113,7 @@ const FormGroup: React.FC = () => {
 
   const createProposal = async (values: any) => {
     const params = {
-      name: '基础设置',
+      name: formatMessage({ id: 'proposal.basic.basic' }),
       description: JSON.stringify({
         type: 'basic',
         purpose: `Vision & Mission: ${values.mission} Itroduction: ${values.description}`,

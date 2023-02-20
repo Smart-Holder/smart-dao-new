@@ -1,33 +1,14 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
-import {
-  Button,
-  Input,
-  Space,
-  Typography,
-  Image,
-  Row,
-  Col,
-  Avatar,
-  message,
-} from 'antd';
+import { Button, Input, Avatar, message } from 'antd';
 import { Checkbox, Form, Upload, Tag } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
-import sdk from 'hcstore/sdk';
 import { useIntl } from 'react-intl';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
-import { setUserInfo } from '@/store/features/userSlice';
 
-import { getCookie } from '@/utils/cookie';
-import { validateImage, getBase64 } from '@/utils/image';
 import { validateChinese, validateEthAddress } from '@/utils/validator';
 
-import type { UploadChangeParam } from 'antd/es/upload';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import type { CheckboxValueType } from 'antd/es/checkbox/Group';
-
-import Slider from '@/components/slider';
 import { createVote } from '@/api/vote';
 import { useRouter } from 'next/router';
 

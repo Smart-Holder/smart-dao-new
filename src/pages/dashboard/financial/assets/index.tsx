@@ -10,7 +10,6 @@ import type { NextPageWithLayout } from '@/pages/_app';
 import styles from '@/styles/content.module.css';
 import FinancialHeader from '@/containers/dashboard/financial/financial-header';
 import Counts from '@/containers/dashboard/mine/counts';
-import Filters from '@/containers/dashboard/mine/filters';
 import FinancialItem from '@/containers/dashboard/financial/financial-item';
 import Image from 'next/image';
 import { useAppSelector } from '@/store/hooks';

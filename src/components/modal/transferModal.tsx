@@ -18,6 +18,7 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 import sdk from 'hcstore/sdk';
 import { transfer } from '@/api/asset';
+import { useIntl } from 'react-intl';
 
 const { Link } = Typography;
 
@@ -29,6 +30,7 @@ const validateMessages = {
 };
 
 const App = (props: any, ref: any) => {
+  const { formatMessage } = useIntl();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -74,7 +76,9 @@ const App = (props: any, ref: any) => {
       destroyOnClose
     >
       <div className="content">
-        <div className="h1">转让NFTP</div>
+        <div className="h1">
+          {formatMessage({ id: 'my.information.transfer' })}
+        </div>
         <div className="h2">将您的身份与权利转让给他人</div>
 
         <Form
@@ -102,7 +106,7 @@ const App = (props: any, ref: any) => {
               htmlType="submit"
               loading={loading}
             >
-              转让
+              {formatMessage({ id: 'my.information.transfer' })}
             </Button>
           </Form.Item>
         </Form>
@@ -137,6 +141,7 @@ const App = (props: any, ref: any) => {
           }
 
           .content :global(.button-submit) {
+            width: 170px;
             height: 54px;
             font-size: 18px;
             font-family: PingFangSC-Regular, PingFang SC;

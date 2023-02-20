@@ -58,10 +58,12 @@ const App = (props: any, ref: any) => {
     ];
 
     const params = {
-      name: '增加成员',
+      name: formatMessage({ id: 'proposal.basic.addNFTP' }),
       description: JSON.stringify({
         type: 'member',
-        purpose: `将${address}增加为DAO成员`,
+        purpose: `${formatMessage({
+          id: 'proposal.basic.addNFTP',
+        })}: ${address}`,
       }),
       extra,
     };
@@ -69,7 +71,7 @@ const App = (props: any, ref: any) => {
     try {
       // await addNFTP({ ...values, votes: Number(values.votes) });
       await createVote(params);
-      message.success('success');
+      message.success(formatMessage({ id: 'governance.proposal.success' }));
       // window.location.reload();
       hideModal();
     } catch (error) {

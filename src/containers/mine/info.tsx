@@ -14,8 +14,10 @@ import { validateChinese, validateEthAddress } from '@/utils/validator';
 
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import { useIntl } from 'react-intl';
 
 export default function Info() {
+  const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
   const { userInfo } = useAppSelector((store) => store.user);
   const [image, setImage] = useState(userInfo.image);
@@ -68,8 +70,8 @@ export default function Info() {
 
   return (
     <div className="info-wrap">
-      <div className="h1">Personal Information</div>
-      <div className="h2">Lorem ipsum dolor sit amet, consectetur</div>
+      <div className="h1">{formatMessage({ id: 'my.information.title' })}</div>
+      {/* <div className="h2">Lorem ipsum dolor sit amet, consectetur</div> */}
 
       <Form
         name="info"
@@ -91,7 +93,11 @@ export default function Info() {
         >
           <Input
             className="smart-input"
-            prefix={<span className="smart-input-prefix">Name:</span>}
+            prefix={
+              <span className="smart-input-prefix">
+                {formatMessage({ id: 'name' })}:
+              </span>
+            }
           />
         </Form.Item>
 
@@ -121,7 +127,9 @@ export default function Info() {
               )}
             </Upload>
 
-            <span className="upload-desc">Upload Images: png、jpeg… </span>
+            <span className="upload-desc">
+              {formatMessage({ id: 'my.information.upload' })}
+            </span>
           </Space>
         </Form.Item>
 
@@ -132,7 +140,7 @@ export default function Info() {
             htmlType="submit"
             onClick={handleSubmit}
           >
-            Save
+            {formatMessage({ id: 'save' })}
           </Button>
         </Form.Item>
       </Form>

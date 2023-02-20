@@ -2,6 +2,7 @@
   "name": "名称",
   "address": "アドレス",
   "save": "保存",
+  "search": "検索",
 
   "home.connectWallet": "ウォレット接続",
   "home.selectNetwork": "ネットワークを選択",
@@ -122,6 +123,12 @@
   "sider.member": "メンバー管理",
   "sider.member.nftp": "NFTPリスト",
 
+  "my.home.dao": "我的DAO",
+  "my.home.information": "個人情報",
+  "my.home.dao.create": "我创建的",
+  "my.home.dao.join": "我加入的",
+  "my.home.dao.follow": "我关注的",
+
   "my.summary.change": "ユーザー切替",
   "my.summary.template": "DAOテンプレート",
   "my.summary.total.member": "メンバー数",
@@ -133,6 +140,7 @@
   "my.summary.total.order": "オーダー数",
   "my.summary.total.income": "総売上",
 
+  "my.information.title": "個人情報",
   "my.information.address": "アドレス",
   "my.information.id": "ユーザーID",
   "my.information.copies": "枚数",
@@ -159,7 +167,7 @@
   "my.asset.published": "発行した資産",
   "my.asset.purchased": "購入した資産",
   "my.asset.allTags": "すべてのタグ",
-  "my.asset.sort,price.desc": "値段高い順",
+  "my.asset.sort.price.desc": "値段高い順",
   "my.asset.sort.price": "値段安い順",
   "my.asset.sort.offer.desc": "オーファー高い順",
   "my.asset.sort.offer": "オーファー低い順",
@@ -392,5 +400,12 @@
   "member.nftp.rights.listed": "資産を公開する",
   "member.nftp.rights.basic": "DAOの基本設定を変更する",
   "member.nftp.submit": "NFTPを追加し提案する",
-  "member.nftp.date": "追加日付"
+  "member.nftp.date": "追加日付",
+
+  "proposal.basic.rights": "NFTP権利",
+  "proposal.basic.rights.addNFTP": "NFTPを追加する",
+  "proposal.basic.rights.executor": "執行人を変更する",
+  "proposal.basic.basic": "基本設定",
+  "proposal.financial": "財務管理",
+  "proposal.financial.balance": "分配収入"
 }

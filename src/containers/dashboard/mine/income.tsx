@@ -150,10 +150,12 @@ const App = () => {
   // 收入分配
   const onDone = async () => {
     const params = {
-      name: '财务管理',
+      name: formatMessage({ id: 'proposal.financial' }),
       description: JSON.stringify({
         type: 'finance',
-        purpose: `分配收入`,
+        purpose: `${formatMessage({
+          id: 'proposal.financial.balance',
+        })}: ${fromToken(balance || 0)} ETH`,
       }),
       extra: [
         {
@@ -296,7 +298,10 @@ const App = () => {
 
       <Modal width={512} open={isModalOpen} onCancel={hideModal} footer={null}>
         <div className={styles['dashboard-modal-content']}>
-          <div className={styles['dashboard-modal-title']}>
+          <div
+            className={styles['dashboard-modal-title']}
+            style={{ marginBottom: 40 }}
+          >
             {formatMessage({ id: 'financial.income.auto' })}
           </div>
           {/* <div className={styles['dashboard-modal-subtitle']}>

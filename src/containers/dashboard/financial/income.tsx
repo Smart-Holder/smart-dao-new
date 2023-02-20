@@ -150,10 +150,12 @@ const App = () => {
   // 收入分配
   const onDone = async () => {
     const params = {
-      name: '财务管理',
+      name: formatMessage({ id: 'proposal.financial' }),
       description: JSON.stringify({
         type: 'finance',
-        purpose: `分配收入`,
+        purpose: `${formatMessage({
+          id: 'proposal.financial.balance',
+        })}: ${fromToken(balance || 0)} ETH`,
       }),
       extra: [
         {

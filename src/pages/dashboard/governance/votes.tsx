@@ -15,7 +15,6 @@ import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
 
 import { useIntl } from 'react-intl';
-import Filters from '@/containers/dashboard/mine/filters';
 
 import styles from '@/styles/content.module.css';
 import VoteItem, {

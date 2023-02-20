@@ -9,11 +9,13 @@ import { Divider, Space, Button } from 'antd';
 
 import { getDAOList } from '@/store/features/daoSlice';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
+import { useIntl } from 'react-intl';
 
 import DAO from '@/containers/mine/daoList';
 import Info from '@/containers/mine/info';
 
 export default function Mine() {
+  const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
 
   const chainId = Number(getCookie('chainId'));
@@ -45,14 +47,14 @@ export default function Mine() {
           type="link"
           onClick={handleDAOClick}
         >
-          我的DAO
+          {formatMessage({ id: 'my.home.dao' })}
         </Button>
         <Button
           className={`button ${active === 2 ? 'active' : ''}`}
           type="link"
           onClick={handleInfoClick}
         >
-          个人信息
+          {formatMessage({ id: 'my.home.information' })}
         </Button>
       </Space>
       {/* <Tabs defaultActiveKey="1" items={items} onChange={onChange} /> */}

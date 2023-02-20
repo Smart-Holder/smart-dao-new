@@ -7,14 +7,20 @@ import styles from '@/styles/content.module.css';
 
 import DAOList from '@/containers/home/daoList';
 
+import { useIntl } from 'react-intl';
+
 const App: NextPageWithLayout = () => {
+  const { formatMessage } = useIntl();
+
   return (
     <AntdLayout.Content className={styles['content-home']}>
       <div>
         <div className={styles.title1}>
-          Welcome! Discovery the hole magic worlds !
+          {formatMessage({ id: 'home.welcome' })}
         </div>
-        <div className={styles.title2}>Welcome to SmartDAO</div>
+        <div className={styles.title2}>
+          {formatMessage({ id: 'home.createOwnDAO' })}
+        </div>
       </div>
       <div className={styles.box} id="scrollableDiv">
         <DAOList />

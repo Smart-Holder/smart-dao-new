@@ -9,6 +9,7 @@ import { Divider, Space, Button } from 'antd';
 
 import { getDAOList } from '@/store/features/daoSlice';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
+import { useIntl } from 'react-intl';
 
 import Mine from '@/containers/mine';
 
@@ -30,6 +31,7 @@ import type { NextPageWithLayout } from '@/pages/_app';
 // ];
 
 const App: NextPageWithLayout = () => {
+  const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
 
   // const { chainId, address } = useAppSelector((store) => store.wallet);
@@ -62,9 +64,11 @@ const App: NextPageWithLayout = () => {
     <AntdLayout.Content className={styles.content}>
       <div>
         <div className={styles.title1}>
-          Welcome! Discovery the hole magic worlds !
+          {formatMessage({ id: 'home.welcome' })}
         </div>
-        <div className={styles.title2}>Welcome to SmartDAO</div>
+        <div className={styles.title2}>
+          {formatMessage({ id: 'home.createOwnDAO' })}
+        </div>
       </div>
       <div className={styles.box}>
         <Mine />
