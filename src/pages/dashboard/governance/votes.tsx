@@ -111,7 +111,40 @@ const App: NextPageWithLayout = () => {
 
   const onValuesChange = (changedValues: any) => {
     let [[key, value]]: any = Object.entries(changedValues);
-    const nextValues: any = { ...values };
+    let nextValues: any = { ...values };
+
+    if (key === 'status') {
+      delete nextValues.isClose;
+      delete nextValues.isAgree;
+      delete nextValues.isExecuted;
+
+      const obj: any = {};
+
+      switch (value) {
+        case 'voting':
+          obj.isClose = false;
+          break;
+        case 'agree':
+          obj.isAgree = true;
+          obj.isClose = true;
+          break;
+        case 'disagree':
+          obj.isAgree = false;
+          obj.isClose = true;
+          break;
+        case 'execute':
+          obj.isExecuted = true;
+          obj.isClose = true;
+          break;
+        default:
+          break;
+      }
+
+      nextValues = { ...nextValues, ...obj };
+      console.log('values', nextValues);
+      setValues(nextValues);
+      return;
+    }
 
     if (!value) {
       delete nextValues[key];
