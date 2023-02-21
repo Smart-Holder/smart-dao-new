@@ -21,6 +21,7 @@ const externals = function ({ context, request }, callback) {
 };
 
 const nextConfig = {
+  // trailingSlash: true,
   exportPathMap: () => {
     return {
       '/': { page: '/' },
@@ -34,6 +35,7 @@ const nextConfig = {
 
       '/dashboard/mine/home': { page: '/dashboard/mine/home' },
       '/dashboard/mine/assets': { page: '/dashboard/mine/assets' },
+      '/dashboard/mine/assets/index': { page: '/dashboard/mine/assets' },
       '/dashboard/mine/assets/detail': {
         page: '/dashboard/mine/assets/detail',
       },
@@ -54,6 +56,9 @@ const nextConfig = {
       '/dashboard/basic/vote': { page: '/dashboard/basic/vote' },
 
       '/dashboard/financial/assets': { page: '/dashboard/financial/assets' },
+      '/dashboard/financial/assets/index': {
+        page: '/dashboard/financial/assets',
+      },
       '/dashboard/financial/assets/issue': {
         page: '/dashboard/financial/assets/issue',
       },
