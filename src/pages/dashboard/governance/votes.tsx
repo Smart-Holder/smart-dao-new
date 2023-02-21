@@ -185,6 +185,39 @@ const App: NextPageWithLayout = () => {
             requiredMark={false}
             validateTrigger="onBlur"
           >
+            <Form.Item name="status">
+              <Select
+                style={{ width: 200 }}
+                placeholder="Status"
+                options={[
+                  { value: '', label: 'All' },
+                  {
+                    value: 'voting',
+                    label: formatMessage({
+                      id: 'governance.votes.sort.voting',
+                    }),
+                  },
+                  {
+                    value: 'agree',
+                    label: formatMessage({
+                      id: 'governance.votes.sort.adopted',
+                    }),
+                  },
+                  {
+                    value: 'disagree',
+                    label: formatMessage({
+                      id: 'governance.votes.sort.dismissed',
+                    }),
+                  },
+                  {
+                    value: 'execute',
+                    label: formatMessage({
+                      id: 'governance.votes.sort.implemented',
+                    }),
+                  },
+                ]}
+              />
+            </Form.Item>
             <Form.Item name="orderBy">
               <Select
                 style={{ width: 200 }}
@@ -199,6 +232,25 @@ const App: NextPageWithLayout = () => {
                     value: 'time desc',
                     label: formatMessage({
                       id: 'governance.votes.sort.time.desc',
+                    }),
+                  },
+                ]}
+              />
+            </Form.Item>
+            <Form.Item name="target">
+              <Select
+                style={{ width: 200 }}
+                placeholder="Type"
+                options={[
+                  { value: '', label: 'All' },
+                  // { value: '1', label: '财务管理' },
+                  // { value: '2', label: '成员管理' },
+                  // { value: '3', label: '基础设置' },
+                  // { value: '4', label: '普通提案' },
+                  {
+                    value: '[]',
+                    label: formatMessage({
+                      id: 'governance.votes.sort.normal',
                     }),
                   },
                 ]}

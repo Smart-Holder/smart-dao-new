@@ -21,11 +21,46 @@ const externals = function ({ context, request }, callback) {
 };
 
 const nextConfig = {
-  // exportPathMap: () => {
-  //   return {
-  //     '/': { page: '/' },
-  //   };
-  // },
+  exportPathMap: () => {
+    return {
+      '/': { page: '/' },
+
+      '/launch': { page: '/launch' },
+      '/launch/information': { page: '/launch/information' },
+      '/launch/setting': { page: '/launch/setting' },
+      '/launch/start': { page: '/launch/start' },
+
+      '/mine': { page: '/mine' },
+
+      '/dashboard/mine/home': { page: '/dashboard/mine/home' },
+      '/dashboard/mine/assets': { page: '/dashboard/mine/assets' },
+      '/dashboard/mine/assets/detail': {
+        page: '/dashboard/mine/assets/detail',
+      },
+      '/dashboard/mine/income': { page: '/dashboard/mine/income' },
+      '/dashboard/mine/information': { page: '/dashboard/mine/information' },
+      '/dashboard/mine/order': { page: '/dashboard/mine/order' },
+
+      '/dashboard/governance/proposal': {
+        page: '/dashboard/governance/proposal',
+      },
+      '/dashboard/governance/votes': { page: '/dashboard/governance/votes' },
+
+      '/dashboard/member/nftp': { page: '/dashboard/member/nftp' },
+
+      '/dashboard/basic/information': { page: '/dashboard/basic/information' },
+      '/dashboard/basic/executor': { page: '/dashboard/basic/executor' },
+      '/dashboard/basic/tax': { page: '/dashboard/basic/tax' },
+      '/dashboard/basic/vote': { page: '/dashboard/basic/vote' },
+
+      '/dashboard/financial/assets': { page: '/dashboard/financial/assets' },
+      '/dashboard/financial/assets/issue': {
+        page: '/dashboard/financial/assets/issue',
+      },
+      '/dashboard/financial/income': { page: '/dashboard/financial/income' },
+      '/dashboard/financial/order': { page: '/dashboard/financial/order' },
+    };
+  },
   distDir: 'build',
   reactStrictMode: false,
   images: {
