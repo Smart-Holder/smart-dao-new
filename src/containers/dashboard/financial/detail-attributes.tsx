@@ -1,6 +1,9 @@
 import { FC } from 'react';
 import styles from './detail-attributes.module.css';
 import { useIntl } from 'react-intl';
+import { Typography } from 'antd';
+
+const { Paragraph, Text } = Typography;
 
 type DetailAttributesProps = {
   items?: AttributeItem[];
@@ -29,8 +32,12 @@ const DetailAttributes: FC<DetailAttributesProps> = (props) => {
           return (
             <div className={styles['item']} key={i}>
               <div className={styles['b']}>
-                <div className={styles['t']}>{item.trait_type}</div>
-                <div className={styles['v']}>{item.value}</div>
+                <div className={styles['t']}>
+                  <Text ellipsis={true}>{item.trait_type}</Text>
+                </div>
+                <div className={styles['v']}>
+                  <Text ellipsis={true}>{item.value}</Text>
+                </div>
                 {item.ratio && (
                   // <div className={styles['r']}>{item.ratio}%拥有此属性</div>
                   <div className={styles['r']}>

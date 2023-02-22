@@ -65,7 +65,9 @@ export function setMakeDAOStorage(key, value) {
     return;
   }
 
-  const id = `${getCookie('address')}-${getCookie('connectType')}`;
+  const id = `${getCookie('address')}-${getCookie('connectType')}-${getCookie(
+    'chainId',
+  )}`;
 
   const data = JSON.parse(localStorage.getItem('makeDAO') || '{}');
 
@@ -86,7 +88,9 @@ export function setMakeDAOStorage(key, value) {
 }
 
 export function getMakeDAOStorage(key) {
-  const id = `${getCookie('address')}-${getCookie('connectType')}`;
+  const id = `${getCookie('address')}-${getCookie('connectType')}-${getCookie(
+    'chainId',
+  )}`;
 
   const data = JSON.parse(localStorage.getItem('makeDAO') || '{}');
 
@@ -98,7 +102,9 @@ export function getMakeDAOStorage(key) {
 }
 
 export function clearMakeDAOStorage() {
-  const id = `${getCookie('address')}-${getCookie('connectType')}`;
+  const id = `${getCookie('address')}-${getCookie('connectType')}-${getCookie(
+    'chainId',
+  )}`;
   const data = JSON.parse(localStorage.getItem('makeDAO') || '{}');
 
   delete data[id];

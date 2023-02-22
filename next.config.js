@@ -27,11 +27,13 @@ const nextConfig = {
       '/': { page: '/' },
 
       '/launch': { page: '/launch' },
+      '/launch/index': { page: '/launch' },
       '/launch/information': { page: '/launch/information' },
       '/launch/setting': { page: '/launch/setting' },
       '/launch/start': { page: '/launch/start' },
 
       '/mine': { page: '/mine' },
+      '/mine/index': { page: '/mine' },
 
       '/dashboard/mine/home': { page: '/dashboard/mine/home' },
       '/dashboard/mine/assets': { page: '/dashboard/mine/assets' },
