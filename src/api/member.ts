@@ -18,10 +18,10 @@ export function getMemberId() {
 }
 
 // 首页加入一个 DAO
-export async function join({ votePool, member }: { votePool: string, member: string }) {
+export async function join({ votePool, module }: { votePool: string, module: string }) {
   const { web3, address } = store.getState().wallet;
 
-  const contract = getContract(web3, Member.abi, member);
+  const contract = getContract(web3, Member.abi, module);
 
   const params = [
     address,
@@ -40,9 +40,9 @@ export async function join({ votePool, member }: { votePool: string, member: str
   return await contractSend(contract, address, 'requestJoin', params);
 }
 
-export async function isPermission(action: number, owner?: string, member?: string) {
+export async function isPermission(action: number, owner?: string, module?: string) {
   const { web3, address } = store.getState().wallet;
-  const contract = getContract(web3, Member.abi, member || store.getState().dao.currentDAO.member);
+  const contract = getContract(web3, Member.abi, module || store.getState().dao.currentDAO.member);
 
   owner = (owner || address).toLowerCase();
 

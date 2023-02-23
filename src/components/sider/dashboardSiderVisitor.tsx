@@ -76,7 +76,7 @@ const App = () => {
       };
 
       setLoading(true);
-      await join({ votePool: currentDAO.root, member: currentDAO.member });
+      await join({ votePool: currentDAO.root, module: currentDAO.member });
       // message.success('success');
       // await createDAOVote(params);
       message.success(formatMessage({ id: 'governance.proposal.success' }));
