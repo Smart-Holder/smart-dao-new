@@ -25,6 +25,9 @@ const App = (props: any, ref: any) => {
 
   const { loading } = useAppSelector((store) => store.common);
   const { currentMember } = useAppSelector((store) => store.dao);
+  const { nickname, image, description } = useAppSelector(
+    (store) => store.user.userInfo,
+  );
 
   useImperativeHandle(ref, () => ({
     show: () => {
@@ -48,9 +51,9 @@ const App = (props: any, ref: any) => {
           address,
           {
             id: '0x' + rng(32).toString('hex'),
-            name: '',
-            description: '',
-            image: '',
+            name: nickname,
+            description,
+            image,
             votes: votes || 1,
           },
           permissions,

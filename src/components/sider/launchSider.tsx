@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Layout, Space, Button, Avatar, Typography } from 'antd';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -19,8 +19,18 @@ const App = () => {
   const router = useRouter();
 
   const roleModal: any = useRef(null);
+  const { address } = useAppSelector((store) => store.wallet);
 
-  const storageValues = getMakeDAOStorage('start') || {};
+  const [storageValues, setStorageValues] = useState({}) as any;
+
+  useEffect(() => {
+    if (address) {
+      const values = getMakeDAOStorage('start') || {};
+      setStorageValues(values);
+    }
+  }, [address]);
+
+  // const storageValues = getMakeDAOStorage('start') || {};
 
   const handleClick = () => {
     router.push('/');
@@ -83,7 +93,9 @@ const App = () => {
         <Space size={16}>
           <Avatar size={44} icon={<UserOutlined />} />
           <span className="rolename">
-            {formatAddress(storageValues?.members[0]?.owner)}
+            {formatAddress(
+              storageValues?.members ? storageValues?.members[0]?.owner : '',
+            )}
           </span>
           {/* <Button type="primary" onClick={onChange}>
             Change

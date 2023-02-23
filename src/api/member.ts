@@ -18,8 +18,15 @@ export function getMemberId() {
 }
 
 // 首页加入一个 DAO
-export async function join({ votePool, member }: { votePool: string, member: string }) {
+export async function join({
+  votePool,
+  member,
+}: {
+  votePool: string;
+  member: string;
+}) {
   const { web3, address } = store.getState().wallet;
+  const { nickname, image, description } = store.getState().user.userInfo;
 
   const contract = getContract(web3, Member.abi, member);
 
@@ -27,9 +34,9 @@ export async function join({ votePool, member }: { votePool: string, member: str
     address,
     {
       id: '0x' + rng(32).toString('hex'),
-      name: '',
-      description: '',
-      image: '',
+      name: nickname,
+      description,
+      image,
       votes: 1,
     },
     [0xdc6b0b72, 0x678ea396],
@@ -40,21 +47,29 @@ export async function join({ votePool, member }: { votePool: string, member: str
   return await contractSend(contract, address, 'requestJoin', params);
 }
 
-export async function isPermission(action: number, owner?: string, module?: string) {
+export async function isPermission(
+  action: number,
+  owner?: string,
+  module?: string,
+) {
   const { web3, address } = store.getState().wallet;
-  const contract = getContract(web3, Member.abi, module || store.getState().dao.currentDAO.member);
+  const contract = getContract(
+    web3,
+    Member.abi,
+    module || store.getState().dao.currentDAO.member,
+  );
 
   owner = (owner || address).toLowerCase();
 
-  let _operator = await contract.methods.operator().call() as string;
+  let _operator = (await contract.methods.operator().call()) as string;
   if (owner != _operator.toLowerCase()) {
     let host = await contract.methods.host().call();
     let dao = getContract(web3, DAO.abi, host);
-    let operator = await dao.methods.operator().call() as string;
+    let operator = (await dao.methods.operator().call()) as string;
     if (owner != operator.toLowerCase()) {
       let root = await dao.methods.root().call();
       if (owner != root.toLowerCase()) {
-        if (!await contract.methods.isPermission(owner, action).call()) {
+        if (!(await contract.methods.isPermission(owner, action).call())) {
           return false;
         }
       }
@@ -73,19 +88,14 @@ export async function addNFTP({
   address,
   votes,
   permissions,
-  name,
-  description,
-  image,
 }: {
   address: string;
   votes: number;
   permissions: number[];
-  name?: string;
-  description?: string;
-  image?: string;
 }) {
   const { web3, address: owner } = store.getState().wallet;
   const { currentDAO } = store.getState().dao;
+  const { nickname, image, description } = store.getState().user.userInfo;
 
   const contract = getContract(web3, Member.abi, currentDAO.member);
 
@@ -93,9 +103,9 @@ export async function addNFTP({
     address,
     {
       id: '0x' + rng(32).toString('hex'),
-      name: name || '',
-      description: description || '',
-      image: image || '',
+      name: nickname,
+      description,
+      image,
       votes,
     },
     permissions,

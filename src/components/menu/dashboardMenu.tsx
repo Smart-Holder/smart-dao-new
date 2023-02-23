@@ -156,7 +156,7 @@ const App: React.FC = () => {
 
   const onClick: MenuProps['onClick'] = useCallback(
     (e: any) => {
-      router.replace(e.key);
+      router.push(e.key);
     },
     [router],
   );

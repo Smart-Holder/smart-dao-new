@@ -129,7 +129,9 @@ const App = () => {
               alt="img"
             />
             <div className="bottom-item-right">
-              <span className="num">{DAOInfo.assetLedgerIncomeTotal} ETH</span>
+              <span className="num">
+                {fromToken(DAOInfo.assetLedgerIncomeTotal)} ETH
+              </span>
               <span>{formatMessage({ id: 'my.summary.total.income' })}</span>
             </div>
           </div>

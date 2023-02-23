@@ -46,6 +46,19 @@ const App = () => {
     });
   };
 
+  const validateExist = (rule: any, value: string) => {
+    const member = (startValues?.members || []).find(
+      (item: any) => item.owner.toLowerCase() === value?.toLowerCase(),
+    );
+
+    if (value && !member?.id) {
+      // callback(new Error(i18n.t('rules.ethAddress')));
+      return Promise.reject(new Error('no such member'));
+    }
+
+    return Promise.resolve();
+  };
+
   return (
     <div className="wrap">
       <div className="h1">{formatMessage({ id: 'launch.executor.title' })}</div>
@@ -62,7 +75,11 @@ const App = () => {
       >
         <Form.Item
           name="address"
-          rules={[{ required: true }, { validator: validateEthAddress }]}
+          rules={[
+            { required: true },
+            { validator: validateEthAddress },
+            { validator: validateExist },
+          ]}
         >
           <Input
             className="input"
