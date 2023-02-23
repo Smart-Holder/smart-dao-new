@@ -60,7 +60,7 @@ export const useJoin = (
       };
 
       setLoading(true);
-      await requestJoin({ votePool, member });
+      await requestJoin({ votePool, module: member });
       // await createDAOVote(params);
       setLoading(false);
       message.success(formatMessage({ id: 'governance.proposal.success' }));
