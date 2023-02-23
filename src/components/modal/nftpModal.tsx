@@ -36,7 +36,8 @@ const App = (props: any, ref: any) => {
     setIsModalOpen(false);
   };
 
-  const createProposal = async (values: any) => {
+  const onFinish = async (values: any) => {
+    console.log('validate Success:', values);
     const { address, votes, permissions } = values;
 
     const extra = [
@@ -75,29 +76,6 @@ const App = (props: any, ref: any) => {
         await createVote(params);
       }
       message.success(formatMessage({ id: 'governance.proposal.success' }));
-      // window.location.reload();
-      hideModal();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const onFinish = async (values: any) => {
-    console.log('validate Success:', values);
-
-    const permission = currentMember.permissions.includes(
-      Permissions.Action_Member_Create,
-    );
-
-    // 没有权限，则创建提案
-    if (!permission) {
-      createProposal(values);
-      return;
-    }
-
-    try {
-      await addNFTP({ ...values, votes: Number(values.votes) });
-      message.success('success');
       // window.location.reload();
       hideModal();
     } catch (error) {
