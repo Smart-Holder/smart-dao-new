@@ -59,12 +59,18 @@ const FormGroup: React.FC = () => {
 
   const [avatar, setAvatar] = useState(initialValues.image);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [imageMessage, setImageMessage] = useState('');
 
   const { formatMessage } = useIntl();
 
   const [form] = Form.useForm();
 
   const onFinish = (values: any) => {
+    if (!avatar) {
+      setImageMessage('Image is required');
+      return;
+    }
+
     const params = {
       chain: chainId,
       address: address,
@@ -132,7 +138,7 @@ const FormGroup: React.FC = () => {
     return Promise.resolve();
   };
 
-  const handleChange: UploadProps['onChange'] = (
+  const onImageChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>,
   ) => {
     // if (info.file.status === 'uploading') {
@@ -142,6 +148,7 @@ const FormGroup: React.FC = () => {
 
     if (info.file.status === 'done') {
       setAvatar(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+      setImageMessage('');
     }
   };
 
@@ -220,7 +227,11 @@ const FormGroup: React.FC = () => {
               <Input.TextArea rows={4} />
             </Form.Item>
 
-            <Form.Item label="Logo" valuePropName="fileList">
+            <Form.Item
+              label="Logo"
+              valuePropName="fileList"
+              extra={<span style={{ color: 'red' }}>{imageMessage}</span>}
+            >
               <Space>
                 <Upload
                   action={process.env.NEXT_PUBLIC_QINIU_UPLOAD_URL}
@@ -228,7 +239,7 @@ const FormGroup: React.FC = () => {
                   showUploadList={false}
                   listType="picture-card"
                   beforeUpload={beforeUpload}
-                  onChange={handleChange}
+                  onChange={onImageChange}
                 >
                   {avatar ? (
                     <Img
