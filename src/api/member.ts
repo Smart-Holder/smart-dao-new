@@ -18,10 +18,10 @@ export function getMemberId() {
 }
 
 // 首页加入一个 DAO
-export async function join({ votePool, module }: { votePool: string, module: string }) {
+export async function join({ votePool, member }: { votePool: string, member: string }) {
   const { web3, address } = store.getState().wallet;
 
-  const contract = getContract(web3, Member.abi, module);
+  const contract = getContract(web3, Member.abi, member);
 
   const params = [
     address,
@@ -64,8 +64,8 @@ export async function isPermission(action: number, owner?: string, module?: stri
   return true;
 }
 
-export function isCanAddNFTP(owner?: string, member?: string) {
-  return isPermission(0x22a25870, owner, member);
+export function isCanAddNFTP(owner?: string, module?: string) {
+  return isPermission(0x22a25870, owner, module);
 }
 
 // 加入 DAO
