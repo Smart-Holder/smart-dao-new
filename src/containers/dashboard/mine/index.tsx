@@ -61,15 +61,15 @@ const App = () => {
           <Space size={82}>
             <div className="top-item">
               <span className="num">{DAOInfo.voteProposalTotal}</span>
-              <span>{formatMessage({ id: 'my.summary.total.member' })}</span>
+              <span>{formatMessage({ id: 'my.summary.total.proposal' })}</span>
             </div>
             <div className="top-item">
               <span className="num">{DAOInfo.voteProposalPendingTotal}</span>
-              <span>{formatMessage({ id: 'my.summary.total.member' })}</span>
+              <span>{formatMessage({ id: 'my.summary.total.voting' })}</span>
             </div>
             <div className="top-item">
               <span className="num">{DAOInfo.voteProposalResolveTotal}</span>
-              <span>{formatMessage({ id: 'my.summary.total.member' })}</span>
+              <span>{formatMessage({ id: 'my.summary.total.complete' })}</span>
             </div>
           </Space>
         </div>
@@ -89,7 +89,9 @@ const App = () => {
               <span className="num">
                 {fromToken(DAOInfo.assetAmountTotal)} ETH
               </span>
-              <span>{formatMessage({ id: 'my.summary.total.member' })}</span>
+              <span>
+                {formatMessage({ id: 'my.summary.total.assetAmount' })}
+              </span>
             </div>
           </div>
           <div className="bottom-item">
@@ -102,7 +104,7 @@ const App = () => {
             />
             <div className="bottom-item-right">
               <span className="num">{DAOInfo.assetTotal}</span>
-              <span>{formatMessage({ id: 'my.summary.total.member' })}</span>
+              <span>{formatMessage({ id: 'my.summary.total.asset' })}</span>
             </div>
           </div>
           <div className="bottom-item">
@@ -115,7 +117,7 @@ const App = () => {
             />
             <div className="bottom-item-right">
               <span className="num">{DAOInfo.assetOrderTotal}</span>
-              <span>{formatMessage({ id: 'my.summary.total.member' })}</span>
+              <span>{formatMessage({ id: 'my.summary.total.order' })}</span>
             </div>
           </div>
           <div className="bottom-item">
@@ -128,7 +130,7 @@ const App = () => {
             />
             <div className="bottom-item-right">
               <span className="num">{DAOInfo.assetLedgerIncomeTotal} ETH</span>
-              <span>{formatMessage({ id: 'my.summary.total.member' })}</span>
+              <span>{formatMessage({ id: 'my.summary.total.income' })}</span>
             </div>
           </div>
         </Space>
