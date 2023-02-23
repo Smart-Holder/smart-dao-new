@@ -9,7 +9,8 @@ import { Permissions } from '@/config/enum';
 import { useIntl } from 'react-intl';
 
 export const useJoin = (
-  contractAddress: string,
+  votePool: string,
+  member: string,
   address: string,
   isJoin: boolean,
   isMember: boolean,
@@ -59,8 +60,8 @@ export const useJoin = (
       };
 
       setLoading(true);
-      // await requestJoin({ contractAddress });
-      await createDAOVote(params);
+      await requestJoin({ votePool, member });
+      // await createDAOVote(params);
       setLoading(false);
       message.success(formatMessage({ id: 'governance.proposal.success' }));
       // setJoin_(true);

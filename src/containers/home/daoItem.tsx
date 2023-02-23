@@ -39,6 +39,7 @@ const DAOItem = (props: any) => {
   const { isInit } = useAppSelector((store) => store.common);
 
   const { join, setJoin, loading } = useJoin(
+    props.data.root,
     props.data.member,
     address,
     isJoin,

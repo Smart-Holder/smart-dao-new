@@ -17,10 +17,10 @@ export function getMemberId() {
 }
 
 // 首页加入一个 DAO
-export function join({ contractAddress }: { contractAddress: string }) {
+export async function join({ votePool, member }: { votePool: string, member: string }) {
   const { web3, address } = store.getState().wallet;
 
-  const contract = getContract(web3, Member.abi, contractAddress);
+  const contract = getContract(web3, Member.abi, member);
 
   const params = [
     address,
@@ -34,7 +34,9 @@ export function join({ contractAddress }: { contractAddress: string }) {
     [0xdc6b0b72, 0x678ea396],
   ];
 
-  return contractSend(contract, address, 'requestJoin', params);
+  await contract.methods.create(...params).call({ from: votePool }); //try call
+
+  return await contractSend(contract, address, 'requestJoin', params);
 }
 
 // 加入 DAO

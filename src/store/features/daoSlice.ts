@@ -70,7 +70,7 @@ export const deployAssetSalesDAO = createAsyncThunk(
       DAOs.abi,
       process.env.NEXT_PUBLIC_DAOS_PROXY_ADDRESS,
     );
-    const baseURI = `${process.env.NEXT_PUBLIC_HCSTORE_URL}/utils/printJSON`;
+    const baseURI = `${process.env.NEXT_PUBLIC_BASE_URL}/service-api/utils/printJSON`;
     let addr = '';
 
     const param = [
