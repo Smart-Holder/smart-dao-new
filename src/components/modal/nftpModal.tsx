@@ -8,7 +8,7 @@ import { useAppSelector } from '@/store/hooks';
 import { Permissions } from '@/config/enum';
 
 import { validateEthAddress } from '@/utils/validator';
-import { addNFTP } from '@/api/member';
+import { addNFTP, isCanAddNFTP } from '@/api/member';
 import { createVote } from '@/api/vote';
 import { useIntl } from 'react-intl';
 
@@ -69,8 +69,11 @@ const App = (props: any, ref: any) => {
     };
 
     try {
-      // await addNFTP({ ...values, votes: Number(values.votes) });
-      await createVote(params);
+      if (await isCanAddNFTP()) {
+        await addNFTP({ ...values, votes: Number(values.votes) });
+      } else {
+        await createVote(params);
+      }
       message.success(formatMessage({ id: 'governance.proposal.success' }));
       // window.location.reload();
       hideModal();

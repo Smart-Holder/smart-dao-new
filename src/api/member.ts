@@ -1,5 +1,6 @@
 import { getContract, contractSend, contractCall } from '@/utils/contract';
 import Member from '@/config/abi/Member.json';
+import DAO from '@/config/abi/DAO.json';
 import { rng } from 'somes/rng';
 import store from '@/store';
 
@@ -39,8 +40,36 @@ export async function join({ votePool, member }: { votePool: string, member: str
   return await contractSend(contract, address, 'requestJoin', params);
 }
 
+export async function isPermission(action: number, owner?: string, member?: string) {
+  const { web3, address } = store.getState().wallet;
+  const contract = getContract(web3, Member.abi, member || store.getState().dao.currentDAO.member);
+
+  owner = (owner || address).toLowerCase();
+
+  let _operator = await contract.methods.operator().call() as string;
+  if (owner != _operator.toLowerCase()) {
+    let host = await contract.methods.host().call();
+    let dao = getContract(web3, DAO.abi, host);
+    let operator = await dao.methods.operator().call() as string;
+    if (owner != operator.toLowerCase()) {
+      let root = await dao.methods.root().call();
+      if (owner != root.toLowerCase()) {
+        if (!await contract.methods.isPermission(owner, action).call()) {
+          return false;
+        }
+      }
+    }
+  }
+
+  return true;
+}
+
+export function isCanAddNFTP(owner?: string, member?: string) {
+  return isPermission(0x22a25870, owner, member);
+}
+
 // 加入 DAO
-export function addNFTP({
+export async function addNFTP({
   address,
   votes,
   permissions,
@@ -72,7 +101,9 @@ export function addNFTP({
     permissions,
   ];
 
-  return contractSend(contract, owner, 'create', params);
+  await contractSend(contract, owner, 'create', params);
+
+  return true;
 }
 
 export function setMemberInfo({

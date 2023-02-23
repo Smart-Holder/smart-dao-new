@@ -33,6 +33,7 @@ import { rng } from 'somes/rng';
 import { createVote } from '@/api/vote';
 import { request } from '@/api';
 import { useIntl } from 'react-intl';
+import { isPermission } from '@/api/member';
 
 const validateMessages = {
   required: '${label} is required!',
@@ -136,12 +137,8 @@ const FormGroup: React.FC = () => {
   };
 
   const onFinish = async (values: any) => {
-    const permission = currentMember.permissions.includes(
-      Permissions.Action_DAO_Settings,
-    );
-
     // 没有权限，则创建提案
-    if (!permission) {
+    if (!await isPermission(Permissions.Action_DAO_Settings)) {
       // message.warning('没有权限');
       createProposal(values);
       return;

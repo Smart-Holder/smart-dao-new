@@ -1,11 +1,8 @@
-// import api from '../api';
-// import wallet from '../store/modules/wallet';
-// import store from '@/store';
-// import { Message } from 'element-ui';
-import sdk from 'hcstore/sdk';
+
 import { beforeUnload, stopClick } from '@/utils';
-import store from '@/store';
 import { message } from 'antd';
+import {waitBlockNumber} from '../api';
+import store from '../store';
 
 export function getContract(web3, abi, contractAddress) {
   return new web3.eth.Contract(abi, contractAddress);
@@ -15,14 +12,8 @@ export async function contractCall(contract, method, params = []) {
   return await contract.methods[method](...params).call();
 }
 
-const waitBlockNumber = async (receipt) => {
-  if (store.getState().dao.currentDAO) {
-    return await sdk.chain.methods.waitBlockNumber({
-      dao: store.getState().dao.currentDAO.address,
-      chain: store.getState().wallet.chainId,
-      blockNumber: receipt.blockNumber,
-    });
-  }
+const waitBlockNumber_ = (receipt) => {
+  return waitBlockNumber(receipt.blockNumber, store.getters.currentDAO.address, store.getState().wallet.chainId, 2);
 };
 
 export async function contractSend(
@@ -30,7 +21,7 @@ export async function contractSend(
   from,
   method,
   params = [],
-  next = waitBlockNumber,
+  next = waitBlockNumber_,
 ) {
   // clearTimeout(store.getters.loadingTimer);
   // store.commit('SET_LOADING', true);

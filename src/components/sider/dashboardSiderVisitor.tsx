@@ -76,9 +76,9 @@ const App = () => {
       };
 
       setLoading(true);
-      // await join({ contractAddress: currentDAO.member });
+      await join({ votePool: currentDAO.root, member: currentDAO.member });
       // message.success('success');
-      await createDAOVote(params);
+      // await createDAOVote(params);
       message.success(formatMessage({ id: 'governance.proposal.success' }));
       setLoading(false);
       // dispatch(setDAOType('joining'));
