@@ -23,6 +23,8 @@ const App = (props: any) => {
     const init = async () => {
       try {
         const res1 = await initialize();
+        const qiniuToken = await sdk.utils.methods.qiniuToken();
+        setCookie('qiniuToken', qiniuToken);
         console.log('init api');
         setInit(true);
       } catch (error) {
