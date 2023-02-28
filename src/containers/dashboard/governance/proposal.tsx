@@ -11,6 +11,8 @@ import { validateChinese, validateEthAddress } from '@/utils/validator';
 
 import { createVote } from '@/api/vote';
 import { useRouter } from 'next/router';
+import { isPermission } from '@/api/member';
+import { Permissions } from '@/config/enum';
 
 const options = [
   { label: 'Apple', value: 'Apple' },
@@ -24,8 +26,8 @@ const App = () => {
   const dispatch = useAppDispatch();
   const { userInfo } = useAppSelector((store) => store.user);
   const { address } = useAppSelector((store) => store.wallet);
-  const { loading } = useAppSelector((store) => store.common);
-  const [image, setImage] = useState();
+  // const { loading } = useAppSelector((store) => store.common);
+  const [loading, setLoading] = useState(false);
 
   const initialValues = {
     executor: address,
@@ -46,12 +48,22 @@ const App = () => {
     };
 
     try {
+      setLoading(true);
+
+      if (!(await isPermission(Permissions.Action_VotePool_Create))) {
+        message.warning('No permission');
+        setLoading(false);
+        return;
+      }
+
       await createVote(params);
       message.success('success');
+      setLoading(false);
       console.log('create success');
       router.push('/dashboard/governance/votes');
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
   };
 
@@ -95,6 +107,7 @@ const App = () => {
             placeholder={formatMessage({
               id: 'governance.proposal.name.placeholder',
             })}
+            style={{ height: 76, fontSize: 18 }}
           />
         </Form.Item>
 
@@ -107,6 +120,7 @@ const App = () => {
             placeholder={formatMessage({
               id: 'governance.proposal.purpose.placeholder',
             })}
+            style={{ fontSize: 18 }}
           />
         </Form.Item>
 
@@ -119,6 +133,7 @@ const App = () => {
             placeholder={formatMessage({
               id: 'governance.proposal.content.placeholder',
             })}
+            style={{ fontSize: 18 }}
           />
         </Form.Item>
 
@@ -131,6 +146,7 @@ const App = () => {
             placeholder={formatMessage({
               id: 'governance.proposal.result.placeholder',
             })}
+            style={{ fontSize: 18 }}
           />
         </Form.Item>
 
@@ -140,7 +156,10 @@ const App = () => {
           name="executor"
           rules={[{ required: true }, { validator: validateEthAddress }]}
         >
-          <Input className="input" prefix={<Avatar size={30} src={url} />} />
+          <Input
+            style={{ height: 76, fontSize: 18 }}
+            prefix={<Avatar size={30} src={url} />}
+          />
           {/* <div className="item-group">
             <Button
               className="button"
@@ -168,7 +187,7 @@ const App = () => {
       <style jsx>
         {`
           .wrap {
-            max-width: 375px;
+            max-width: 690px;
           }
 
           .h1 {
@@ -201,6 +220,7 @@ const App = () => {
           .wrap :global(.button-submit) {
             width: 170px;
             height: 54px;
+            margin-top: 40px;
             font-size: 18px;
           }
         `}

@@ -10,6 +10,7 @@ import { request } from '@/api';
 import { setExecutor } from '@/api/member';
 import { createVote } from '@/api/vote';
 import { useIntl } from 'react-intl';
+import { isRepeate } from '@/utils';
 
 const options = [
   { label: 'Apple', value: 'Apple' },
@@ -26,6 +27,7 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [members, setMembers] = useState([]);
   const [initialValues, setInitialValues] = useState(null) as any;
+  const [isEdit, setIsEdit] = useState(false);
   const url =
     'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
 
@@ -58,6 +60,10 @@ const App = () => {
       getMembers();
     }
   }, []);
+
+  const onValuesChange = (changedValues: any, values: any) => {
+    setIsEdit(!isRepeate(initialValues, values));
+  };
 
   const onFinish = async (values: any) => {
     console.log('validate Success:', values);
@@ -169,6 +175,7 @@ const App = () => {
         initialValues={initialValues}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
+        onValuesChange={onValuesChange}
         autoComplete="off"
         labelAlign="left"
         requiredMark={false}
@@ -189,6 +196,7 @@ const App = () => {
             type="primary"
             htmlType="submit"
             loading={loading}
+            disabled={!isEdit}
           >
             {formatMessage({ id: 'basic.executor.replace' })}
           </Button>
@@ -258,7 +266,6 @@ const App = () => {
             font-size: 18px;
             font-family: PingFangSC-Regular, PingFang SC;
             font-weight: 400;
-            color: #ffffff;
             line-height: 27px;
           }
         `}

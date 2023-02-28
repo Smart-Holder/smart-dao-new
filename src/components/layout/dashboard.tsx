@@ -31,6 +31,8 @@ export default function BasicLayout({ children }: { children: ReactElement }) {
   const router = useRouter();
   const [init, setInit] = useState(false);
 
+  console.log('????????', router);
+
   useEffect(() => {
     const initData = async () => {
       const dao = getSessionStorage('currentDAO');

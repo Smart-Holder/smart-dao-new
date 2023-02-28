@@ -26,6 +26,10 @@ import { request } from '@/api';
 import { safeMint } from '@/api/asset';
 import { fromToken } from '@/utils';
 import { useIntl } from 'react-intl';
+import { isPermission } from '@/api/member';
+import { Permissions } from '@/config/enum';
+import { rng } from 'somes/rng';
+import { createVote } from '@/api/vote';
 
 const { Option } = Select;
 type IssueFormProps = {};
@@ -38,7 +42,7 @@ const testTags = [
 
 const IssueForm: FC<IssueFormProps> = () => {
   const { formatMessage } = useIntl();
-  const { chainId } = useAppSelector((store) => store.wallet);
+  const { chainId, address, web3 } = useAppSelector((store) => store.wallet);
   const { currentDAO } = useAppSelector((store) => store.dao);
 
   const [form] = Form.useForm();
@@ -61,6 +65,42 @@ const IssueForm: FC<IssueFormProps> = () => {
       });
     }
   }, []);
+
+  const createProposal = async (values: any, _tokenURI: string) => {
+    const params = {
+      name: formatMessage({ id: 'proposal.financial.asset.publish' }),
+      description: JSON.stringify({
+        type: 'basic',
+        purpose: `${formatMessage({
+          id: 'proposal.financial.asset.publish',
+        })}: ${values.name}`,
+      }),
+      extra: [
+        {
+          abi: 'asset',
+          method: 'safeMint',
+          params: [
+            currentDAO.first,
+            '0x' + rng(32).toString('hex'),
+            _tokenURI,
+            web3.eth.abi.encodeParameters(
+              ['address', 'uint256'],
+              [address, '10000000000000000' /*min price 0.01 eth*/],
+            ),
+          ],
+        },
+      ],
+    };
+
+    // try {
+    //   await createVote(params);
+    //   message.success('success');
+    // } catch (error) {
+    //   console.error(error);
+    // }
+
+    return createVote(params);
+  };
 
   const onFinish = async (values: any) => {
     console.log('validate Success:', values);
@@ -104,6 +144,12 @@ const IssueForm: FC<IssueFormProps> = () => {
       });
 
       if (!_tokenURI) {
+        setLoading(false);
+        return;
+      }
+
+      if (!(await isPermission(Permissions.Action_Asset_SafeMint))) {
+        await createProposal(params, _tokenURI);
         setLoading(false);
         return;
       }

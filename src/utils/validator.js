@@ -4,7 +4,7 @@ import Web3 from 'web3';
 export const validateChinese = (rule, value) => {
   if (value && /[\u4e00-\u9fa5]/.test(value)) {
     // callback(new Error(i18n.t('rules.english')));
-    return Promise.reject(new Error('chinese'));
+    return Promise.reject(new Error('Cannot input Chinese'));
   }
   return Promise.resolve();
 };
@@ -12,7 +12,7 @@ export const validateChinese = (rule, value) => {
 export function validateEthAddress(rule, value) {
   if (value && !Web3.utils.isAddress(value)) {
     // callback(new Error(i18n.t('rules.ethAddress')));
-    return Promise.reject(new Error('ethAddress'));
+    return Promise.reject(new Error('Incorrect ethAddress'));
   }
 
   return Promise.resolve();

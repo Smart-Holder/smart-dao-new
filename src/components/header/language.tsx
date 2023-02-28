@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
-import Image from 'next/image';
-import { Layout, Dropdown, Space } from 'antd';
+import { Dropdown, Space } from 'antd';
 import { DownOutlined, GlobalOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { useRouter } from 'next/router';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { setLang } from '@/store/features/commonSlice';
-
-import { getCookie } from '@/utils/cookie';
 
 const langList: MenuProps['items'] = [
   {
@@ -20,7 +15,6 @@ const langList: MenuProps['items'] = [
 ];
 
 const Lang = () => {
-  const router = useRouter();
   const { lang } = useAppSelector((store) => store.common);
   const dispatch = useAppDispatch();
   const [langLabel, setLangLabel] = useState('');

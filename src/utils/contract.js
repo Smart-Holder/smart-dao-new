@@ -1,8 +1,7 @@
-
 import { beforeUnload, stopClick } from '@/utils';
 import { message } from 'antd';
-import {waitBlockNumber} from '../api';
-import store from '../store';
+import { waitBlockNumber } from '../api';
+import store from '@/store';
 
 export function getContract(web3, abi, contractAddress) {
   return new web3.eth.Contract(abi, contractAddress);
@@ -13,7 +12,12 @@ export async function contractCall(contract, method, params = []) {
 }
 
 const waitBlockNumber_ = (receipt) => {
-  return waitBlockNumber(receipt.blockNumber, store.getters.currentDAO.address, store.getState().wallet.chainId, 2);
+  return waitBlockNumber(
+    receipt.blockNumber,
+    store.getState().dao.currentDAO.address,
+    store.getState().wallet.chainId,
+    2,
+  );
 };
 
 export async function contractSend(

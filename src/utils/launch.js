@@ -1,5 +1,5 @@
-import store from '@/store';
-import router from 'next/router';
+// import store from '@/store';
+// import router from 'next/router';
 import { getCookie } from '@/utils/cookie';
 // import i18n from '@/plugins/i18n';
 

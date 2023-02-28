@@ -7,6 +7,7 @@ import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import Slider from '@/components/slider';
 
 import { getLifespan } from '@/api/vote';
+import { Button } from 'antd';
 
 const options = [
   { label: 'Apple', value: 'Apple' },
@@ -82,14 +83,15 @@ const App = () => {
         // onAfterChange={onTaxChange2}
       />
 
-      {/* <Button
+      <Button
         className="button"
         type="primary"
         htmlType="submit"
         onClick={handleSubmit}
+        disabled
       >
-        Change
-      </Button> */}
+        {formatMessage({ id: 'change' })}
+      </Button>
 
       <style jsx>
         {`
@@ -126,7 +128,6 @@ const App = () => {
             font-size: 18px;
             font-family: PingFangSC-Regular, PingFang SC;
             font-weight: 400;
-            color: #ffffff;
             line-height: 27px;
           }
         `}

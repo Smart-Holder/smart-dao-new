@@ -137,3 +137,63 @@ export function stopClick(e) {
 //     return str;
 //   }
 // }
+
+export const isRepeateArray = (arr1, arr2) => {
+  console.log(arr1, arr2);
+
+  if (!arr1 || !arr2) {
+    return false;
+  }
+
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+
+  const a1 = [...arr1].sort();
+  const a2 = [...arr2].sort();
+
+  for (let i = 0, l = a1.length; i < l; i++) {
+    if (a1[i] !== a2[i]) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
+export const isRepeate = (obj1, obj2) => {
+  if (!obj1 || !obj2) {
+    return false;
+  }
+
+  const keys = Object.keys(obj2);
+
+  for (let i = 0, l = keys.length; i < l; i++) {
+    if (obj1[keys[i]] !== obj2[keys[i]]) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
+export const isRepeate2 = (obj1, obj2) => {
+  if (!obj1 || !obj2) {
+    return false;
+  }
+
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
+
+  if (keys1.length !== keys2.length) {
+    return false;
+  }
+
+  for (let i = 0, l = keys1.length; i < l; i++) {
+    if (obj1[keys1[i]] !== obj2[keys1[i]]) {
+      return false;
+    }
+  }
+
+  return true;
+};

@@ -3,6 +3,7 @@
   "address": "Address",
   "save": "Save",
   "search": "Search",
+  "change": "Change",
 
   "home.connectWallet": "Connect Wallet",
   "home.selectNetwork": "Select Network",
@@ -156,7 +157,7 @@
   "my.information.rights.publish": "Publishing assets",
   "my.information.rights.listed": "Listed assets",
   "my.information.rights.basic": "Modify DAO base settings",
-  "my.information.change": "change",
+  "my.information.change": "Change",
 
   "my.asset.total": "Total assets",
   "my.asset.total.pending": "Number of pending assets",
@@ -407,5 +408,6 @@
   "proposal.basic.executor": "Replacement of executors",
   "proposal.basic.basic": "Basic settings",
   "proposal.financial": "Financial management",
-  "proposal.financial.balance": "Distribute income"
+  "proposal.financial.balance": "Distribute income",
+  "proposal.financial.asset.publish": "Publish new assets"
 }

@@ -1,4 +1,4 @@
-import { Avatar, Button, Modal, Statistic } from 'antd';
+import { Avatar, Button, Modal, Statistic, Skeleton } from 'antd';
 import { FC, useEffect, useState } from 'react';
 import { StatusKeyMap, TypeKeyMap, VoteItemType, Type } from './vote-item';
 import Image from 'next/image';
@@ -14,6 +14,8 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { formatAddress } from '@/utils';
 
 import { useIntl } from 'react-intl';
+import { isPermission } from '@/api/member';
+import { Permissions } from '@/config/enum';
 
 dayjs.extend(customParseFormat);
 const { Countdown } = Statistic;
@@ -33,6 +35,7 @@ const VoteModal: FC<VoteModalProps> = (props) => {
   const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
 
   const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const [isVote, setIsVote] = useState(true);
@@ -45,24 +48,33 @@ const VoteModal: FC<VoteModalProps> = (props) => {
 
   useEffect(() => {
     const getData = async () => {
-      const res = await request({
-        name: 'utils',
-        method: 'getVotesFrom',
-        params: {
-          chain: chainId,
-          address: currentDAO.root,
-          proposal_id: data?.proposal_id,
-        },
-      });
+      const [res] = await Promise.all([
+        request({
+          name: 'utils',
+          method: 'getVotesFrom',
+          params: {
+            chain: chainId,
+            address: currentDAO.root,
+            proposal_id: data?.proposal_id,
+          },
+        }),
+        // isPermission(Permissions.Action_VotePool_Vote),
+      ]);
 
-      if (res && res.length > 0) {
-        setIsVote(true);
-        setYourVote(res[0].votes);
-      } else {
+      console.log('permission', data?.data?.time, currentMember.time);
+      const permission = data?.data.time > currentMember.time;
+
+      if (permission && res?.length === 0) {
+        // 未投票
         setIsVote(false);
         setYourVote(0);
+      } else {
+        // 已投票或没有权限
+        setIsVote(true);
+        setYourVote(res[0]?.votes || 0);
       }
       console.log(res);
+      setLoading(false);
     };
 
     if (data) {
@@ -109,11 +121,17 @@ const VoteModal: FC<VoteModalProps> = (props) => {
         setShow(false);
         setIsVote(true);
         setYourVote(0);
+        setLoading(true);
       }}
       footer={null}
       // maskClosable={false}
     >
-      {data && (
+      {loading && (
+        <div className={styles['content']} style={{ minHeight: 400 }}>
+          {loading && <Skeleton active />}
+        </div>
+      )}
+      {!loading && data && (
         <div className={styles['content']}>
           <div className={styles['header']}>
             <div className={`${styles['status']} ${styles[data.status]}`}>

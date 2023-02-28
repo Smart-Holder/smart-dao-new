@@ -17,7 +17,7 @@ import { PlusOutlined } from '@ant-design/icons';
 
 import { validateChinese, validateEthAddress } from '@/utils/validator';
 import { getCookie } from '@/utils/cookie';
-import { hexRandomNumber } from '@/utils';
+import { hexRandomNumber, isRepeate, isRepeateArray } from '@/utils';
 import { validateImage, getBase64 } from '@/utils/image';
 import { setMakeDAOStorage, getMakeDAOStorage } from '@/utils/launch';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
@@ -51,6 +51,7 @@ const FormGroup: React.FC = () => {
   const { loading } = useAppSelector((store) => store.common);
 
   const [initialValues, setInitialValues] = useState() as any;
+  const [isEdit, setIsEdit] = useState(false);
 
   useEffect(() => {
     const getDAO = async () => {
@@ -136,9 +137,13 @@ const FormGroup: React.FC = () => {
     }
   };
 
+  const onValuesChange = (changedValues: any, values: any) => {
+    setIsEdit(!isRepeate(initialValues, values));
+  };
+
   const onFinish = async (values: any) => {
     // 没有权限，则创建提案
-    if (!await isPermission(Permissions.Action_DAO_Settings)) {
+    if (!(await isPermission(Permissions.Action_DAO_Settings))) {
       // message.warning('没有权限');
       createProposal(values);
       return;
@@ -233,6 +238,7 @@ const FormGroup: React.FC = () => {
         initialValues={initialValues}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
+        onValuesChange={onValuesChange}
         autoComplete="off"
         labelAlign="left"
         requiredMark={false}
@@ -298,7 +304,7 @@ const FormGroup: React.FC = () => {
                 >
                   {avatar ? (
                     <Img
-                      style={{ borderRadius: 10, cursor: 'pointer' }}
+                      style={{ borderRadius: 10 }}
                       src={avatar}
                       width={100}
                       height={100}
@@ -372,6 +378,7 @@ const FormGroup: React.FC = () => {
             type="primary"
             htmlType="submit"
             loading={loading}
+            disabled={!isEdit}
           >
             {formatMessage({ id: 'save' })}
           </Button>

@@ -22,8 +22,8 @@ const validateMessages = {
 const App = (props: any, ref: any) => {
   const { formatMessage } = useIntl();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const { loading } = useAppSelector((store) => store.common);
   const { currentMember } = useAppSelector((store) => store.dao);
   const { nickname, image, description } = useAppSelector(
     (store) => store.user.userInfo,
@@ -73,6 +73,7 @@ const App = (props: any, ref: any) => {
     };
 
     try {
+      setLoading(true);
       if (await isCanAddNFTP()) {
         await addNFTP({ ...values, votes: Number(values.votes) });
       } else {
@@ -81,8 +82,10 @@ const App = (props: any, ref: any) => {
       message.success(formatMessage({ id: 'governance.proposal.success' }));
       // window.location.reload();
       hideModal();
+      setLoading(false);
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
   };
 

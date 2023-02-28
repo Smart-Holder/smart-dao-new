@@ -3,6 +3,7 @@
   "address": "アドレス",
   "save": "保存",
   "search": "検索",
+  "change": "ユーザー切替",
 
   "home.connectWallet": "ウォレット接続",
   "home.selectNetwork": "ネットワークを選択",
@@ -407,5 +408,6 @@
   "proposal.basic.rights.executor": "執行人を変更する",
   "proposal.basic.basic": "基本設定",
   "proposal.financial": "財務管理",
-  "proposal.financial.balance": "分配収入"
+  "proposal.financial.balance": "分配収入",
+  "proposal.financial.asset.publish": "新しい資産を発行する"
 }

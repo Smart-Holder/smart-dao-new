@@ -11,6 +11,7 @@ type Params = {
   min?: number;
   max?: number;
   readOnly?: boolean;
+  disabled?: boolean;
   onAfterChange?: (value: number) => void;
 };
 
@@ -24,6 +25,7 @@ const App = ({
   min = 0,
   max = 100,
   readOnly = false,
+  disabled = false,
   onAfterChange,
 }: Params) => {
   const [v, setValue] = useState(defaultValue);
@@ -54,6 +56,7 @@ const App = ({
         max={max}
         onChange={handleChange}
         onAfterChange={onAfterChange}
+        disabled={disabled}
       />
 
       <style jsx>{`

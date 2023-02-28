@@ -9,6 +9,7 @@ import { Permissions } from '@/config/enum';
 
 import { createVote } from '@/api/vote';
 import { useIntl } from 'react-intl';
+import { isRepeateArray } from '@/utils';
 
 const validateMessages = {
   required: '${label} is required!',
@@ -34,6 +35,7 @@ const App = (props: any, ref: any) => {
   const { userInfo } = useAppSelector((store) => store.user);
   const { currentMember } = useAppSelector((store) => store.dao);
 
+  const [isEdit, setIsEdit] = useState(false);
   const [loading, setLoading] = useState(false);
   const [initialValues, setInitialValues] = useState({});
 
@@ -46,6 +48,11 @@ const App = (props: any, ref: any) => {
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    setIsEdit(false);
+  };
+
+  const onValuesChange = (changedValues: any, values: any) => {
+    setIsEdit(!isRepeateArray(currentMember.permissions, values.permissions));
   };
 
   const onFinish = async (values: any) => {
@@ -135,6 +142,7 @@ const App = (props: any, ref: any) => {
           initialValues={initialValues}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
+          onValuesChange={onValuesChange}
           autoComplete="off"
           labelAlign="left"
           layout="vertical"
@@ -188,6 +196,7 @@ const App = (props: any, ref: any) => {
               type="primary"
               htmlType="submit"
               loading={loading}
+              disabled={!isEdit}
             >
               {formatMessage({ id: 'my.information.change' })}
             </Button>
@@ -225,11 +234,11 @@ const App = (props: any, ref: any) => {
           }
 
           .content :global(.button-submit) {
+            width: 168px;
             height: 54px;
             font-size: 18px;
             font-family: PingFangSC-Regular, PingFang SC;
             font-weight: 400;
-            color: #ffffff;
             line-height: 27px;
           }
 

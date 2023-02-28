@@ -25,7 +25,7 @@ import { validateChinese, validateEthAddress } from '@/utils/validator';
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import type { CheckboxValueType } from 'antd/es/checkbox/Group';
-import { formatAddress } from '@/utils';
+import { formatAddress, isRepeate, isRepeateArray } from '@/utils';
 import { Permissions } from '@/config/enum';
 
 import TransferModal from '@/components/modal/transferModal';
@@ -48,6 +48,11 @@ const App = () => {
   const { currentMember } = useAppSelector((store) => store.dao);
   // const { loading } = useAppSelector((store) => store.common);
 
+  const [initialValues, setInitialValues] = useState({
+    name: currentMember.name,
+    image: currentMember.image,
+  });
+  const [isEdit, setIsEdit] = useState(false);
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(currentMember.image);
   const [imageMessage, setImageMessage] = useState('');
@@ -58,6 +63,10 @@ const App = () => {
 
   const url =
     'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
+
+  const onValuesChange = (changedValues: any, values: any) => {
+    setIsEdit(!isRepeate(initialValues, values));
+  };
 
   const onFinish = async (values: any) => {
     console.log('validate Success:', values);
@@ -86,6 +95,7 @@ const App = () => {
     if (info.file.status === 'done') {
       setImage(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
       setImageMessage('');
+      setIsEdit(true);
     }
   };
 
@@ -127,9 +137,10 @@ const App = () => {
 
       <Form
         name="info"
-        initialValues={{ name: currentMember.name }}
+        initialValues={initialValues}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
+        onValuesChange={onValuesChange}
         autoComplete="off"
         labelAlign="left"
         requiredMark={false}
@@ -211,6 +222,7 @@ const App = () => {
               className="button"
               type="primary"
               htmlType="submit"
+              disabled={!isEdit}
               loading={loading}
             >
               {formatMessage({ id: 'my.information.save' })}
@@ -402,7 +414,6 @@ const App = () => {
             font-size: 18px;
             font-family: PingFangSC-Regular, PingFang SC;
             font-weight: 400;
-            color: #ffffff;
             line-height: 27px;
           }
         `}
