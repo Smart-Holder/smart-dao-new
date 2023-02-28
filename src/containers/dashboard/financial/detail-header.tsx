@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 import styles from './detail-header.module.css';
 import modalStyles from './put-modal.module.css';
 import Image from 'next/image';
-import { Button, message, Modal, Space } from 'antd';
+import { Avatar, Button, message, Modal, Space } from 'antd';
 import { formatAddress, fromToken } from '@/utils';
 import { useAppSelector } from '@/store/hooks';
 import PutModal, { PutModalListItem } from './put-modal';
@@ -15,6 +15,7 @@ type DetailHeaderProps = {
 
 import openseaIcon from '/public/images/opensea.png';
 import { shelves } from '@/api/asset';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const list = [{ name: 'OpenSea', image: openseaIcon }];
 
@@ -33,6 +34,7 @@ const DetailHeader: FC<DetailHeaderProps> = (props) => {
     (item: any) => item.trait_type === 'blockchain',
   );
 
+  const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const onShare = () => {};
@@ -45,12 +47,16 @@ const DetailHeader: FC<DetailHeaderProps> = (props) => {
     };
 
     try {
+      setLoading(true);
       await shelves(params);
       message.success('success');
       // window.location.reload();
+      setLoading(false);
       hideModal();
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      message.error(error?.message);
+      setLoading(false);
     }
   };
 
@@ -133,13 +139,18 @@ const DetailHeader: FC<DetailHeaderProps> = (props) => {
                   onShelves(item.name);
                 }}
               >
-                <Image
-                  className={modalStyles['item-icon']}
-                  src={item.image}
-                  alt="img"
-                  width={88}
-                  height={88}
-                />
+                {!loading ? (
+                  <Image
+                    className={modalStyles['item-icon']}
+                    src={item.image}
+                    alt="img"
+                    width={88}
+                    height={88}
+                  />
+                ) : (
+                  // <LoadingOutlined style={{ fontSize: 88 }} />
+                  <Avatar size={88} icon={<LoadingOutlined />} />
+                )}
                 <div className={modalStyles['item-title']}>{item.name}</div>
               </div>
             ))}

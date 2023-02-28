@@ -9,6 +9,9 @@ import { ETH_CHAINS_INFO } from '@/config/chains';
 import { initialize as initApi } from '@/api';
 import router from 'next/router';
 import { formatAddress } from '@/utils';
+// import dynamic from 'next/dynamic';
+
+// const connector = dynamic(() => import('@/utils/connect'), { ssr: false });
 
 export interface WalletState {
   web3: any;
@@ -37,8 +40,8 @@ const initialState: WalletState = {
 
 export const connectWallet = createAsyncThunk(
   'wallet/connectAsync',
-  async (connectType: number) => {
-    const res = await connector(connectType);
+  async (connectType: number, { dispatch }) => {
+    const res = await connector(connectType, dispatch);
     // if (res) {
     //   const { chainId, address } = res;
     //   console.log('res', res);
@@ -123,30 +126,30 @@ export const walletSlice = createSlice({
         state.connectType = type;
 
         // 钱包监听
-        if (type === connectType.MetaMask) {
-          window?.ethereum.on('chainChanged', (res: any) => {
-            console.log('-----chainChanged-----', res);
+        // if (type === connectType.MetaMask) {
+        //   window?.ethereum.on('chainChanged', (res: any) => {
+        //     console.log('-----chain changed-----', res);
 
-            clearCookie('address');
-            clearCookie('chainId');
-            clearCookie('connectType');
-            localStorage.removeItem('step');
-            localStorage.removeItem('walletconnect');
-            sessionStorage.clear();
-            router.reload();
-          });
+        //     clearCookie('address');
+        //     clearCookie('chainId');
+        //     clearCookie('connectType');
+        //     localStorage.removeItem('step');
+        //     localStorage.removeItem('walletconnect');
+        //     sessionStorage.clear();
+        //     router.reload();
+        //   });
 
-          window?.ethereum.on('accountsChanged', (res: any) => {
-            console.log('-----accountsChanged-----', res);
-            clearCookie('address');
-            clearCookie('chainId');
-            clearCookie('connectType');
-            localStorage.removeItem('step');
-            localStorage.removeItem('walletconnect');
-            sessionStorage.clear();
-            router.reload();
-          });
-        }
+        //   window?.ethereum.on('accountsChanged', (res: any) => {
+        //     console.log('-----accounts changed-----', res);
+        //     clearCookie('address');
+        //     clearCookie('chainId');
+        //     clearCookie('connectType');
+        //     localStorage.removeItem('step');
+        //     localStorage.removeItem('walletconnect');
+        //     sessionStorage.clear();
+        //     router.reload();
+        //   });
+        // }
       })
       .addCase(connectWallet.rejected, (state, err) => {
         console.log('connect rejected', err);

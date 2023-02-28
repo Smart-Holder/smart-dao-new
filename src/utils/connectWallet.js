@@ -1,8 +1,9 @@
 import WalletConnect from '@walletconnect/client';
 import QRCodeModal from '@walletconnect/qrcode-modal';
-// import store from '@/store/index';
-import { clearCookie } from '@/utils/cookie';
+// import store from '@/store';
+import { clearCookie, setCookie } from '@/utils/cookie';
 import { connectType } from '@/config/enum';
+import Router from 'next/router';
 // import { initialize as initApi } from "@/api";
 
 class WalletConnectPROVIDER {
@@ -16,7 +17,7 @@ class WalletConnectPROVIDER {
 }
 
 let connector = null;
-export const connect = async () => {
+export const connect = async (dispatch) => {
   return new Promise((resolve, reject) => {
     console.log('------WalletConnect-------');
     // Create a connector
@@ -86,6 +87,24 @@ export const connect = async () => {
         throw error;
       }
       console.log('---session_update---', payload);
+
+      // const { accounts, chainId } = payload.params[0];
+      // setCookie('chainId', Number(chainId), 30);
+      // setCookie('address', accounts[0], 30);
+      // dispatch({ type: 'wallet/setChainId', payload: Number(chainId) });
+      // dispatch({ type: 'wallet/setAddress', payload: accounts[0] });
+      // dispatch({
+      //   type: 'wallet/setProvider',
+      //   payload: new WalletConnectPROVIDER(connector),
+      // });
+      // sessionStorage.clear();
+      // // Router.push('/');
+      // // dispatch({ type: 'wallet/disconnect', payload: null });
+      // // dispatch({
+      // //   type: 'wallet/connectWallet',
+      // //   payload: connectType.WalletConnect,
+      // // });
+      // // Router.reload();
 
       // store.dispatch('disconnect');
       // store.dispatch('connect', connectType.WalletConnect);

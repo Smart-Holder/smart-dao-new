@@ -10,7 +10,7 @@ import dynamic from 'next/dynamic';
 
 // const store = dynamic(() => import('@/store'), { ssr: false });
 
-export async function connect() {
+export async function connect(dispatch) {
   if (typeof window.ethereum !== 'undefined') {
     try {
       // store.dispatch(setProvider(window.ethereum));
@@ -27,15 +27,17 @@ export async function connect() {
 
       // 只清空 sessionStorage, 重新连接
       // window.ethereum.on('chainChanged', (res) => {
-      //   console.log('-----chainChanged-----', res);
-      //   store.dispatch({ type: 'wallet/disconnect', payload: null });
+      //   console.log('-----chain changed-----', res);
+      //   // store.dispatch({ type: 'wallet/disconnect', payload: null });
       // });
 
-      // // 清空所有登录信息，重新连接
+      // 清空所有登录信息，重新连接
       // window.ethereum.on('accountsChanged', (res) => {
-      //   console.log('store', store);
-      //   console.log('-----accountsChanged-----', res);
-      //   store.dispatch({ type: 'wallet/disconnect', payload: null });
+      //   // console.log('store', store);
+      //   console.log('-----accounts changed-----', res);
+      //   // store.dispatch({ type: 'wallet/disconnect', payload: null });
+      //   setCookie('address', res[0], 30);
+      //   // store.dispatch({ type: 'wallet/setAddress', payload: res[0] });
       // });
 
       return {

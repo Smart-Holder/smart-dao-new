@@ -31,8 +31,6 @@ export default function BasicLayout({ children }: { children: ReactElement }) {
   const router = useRouter();
   const [init, setInit] = useState(false);
 
-  console.log('????????', router);
-
   useEffect(() => {
     const initData = async () => {
       const dao = getSessionStorage('currentDAO');
@@ -65,9 +63,36 @@ export default function BasicLayout({ children }: { children: ReactElement }) {
     initData();
   }, []);
 
+  // useEffect(() => {
+  //   const getDAOList = async () => {
+  //     const res = await sdk.dao.methods.getDAOsFromCreatedBy({
+  //       chain: chainId,
+  //       owner: address,
+  //     });
+
+  //     if (!res || res.length === 0) {
+  //       router.push('/');
+  //       return;
+  //     }
+
+  //     const dao = res.find((item: any) => item.host === currentDAO.host);
+
+  //     if (!dao) {
+  //       router.push('/');
+  //       return;
+  //     }
+
+  //     dispatch(setCurrentDAO(dao));
+  //   };
+
+  //   if (address && chainId) {
+  //     getDAOList();
+  //   }
+  // }, [address, chainId]);
+
   useEffect(() => {
     const onDAOChange = async () => {
-      console.log('currentDAO', currentDAO);
+      console.log('onDAOChange', currentDAO);
       const members = await sdk.utils.methods.getMembersFrom({
         chain: chainId,
         host: currentDAO.host,

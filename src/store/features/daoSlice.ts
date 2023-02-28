@@ -1,19 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 // import { increment } from './counterSlice';
-import connector from '@/utils/connect';
+// import connector from '@/utils/connect';
 // import { connect as connectMetaMask } from "@/utils/metamask";
-import { connectType } from '@/config/enum';
-import { getCookie, setCookie, clearCookie } from '@/utils/cookie';
-import Web3 from 'web3';
-import { ETH_CHAINS_INFO } from '@/config/chains';
-import { initialize as initApi } from '@/api';
+// import { connectType } from '@/config/enum';
+// import { getCookie, setCookie, clearCookie } from '@/utils/cookie';
+// import Web3 from 'web3';
+// import { ETH_CHAINS_INFO } from '@/config/chains';
+// import { initialize as initApi } from '@/api';
 import sdk from 'hcstore/sdk';
-import { getSessionStorage } from '@/utils';
+// import { getSessionStorage } from '@/utils';
 import { request, waitBlockNumber } from '@/api';
 import { disconnect } from './walletSlice';
 
 import { getContract, contractSend } from '@/utils/contract';
-import { abi as DAOABI } from '@/config/abi/DAO.json';
+// import { abi as DAOABI } from '@/config/abi/DAO.json';
 // import { abi as DAOsABI } from '@/config/abi/DAOs.json';
 import DAOs from '@/config/abi/DAOs.json';
 import { clearMakeDAOStorage } from '@/utils/launch';
