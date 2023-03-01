@@ -103,7 +103,7 @@ const FormGroup: React.FC = () => {
       host: currentDAO.host,
       ...values,
     };
-    console.log('form:', params);
+    // console.log('form:', params);
 
     const res = await setMissionAndDesc(params);
 
@@ -111,6 +111,7 @@ const FormGroup: React.FC = () => {
 
     dispatch(getDAOList({ chain: chainId, owner: address }));
     dispatch(getDAO({ chain: chainId, address: currentDAO.address }));
+    setIsEdit(false);
   };
 
   const createProposal = async (values: any) => {
@@ -132,6 +133,7 @@ const FormGroup: React.FC = () => {
     try {
       await createVote(params);
       message.success('success');
+      setIsEdit(false);
     } catch (error) {
       console.error(error);
     }

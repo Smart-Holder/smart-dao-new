@@ -17,7 +17,7 @@ import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 import sdk from 'hcstore/sdk';
-import { transfer } from '@/api/asset';
+import { transfer } from '@/api/member';
 import { useIntl } from 'react-intl';
 
 const { Link } = Typography;
@@ -36,6 +36,8 @@ const App = (props: any, ref: any) => {
   const dispatch = useAppDispatch();
 
   const { userInfo } = useAppSelector((store) => store.user);
+
+  const [modal, contextHolder] = Modal.useModal();
 
   const [loading, setLoading] = useState(false);
 
@@ -56,8 +58,16 @@ const App = (props: any, ref: any) => {
       setLoading(true);
       await transfer({ to: values.address });
       setLoading(false);
-      message.success('success');
+      // message.success('success');
       // router.push('/');
+      handleCancel();
+      modal.success({
+        title: 'Transfer successful.',
+        className: 'modal-small',
+        onOk: () => {
+          router.push('/');
+        },
+      });
     } catch (error) {
       setLoading(false);
     }
@@ -68,94 +78,98 @@ const App = (props: any, ref: any) => {
   };
 
   return (
-    <Modal
-      width={512}
-      open={isModalOpen}
-      onCancel={handleCancel}
-      footer={null}
-      destroyOnClose
-    >
-      <div className="content">
-        <div className="h1">
-          {formatMessage({ id: 'my.information.transfer' })}
-        </div>
-        <div className="h2">将您的身份与权利转让给他人</div>
+    <>
+      <Modal
+        width={512}
+        open={isModalOpen}
+        onCancel={handleCancel}
+        footer={null}
+        destroyOnClose
+      >
+        <div className="content">
+          <div className="h1">
+            {formatMessage({ id: 'my.information.transfer' })}
+          </div>
+          <div className="h2">将您的身份与权利转让给他人</div>
 
-        <Form
-          name="info"
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off"
-          labelAlign="left"
-          layout="vertical"
-          requiredMark={false}
-          validateTrigger="onBlur"
-        >
-          <Form.Item
-            name="address"
-            label="受让方地址"
-            rules={[{ required: true }, { validator: validateEthAddress }]}
+          <Form
+            name="info"
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
+            labelAlign="left"
+            layout="vertical"
+            requiredMark={false}
+            validateTrigger="onBlur"
           >
-            <Input className="input" />
-          </Form.Item>
-
-          <Form.Item style={{ margin: '60px 0 0', textAlign: 'center' }}>
-            <Button
-              className="button-submit"
-              type="primary"
-              htmlType="submit"
-              loading={loading}
+            <Form.Item
+              name="address"
+              label="受让方地址"
+              rules={[{ required: true }, { validator: validateEthAddress }]}
             >
-              {formatMessage({ id: 'my.information.transfer' })}
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
+              <Input className="input" />
+            </Form.Item>
 
-      <style jsx>
-        {`
-          .content {
-            padding: 25px 16px;
-          }
+            <Form.Item style={{ margin: '60px 0 0', textAlign: 'center' }}>
+              <Button
+                className="button-submit"
+                type="primary"
+                htmlType="submit"
+                loading={loading}
+              >
+                {formatMessage({ id: 'my.information.transfer' })}
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
 
-          .h1 {
-            font-size: 20px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #000000;
-            line-height: 30px;
-          }
+        <style jsx>
+          {`
+            .content {
+              padding: 25px 16px;
+            }
 
-          .h2 {
-            margin-top: 7px;
-            margin-bottom: 30px;
-            font-size: 12px;
-            font-family: AppleSystemUIFont;
-            color: #969ba0;
-            line-height: 18px;
-          }
+            .h1 {
+              font-size: 20px;
+              font-family: PingFangSC-Regular, PingFang SC;
+              font-weight: 400;
+              color: #000000;
+              line-height: 30px;
+            }
 
-          .content :global(.input) {
-            height: 76px;
-            font-size: 16px;
-          }
+            .h2 {
+              margin-top: 7px;
+              margin-bottom: 30px;
+              font-size: 12px;
+              font-family: AppleSystemUIFont;
+              color: #969ba0;
+              line-height: 18px;
+            }
 
-          .content :global(.button-submit) {
-            width: 170px;
-            height: 54px;
-            font-size: 18px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #ffffff;
-            line-height: 27px;
-          }
+            .content :global(.input) {
+              height: 76px;
+              font-size: 16px;
+            }
 
-          .content :global(.ant-form-item .ant-form-item-label > label) {
-            font-size: 16px;
-          }
-        `}
-      </style>
-    </Modal>
+            .content :global(.button-submit) {
+              width: 170px;
+              height: 54px;
+              font-size: 18px;
+              font-family: PingFangSC-Regular, PingFang SC;
+              font-weight: 400;
+              color: #ffffff;
+              line-height: 27px;
+            }
+
+            .content :global(.ant-form-item .ant-form-item-label > label) {
+              font-size: 16px;
+            }
+          `}
+        </style>
+      </Modal>
+
+      {contextHolder}
+    </>
   );
 };
 

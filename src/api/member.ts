@@ -145,3 +145,17 @@ export function setExecutor({ id }: { id: string }) {
 
   return contractSend(contract, address, 'setExecutor', [id]);
 }
+
+// 转让成员
+export function transfer({ to }: { to: string }) {
+  const { web3, address } = store.getState().wallet;
+  const { currentDAO, currentMember } = store.getState().dao;
+
+  const contract = getContract(web3, Member.abi, currentDAO.member);
+
+  return contractSend(contract, address, 'safeTransferFrom', [
+    address,
+    to,
+    currentMember.tokenId,
+  ]);
+}

@@ -3,7 +3,8 @@
   "address": "アドレス",
   "save": "保存",
   "search": "検索",
-  "change": "ユーザー切替",
+  "change": "変更",
+  "revoke": "Revoke",
 
   "home.connectWallet": "ウォレット接続",
   "home.selectNetwork": "ネットワークを選択",
@@ -84,7 +85,7 @@
 
   "sider.join": "加入",
   "sider.follow": "フォロー",
-  "sider.change": "ユーザー切替",
+  "sider.change": "変更",
   "sider.switch": "ID切替",
   "sider.join.applied": "加入を申し込みしました",
   "sider.apply.info": "承認後自動的にDAOに追加されます",
@@ -130,7 +131,7 @@
   "my.home.dao.join": "我加入的",
   "my.home.dao.follow": "我关注的",
 
-  "my.summary.change": "ユーザー切替",
+  "my.summary.change": "変更",
   "my.summary.template": "DAOテンプレート",
   "my.summary.total.member": "メンバー数",
   "my.summary.total.proposal": "提案数",
@@ -157,7 +158,7 @@
   "my.information.rights.publish": "資産を発行する",
   "my.information.rights.listed": "資産を公開する",
   "my.information.rights.basic": "DAOの基本設定を変更する",
-  "my.information.change": "ユーザー切替",
+  "my.information.change": "変更",
 
   "my.asset.total": "合計資産",
   "my.asset.total.pending": "未決注文資産数",

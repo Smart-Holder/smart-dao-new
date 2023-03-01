@@ -23,12 +23,14 @@ const DetailHeader: FC<DetailHeaderProps> = (props) => {
   const { formatMessage } = useIntl();
   const { logo, title } = props;
 
+  const { address } = useAppSelector((store) => store.wallet);
   const { currentMember } = useAppSelector((store) => store.dao);
 
   const storageData = JSON.parse(localStorage.getItem('asset') || '{}') || {};
   console.log('storageData', storageData);
 
   const extra = storageData?.properties || [];
+  const owner = address.toLowerCase() === storageData.owner.toLowerCase();
 
   const blockchain = extra.find(
     (item: any) => item.trait_type === 'blockchain',
@@ -79,12 +81,14 @@ const DetailHeader: FC<DetailHeaderProps> = (props) => {
             <span>{title}</span>
             {/* <span className={styles['sub-title']}>(标签#8790)</span> */}
           </div>
-          {currentMember.tokenId && (
+          {currentMember.tokenId && owner && (
             <Space size={10}>
               {/* <Button onClick={onShare}>分享</Button> */}
-              <Button onClick={showModal}>
-                {formatMessage({ id: 'financial.asset.listing' })}
-              </Button>
+              {storageData.selling === 0 && (
+                <Button onClick={showModal}>
+                  {formatMessage({ id: 'financial.asset.listing' })}
+                </Button>
+              )}
             </Space>
           )}
         </div>

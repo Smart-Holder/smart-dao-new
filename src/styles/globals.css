@@ -77,6 +77,10 @@ a {
   border-radius: 30px;
 }
 
+.modal-small .ant-modal-content {
+  border-radius: 8px;
+}
+
 /* ------------ smart-input v1 ------------ */
 /* .smart-input {
   height: 76px;

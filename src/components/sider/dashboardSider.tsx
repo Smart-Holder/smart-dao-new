@@ -107,8 +107,8 @@ const App = () => {
             )}
           </span>
           <Button type="primary" onClick={onChange}>
-            {/* {formatMessage({ id: 'sider.change' })} */}
-            Change
+            {formatMessage({ id: 'sider.change' })}
+            {/* Change */}
           </Button>
         </Space>
       </div>

@@ -81,6 +81,7 @@ const App = () => {
     await setMemberInfo({ ...values, image });
 
     setLoading(false);
+    setIsEdit(false);
     message.success('success');
     window.location.reload();
   };

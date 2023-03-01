@@ -1,4 +1,5 @@
 import { rng } from 'somes/rng';
+import sdk from 'hcstore/sdk';
 
 import { getContract, contractSend, contractCall } from '@/utils/contract';
 import Asset from '@/config/abi/Asset.json';
@@ -9,22 +10,6 @@ import { connectType as type } from '@/config/enum';
 
 import store from '@/store';
 import { request } from '@/api';
-
-// 转让
-export function transfer({ to }: { to: string }) {
-  const { web3, address } = store.getState().wallet;
-  const { currentDAO, currentMember } = store.getState().dao;
-
-  const contract = getContract(web3, Asset.abi, currentDAO.asset);
-
-  console.log(currentMember.tokenId);
-
-  return contractSend(contract, address, 'safeTransferFrom', [
-    address,
-    to,
-    currentMember.tokenId,
-  ]);
-}
 
 // 发行资产
 export function safeMint({ _tokenURI }: { _tokenURI: string }) {
@@ -140,6 +125,33 @@ export async function shelves({
 
   return data;
 }
+
+/* 
+下架资产
+1. getOrder
+getOrder能取到数据，说明订单还存在，可以调用取消，否则直接调用maskOrderClose方法
+2. 调用合约cancel方法下架
+3. 调用maskOrderClose方法
+*/
+export const revoke = async (token: string, tokenId: string) => {
+  const { web3, address, chainId: chain } = store.getState().wallet;
+  // let { chain, web3, address: from } = store.getters;
+
+  const order = await sdk.opensea.methods.getOrder({ chain, token, tokenId });
+
+  if (order) {
+    const SEAPORT_ADDRESS =
+      await sdk.opensea.methods.get_CROSS_CHAIN_SEAPORT_ADDRESS(); // 取消出售合约地址 seaport
+
+    const SEAPORT_ABI = await sdk.opensea.methods.get_CROSS_CHAIN_SEAPORT_ABI(); // 取消出售合约abi seaport
+
+    const contract = getContract(web3, SEAPORT_ABI, SEAPORT_ADDRESS);
+
+    await contractSend(contract, address, 'cancel', [[order]]);
+  }
+
+  await sdk.opensea.methods.maskOrderClose({ chain, token, tokenId });
+};
 
 // 收入分配
 export function release({

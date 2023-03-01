@@ -4,6 +4,7 @@ import { ReactElement, useEffect, useState } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
 import styles from '@/styles/content.module.css';
 import DetailHeader from '@/containers/dashboard/financial/detail-header';
+import DetailMarket from '@/containers/dashboard/financial/detail-market';
 import DetailAttributes from '@/containers/dashboard/financial/detail-attributes';
 import DetailTransactions, {
   DetailTransactionItem,
@@ -61,12 +62,16 @@ const App: NextPageWithLayout = () => {
             title={`${storageData.name} #${storageData.id}`}
             logo={storageData.imageOrigin}
           />
+
+          {storageData.selling !== 0 && <DetailMarket />}
+
           {storageData.properties && (
             <DetailAttributes
               // items={[{ key: attr[0], value: attr[1], ratio: attr[2] }]}
               items={storageData.properties}
             />
           )}
+
           <DetailTransactions
             currentPage={page}
             total={total}

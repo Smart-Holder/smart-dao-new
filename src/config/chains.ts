@@ -65,3 +65,9 @@ export const ETH_CHAINS_INFO: any = {
   //   decimals: 18,
   // },
 };
+
+export const Market = {
+  Opensea: {
+    image: 'https://smart-dao-res.stars-mine.com/FlAqJJOOLLwzaOJvzF9GfjEdFY8X',
+  },
+};

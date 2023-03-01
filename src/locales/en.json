@@ -4,6 +4,7 @@
   "save": "Save",
   "search": "Search",
   "change": "Change",
+  "revoke": "Revoke",
 
   "home.connectWallet": "Connect Wallet",
   "home.selectNetwork": "Select Network",
