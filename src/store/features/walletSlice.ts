@@ -9,6 +9,7 @@ import { ETH_CHAINS_INFO } from '@/config/chains';
 import { initialize as initApi } from '@/api';
 import router from 'next/router';
 import { formatAddress } from '@/utils';
+import { Modal } from 'antd';
 // import dynamic from 'next/dynamic';
 
 // const connector = dynamic(() => import('@/utils/connect'), { ssr: false });
@@ -114,6 +115,16 @@ export const walletSlice = createSlice({
         const { provider, chainId, address, connectType: type } = payload;
 
         // initApi(address, chainId);
+
+        const isSupport = Object.keys(ETH_CHAINS_INFO).includes(chainId);
+
+        if (!isSupport) {
+          Modal.warning({
+            title: 'Supported networks: Ethereum, Goerli',
+            className: 'modal-small',
+          });
+          return;
+        }
 
         setCookie('address', address, 30);
         setCookie('chainId', chainId, 30);
