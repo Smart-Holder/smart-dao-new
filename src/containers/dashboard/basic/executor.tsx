@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Input, Image, Avatar, message } from 'antd';
+import { Button, Input, Image, Avatar, message, Modal } from 'antd';
 import { Form } from 'antd';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
@@ -7,10 +7,11 @@ import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { validateChinese, validateEthAddress } from '@/utils/validator';
 
 import { request } from '@/api';
-import { setExecutor } from '@/api/member';
+import { isPermission, setExecutor } from '@/api/member';
 import { createVote } from '@/api/vote';
 import { useIntl } from 'react-intl';
 import { isRepeate } from '@/utils';
+import { Permissions } from '@/config/enum';
 
 const options = [
   { label: 'Apple', value: 'Apple' },
@@ -96,9 +97,20 @@ const App = () => {
 
       try {
         setLoading(true);
-        // await setExecutor({ id: member.tokenId });
-        await createVote(params);
-        message.success(formatMessage({ id: 'governance.proposal.success' }));
+
+        if (!(await isPermission(Permissions.Action_DAO_Settings))) {
+          await createVote(params);
+          Modal.success({
+            title: formatMessage({ id: 'proposal.create.message' }),
+            className: 'modal-small',
+          });
+          // message.success(formatMessage({ id: 'governance.proposal.success' }));
+        } else {
+          await setExecutor({ id: member.tokenId });
+          message.success('Success');
+        }
+
+        setIsEdit(false);
         setLoading(false);
       } catch (error) {
         console.log(error);

@@ -107,6 +107,7 @@ const FormGroup: React.FC = () => {
 
     const res = await setMissionAndDesc(params);
 
+    message.success('Success');
     console.log(res);
 
     dispatch(getDAOList({ chain: chainId, owner: address }));
@@ -132,7 +133,10 @@ const FormGroup: React.FC = () => {
 
     try {
       await createVote(params);
-      message.success('success');
+      Modal.success({
+        title: formatMessage({ id: 'proposal.create.message' }),
+        className: 'modal-small',
+      });
       setIsEdit(false);
     } catch (error) {
       console.error(error);
@@ -209,6 +213,7 @@ const FormGroup: React.FC = () => {
 
     if (info.file.status === 'done') {
       setAvatar(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+      setIsEdit(true);
     }
   };
 

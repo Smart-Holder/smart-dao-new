@@ -58,8 +58,6 @@ const App = (props: any, ref: any) => {
       setLoading(true);
       await transfer({ to: values.address });
       setLoading(false);
-      // message.success('success');
-      // router.push('/');
       handleCancel();
       modal.success({
         title: 'Transfer successful.',

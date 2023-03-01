@@ -1,5 +1,5 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
-import { Button, Input, Avatar, message } from 'antd';
+import { Button, Input, Avatar, message, Modal } from 'antd';
 import { Checkbox, Form, Upload, Tag } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
@@ -57,10 +57,16 @@ const App = () => {
       }
 
       await createVote(params);
-      message.success('success');
+
       setLoading(false);
-      console.log('create success');
-      router.push('/dashboard/governance/votes');
+
+      Modal.success({
+        title: formatMessage({ id: 'proposal.create.message' }),
+        className: 'modal-small',
+        onOk: () => {
+          router.push('/dashboard/governance/votes');
+        },
+      });
     } catch (error) {
       console.error(error);
       setLoading(false);

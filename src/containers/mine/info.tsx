@@ -15,19 +15,28 @@ import { validateChinese, validateEthAddress } from '@/utils/validator';
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { useIntl } from 'react-intl';
+import { isRepeate } from '@/utils';
+import { request } from '@/api';
 
 export default function Info() {
   const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
+  const { loading } = useAppSelector((store) => store.common);
   const { userInfo } = useAppSelector((store) => store.user);
   const [image, setImage] = useState(userInfo.image);
+
+  const [isEdit, setIsEdit] = useState(false);
 
   const initialValues = {
     nickname: userInfo.nickname,
     // image: userInfo.image,
   };
 
-  const onFinish = (values: any) => {
+  const onValuesChange = (changedValues: any, values: any) => {
+    setIsEdit(!isRepeate(initialValues, values));
+  };
+
+  const onFinish = async (values: any) => {
     console.log('validate Success:', values);
 
     if (image) {
@@ -37,14 +46,28 @@ export default function Info() {
         nickname: values.nickname,
       };
 
-      sdk.user.methods.setUser(params).then(() => {
-        sdk.user.methods.getUser().then((res) => {
-          if (res && res.nickname) {
-            dispatch(setUserInfo(res));
-          }
-          message.success('success!');
+      try {
+        await request({
+          name: 'user',
+          method: 'setUser',
+          params,
         });
-      });
+
+        const res = await request({
+          name: 'user',
+          method: 'getUser',
+          params,
+        });
+
+        if (res && res.nickname) {
+          dispatch(setUserInfo(res));
+          setIsEdit(false);
+          message.success('success!');
+        }
+      } catch (error: any) {
+        message.error(error?.message);
+        console.error(error);
+      }
     }
   };
 
@@ -57,6 +80,7 @@ export default function Info() {
   ) => {
     if (info.file.status === 'done') {
       setImage(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+      setIsEdit(true);
     }
   };
 
@@ -78,6 +102,7 @@ export default function Info() {
         initialValues={initialValues}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
+        onValuesChange={onValuesChange}
         autoComplete="off"
         labelAlign="left"
         requiredMark={false}
@@ -139,6 +164,8 @@ export default function Info() {
             type="primary"
             htmlType="submit"
             onClick={handleSubmit}
+            loading={loading}
+            disabled={!isEdit}
           >
             {formatMessage({ id: 'save' })}
           </Button>
@@ -186,7 +213,6 @@ export default function Info() {
             font-size: 18px;
             font-family: PingFangSC-Regular, PingFang SC;
             font-weight: 400;
-            color: #ffffff;
             line-height: 27px;
           }
         `}

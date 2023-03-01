@@ -11,6 +11,7 @@ import { validateEthAddress } from '@/utils/validator';
 import { addNFTP, isCanAddNFTP } from '@/api/member';
 import { createVote } from '@/api/vote';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 
 const validateMessages = {
   required: '${label} is required!',
@@ -21,6 +22,7 @@ const validateMessages = {
 
 const App = (props: any, ref: any) => {
   const { formatMessage } = useIntl();
+  const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -76,10 +78,14 @@ const App = (props: any, ref: any) => {
       setLoading(true);
       if (await isCanAddNFTP()) {
         await addNFTP({ ...values, votes: Number(values.votes) });
+        router.reload();
       } else {
         await createVote(params);
+        Modal.success({
+          title: formatMessage({ id: 'proposal.create.message' }),
+          className: 'modal-small',
+        });
       }
-      message.success(formatMessage({ id: 'governance.proposal.success' }));
       // window.location.reload();
       hideModal();
       setLoading(false);

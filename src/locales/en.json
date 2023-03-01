@@ -5,6 +5,7 @@
   "search": "Search",
   "change": "Change",
   "revoke": "Revoke",
+  "proposal.create.message": "需要投票后才可以生效",
 
   "home.connectWallet": "Connect Wallet",
   "home.selectNetwork": "Select Network",

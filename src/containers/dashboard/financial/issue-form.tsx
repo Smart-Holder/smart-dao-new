@@ -16,6 +16,7 @@ import {
   InputNumber,
   Select,
   message,
+  Modal,
 } from 'antd';
 import { RcFile, UploadChangeParam, UploadFile } from 'antd/es/upload';
 import { FC, useEffect, useState } from 'react';
@@ -150,12 +151,15 @@ const IssueForm: FC<IssueFormProps> = () => {
 
       if (!(await isPermission(Permissions.Action_Asset_SafeMint))) {
         await createProposal(params, _tokenURI);
-        setLoading(false);
-        return;
+        Modal.success({
+          title: formatMessage({ id: 'proposal.create.message' }),
+          className: 'modal-small',
+        });
+      } else {
+        await safeMint({ _tokenURI });
+        message.success('Success');
       }
 
-      await safeMint({ _tokenURI });
-      message.success('success');
       setLoading(false);
       form.resetFields();
       setImage('');

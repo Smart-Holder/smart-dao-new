@@ -168,7 +168,10 @@ const App = () => {
 
     try {
       await createVote(params);
-      message.success('success');
+      Modal.success({
+        title: formatMessage({ id: 'proposal.create.message' }),
+        className: 'modal-small',
+      });
       // window.location.reload();
       hideModal();
       getBalanceData();

@@ -137,7 +137,6 @@ export function setMemberInfo({
 }
 
 export function setExecutor({ id }: { id: string }) {
-  console.log('id', id);
   const { web3, address } = store.getState().wallet;
   const { currentDAO } = store.getState().dao;
 
