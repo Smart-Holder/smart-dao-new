@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Space, Button } from 'antd';
+import { useIntl } from 'react-intl';
 
 import Slider from '@/components/slider';
 import Footer from '@/containers/launch/steps/footer';
@@ -8,7 +8,6 @@ import { useAppDispatch } from '@/store/hooks';
 import { prevStep, nextStep } from '@/store/features/daoSlice';
 
 import { setMakeDAOStorage, getMakeDAOStorage } from '@/utils/launch';
-import { useIntl } from 'react-intl';
 
 const App = () => {
   const { formatMessage } = useIntl();
@@ -70,26 +69,28 @@ const App = () => {
 
       <Footer prev={prev} next={next} />
 
-      <style jsx>{`
-        .h1 {
-          height: 42px;
-          margin-top: 59px;
-          font-size: 20px;
-          font-family: PingFangSC-Regular, PingFang SC;
-          font-weight: 400;
-          color: #000000;
-          line-height: 42px;
-        }
+      <style jsx>
+        {`
+          .h1 {
+            height: 42px;
+            margin-top: 59px;
+            font-size: 20px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #000000;
+            line-height: 42px;
+          }
 
-        .h2 {
-          height: 52px;
-          font-size: 16px;
-          font-family: PingFangSC-Regular, PingFang SC;
-          font-weight: 400;
-          color: #3c4369;
-          line-height: 26px;
-        }
-      `}</style>
+          .h2 {
+            height: 52px;
+            font-size: 16px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #3c4369;
+            line-height: 26px;
+          }
+        `}
+      </style>
     </div>
   );
 };

@@ -35,7 +35,6 @@ const DAOItem = (props: any) => {
 
   const { web3, address, chainId } = useAppSelector((store) => store.wallet);
   const { nickname } = useAppSelector((store) => store.user.userInfo);
-  const { likeDAOs, joinDAOs, DAOList } = useAppSelector((store) => store.dao);
   const { isInit } = useAppSelector((store) => store.common);
 
   const { join, setJoin, loading } = useJoin(

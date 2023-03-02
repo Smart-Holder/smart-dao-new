@@ -1,14 +1,23 @@
 import type { ReactElement } from 'react';
-import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { Layout } from 'antd';
+import { useRouter } from 'next/router';
 
 import Header from '@/components/header';
 import Footer from '@/components/footer';
+// import { useAppSelector } from '@/store/hooks';
 
 // const Header = dynamic(() => import('@/components/header'), { ssr: false });
 
-export default function BasicLayout({ children }: { children: ReactElement }) {
+const BasicLayout = ({ children }: { children: ReactElement }) => {
+  // const router = useRouter();
+
+  // const { isInit } = useAppSelector((store) => store.common);
+
+  // if (router.pathname !== '/' && !isInit) {
+  //   return null;
+  // }
+
   return (
     <>
       <Head>
@@ -19,10 +28,11 @@ export default function BasicLayout({ children }: { children: ReactElement }) {
       </Head>
       <Layout>
         <Header />
-        {/* <main></main> */}
         {children}
         <Footer />
       </Layout>
     </>
   );
-}
+};
+
+export default BasicLayout;

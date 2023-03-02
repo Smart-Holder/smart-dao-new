@@ -8,7 +8,7 @@ import type { NextPageWithLayout } from '@/pages/_app';
 import styles from '@/styles/content.module.css';
 import { useIntl } from 'react-intl';
 
-const Start = dynamic(() => import('@/containers/launch/start'), {
+const Information = dynamic(() => import('@/containers/launch/information'), {
   ssr: false,
 });
 
@@ -24,7 +24,7 @@ const App: NextPageWithLayout = () => {
         {formatMessage({ id: 'home.createOwnDAO' })}
       </div>
       <div className={styles.box}>
-        <Start />
+        <Information />
       </div>
     </AntdLayout.Content>
   );

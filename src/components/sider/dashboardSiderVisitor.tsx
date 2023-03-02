@@ -1,24 +1,20 @@
+import { useRef, useState } from 'react';
 import { Layout, Space, Button, Avatar, Typography, message } from 'antd';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
+import { rng } from 'somes/rng';
+import { useIntl } from 'react-intl';
+// import Image from 'next/image';
 
 import Menu from '@/components/menu/dashboardMenuVisitor';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
-import { UserOutlined } from '@ant-design/icons';
-import { formatAddress } from '@/utils';
-
-import RoleModal from '@/components/modal/roleModal';
-import { use, useRef, useState } from 'react';
-import { join } from '@/api/member';
-
-import logo from '/public/logo.png';
 import { setDAOType } from '@/store/features/daoSlice';
+
+import { join } from '@/api/member';
 import { request } from '@/api';
-import { createDAOVote } from '@/api/vote';
 import { Permissions } from '@/config/enum';
-import { rng } from 'somes/rng';
-import { useIntl } from 'react-intl';
+
+// import logo from '/public/logo.png';
 
 const { Paragraph } = Typography;
 

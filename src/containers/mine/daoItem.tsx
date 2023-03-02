@@ -1,10 +1,10 @@
 import { Image, Typography } from 'antd';
 import { useRouter } from 'next/router';
 
-import { useAppSelector, useAppDispatch } from '@/store/hooks';
+import { useAppDispatch } from '@/store/hooks';
 import { setCurrentDAO, setDAOType } from '@/store/features/daoSlice';
 
-export default function Info({ data, DAOType }: any) {
+const Item = ({ data, DAOType }: any) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -57,4 +57,6 @@ export default function Info({ data, DAOType }: any) {
       </style>
     </div>
   );
-}
+};
+
+export default Item;

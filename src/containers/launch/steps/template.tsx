@@ -1,11 +1,10 @@
 import { Space } from 'antd';
+import { useIntl } from 'react-intl';
 
 import { useAppDispatch } from '@/store/hooks';
-import { nextStep, resetStep } from '@/store/features/daoSlice';
+import { nextStep } from '@/store/features/daoSlice';
 
 import { setMakeDAOStorage } from '@/utils/launch';
-import { useEffect } from 'react';
-import { useIntl } from 'react-intl';
 
 const App = () => {
   const { formatMessage } = useIntl();

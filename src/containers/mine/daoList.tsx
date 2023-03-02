@@ -1,86 +1,78 @@
 import { useEffect, useState } from 'react';
-import { Space, Button, Divider } from 'antd';
-import { getDAOList, setDAOList } from '@/store/features/daoSlice';
-import { useAppSelector, useAppDispatch } from '@/store/hooks';
+import { Space, Button, Divider, Skeleton, Empty } from 'antd';
 import sdk from 'hcstore/sdk';
+import { useIntl } from 'react-intl';
+
+import { useAppSelector } from '@/store/hooks';
 
 import Item from '@/containers/mine/daoItem';
 
-import { getCookie } from '@/utils/cookie';
+// import { getCookie } from '@/utils/cookie';
 import { getMakeDAOStorage } from '@/utils/launch';
-import { useIntl } from 'react-intl';
 
 export default function List() {
   const { formatMessage } = useIntl();
-  const dispatch = useAppDispatch();
 
-  const chainId = Number(getCookie('chainId'));
-  const address = getCookie('address');
+  // const chainId = Number(getCookie('chainId'));
+  // const address = getCookie('address');
 
-  const { isInit } = useAppSelector((store) => store.common);
-  const [active, setActive] = useState('create');
-  // const { DAOList } = useAppSelector((store) => store.dao);
-  const [likeDAOs, setLikeDAOs] = useState([]);
-  const [joinDAOs, setJoinDAOs] = useState([]);
+  const { address, chainId } = useAppSelector((store) => store.wallet);
+
+  // const { isInit } = useAppSelector((store) => store.common);
+  const [active, setActive] = useState('create'); // create, join, follow
+
   const [createDAOs, setCreateDAOs] = useState([]);
+  const [followDAOs, setFollowDAOs] = useState([]);
+  const [joinDAOs, setJoinDAOs] = useState([]);
 
-  const [list, setList] = useState([]) as any;
+  const [list, setList] = useState(null) as any;
+  const [loading, setLoading] = useState(false);
 
   const cacheDAO = getMakeDAOStorage('start');
 
   useEffect(() => {
     const getDAOList = async () => {
-      const res = await sdk.dao.methods.getDAOsFromCreatedBy({
-        chain: chainId,
-        owner: address,
-      });
+      setLoading(true);
+      const [res1, res2, res3] = await Promise.all([
+        sdk.dao.methods.getDAOsFromCreatedBy({
+          chain: chainId,
+          owner: address,
+        }),
 
-      setCreateDAOs(res);
-      setList(res);
+        sdk.utils.methods.getDAOsFromOwner({
+          chain: chainId,
+          owner: address,
+        }),
+        sdk.user.methods.getUserLikeDAOs({ chain: chainId }),
+      ]);
+
+      setCreateDAOs(res1);
+      setJoinDAOs(res2);
+      setFollowDAOs(res3);
+
+      setList(active === 'create' ? res1 : active === 'join' ? res2 : res3);
+
+      setLoading(false);
     };
 
     if (address && chainId) {
       getDAOList();
     }
-  }, [isInit]);
-
-  useEffect(() => {
-    const getDAOList = async () => {
-      const res = await sdk.utils.methods.getDAOsFromOwner({
-        chain: chainId,
-        owner: address,
-      });
-
-      dispatch(setDAOList(res));
-      setJoinDAOs(res);
-    };
-
-    if (address && chainId) {
-      getDAOList();
-    }
-  }, [isInit]);
-
-  useEffect(() => {
-    const getLikeDAOS = async () => {
-      const res = await sdk.user.methods.getUserLikeDAOs({ chain: chainId });
-
-      setLikeDAOs(res);
-    };
-
-    getLikeDAOS();
-  }, []);
+  }, [address, chainId]);
 
   const handleClick1 = () => {
     setActive('create');
     setList(createDAOs);
   };
+
   const handleClick2 = () => {
     setActive('join');
     setList(joinDAOs);
   };
+
   const handleClick3 = () => {
     setActive('follow');
-    setList(likeDAOs);
+    setList(followDAOs);
   };
 
   return (
@@ -110,18 +102,20 @@ export default function List() {
       </Space>
 
       <div className="dao-list">
-        <Space size={34} wrap>
-          {(active === 'create' || active === 'join') && cacheDAO && (
-            <Item data={cacheDAO} DAOType="cache" />
-          )}
-          {list.map((item: any) => (
-            <Item data={item} DAOType={active} key={item.id} />
-          ))}
-          {/* <Item data={{ name: '123' }} />
-          <Item data={{ name: '123' }} />
-          <Item data={{ name: '123' }} />
-          <Item data={{ name: '123' }} /> */}
-        </Space>
+        {loading && <Skeleton />}
+
+        {!loading && list && list.length === 0 && <Empty />}
+
+        {!loading && list && list.length > 0 && (
+          <Space size={34} wrap>
+            {(active === 'create' || active === 'join') && cacheDAO && (
+              <Item data={cacheDAO} DAOType="cache" />
+            )}
+            {list.map((item: any) => (
+              <Item data={item} DAOType={active} key={item.id} />
+            ))}
+          </Space>
+        )}
       </div>
 
       <style jsx>

@@ -6,9 +6,9 @@ import Slider from '@/components/slider';
 import Footer from '@/containers/launch/steps/footer';
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { prevStep, nextStep } from '@/store/features/daoSlice';
+import { prevStep } from '@/store/features/daoSlice';
 
-import { setMakeDAOStorage, getMakeDAOStorage } from '@/utils/launch';
+import { getMakeDAOStorage } from '@/utils/launch';
 import { deployAssetSalesDAO } from '@/store/features/daoSlice';
 import { useIntl } from 'react-intl';
 

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import {
   Button,
-  Checkbox,
   Form,
   Input,
   Upload,
@@ -17,62 +17,88 @@ import { useIntl } from 'react-intl';
 import { validateChinese, validateEthAddress } from '@/utils/validator';
 import { getCookie } from '@/utils/cookie';
 import { hexRandomNumber } from '@/utils';
-import { validateImage, getBase64 } from '@/utils/image';
-import { useAppSelector, useAppDispatch } from '@/store/hooks';
+import { validateImage } from '@/utils/image';
+import { setMakeDAOStorage, getMakeDAOStorage } from '@/utils/launch';
+import { useAppSelector } from '@/store/hooks';
 
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 import iconSuccess from '/public/images/icon-success.png';
-import { deployAssetSalesDAO } from '@/store/features/daoSlice';
 
-const validateMessages = {
-  required: '${label} is required!',
-  string: {
-    range: "'${label}' must be between ${min} and ${max} characters",
-  },
-};
+// const validateMessages = {
+//   required: '${label} is required!',
+//   string: {
+//     range: "'${label}' must be between ${min} and ${max} characters",
+//   },
+// };
 
-const FormGroup: React.FC = () => {
-  const dispatch = useAppDispatch();
-  const { chainId, address, web3 } = useAppSelector((store) => store.wallet);
+const App: React.FC = () => {
+  const { formatMessage } = useIntl();
+  const router = useRouter();
 
+  const { chainId, address } = useAppSelector((store) => store.wallet);
+
+  // const [cacheDAO, setCacheDAO] = useState({}) as any;
   const [members, setMembers] = useState([
     {
       id: hexRandomNumber(),
-      owner: getCookie('address'),
-      votes: 1,
       name: '',
       description: '',
-      avatar: '',
+      image: '',
+      votes: 1,
+      owner: address,
     },
   ]);
-
-  const [avatar, setAvatar] = useState();
+  const [avatar, setAvatar] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const { formatMessage } = useIntl();
+  const [imageMessage, setImageMessage] = useState('');
 
   const [form] = Form.useForm();
 
+  useEffect(() => {
+    const dao = getMakeDAOStorage('start');
+
+    if (dao) {
+      // setCacheDAO(dao);
+      form.setFieldsValue({
+        name: dao.name,
+        mission: dao.mission,
+        description: dao.description,
+      });
+      setMembers(dao.members);
+      setAvatar(dao.image);
+    } else {
+      router.replace('/');
+    }
+  }, [chainId, address]);
+
   const onFinish = (values: any) => {
+    if (!avatar) {
+      setImageMessage('Image is required');
+      return;
+    }
+
     const params = {
       chain: chainId,
       address: address,
-      operator: address,
-      web3: web3,
+      // operator: address,
+      // web3: web3,
       memberBaseName: values.name + '-NFTP',
       ...values,
       members,
       image: avatar,
 
-      defaultVoteTime: 0,
-      assetIssuanceTax: 6000,
-      assetCirculationTax: 1000,
+      // defaultVoteTime: 0,
+      // assetIssuanceTax: 6000,
+      // assetCirculationTax: 1000,
     };
     console.log('form:', params);
 
-    dispatch(deployAssetSalesDAO(params));
+    setMakeDAOStorage('start', params);
+    setIsModalOpen(true);
+
+    // dispatch(deployAssetSalesDAO(params));
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -81,7 +107,7 @@ const FormGroup: React.FC = () => {
 
   const removeMember = (value: string) => {
     members.splice(
-      members.findIndex((item) => item.owner === value),
+      members.findIndex((item: any) => item.owner === value),
       1,
     );
     setMembers([...members]);
@@ -97,11 +123,11 @@ const FormGroup: React.FC = () => {
           ...members,
           {
             id: hexRandomNumber(),
-            owner: value,
-            votes: 1,
             name: '',
             description: '',
-            avatar: '',
+            image: '',
+            votes: 1,
+            owner: value,
           },
         ];
 
@@ -112,7 +138,7 @@ const FormGroup: React.FC = () => {
   };
 
   const validateRepeat = (rule: any, value: string) => {
-    if ((members || []).find((item) => item.owner === value)) {
+    if ((members || []).find((item: any) => item.owner === value)) {
       // callback(new Error(this.$t("rules.repeat", { name: "address" })));
       return Promise.reject(new Error('repeat'));
     }
@@ -120,7 +146,7 @@ const FormGroup: React.FC = () => {
     return Promise.resolve();
   };
 
-  const handleChange: UploadProps['onChange'] = (
+  const onImageChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>,
   ) => {
     // if (info.file.status === 'uploading') {
@@ -130,6 +156,7 @@ const FormGroup: React.FC = () => {
 
     if (info.file.status === 'done') {
       setAvatar(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+      setImageMessage('');
     }
   };
 
@@ -143,31 +170,35 @@ const FormGroup: React.FC = () => {
     setIsModalOpen(false);
   };
 
+  const next = () => {
+    router.push('/launch/setting');
+  };
+
   return (
     <div className="form-wrap">
       <Form
         name="basic"
         form={form}
-        labelCol={{ span: 6 }}
-        wrapperCol={{ span: 18 }}
-        initialValues={{ remember: true }}
+        // initialValues={initialValues}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
         labelAlign="left"
-        requiredMark={false}
+        layout="vertical"
         validateTrigger="onBlur"
       >
         <div className="wrap">
           {/* <Space size={0} wrap align="start" style={{ justifyContent: 'center' }}> */}
           <div className="item-group">
-            <div className="form-title1">Set Basic Information</div>
-            <div className="form-title2">
-              The basic information of dao is poblicy viable to anyone and will
-              be used for display on the website
+            <div className="form-title1">
+              {formatMessage({ id: 'start.basic' })}
             </div>
+            <div className="form-title2">
+              {formatMessage({ id: 'start.desc' })}
+            </div>
+
             <Form.Item
-              label="Name"
+              label={formatMessage({ id: 'start.name' })}
               name="name"
               rules={[
                 { required: true },
@@ -175,35 +206,37 @@ const FormGroup: React.FC = () => {
                 { validator: validateChinese },
               ]}
             >
-              <Input
-              // className="input"
-              // prefix={<span style={{ color: '#000' }}>Name:</span>}
-              />
+              <Input style={{ height: 76, fontSize: 18 }} />
             </Form.Item>
 
             <Form.Item
-              label="Vision & Mission"
+              label={formatMessage({ id: 'start.mission' })}
               name="mission"
               rules={[
                 { required: true },
                 { type: 'string', min: 20, max: 150 },
               ]}
             >
-              <Input.TextArea rows={4} />
+              <Input.TextArea rows={4} style={{ fontSize: 18 }} />
             </Form.Item>
 
             <Form.Item
-              label="Itroduction"
+              label={formatMessage({ id: 'start.introduce' })}
               name="description"
               rules={[
                 { required: true },
                 { type: 'string', min: 20, max: 150 },
               ]}
             >
-              <Input.TextArea rows={4} />
+              <Input.TextArea rows={4} style={{ fontSize: 18 }} />
             </Form.Item>
 
-            <Form.Item label="Upload" valuePropName="fileList">
+            <Form.Item
+              label="Logo"
+              valuePropName="fileList"
+              required
+              extra={<span style={{ color: 'red' }}>{imageMessage}</span>}
+            >
               <Space>
                 <Upload
                   action={process.env.NEXT_PUBLIC_QINIU_UPLOAD_URL}
@@ -211,7 +244,7 @@ const FormGroup: React.FC = () => {
                   showUploadList={false}
                   listType="picture-card"
                   beforeUpload={beforeUpload}
-                  onChange={handleChange}
+                  onChange={onImageChange}
                 >
                   {avatar ? (
                     <Img
@@ -229,42 +262,47 @@ const FormGroup: React.FC = () => {
                   )}
                 </Upload>
 
-                <span className="upload-desc">Upload Images: png、jpeg… </span>
+                <span className="upload-desc">
+                  {formatMessage({ id: 'start.upload' })}
+                </span>
               </Space>
             </Form.Item>
           </div>
 
           <div className="item-group">
-            <div className="form-title1">Setting No.1 Member</div>
+            <div className="form-title1">
+              {formatMessage({ id: 'start.members' })}
+            </div>
             <div className="form-title2">
-              Lorem ipsum dolor sit amet, consectetur
+              {formatMessage({ id: 'start.members.desc' })}
             </div>
 
             <Form.Item
-              label="Name"
+              label={formatMessage({ id: 'name' })}
               name="member"
-              labelCol={{ span: 3 }}
-              wrapperCol={{ span: 21 }}
               rules={[
                 { validator: validateEthAddress },
                 { validator: validateRepeat },
               ]}
             >
               {/* <Input /> */}
-              <Space
-                className="input-member"
-                align="baseline"
-                direction="horizontal"
-              >
-                <Input />
-                <Button type="primary" onClick={addMember}>
-                  Add
+              <Space className="input-member" direction="horizontal">
+                <Input style={{ height: 76, fontSize: 18 }} />
+                <Button
+                  style={{ width: 100, height: 76, fontSize: 18 }}
+                  type="primary"
+                  onClick={addMember}
+                >
+                  {formatMessage({ id: 'start.add' })}
                 </Button>
               </Space>
             </Form.Item>
 
             <div className="tags">
-              {members.map((item) => (
+              <Tag key={address} className="tag">
+                {address}
+              </Tag>
+              {members.slice(1).map((item: any) => (
                 <Tag
                   closable
                   onClose={(e) => {
@@ -284,7 +322,7 @@ const FormGroup: React.FC = () => {
 
         <Form.Item>
           <Button className="button-submit" type="primary" htmlType="submit">
-            Save
+            {formatMessage({ id: 'start.release' })}
           </Button>
         </Form.Item>
       </Form>
@@ -298,11 +336,11 @@ const FormGroup: React.FC = () => {
         <div className="modal-content">
           <Image src={iconSuccess} width={88} height={88} alt="success" />
           <div style={{ marginTop: 55 }} className="modal-content-text">
-            SmartDAO
+            {formatMessage({ id: 'start.success' })}
           </div>
-          <div className="modal-content-text">Initialization successful!</div>
-          <Button className="button-done" type="primary">
-            Done
+          {/* <div className="modal-content-text">Initialization successful!</div> */}
+          <Button className="button-done" type="primary" onClick={next}>
+            {formatMessage({ id: 'start.determine' })}
           </Button>
         </div>
       </Modal>
@@ -413,4 +451,4 @@ const FormGroup: React.FC = () => {
   );
 };
 
-export default FormGroup;
+export default App;

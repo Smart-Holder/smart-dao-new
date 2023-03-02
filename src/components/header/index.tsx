@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Layout, Space } from 'antd';
-import Image from 'next/image';
 import router from 'next/router';
 import dynamic from 'next/dynamic';
 
@@ -8,7 +7,7 @@ import dynamic from 'next/dynamic';
 // import Menu from '@/components/header/menu';
 // import Language from '@/components/header/language';
 
-import logo from '/public/logo.png';
+// import logo from '/public/logo.png';
 
 const Search = dynamic(() => import('@/components/search'), { ssr: false });
 const Menu = dynamic(() => import('@/components/header/menu'), { ssr: false });

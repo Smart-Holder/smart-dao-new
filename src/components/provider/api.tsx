@@ -22,9 +22,7 @@ const App = (props: any) => {
   useEffect(() => {
     const init = async () => {
       try {
-        const res1 = await initialize();
-        const qiniuToken = await sdk.utils.methods.qiniuToken();
-        setCookie('qiniuToken', qiniuToken);
+        await initialize();
         console.log('init api');
         setInit(true);
       } catch (error) {
@@ -39,7 +37,7 @@ const App = (props: any) => {
   useEffect(() => {
     const init = async () => {
       try {
-        const res1 = await initialize(address);
+        await initialize(address);
 
         const [token, user] = await Promise.all([
           sdk.utils.methods.qiniuToken(),
@@ -64,7 +62,7 @@ const App = (props: any) => {
     if (address && chainId) {
       init();
     }
-  }, [address, chainId]);
+  }, [address, chainId, dispatch]);
 
   if (!init) {
     return null;

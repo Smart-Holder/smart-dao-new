@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Space, Steps } from 'antd';
+import { useState } from 'react';
+import { useIntl } from 'react-intl';
 
 import Slider from '@/components/slider';
 import Footer from '@/containers/launch/steps/footer';
@@ -8,8 +8,6 @@ import { useAppDispatch } from '@/store/hooks';
 import { prevStep, nextStep } from '@/store/features/daoSlice';
 
 import { setMakeDAOStorage, getMakeDAOStorage } from '@/utils/launch';
-import { getLifespan } from '@/api/vote';
-import { useIntl } from 'react-intl';
 
 const App = () => {
   const { formatMessage } = useIntl();

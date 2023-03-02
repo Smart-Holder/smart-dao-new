@@ -1,7 +1,10 @@
+import { useAppSelector } from '@/store/hooks';
 import { getMakeDAOStorage } from '@/utils/launch';
 import { Avatar, Space } from 'antd';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 
 import icon1 from '/public/images/dashboard/mine/home-icon-1.png';
 import icon2 from '/public/images/dashboard/mine/home-icon-2.png';
@@ -10,7 +13,25 @@ import icon4 from '/public/images/dashboard/mine/home-icon-4.png';
 
 const App = () => {
   const { formatMessage } = useIntl();
-  const cacheDAO = getMakeDAOStorage('start');
+  const router = useRouter();
+
+  const [cacheDAO, setCacheDAO] = useState() as any;
+
+  const { chainId, address } = useAppSelector((store) => store.wallet);
+
+  useEffect(() => {
+    const dao = getMakeDAOStorage('start');
+
+    if (dao) {
+      setCacheDAO(dao);
+    } else {
+      router.replace('/');
+    }
+  }, [chainId, address]);
+
+  if (!cacheDAO) {
+    return null;
+  }
 
   return (
     <div className="wrap">
@@ -23,7 +44,8 @@ const App = () => {
         <div>
           <div className="name">{cacheDAO.name}</div>
           <div className="total">
-            {formatMessage({ id: 'my.summary.total.member' })}:<span>0</span>
+            {formatMessage({ id: 'my.summary.total.member' })}:
+            <span>{cacheDAO.members.length}</span>
           </div>
           <Space size={82}>
             <div className="top-item">
