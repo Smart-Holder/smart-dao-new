@@ -1,4 +1,10 @@
-import { Layout as AntdLayout, Pagination, PaginationProps } from 'antd';
+import {
+  Button,
+  Layout as AntdLayout,
+  Pagination,
+  PaginationProps,
+  Space,
+} from 'antd';
 import Layout from '@/components/layout';
 import { ReactElement, useCallback, useEffect, useState } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
@@ -132,6 +138,10 @@ const App: NextPageWithLayout = () => {
     getTotal();
   };
 
+  const goShelves = () => {
+    router.push('/dashboard/mine/assets/shelves');
+  };
+
   return (
     <AntdLayout.Content className={styles['dashboard-content']}>
       <div className={styles['dashboard-content-header']}>
@@ -140,65 +150,70 @@ const App: NextPageWithLayout = () => {
             { num: total, title: formatMessage({ id: 'my.asset.total' }) },
           ]}
         />
-        <Filters
-          items={[
-            {
-              defaultValue: '',
-              options: [
-                {
-                  value: '',
-                  label: formatMessage({ id: 'my.asset.allTypes' }),
-                },
-                {
-                  value: '1',
-                  label: formatMessage({ id: 'my.asset.published' }),
-                },
-                {
-                  value: '2',
-                  label: formatMessage({ id: 'my.asset.purchased' }),
-                },
-              ],
-              onSelect: onSelectType,
-            },
-            // {
-            //   defaultValue: '',
-            //   options: [
-            //     { value: '', label: '全部标签' },
-            //     { value: '1', label: '标签1' },
-            //     { value: '2', label: '标签2' },
-            //   ],
-            //   onSelect: onSelectTag,
-            // },
-            {
-              defaultValue: '0',
-              options: [
-                {
-                  value: '0',
-                  label: formatMessage({ id: 'my.asset.sort.price.desc' }),
-                },
-                {
-                  value: '1',
-                  label: formatMessage({ id: 'my.asset.sort.price' }),
-                },
-                // { value: '2', label: 'offer从低到高' },
-                // { value: '3', label: 'offer从高到低' },
-                {
-                  value: '2',
-                  label: formatMessage({ id: 'my.asset.sort.release' }),
-                },
-                {
-                  value: '3',
-                  label: formatMessage({ id: 'my.asset.sort.created' }),
-                },
-                {
-                  value: '4',
-                  label: formatMessage({ id: 'my.asset.sort.sold' }),
-                },
-              ],
-              onSelect: onSelectOrderby,
-            },
-          ]}
-        />
+        <Space size={10}>
+          <Filters
+            items={[
+              {
+                defaultValue: '',
+                options: [
+                  {
+                    value: '',
+                    label: formatMessage({ id: 'my.asset.allTypes' }),
+                  },
+                  {
+                    value: '1',
+                    label: formatMessage({ id: 'my.asset.published' }),
+                  },
+                  {
+                    value: '2',
+                    label: formatMessage({ id: 'my.asset.purchased' }),
+                  },
+                ],
+                onSelect: onSelectType,
+              },
+              // {
+              //   defaultValue: '',
+              //   options: [
+              //     { value: '', label: '全部标签' },
+              //     { value: '1', label: '标签1' },
+              //     { value: '2', label: '标签2' },
+              //   ],
+              //   onSelect: onSelectTag,
+              // },
+              {
+                defaultValue: '0',
+                options: [
+                  {
+                    value: '0',
+                    label: formatMessage({ id: 'my.asset.sort.price.desc' }),
+                  },
+                  {
+                    value: '1',
+                    label: formatMessage({ id: 'my.asset.sort.price' }),
+                  },
+                  // { value: '2', label: 'offer从低到高' },
+                  // { value: '3', label: 'offer从高到低' },
+                  {
+                    value: '2',
+                    label: formatMessage({ id: 'my.asset.sort.release' }),
+                  },
+                  {
+                    value: '3',
+                    label: formatMessage({ id: 'my.asset.sort.created' }),
+                  },
+                  {
+                    value: '4',
+                    label: formatMessage({ id: 'my.asset.sort.sold' }),
+                  },
+                ],
+                onSelect: onSelectOrderby,
+              },
+            ]}
+          />
+          <Button type="primary" onClick={goShelves}>
+            {formatMessage({ id: 'financial.asset.listing' })}
+          </Button>
+        </Space>
       </div>
       <div className={styles['dashboard-content-body']}>
         <div className={styles['financial-list']}>

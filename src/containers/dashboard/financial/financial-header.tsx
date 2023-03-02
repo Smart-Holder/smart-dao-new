@@ -46,6 +46,10 @@ const FinancialHeader: FC<FinancialHeaderProps> = (props) => {
     router.push('/dashboard/financial/assets/issue');
   };
 
+  const onShelves = () => {
+    router.push('/dashboard/mine/assets/shelves');
+  };
+
   // const onPut = () => {
   //   setCurrentItem({ logo, title, addr });
   //   setCurrentPutList([
@@ -105,6 +109,9 @@ const FinancialHeader: FC<FinancialHeaderProps> = (props) => {
             {/* <Button onClick={onShare}>分享</Button> */}
             <Button onClick={onCreate}>
               {formatMessage({ id: 'financial.asset.publish' })}
+            </Button>
+            <Button onClick={onShelves}>
+              {formatMessage({ id: 'financial.asset.listing' })}
             </Button>
             {/* <Button onClick={onPut}>上架交易</Button> */}
             {/* <Button onClick={onEdit}>编辑</Button> */}

@@ -16,6 +16,19 @@ export function fromToken(number, precision = 18, decimal = 4) {
   }
 }
 
+export function toToken(number, precision) {
+  if (typeof Number(number) === 'number') {
+    const amount = new BigNumber(number)
+      .shiftedBy(precision)
+      .toFormat()
+      .replaceAll(',', '');
+    if (amount === 'NaN') return '0';
+    return amount;
+  } else {
+    return '0';
+  }
+}
+
 // 防抖
 export const debounce = (fn, time) => {
   let timer = null;

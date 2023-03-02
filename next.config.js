@@ -41,6 +41,9 @@ const nextConfig = {
       '/dashboard/mine/assets/detail': {
         page: '/dashboard/mine/assets/detail',
       },
+      '/dashboard/mine/assets/shelves': {
+        page: '/dashboard/mine/assets/shelves',
+      },
       '/dashboard/mine/income': { page: '/dashboard/mine/income' },
       '/dashboard/mine/information': { page: '/dashboard/mine/information' },
       '/dashboard/mine/order': { page: '/dashboard/mine/order' },
