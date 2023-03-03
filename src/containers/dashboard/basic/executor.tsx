@@ -78,6 +78,7 @@ const App = () => {
       const extra = [
         {
           abi: 'member',
+          target: currentDAO.member,
           method: 'setExecutor',
           params: [member.tokenId],
         },

@@ -4,6 +4,8 @@ import jaJP from 'antd/locale/ja_JP';
 import en from '@/locales/en.json';
 import ja from '@/locales/ja.json';
 
+import store from '../store';
+
 export const languageList = ['en', 'ja'];
 
 const antdLocales: { [index: string]: any } = {
@@ -33,6 +35,12 @@ const messagesList: { [index: string]: any } = {
 //     antdLocale: antdLocales[language],
 //   };
 // };
+
+export function getMessage(tag: string) {
+  const {lang} = store.getState().common;
+  const list = (tag in messagesList) ? messagesList[lang]: messagesList.en;
+  return (list[tag] || tag) as string;
+}
 
 const getLanguageConfig = (lang = 'en') => {
   return {

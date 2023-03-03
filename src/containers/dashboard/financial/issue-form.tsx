@@ -79,6 +79,7 @@ const IssueForm: FC<IssueFormProps> = () => {
       extra: [
         {
           abi: 'asset',
+          target: currentDAO.asset,
           method: 'safeMint',
           params: [
             currentDAO.first,

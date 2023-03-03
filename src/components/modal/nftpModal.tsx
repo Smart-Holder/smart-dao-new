@@ -2,16 +2,14 @@ import React, { useState, useImperativeHandle, forwardRef } from 'react';
 import { Button, Input, Modal, Row, Col, message } from 'antd';
 import { Checkbox, Form } from 'antd';
 import { rng } from 'somes/rng';
-
 import { useAppSelector } from '@/store/hooks';
-
 import { Permissions } from '@/config/enum';
-
 import { validateEthAddress } from '@/utils/validator';
 import { addNFTP, isCanAddNFTP } from '@/api/member';
 import { createVote } from '@/api/vote';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
+import store from '../../store';
 
 const validateMessages = {
   required: '${label} is required!',
@@ -26,7 +24,6 @@ const App = (props: any, ref: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const { currentMember } = useAppSelector((store) => store.dao);
   const { nickname, image, description } = useAppSelector(
     (store) => store.user.userInfo,
   );
@@ -44,10 +41,12 @@ const App = (props: any, ref: any) => {
   const onFinish = async (values: any) => {
     console.log('validate Success:', values);
     const { address, votes, permissions } = values;
+    const {currentDAO} = store.getState().dao;
 
     const extra = [
       {
         abi: 'member',
+        target: currentDAO.member,
         method: 'create',
         params: [
           address,

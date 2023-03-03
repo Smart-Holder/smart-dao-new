@@ -7,7 +7,8 @@ import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
 import { Permissions } from '@/config/enum';
 
-import { createVote } from '@/api/vote';
+// import { createVote } from '@/api/vote';
+import { setPermissions } from '@/api/member';
 import { useIntl } from 'react-intl';
 import { isRepeateArray } from '@/utils';
 
@@ -16,14 +17,6 @@ const validateMessages = {
   string: {
     range: "'${label}' must be between ${min} and ${max} characters",
   },
-};
-
-const PermissionMap: { [index: number]: string } = {
-  0x22a25870: '添加NFTP',
-  0xdc6b0b72: '发起提案',
-  0x678ea396: '投票',
-  0x59baef2a: '发行资产',
-  0xd0a4ad96: '修改DAO的基础设置',
 };
 
 const App = (props: any, ref: any) => {
@@ -38,8 +31,9 @@ const App = (props: any, ref: any) => {
   const [isEdit, setIsEdit] = useState(false);
   const [loading, setLoading] = useState(false);
   const [initialValues, setInitialValues] = useState({});
-
   const [modal, contextHolder] = Modal.useModal();
+
+  const { currentDAO } = useAppSelector((store) => store.dao);
 
   useImperativeHandle(ref, () => ({
     show: (permissions: number[]) => {
@@ -60,56 +54,22 @@ const App = (props: any, ref: any) => {
   const onFinish = async (values: any) => {
     console.log('validate Success:', values);
 
-    const add: any = []; // 添加的权限
-    const remove: any = []; // 删除的权限
+    const add = []as number[]; // 添加的权限
+    const remove: any = []as number[]; // 删除的权限
 
     values.permissions.forEach((v: any) => {
-      if (!currentMember.permissions.includes(v)) {
+      if (!currentMember.permissions.includes(v))
         add.push(v);
-      }
     });
 
     currentMember.permissions.forEach((v: any) => {
-      if (!values.permissions.includes(v)) {
+      if (!values.permissions.includes(v))
         remove.push(v);
-      }
     });
-
-    const extra = [];
-
-    if (add.length > 0) {
-      extra.push({
-        abi: 'member',
-        method: 'addPermissions',
-        params: [[currentMember.tokenId], add],
-      });
-    }
-
-    if (remove.length > 0) {
-      extra.push({
-        abi: 'member',
-        method: 'removePermissions',
-        params: [[currentMember.tokenId], remove],
-      });
-    }
-
-    // 权限名称
-    const labels = values.permissions.map((v: number) => PermissionMap[v]);
-
-    const params = {
-      name: formatMessage({ id: 'proposal.basic.rights' }),
-      description: JSON.stringify({
-        type: 'basic',
-        purpose: `${formatMessage({
-          id: 'proposal.basic.rights',
-        })}: ${labels.valueOf()}`,
-      }),
-      extra,
-    };
 
     try {
       setLoading(true);
-      await createVote(params);
+      await setPermissions(currentMember.tokenId, add, remove, values.permissions);
       setLoading(false);
       handleCancel();
       // router.push('/dashboard/governance/votes');

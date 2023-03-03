@@ -160,6 +160,7 @@ const App = () => {
       extra: [
         {
           abi: 'ledger',
+          target: currentDAO.ledger,
           method: 'release',
           params: [balance, 'description'],
         },

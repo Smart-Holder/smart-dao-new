@@ -125,6 +125,7 @@ const FormGroup: React.FC = () => {
       extra: [
         {
           abi: 'dao',
+          target: currentDAO.address,
           method: 'setMissionAndDesc',
           params: [values.mission, values.description],
         },

@@ -3,6 +3,8 @@ import Member from '@/config/abi/Member.json';
 import DAO from '@/config/abi/DAO.json';
 import { rng } from 'somes/rng';
 import store from '@/store';
+import {createVote} from './vote';
+import { getMessage } from '../utils/language';
 
 export function getMemberId() {
   const { web3, address } = store.getState().wallet;
@@ -69,7 +71,7 @@ export async function isPermission(
     if (owner != operator.toLowerCase()) {
       let root = await dao.methods.root().call();
       if (owner != root.toLowerCase()) {
-        if (!(await contract.methods.isPermission(owner, action).call())) {
+        if (!action || !(await contract.methods.isPermission(owner, action).call())) {
           return false;
         }
       }
@@ -79,8 +81,8 @@ export async function isPermission(
   return true;
 }
 
-export function isCanAddNFTP(owner?: string, module?: string) {
-  return isPermission(0x22a25870, owner, module);
+export function isCanAddNFTP(owner?: string) {
+  return isPermission(0x22a25870, owner);
 }
 
 // 加入 DAO
@@ -157,4 +159,41 @@ export function transfer({ to }: { to: string }) {
     to,
     currentMember.tokenId,
   ]);
+}
+
+export async function setPermissions(tokenId: string, addActions: number[], removeActions: number[], permissions: number[]) {
+  const { web3, address } = store.getState().wallet;
+  const { currentDAO } = store.getState().dao;
+  const contract = getContract(web3, Member.abi, currentDAO.member);
+
+  if (await isPermission(0, address)) { // match OnlyDAO
+    await contractSend(contract, address, 'setPermissions', [
+      tokenId,
+      addActions,
+      removeActions,
+    ]);
+  } else {
+    const PermissionMap: { [index: number]: string } = {
+      0x22a25870: '添加NFTP',
+      0xdc6b0b72: '发起提案',
+      0x678ea396: '投票',
+      0x59baef2a: '发行资产',
+      0xd0a4ad96: '修改DAO的基础设置',
+    };
+    const labels = permissions.map((v: number) => PermissionMap[v]);
+
+    await createVote({
+      name: getMessage('proposal.basic.rights'),
+      description: JSON.stringify({
+        type: 'basic',
+        purpose: `${getMessage('proposal.basic.rights')}: ${labels.valueOf()}`,
+      }),
+      extra: [{
+        abi: 'member',
+        target: currentDAO.member,
+        method: 'setPermissions',
+        params: [tokenId, addActions, removeActions],
+      }],
+    })
+  }
 }
