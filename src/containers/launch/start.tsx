@@ -38,14 +38,17 @@ const App: React.FC = () => {
   const router = useRouter();
 
   const { chainId, address } = useAppSelector((store) => store.wallet);
+  const { nickname, image, description } = useAppSelector(
+    (store) => store.user.userInfo,
+  );
 
   // const [cacheDAO, setCacheDAO] = useState({}) as any;
   const [members, setMembers] = useState([
     {
       id: hexRandomNumber(),
-      name: '',
-      description: '',
-      image: '',
+      name: nickname,
+      description,
+      image,
       votes: 1,
       owner: address,
     },
@@ -73,9 +76,9 @@ const App: React.FC = () => {
       setMembers([
         {
           id: hexRandomNumber(),
-          name: '',
-          description: '',
-          image: '',
+          name: nickname,
+          description,
+          image,
           votes: 1,
           owner: address,
         },
@@ -134,9 +137,9 @@ const App: React.FC = () => {
           ...members,
           {
             id: hexRandomNumber(),
-            name: '',
-            description: '',
-            image: '',
+            name: nickname,
+            description,
+            image,
             votes: 1,
             owner: value,
           },
