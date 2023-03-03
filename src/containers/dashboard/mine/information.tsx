@@ -1,31 +1,19 @@
-import React, { useState, forwardRef, useRef } from 'react';
-import {
-  Button,
-  Input,
-  Space,
-  Typography,
-  Image,
-  Row,
-  Col,
-  message,
-} from 'antd';
-import { Checkbox, Form, Upload, Tag } from 'antd';
+import React, { useState, useRef, useEffect } from 'react';
+import { Button, Input, Space, Image, Row, Col, message } from 'antd';
+import { Checkbox, Form, Upload } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useIntl } from 'react-intl';
 
-import sdk from 'hcstore/sdk';
-
-import { useAppSelector, useAppDispatch } from '@/store/hooks';
-import { setUserInfo } from '@/store/features/userSlice';
+import { useAppSelector } from '@/store/hooks';
 
 import { getCookie } from '@/utils/cookie';
-import { validateImage, getBase64 } from '@/utils/image';
-import { validateChinese, validateEthAddress } from '@/utils/validator';
+import { validateImage } from '@/utils/image';
+import { validateChinese } from '@/utils/validator';
 
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import type { CheckboxValueType } from 'antd/es/checkbox/Group';
-import { formatAddress, isRepeate, isRepeateArray } from '@/utils';
+import { formatAddress, isRepeate } from '@/utils';
 import { Permissions } from '@/config/enum';
 
 import TransferModal from '@/components/modal/transferModal';
@@ -33,15 +21,9 @@ import PermissionModal from '@/components/modal/permissionModal';
 
 import { setMemberInfo } from '@/api/member';
 
-const options = [
-  { label: 'Apple', value: 'Apple' },
-  { label: 'Pear', value: 'Pear' },
-  { label: 'Orange', value: 'Orange' },
-];
-
 const App = () => {
+  const [form] = Form.useForm();
   const { formatMessage } = useIntl();
-  const dispatch = useAppDispatch();
 
   const { userInfo } = useAppSelector((store) => store.user);
   const { addressFormat } = useAppSelector((store) => store.wallet);
@@ -61,8 +43,14 @@ const App = () => {
   const transferModal: any = useRef(null);
   const permissionModal: any = useRef(null);
 
-  const url =
-    'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
+  useEffect(() => {
+    form.setFieldsValue({
+      name: currentMember.name,
+      image: currentMember.image,
+    });
+    setImage(currentMember.image);
+    setPermissions(currentMember.permissions);
+  }, [currentMember, form]);
 
   const onValuesChange = (changedValues: any, values: any) => {
     setIsEdit(!isRepeate(initialValues, values));
@@ -138,6 +126,7 @@ const App = () => {
 
       <Form
         name="info"
+        form={form}
         initialValues={initialValues}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}

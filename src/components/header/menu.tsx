@@ -1,8 +1,7 @@
 import React, { useState, MouseEvent, useEffect, useRef } from 'react';
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { Dropdown, Image as Img, Avatar, Divider, Button } from 'antd';
-import { DownOutlined, GlobalOutlined } from '@ant-design/icons';
+import { Dropdown, Image as Img, Avatar, Button } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { useRouter } from 'next/router';
 

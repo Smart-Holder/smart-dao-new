@@ -1,31 +1,17 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { Image, Typography, Space, Button } from 'antd';
-import sdk from 'hcstore/sdk';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
 
 import InfoModal from '@/components/modal/infoModal';
 import { useJoin, useFollow } from './useHooks';
 
-import { getContract, contractCall, contractSend } from '@/utils/contract';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
-import { getMemberId, join as joinDAO } from '@/api/member';
 import { setCurrentDAO, setDAOType } from '@/store/features/daoSlice';
 
 import WalletModal from '@/components/modal/walletModal';
 
-const { Title, Paragraph, Text, Link } = Typography;
-
-const statusType1: { [index: number]: string } = {
-  1: 'Join',
-  2: 'Apply',
-  3: 'Joined',
-};
-
-const statusType2: { [index: number]: string } = {
-  1: 'Fllow',
-  2: 'Fllowed',
-};
+const { Paragraph } = Typography;
 
 const DAOItem = (props: any) => {
   const { formatMessage } = useIntl();

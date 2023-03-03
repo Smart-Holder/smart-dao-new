@@ -3,9 +3,8 @@ import styles from './detail-header.module.css';
 import modalStyles from './put-modal.module.css';
 import Image from 'next/image';
 import { Avatar, Button, message, Modal, Space } from 'antd';
-import { formatAddress, fromToken } from '@/utils';
+import { formatAddress } from '@/utils';
 import { useAppSelector } from '@/store/hooks';
-import PutModal, { PutModalListItem } from './put-modal';
 import { useIntl } from 'react-intl';
 
 type DetailHeaderProps = {

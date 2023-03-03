@@ -1,17 +1,17 @@
 import { useEffect, useState, useRef } from 'react';
-import { Table, Button, DatePicker, Form, Select, Modal } from 'antd';
+import { Table, DatePicker, Form, Select } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 import Counts from '@/containers/dashboard/mine/counts';
-import NftpModal from '@/components/modal/nftpModal';
+// import NftpModal from '@/components/modal/nftpModal';
 
 import { request } from '@/api';
 
 import styles from '@/styles/content.module.css';
 import { useAppSelector } from '@/store/hooks';
 
-import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
+import { formatDayjsValues, fromToken } from '@/utils';
 
 import type { PaginationProps } from 'antd';
 
@@ -65,7 +65,7 @@ const columns = [
 
 const App = () => {
   const { formatMessage } = useIntl();
-  const { chainId } = useAppSelector((store) => store.wallet);
+  const { chainId, address } = useAppSelector((store) => store.wallet);
   const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
   const { loading, searchText } = useAppSelector((store) => store.common);
 
@@ -96,6 +96,7 @@ const App = () => {
         // tokenId: currentMember.tokenId,
         limit: [(page - 1) * pageSize, pageSize],
         name: searchText,
+        toAddress: address,
         ...values,
       },
     });
@@ -163,7 +164,7 @@ const App = () => {
     setPage(1);
     getData(1);
     getTotal();
-  }, [searchText, values]);
+  }, [searchText, values, chainId, address]);
 
   return (
     <div className="wrap">

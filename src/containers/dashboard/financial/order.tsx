@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { Table, Button, DatePicker, Form, Select, message } from 'antd';
+import { Table, DatePicker, Form, Select, message } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
@@ -91,7 +91,7 @@ const columns = [
 
 const App = () => {
   const { formatMessage } = useIntl();
-  const { chainId } = useAppSelector((store) => store.wallet);
+  const { chainId, address } = useAppSelector((store) => store.wallet);
   const { currentDAO } = useAppSelector((store) => store.dao);
   const { loading, searchText } = useAppSelector((store) => store.common);
 
@@ -183,7 +183,7 @@ const App = () => {
     setPage(1);
     getData(1);
     getTotal();
-  }, [searchText, values]);
+  }, [searchText, values, chainId, address]);
 
   return (
     <div className="wrap">

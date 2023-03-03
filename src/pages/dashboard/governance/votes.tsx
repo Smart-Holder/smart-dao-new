@@ -1,11 +1,4 @@
-import {
-  Form,
-  Layout as AntdLayout,
-  Select,
-  Skeleton,
-  Radio,
-  Checkbox,
-} from 'antd';
+import { Form, Layout as AntdLayout, Select, Skeleton } from 'antd';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -166,7 +159,7 @@ const App: NextPageWithLayout = () => {
     setTotal(0);
     resetData();
     // getTotal();
-  }, [searchText, values]);
+  }, [searchText, values, chainId, address]);
 
   const onClickItem = (item: VoteItemType) => {
     setCurrentItem(item);

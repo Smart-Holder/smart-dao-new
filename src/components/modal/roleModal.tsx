@@ -1,37 +1,20 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
 import { useRouter } from 'next/router';
-import { Button, Input, Modal, Typography, Image, Avatar } from 'antd';
-import { Checkbox, Form, Upload, Tag, Space } from 'antd';
-import Icon, {
-  RightCircleOutlined,
-  PlusOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
+import { Modal, Avatar } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { setCurrentMember } from '@/store/features/daoSlice';
 
-import { connectType } from '@/config/enum';
-
-import { validateChinese, validateEthAddress } from '@/utils/validator';
-import { getCookie } from '@/utils/cookie';
-import { validateImage, getBase64 } from '@/utils/image';
-
-import type { UploadChangeParam } from 'antd/es/upload';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-
-import sdk from 'hcstore/sdk';
 import { formatAddress } from '@/utils';
 import { useIntl } from 'react-intl';
 
-const { Link } = Typography;
-
-const validateMessages = {
-  required: '${label} is required!',
-  string: {
-    range: "'${label}' must be between ${min} and ${max} characters",
-  },
-};
+// const validateMessages = {
+//   required: '${label} is required!',
+//   string: {
+//     range: "'${label}' must be between ${min} and ${max} characters",
+//   },
+// };
 
 const RoleModal = (props: any, ref: any) => {
   const { formatMessage } = useIntl();

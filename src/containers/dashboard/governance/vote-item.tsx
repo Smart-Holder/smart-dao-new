@@ -1,8 +1,6 @@
-import { Avatar, Statistic, Typography } from 'antd';
+import { Statistic, Typography } from 'antd';
 import { FC } from 'react';
 import styles from './vote-item.module.css';
-import iconUser from '/public/images/icon-user.png';
-import Image from 'next/image';
 import { useIntl, FormattedMessage } from 'react-intl';
 
 import { formatAddress } from '@/utils';

@@ -22,7 +22,7 @@ dayjs.extend(customParseFormat);
 
 const App = () => {
   const { formatMessage } = useIntl();
-  const { chainId } = useAppSelector((store) => store.wallet);
+  const { chainId, address } = useAppSelector((store) => store.wallet);
   const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
   const { loading, searchText } = useAppSelector((store) => store.common);
 
@@ -115,7 +115,7 @@ const App = () => {
     setPage(1);
     getData(1);
     getTotal();
-  }, [searchText, values]);
+  }, [searchText, values, chainId, address]);
 
   return (
     <div className="wrap">

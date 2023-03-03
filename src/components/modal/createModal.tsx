@@ -1,19 +1,10 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { Button, Modal, Typography } from 'antd';
-import Icon, { RightCircleOutlined } from '@ant-design/icons';
+import { Button, Modal } from 'antd';
+import { RightCircleOutlined } from '@ant-design/icons';
 import { useIntl } from 'react-intl';
 
 import { useAppDispatch } from '@/store/hooks';
-import { connectWallet } from '@/store/features/walletSlice';
-
-import { connectType } from '@/config/enum';
-
-import iconMetamask from '/public/images/icon-metamask.png';
-import iconWallet from '/public/images/icon-wallet.png';
-
-const { Link } = Typography;
 
 const ConnectModal = (props: any, ref: any) => {
   const { formatMessage } = useIntl();

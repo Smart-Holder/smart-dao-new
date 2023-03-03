@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import {
   Button,
-  Checkbox,
   Form,
   Input,
   Upload,
-  Tag,
   Space,
   Modal,
   Image as Img,
@@ -15,34 +12,32 @@ import {
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
-import { validateChinese, validateEthAddress } from '@/utils/validator';
+import { validateChinese } from '@/utils/validator';
 import { getCookie } from '@/utils/cookie';
-import { hexRandomNumber, isRepeate, isRepeateArray } from '@/utils';
-import { validateImage, getBase64 } from '@/utils/image';
-import { setMakeDAOStorage, getMakeDAOStorage } from '@/utils/launch';
+import { isRepeate } from '@/utils';
+import { validateImage } from '@/utils/image';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
-import iconSuccess from '/public/images/icon-success.png';
 import { getDAO, getDAOList, setCurrentDAO } from '@/store/features/daoSlice';
 import { setMissionAndDesc } from '@/api/dao';
 import { Permissions } from '@/config/enum';
-import { rng } from 'somes/rng';
 import { createVote } from '@/api/vote';
 import { request } from '@/api';
 import { useIntl } from 'react-intl';
 import { isPermission } from '@/api/member';
 
-const validateMessages = {
-  required: '${label} is required!',
-  string: {
-    range: "'${label}' must be between ${min} and ${max} characters",
-  },
-};
+// const validateMessages = {
+//   required: '${label} is required!',
+//   string: {
+//     range: "'${label}' must be between ${min} and ${max} characters",
+//   },
+// };
 
 const FormGroup: React.FC = () => {
+  const [form] = Form.useForm();
   const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -69,12 +64,17 @@ const FormGroup: React.FC = () => {
             mission: res.mission,
             description: res.description,
           });
+          form.setFieldsValue({
+            name: res.name,
+            mission: res.mission,
+            description: res.description,
+          });
         }
       } catch (error) {}
     };
 
     getDAO();
-  }, []);
+  }, [chainId, address]);
 
   // const defaultMember = [
   //   {
@@ -93,8 +93,6 @@ const FormGroup: React.FC = () => {
 
   const [avatar, setAvatar] = useState(currentDAO.image);
   // const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const [form] = Form.useForm();
 
   const setInfo = async (values: any) => {
     const params = {
@@ -392,24 +390,6 @@ const FormGroup: React.FC = () => {
           </Button>
         </Form.Item>
       </Form>
-
-      {/* <Modal
-        width={512}
-        open={isModalOpen}
-        onCancel={handleCancel}
-        footer={null}
-      >
-        <div className="modal-content">
-          <Image src={iconSuccess} width={88} height={88} alt="success" />
-          <div style={{ marginTop: 55 }} className="modal-content-text">
-            SmartDAO
-          </div>
-          <div className="modal-content-text">Initialization successful!</div>
-          <Button className="button-done" type="primary" onClick={next}>
-            Done
-          </Button>
-        </div>
-      </Modal> */}
 
       <style jsx>
         {`

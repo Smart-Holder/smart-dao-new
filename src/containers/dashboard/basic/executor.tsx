@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Input, Image, Avatar, message, Modal } from 'antd';
+import { Button, Input, message, Modal } from 'antd';
 import { Form } from 'antd';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
-import { validateChinese, validateEthAddress } from '@/utils/validator';
+import { validateEthAddress } from '@/utils/validator';
 
 import { request } from '@/api';
 import { isPermission, setExecutor } from '@/api/member';
@@ -13,13 +13,14 @@ import { useIntl } from 'react-intl';
 import { isRepeate } from '@/utils';
 import { Permissions } from '@/config/enum';
 
-const options = [
-  { label: 'Apple', value: 'Apple' },
-  { label: 'Pear', value: 'Pear' },
-  { label: 'Orange', value: 'Orange' },
-];
+// const options = [
+//   { label: 'Apple', value: 'Apple' },
+//   { label: 'Pear', value: 'Pear' },
+//   { label: 'Orange', value: 'Orange' },
+// ];
 
 const App = () => {
+  const [form] = Form.useForm();
   const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
   const { chainId, address } = useAppSelector((store) => store.wallet);
@@ -29,8 +30,6 @@ const App = () => {
   const [members, setMembers] = useState([]);
   const [initialValues, setInitialValues] = useState(null) as any;
   const [isEdit, setIsEdit] = useState(false);
-  const url =
-    'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
 
   useEffect(() => {
     const getMembers = async () => {
@@ -55,12 +54,13 @@ const App = () => {
       console.log('values', values);
 
       setInitialValues(values);
+      form.setFieldsValue({ ...values });
     };
 
     if (chainId && currentDAO.host) {
       getMembers();
     }
-  }, []);
+  }, [chainId, currentDAO]);
 
   const onValuesChange = (changedValues: any, values: any) => {
     setIsEdit(!isRepeate(initialValues, values));
@@ -185,6 +185,7 @@ const App = () => {
       <Form
         style={{ marginTop: 16 }}
         name="info"
+        form={form}
         initialValues={initialValues}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}

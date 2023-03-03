@@ -34,7 +34,7 @@ const App: NextPageWithLayout = () => {
   const { formatMessage } = useIntl();
   const router = useRouter();
   const { currentDAO } = useAppSelector((store) => store.dao);
-  const { chainId } = useAppSelector((store) => store.wallet);
+  const { chainId, address } = useAppSelector((store) => store.wallet);
   const { searchText, loading } = useAppSelector((store) => store.common);
 
   const [chainData, setChainData] = useState({ name: '' }) as any;
@@ -53,7 +53,7 @@ const App: NextPageWithLayout = () => {
     if (ETH_CHAINS_INFO[chainId]) {
       setChainData(ETH_CHAINS_INFO[chainId]);
     }
-  }, []);
+  }, [chainId]);
 
   useEffect(() => {
     const getData = async () => {
@@ -142,7 +142,7 @@ const App: NextPageWithLayout = () => {
     setTotal(0);
     resetData();
     // getTotal();
-  }, [searchText, values]);
+  }, [searchText, values, chainId, address]);
 
   const onCountClick = () => {
     router.push('/dashboard/financial/order');

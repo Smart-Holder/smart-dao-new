@@ -1,20 +1,11 @@
-import { ReactElement, useEffect, useRef } from 'react';
+import { ReactElement } from 'react';
 
 import BasicLayout from './basic';
 import LaunchLayout from './launch';
 import DashboardLayout from './dashboard';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
-import { connectType as types } from '@/config/enum';
-import { ETH_CHAINS_INFO } from '@/config/chains';
-import { setCookie } from '@/utils/cookie';
-import {
-  connectWallet,
-  disconnect,
-  setAddress,
-  setChainId,
-} from '@/store/features/walletSlice';
+
 import { useRouter } from 'next/router';
-import { Modal } from 'antd';
 
 const App = ({ children, type }: { children: ReactElement; type?: string }) => {
   const dispatch = useAppDispatch();
