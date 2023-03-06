@@ -56,17 +56,6 @@ const ConnectModal = (props: any, ref: any) => {
   };
 
   const handleWallet = () => {
-    if (!isSupportChain) {
-      Modal.warning({
-        title: 'Supported networks: Ethereum, Goerli',
-        className: 'modal-small',
-      });
-
-      handleCancel();
-
-      return;
-    }
-
     dispatch(connectWallet(types.WalletConnect));
     handleCancel();
   };

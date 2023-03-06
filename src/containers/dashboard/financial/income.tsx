@@ -208,10 +208,12 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    setPage(1);
-    getData(1);
-    getTotal();
-  }, [searchText, values, balance, chainId, address]);
+    if (currentDAO.host) {
+      setPage(1);
+      getData(1);
+      getTotal();
+    }
+  }, [searchText, values, balance, chainId, address, currentDAO.host]);
 
   const hideModal = () => {
     setIsModalOpen(false);

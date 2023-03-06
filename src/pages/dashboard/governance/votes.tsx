@@ -155,11 +155,13 @@ const App: NextPageWithLayout = () => {
   //   }
   // }, [currentDAO]);
   useEffect(() => {
-    setData([]);
-    setTotal(0);
-    resetData();
-    // getTotal();
-  }, [searchText, values, chainId, address]);
+    if (currentDAO.root) {
+      setData([]);
+      setTotal(0);
+      resetData();
+      // getTotal();
+    }
+  }, [searchText, values, chainId, address, currentDAO.root]);
 
   const onClickItem = (item: VoteItemType) => {
     setCurrentItem(item);

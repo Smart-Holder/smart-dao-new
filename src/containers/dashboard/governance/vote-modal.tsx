@@ -37,7 +37,14 @@ const VoteModal: FC<VoteModalProps> = (props) => {
   const [isVote, setIsVote] = useState(true);
   const [yourVote, setYourVote] = useState(0);
 
-  let desc = data?.desc ? JSON.parse(data.desc || '{}') : {};
+  let desc;
+
+  try {
+    desc = data?.desc ? JSON.parse(data.desc || '{}') : {};
+  } catch (error) {
+    desc = { type: 'normal' };
+  }
+
   const type: Type = desc.type;
 
   useEffect(() => setShow(open), [open]);

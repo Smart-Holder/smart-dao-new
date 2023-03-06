@@ -89,7 +89,13 @@ const VoteItem: FC<VoteItemProps> = (props) => {
     data,
   } = props;
 
-  const extra = desc ? JSON.parse(desc || '{}') : {};
+  let extra;
+
+  try {
+    extra = desc ? JSON.parse(desc || '{}') : {};
+  } catch (error) {
+    extra = { type: '', purpose: '' };
+  }
   // console.log('extra', extra);
   // console.log('-----------------', extra.type);
   const purpose = extra?.purpose;

@@ -111,20 +111,20 @@ export const connect = async (type, dispatch) => {
           chainId.toString(),
         );
 
+        if (!isSupport) {
+          dispatch(setSupportChain(false));
+        }
+
         setCookie('chainId', chainId, 30);
         setCookie('connectType', type, 30);
         dispatch(setChainId(chainId));
         dispatch(setConnectType(type));
-
-        if (!isSupport) {
-          dispatch(setSupportChain(false));
-        }
       } else if (address !== address_cookie) {
         console.log('walletconnect: address changed');
 
-        setCookie('address', res[0], 30);
+        setCookie('address', address, 30);
         setCookie('connectType', type, 30);
-        dispatch({ type: 'wallet/setAddress', payload: res[0] });
+        dispatch({ type: 'wallet/setAddress', payload: address });
         dispatch(setConnectType(type));
       }
 

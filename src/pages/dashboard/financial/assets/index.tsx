@@ -138,11 +138,13 @@ const App: NextPageWithLayout = () => {
   };
 
   useEffect(() => {
-    setData([]);
-    setTotal(0);
-    resetData();
-    // getTotal();
-  }, [searchText, values, chainId, address]);
+    if (currentDAO.host) {
+      setData([]);
+      setTotal(0);
+      resetData();
+      // getTotal();
+    }
+  }, [searchText, values, chainId, address, currentDAO.host]);
 
   const onCountClick = () => {
     router.push('/dashboard/financial/order');

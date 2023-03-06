@@ -6,6 +6,7 @@ import {
   setConnectType,
   setSupportChain,
 } from '@/store/features/walletSlice';
+// import { setCurrentDAO } from '@/store/features/daoSlice';
 import { ETH_CHAINS_INFO } from '@/config/chains';
 import { setCookie } from '@/utils/cookie';
 
@@ -27,14 +28,16 @@ export async function connect(type, dispatch) {
           chainId.toString(),
         );
 
+        if (!isSupport) {
+          dispatch(setSupportChain(false));
+        }
+
         setCookie('chainId', chainId, 30);
         setCookie('connectType', type, 30);
         dispatch(setChainId(chainId));
         dispatch(setConnectType(type));
-
-        if (!isSupport) {
-          dispatch(setSupportChain(false));
-        }
+        // dispatch(setCurrentDAO({ name: '' }));
+        dispatch({ type: 'dao/setCurrentDAO', payload: { name: '' } });
       });
 
       window.ethereum.on('accountsChanged', (res) => {

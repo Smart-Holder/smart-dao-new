@@ -161,10 +161,12 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    setPage(1);
-    getData(1);
-    getTotal();
-  }, [searchText, values, chainId, address]);
+    if (currentDAO.host) {
+      setPage(1);
+      getData(1);
+      getTotal();
+    }
+  }, [searchText, values, chainId, address, currentDAO.host]);
 
   return (
     <div className="wrap">
