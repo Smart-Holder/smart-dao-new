@@ -1,10 +1,18 @@
 import WalletConnect from '@walletconnect/client';
 import QRCodeModal from '@walletconnect/qrcode-modal';
 // import store from '@/store';
-import { clearCookie, setCookie } from '@/utils/cookie';
+import { clearCookie, getCookie, setCookie } from '@/utils/cookie';
 import { connectType } from '@/config/enum';
 import Router from 'next/router';
+import { ETH_CHAINS_INFO } from '@/config/chains';
 // import { initialize as initApi } from "@/api";
+
+import {
+  setChainId,
+  setConnectType,
+  setSupportChain,
+  disconnect,
+} from '@/store/features/walletSlice';
 
 class WalletConnectPROVIDER {
   constructor(connect) {
@@ -17,9 +25,9 @@ class WalletConnectPROVIDER {
 }
 
 let connector = null;
-export const connect = async (dispatch) => {
+export const connect = async (type, dispatch) => {
   return new Promise((resolve, reject) => {
-    console.log('------WalletConnect-------');
+    console.log('walletconnect');
     // Create a connector
     connector = new WalletConnect({
       bridge: 'https://bridge.walletconnect.org', // Required
@@ -47,7 +55,7 @@ export const connect = async (dispatch) => {
       });
     } else {
       const { accounts, chainId } = connector;
-      console.log('----connection is already established----');
+      console.log('connection is already established');
       // store.commit('SET_PROVIDER', new WalletConnectPROVIDER(connector));
       resolve({
         address: accounts[0],
@@ -70,7 +78,7 @@ export const connect = async (dispatch) => {
       // Get provided accounts and chainId
       const { accounts, chainId } = payload.params[0];
 
-      console.log('---WalletConnect success---', payload);
+      console.log('walletconnect success', payload);
       // store.commit('SET_PROVIDER', new WalletConnectPROVIDER(connector));
       // resolve({ chainId, address: accounts[0] });
       resolve({
@@ -86,51 +94,65 @@ export const connect = async (dispatch) => {
         reject(error);
         throw error;
       }
-      console.log('---session_update---', payload);
+      console.log('walletconnect session_update', payload);
 
-      // const { accounts, chainId } = payload.params[0];
-      // setCookie('chainId', Number(chainId), 30);
-      // setCookie('address', accounts[0], 30);
-      // dispatch({ type: 'wallet/setChainId', payload: Number(chainId) });
-      // dispatch({ type: 'wallet/setAddress', payload: accounts[0] });
-      // dispatch({
-      //   type: 'wallet/setProvider',
-      //   payload: new WalletConnectPROVIDER(connector),
-      // });
+      const { accounts, chainId: chain } = payload.params[0];
+
+      const address = accounts[0];
+      const chainId = Number(chain);
+
+      const address_cookie = getCookie('address');
+      const chainId_cookie = getCookie('chainId');
+
+      if (chainId !== Number(chainId_cookie)) {
+        console.log('walletconnect: chain changed');
+
+        const isSupport = Object.keys(ETH_CHAINS_INFO).includes(
+          chainId.toString(),
+        );
+
+        setCookie('chainId', chainId, 30);
+        setCookie('connectType', type, 30);
+        dispatch(setChainId(chainId));
+        dispatch(setConnectType(type));
+
+        if (!isSupport) {
+          dispatch(setSupportChain(false));
+        }
+      } else if (address !== address_cookie) {
+        console.log('walletconnect: address changed');
+
+        setCookie('address', res[0], 30);
+        setCookie('connectType', type, 30);
+        dispatch({ type: 'wallet/setAddress', payload: res[0] });
+        dispatch(setConnectType(type));
+      }
+
+      // clearCookie('address');
+      // clearCookie('chainId');
+      // clearCookie('connectType');
+      // localStorage.removeItem('walletconnect');
+      // localStorage.removeItem('step');
       // sessionStorage.clear();
-      // // Router.push('/');
-      // // dispatch({ type: 'wallet/disconnect', payload: null });
-      // // dispatch({
-      // //   type: 'wallet/connectWallet',
-      // //   payload: connectType.WalletConnect,
-      // // });
-      // // Router.reload();
-
-      // store.dispatch('disconnect');
-      // store.dispatch('connect', connectType.WalletConnect);
-      clearCookie('address');
-      clearCookie('chainId');
-      clearCookie('connectType');
-      localStorage.removeItem('walletconnect');
-      localStorage.removeItem('step');
-      sessionStorage.clear();
-      window.location.reload();
+      // window.location.reload();
     });
 
     connector.on('disconnect', (error, payload) => {
-      console.log('---disconnect payload---', payload);
+      console.log('walletconnect disconnect', payload);
+
       if (error) {
         reject(error);
         throw error;
       }
-      // store.dispatch("disconnect");
-      clearCookie('address');
-      clearCookie('chainId');
-      clearCookie('connectType');
-      localStorage.removeItem('walletconnect');
-      localStorage.removeItem('step');
-      sessionStorage.clear();
-      window.location.reload();
+
+      dispatch(disconnect());
+      // clearCookie('address');
+      // clearCookie('chainId');
+      // clearCookie('connectType');
+      // localStorage.removeItem('walletconnect');
+      // localStorage.removeItem('step');
+      // sessionStorage.clear();
+      // window.location.reload();
     });
   });
 };

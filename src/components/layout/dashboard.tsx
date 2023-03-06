@@ -17,12 +17,15 @@ import {
   setUserMembers,
 } from '@/store/features/daoSlice';
 import { useRouter } from 'next/router';
+import { request } from '@/api';
 
 // const Header = dynamic(() => import('@/components/header'), { ssr: false });
 
 export default function BasicLayout({ children }: { children: ReactElement }) {
   const dispatch = useAppDispatch();
-  const { address, chainId } = useAppSelector((store) => store.wallet);
+  const { address, chainId, isSupportChain } = useAppSelector(
+    (store) => store.wallet,
+  );
   const { currentDAO, currentMember, DAOType } = useAppSelector(
     (store) => store.dao,
   );
@@ -43,10 +46,10 @@ export default function BasicLayout({ children }: { children: ReactElement }) {
       dispatch(setDAOType(type));
 
       if (type === 'join' || type === 'create') {
-        const members = await sdk.utils.methods.getMembersFrom({
-          chain: chainId,
-          host: dao.host,
-          owner: address,
+        const members = await request({
+          name: 'utils',
+          method: 'getMembersFrom',
+          params: { chain: chainId, host: dao.host, owner: address },
         });
 
         if (members && members.length > 0) {
@@ -68,9 +71,10 @@ export default function BasicLayout({ children }: { children: ReactElement }) {
     }
 
     const getDAOAndMember = async () => {
-      const daos = await sdk.utils.methods.getDAOsFromOwner({
-        chain: chainId,
-        owner: address,
+      const daos = await request({
+        name: 'utils',
+        method: 'getDAOsFromOwner',
+        params: { chain: chainId, owner: address },
       });
 
       if (!daos || daos.length === 0) {
@@ -88,10 +92,10 @@ export default function BasicLayout({ children }: { children: ReactElement }) {
       dispatch(setCurrentDAO(dao));
       dispatch(setDAOType('join'));
 
-      const members = await sdk.utils.methods.getMembersFrom({
-        chain: chainId,
-        host: dao.host,
-        owner: address,
+      const members = await request({
+        name: 'utils',
+        method: 'getMembersFrom',
+        params: { chain: chainId, host: dao.host, owner: address },
       });
 
       if (members && members.length > 0) {
@@ -104,9 +108,13 @@ export default function BasicLayout({ children }: { children: ReactElement }) {
     };
 
     if (address && chainId) {
-      getDAOAndMember();
+      if (isSupportChain) {
+        getDAOAndMember();
+      } else {
+        router.push('/');
+      }
     }
-  }, [address, chainId]);
+  }, [address, chainId, isSupportChain]);
 
   // useEffect(() => {
   //   const onDAOChange = async () => {

@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Modal } from 'antd';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { connectWallet } from '@/store/features/walletSlice';
@@ -12,16 +13,38 @@ import { getCookie } from '@/utils/cookie';
  */
 const App = (props: any) => {
   const dispatch = useAppDispatch();
-  const { provider } = useAppSelector((store) => store.wallet);
+  const { provider, connectType, address, chainId, isSupportChain } =
+    useAppSelector((store) => store.wallet);
+
+  const [init, setInit] = useState(false);
 
   // 有 connectType，没有 provider，先连接钱包
   useEffect(() => {
     const type = Number(getCookie('connectType'));
 
-    if (type && !provider) {
+    if (type && isSupportChain && !provider) {
       dispatch(connectWallet(type));
+      setInit(true);
     }
-  }, []);
+  }, [connectType, isSupportChain]);
+
+  // useEffect(() => {
+  //   if (init && !address && chainId && connectType) {
+  //     dispatch(connectWallet(connectType));
+  //   }
+  // }, [chainId]);
+
+  useEffect(() => {
+    if (!isSupportChain) {
+      Modal.warning({
+        title: `Supported networks: Ethereum, Goerli`,
+        className: 'modal-small',
+        onOk: () => {
+          dispatch({ type: 'wallet/notSupportChain', payload: null });
+        },
+      });
+    }
+  }, [isSupportChain]);
 
   return <>{props.children}</>;
 };

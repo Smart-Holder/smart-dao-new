@@ -4,9 +4,9 @@ import { connectType } from '@/config/enum';
 
 const connect = (type, dispatch) => {
   if (type === connectType.MetaMask) {
-    return connectMetaMask(dispatch);
+    return connectMetaMask(type, dispatch);
   } else if (type === connectType.WalletConnect) {
-    return walletConnect(dispatch);
+    return walletConnect(type, dispatch);
   }
 };
 

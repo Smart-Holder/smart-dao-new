@@ -63,23 +63,30 @@ export function request({ name, method, params, listen = false }) {
   loading(listen);
 
   return new Promise((resolve, reject) => {
-    sdk[name].methods[method](params)
-      .then((res) => {
-        console.log(method, res);
-        closeLoading(listen);
-        resolve(res);
-      })
-      .catch((e) => {
-        console.log('catch', e);
-        if (e?.message) {
-          const errorCodeMessage = e.errno !== 0 ? errorCode[e.errno + ''] : '';
-          // Message.error({ message: errorCodeMessage || e.message });
-          console.error(errorCodeMessage || e.message);
-        }
+    const { isSupportChain } = store.getState().wallet;
 
-        closeLoading(listen);
-        reject(e);
-      });
+    if (!isSupportChain) {
+      reject({ message: 'unsupported chain' });
+    } else {
+      sdk[name].methods[method](params)
+        .then((res) => {
+          console.log(method, res);
+          closeLoading(listen);
+          resolve(res);
+        })
+        .catch((e) => {
+          console.log('catch', e);
+          if (e?.message) {
+            const errorCodeMessage =
+              e.errno !== 0 ? errorCode[e.errno + ''] : '';
+            // Message.error({ message: errorCodeMessage || e.message });
+            console.error(errorCodeMessage || e.message);
+          }
+
+          closeLoading(listen);
+          reject(e);
+        });
+    }
   });
 }
 

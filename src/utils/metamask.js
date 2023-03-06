@@ -1,11 +1,15 @@
-import Router from 'next/router';
-import { Modal } from 'antd';
+// import Router from 'next/router';
+// import { Modal } from 'antd';
 // import { connectType } from '@/config/enum';
-import { setChainId } from '@/store/features/walletSlice';
+import {
+  setChainId,
+  setConnectType,
+  setSupportChain,
+} from '@/store/features/walletSlice';
 import { ETH_CHAINS_INFO } from '@/config/chains';
 import { setCookie } from '@/utils/cookie';
 
-export async function connect(dispatch) {
+export async function connect(type, dispatch) {
   if (typeof window.ethereum !== 'undefined') {
     try {
       const [accounts, chainId] = await Promise.all([
@@ -23,35 +27,22 @@ export async function connect(dispatch) {
           chainId.toString(),
         );
 
-        if (isSupport) {
-          setCookie('chainId', chainId, 30);
-          dispatch(setChainId(chainId));
-          // window.location.reload();
-          // router.push('/');
+        setCookie('chainId', chainId, 30);
+        setCookie('connectType', type, 30);
+        dispatch(setChainId(chainId));
+        dispatch(setConnectType(type));
 
-          // dispatch(connectWallet(types.MetaMask));
-
-          // if (router.pathname === '/') {
-          //   router.reload();
-          // } else {
-          //   router.push('/');
-          // }
-        } else {
-          Modal.warning({
-            title: `Supported networks: Ethereum, Goerli`,
-            className: 'modal-small',
-            onOk: () => {
-              dispatch({ type: 'wallet/disconnect', payload: null });
-            },
-          });
+        if (!isSupport) {
+          dispatch(setSupportChain(false));
         }
-        // store.dispatch({ type: 'wallet/disconnect', payload: null });
       });
 
       window.ethereum.on('accountsChanged', (res) => {
         console.log('address changed', res);
         setCookie('address', res[0], 30);
+        setCookie('connectType', type, 30);
         dispatch({ type: 'wallet/setAddress', payload: res[0] });
+        dispatch(setConnectType(type));
       });
 
       return {

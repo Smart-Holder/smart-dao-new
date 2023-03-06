@@ -15,7 +15,9 @@ import { setUserInfo } from '@/store/features/userSlice';
  */
 const App = (props: any) => {
   const dispatch = useAppDispatch();
-  const { address, chainId } = useAppSelector((store) => store.wallet);
+  const { address, chainId, isSupportChain } = useAppSelector(
+    (store) => store.wallet,
+  );
   const [init, setInit] = useState(false); // init api
 
   // init api
@@ -59,10 +61,10 @@ const App = (props: any) => {
       }
     };
 
-    if (address && chainId) {
+    if (address && chainId && isSupportChain) {
       init();
     }
-  }, [address, chainId, dispatch]);
+  }, [address, chainId, isSupportChain, dispatch]);
 
   if (!init) {
     return null;

@@ -10,6 +10,7 @@ import icon3 from '/public/images/dashboard/mine/home-icon-3.png';
 import icon4 from '/public/images/dashboard/mine/home-icon-4.png';
 import { fromToken } from '@/utils';
 import { useIntl } from 'react-intl';
+import { request } from '@/api';
 
 const App = () => {
   const { formatMessage } = useIntl();
@@ -23,15 +24,21 @@ const App = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const res = await sdk.dao.methods.getDAOSummarys({
-        chain: chainId,
-        host: currentDAO.host,
+      const res = await request({
+        name: 'dao',
+        method: 'getDAOSummarys',
+        params: {
+          chain: chainId,
+          host: currentDAO.host,
+        },
       });
 
       setDAOInfo(res);
     };
 
-    getData();
+    if (currentDAO.host && chainId) {
+      getData();
+    }
   }, [currentDAO.host, chainId]);
 
   if (!DAOInfo) {

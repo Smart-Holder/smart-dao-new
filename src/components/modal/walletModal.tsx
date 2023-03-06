@@ -17,7 +17,9 @@ const { Link } = Typography;
 
 const ConnectModal = (props: any, ref: any) => {
   const { formatMessage } = useIntl();
-  const { connectType, chainId } = useAppSelector((store) => store.wallet);
+  const { connectType, chainId, isSupportChain } = useAppSelector(
+    (store) => store.wallet,
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const chainData = ETH_CHAINS_INFO[chainId];
@@ -38,11 +40,33 @@ const ConnectModal = (props: any, ref: any) => {
   };
 
   const handleMetaMask = () => {
+    if (!isSupportChain) {
+      Modal.warning({
+        title: 'Supported networks: Ethereum, Goerli',
+        className: 'modal-small',
+      });
+
+      handleCancel();
+
+      return;
+    }
+
     dispatch(connectWallet(types.MetaMask));
     handleCancel();
   };
 
   const handleWallet = () => {
+    if (!isSupportChain) {
+      Modal.warning({
+        title: 'Supported networks: Ethereum, Goerli',
+        className: 'modal-small',
+      });
+
+      handleCancel();
+
+      return;
+    }
+
     dispatch(connectWallet(types.WalletConnect));
     handleCancel();
   };

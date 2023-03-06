@@ -9,6 +9,7 @@ import Item from '@/containers/mine/daoItem';
 
 // import { getCookie } from '@/utils/cookie';
 import { getMakeDAOStorage } from '@/utils/launch';
+import { request } from '@/api';
 
 export default function List() {
   const { formatMessage } = useIntl();
@@ -34,16 +35,21 @@ export default function List() {
     const getDAOList = async () => {
       setLoading(true);
       const [res1, res2, res3] = await Promise.all([
-        sdk.dao.methods.getDAOsFromCreatedBy({
-          chain: chainId,
-          owner: address,
+        request({
+          name: 'dao',
+          method: 'getDAOsFromCreatedBy',
+          params: { chain: chainId, owner: address },
         }),
-
-        sdk.utils.methods.getDAOsFromOwner({
-          chain: chainId,
-          owner: address,
+        request({
+          name: 'utils',
+          method: 'getDAOsFromOwner',
+          params: { chain: chainId, owner: address },
         }),
-        sdk.user.methods.getUserLikeDAOs({ chain: chainId }),
+        request({
+          name: 'user',
+          method: 'getUserLikeDAOs',
+          params: { chain: chainId },
+        }),
       ]);
 
       setCreateDAOs(res1);

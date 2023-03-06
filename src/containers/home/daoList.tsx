@@ -24,7 +24,9 @@ const DAOList = () => {
   // const address = getCookie('address');
 
   const { searchText, isInit } = useAppSelector((store) => store.common);
-  const { chainId, address } = useAppSelector((store) => store.wallet);
+  const { chainId, address, isSupportChain } = useAppSelector(
+    (store) => store.wallet,
+  );
 
   const pageSize = useRef(20);
   const [width, setWidth] = useState('');
@@ -59,6 +61,10 @@ const DAOList = () => {
   }, []);
 
   const getData = async () => {
+    if (!isSupportChain) {
+      return;
+    }
+
     setLoading(true);
     const res = await sdk.dao.methods.getAllDAOs({
       chain: chainId || defaultChain,
@@ -75,6 +81,10 @@ const DAOList = () => {
   };
 
   const resetData = async () => {
+    if (!isSupportChain) {
+      return;
+    }
+
     setLoading(true);
     const t = await sdk.dao.methods.getAllDAOsTotal({
       chain: chainId || defaultChain,
@@ -100,7 +110,7 @@ const DAOList = () => {
     setDAOList([]);
     setTotal(0);
     resetData();
-  }, [isInit, searchText, address, chainId]);
+  }, [searchText, address, chainId]);
 
   // useEffect(() => {
   //   if (searchText) {
