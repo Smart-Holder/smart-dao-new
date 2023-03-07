@@ -3,7 +3,7 @@ import styles from './detail-attributes.module.css';
 import { useIntl } from 'react-intl';
 import { Typography } from 'antd';
 
-const { Paragraph, Text } = Typography;
+const { Text } = Typography;
 
 type DetailAttributesProps = {
   items?: AttributeItem[];

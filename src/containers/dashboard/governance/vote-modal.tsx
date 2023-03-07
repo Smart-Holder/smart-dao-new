@@ -1,8 +1,6 @@
-import { Avatar, Button, Modal, Statistic, Skeleton } from 'antd';
+import { Button, Modal, Statistic, Skeleton } from 'antd';
 import { FC, useEffect, useState } from 'react';
 import { StatusKeyMap, TypeKeyMap, VoteItemType, Type } from './vote-item';
-import Image from 'next/image';
-import iconUser from '/public/images/icon-user.png';
 import styles from './vote-modal.module.css';
 import { setVote } from '@/api/vote';
 import { request } from '@/api';
@@ -14,8 +12,6 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { formatAddress } from '@/utils';
 
 import { useIntl } from 'react-intl';
-import { isPermission } from '@/api/member';
-import { Permissions } from '@/config/enum';
 
 dayjs.extend(customParseFormat);
 const { Countdown } = Statistic;
@@ -41,7 +37,14 @@ const VoteModal: FC<VoteModalProps> = (props) => {
   const [isVote, setIsVote] = useState(true);
   const [yourVote, setYourVote] = useState(0);
 
-  let desc = data?.desc ? JSON.parse(data.desc || '{}') : {};
+  let desc;
+
+  try {
+    desc = data?.desc ? JSON.parse(data.desc || '{}') : {};
+  } catch (error) {
+    desc = { type: 'normal' };
+  }
+
   const type: Type = desc.type;
 
   useEffect(() => setShow(open), [open]);

@@ -1,8 +1,7 @@
-import React, { useEffect, useState, memo, useCallback } from 'react';
-import { MailOutlined } from '@ant-design/icons';
+import React, { memo, useCallback } from 'react';
 import type { MenuProps } from 'antd';
 import { Menu } from 'antd';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
 
 type MenuItem = Required<MenuProps>['items'][number];

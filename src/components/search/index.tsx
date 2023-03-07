@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
@@ -6,7 +6,6 @@ import { useRouter } from 'next/router';
 import { setSearchText } from '@/store/features/commonSlice';
 import { useAppDispatch } from '@/store/hooks';
 
-import { debounce } from '@/utils';
 import { useIntl } from 'react-intl';
 
 // import type { InputRef } from 'antd';

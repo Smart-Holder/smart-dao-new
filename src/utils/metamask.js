@@ -1,44 +1,52 @@
-// import Web3 from 'web3';
-// import { Message } from "element-ui";
-// import store from "@/store/index";
-// import router from "@/router";
-import { connectType } from '@/config/enum';
-// import i18n from "@/plugins/i18n";
-import dynamic from 'next/dynamic';
-// import store from '@/store';
-// import { setProvider } from '@/store/features/walletSlice';
+// import Router from 'next/router';
+// import { Modal } from 'antd';
+// import { connectType } from '@/config/enum';
+import {
+  setChainId,
+  setConnectType,
+  setSupportChain,
+} from '@/store/features/walletSlice';
+// import { setCurrentDAO } from '@/store/features/daoSlice';
+import { ETH_CHAINS_INFO } from '@/config/chains';
+import { setCookie } from '@/utils/cookie';
 
-// const store = dynamic(() => import('@/store'), { ssr: false });
-
-export async function connect(dispatch) {
+export async function connect(type, dispatch) {
   if (typeof window.ethereum !== 'undefined') {
     try {
-      // store.dispatch(setProvider(window.ethereum));
-      // store.dispatch({ type: 'wallet/setProvider', payload: window.ethereum });
-      // const dispatch = useAppDispatch();
-      // store.commit("SET_PROVIDER", window.ethereum);
-
       const [accounts, chainId] = await Promise.all([
         window.ethereum.request({ method: 'eth_requestAccounts' }),
         window.ethereum.request({ method: 'eth_chainId' }),
       ]);
 
-      console.log('---connect metamask---', chainId, accounts[0]);
+      console.log('connect metamask', chainId, accounts[0]);
 
-      // 只清空 sessionStorage, 重新连接
-      // window.ethereum.on('chainChanged', (res) => {
-      //   console.log('-----chain changed-----', res);
-      //   // store.dispatch({ type: 'wallet/disconnect', payload: null });
-      // });
+      window.ethereum.on('chainChanged', (res) => {
+        console.log('chain changed', res);
 
-      // 清空所有登录信息，重新连接
-      // window.ethereum.on('accountsChanged', (res) => {
-      //   // console.log('store', store);
-      //   console.log('-----accounts changed-----', res);
-      //   // store.dispatch({ type: 'wallet/disconnect', payload: null });
-      //   setCookie('address', res[0], 30);
-      //   // store.dispatch({ type: 'wallet/setAddress', payload: res[0] });
-      // });
+        const chainId = Number(res);
+        const isSupport = Object.keys(ETH_CHAINS_INFO).includes(
+          chainId.toString(),
+        );
+
+        if (!isSupport) {
+          dispatch(setSupportChain(false));
+        }
+
+        setCookie('chainId', chainId, 30);
+        setCookie('connectType', type, 30);
+        dispatch(setChainId(chainId));
+        dispatch(setConnectType(type));
+        // dispatch(setCurrentDAO({ name: '' }));
+        dispatch({ type: 'dao/setCurrentDAO', payload: { name: '' } });
+      });
+
+      window.ethereum.on('accountsChanged', (res) => {
+        console.log('address changed', res);
+        setCookie('address', res[0], 30);
+        setCookie('connectType', type, 30);
+        dispatch({ type: 'wallet/setAddress', payload: res[0] });
+        dispatch(setConnectType(type));
+      });
 
       return {
         address: accounts[0],

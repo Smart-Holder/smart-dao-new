@@ -1,36 +1,40 @@
-import React, { useState, useImperativeHandle, forwardRef } from 'react';
-import { Button, Input, Modal, Typography, Image, message } from 'antd';
-import { Checkbox, Form, Upload, Tag, Space } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, Input, Image, message } from 'antd';
+import { Form, Upload, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-
-import sdk from 'hcstore/sdk';
+import { useIntl } from 'react-intl';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { setUserInfo } from '@/store/features/userSlice';
 
+import { request } from '@/api';
 import { getCookie } from '@/utils/cookie';
-import { validateImage, getBase64 } from '@/utils/image';
-import { validateChinese, validateEthAddress } from '@/utils/validator';
+import { validateImage } from '@/utils/image';
+import { validateChinese } from '@/utils/validator';
+import { isRepeate } from '@/utils';
 
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import { useIntl } from 'react-intl';
-import { isRepeate } from '@/utils';
-import { request } from '@/api';
 
-export default function Info() {
+const Info = () => {
   const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
+
   const { loading } = useAppSelector((store) => store.common);
   const { userInfo } = useAppSelector((store) => store.user);
+
   const [image, setImage] = useState(userInfo.image);
-
   const [isEdit, setIsEdit] = useState(false);
-
-  const initialValues = {
+  const [initialValues, setInitialValues] = useState({
     nickname: userInfo.nickname,
-    // image: userInfo.image,
-  };
+  });
+
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    form.setFieldsValue({ nickname: userInfo.nickname });
+    setImage(userInfo.image);
+  }, [userInfo]);
 
   const onValuesChange = (changedValues: any, values: any) => {
     setIsEdit(!isRepeate(initialValues, values));
@@ -75,7 +79,7 @@ export default function Info() {
     console.log('validate Failed:', errorInfo);
   };
 
-  const handleChange: UploadProps['onChange'] = (
+  const onImageChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>,
   ) => {
     if (info.file.status === 'done') {
@@ -90,8 +94,6 @@ export default function Info() {
     return !message;
   };
 
-  const handleSubmit = () => {};
-
   return (
     <div className="info-wrap">
       <div className="h1">{formatMessage({ id: 'my.information.title' })}</div>
@@ -99,6 +101,7 @@ export default function Info() {
 
       <Form
         name="info"
+        form={form}
         initialValues={initialValues}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
@@ -134,7 +137,7 @@ export default function Info() {
               showUploadList={false}
               listType="picture-card"
               beforeUpload={beforeUpload}
-              onChange={handleChange}
+              onChange={onImageChange}
             >
               {image ? (
                 <Image
@@ -163,7 +166,6 @@ export default function Info() {
             className="button-submit"
             type="primary"
             htmlType="submit"
-            onClick={handleSubmit}
             loading={loading}
             disabled={!isEdit}
           >
@@ -219,4 +221,6 @@ export default function Info() {
       </style>
     </div>
   );
-}
+};
+
+export default Info;

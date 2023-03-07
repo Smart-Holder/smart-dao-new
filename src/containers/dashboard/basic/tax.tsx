@@ -6,20 +6,12 @@ import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import Slider from '@/components/slider';
 import { Button } from 'antd';
 
-const options = [
-  { label: 'Apple', value: 'Apple' },
-  { label: 'Pear', value: 'Pear' },
-  { label: 'Orange', value: 'Orange' },
-];
-
 const App = () => {
   const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
   const { userInfo } = useAppSelector((store) => store.user);
   const { currentDAO } = useAppSelector((store) => store.dao);
   const [image, setImage] = useState();
-  const url =
-    'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
 
   const onTaxChange1 = (value: number) => {
     console.log(value);

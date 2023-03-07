@@ -1,7 +1,6 @@
 import { ReactElement, useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { Layout, Image, Space, Button } from 'antd';
+import { Layout } from 'antd';
 
 import Header from '@/components/header';
 import Sider from '@/components/sider/dashboardSider';
@@ -17,14 +16,16 @@ import {
   setDAOType,
   setUserMembers,
 } from '@/store/features/daoSlice';
-import { setSearchText } from '@/store/features/commonSlice';
 import { useRouter } from 'next/router';
+import { request } from '@/api';
 
 // const Header = dynamic(() => import('@/components/header'), { ssr: false });
 
 export default function BasicLayout({ children }: { children: ReactElement }) {
   const dispatch = useAppDispatch();
-  const { address, chainId } = useAppSelector((store) => store.wallet);
+  const { address, chainId, isSupportChain } = useAppSelector(
+    (store) => store.wallet,
+  );
   const { currentDAO, currentMember, DAOType } = useAppSelector(
     (store) => store.dao,
   );
@@ -45,10 +46,10 @@ export default function BasicLayout({ children }: { children: ReactElement }) {
       dispatch(setDAOType(type));
 
       if (type === 'join' || type === 'create') {
-        const members = await sdk.utils.methods.getMembersFrom({
-          chain: chainId,
-          host: dao.host,
-          owner: address,
+        const members = await request({
+          name: 'utils',
+          method: 'getMembersFrom',
+          params: { chain: chainId, host: dao.host, owner: address },
         });
 
         if (members && members.length > 0) {
@@ -63,40 +64,38 @@ export default function BasicLayout({ children }: { children: ReactElement }) {
     initData();
   }, []);
 
-  // useEffect(() => {
-  //   const getDAOList = async () => {
-  //     const res = await sdk.dao.methods.getDAOsFromCreatedBy({
-  //       chain: chainId,
-  //       owner: address,
-  //     });
-
-  //     if (!res || res.length === 0) {
-  //       router.push('/');
-  //       return;
-  //     }
-
-  //     const dao = res.find((item: any) => item.host === currentDAO.host);
-
-  //     if (!dao) {
-  //       router.push('/');
-  //       return;
-  //     }
-
-  //     dispatch(setCurrentDAO(dao));
-  //   };
-
-  //   if (address && chainId) {
-  //     getDAOList();
-  //   }
-  // }, [address, chainId]);
-
+  // 切换地址或网络
   useEffect(() => {
-    const onDAOChange = async () => {
-      console.log('onDAOChange', currentDAO);
-      const members = await sdk.utils.methods.getMembersFrom({
-        chain: chainId,
-        host: currentDAO.host,
-        owner: address,
+    if (!init) {
+      return;
+    }
+
+    const getDAOAndMember = async () => {
+      const daos = await request({
+        name: 'utils',
+        method: 'getDAOsFromOwner',
+        params: { chain: chainId, owner: address },
+      });
+
+      if (!daos || daos.length === 0) {
+        router.push('/');
+        return;
+      }
+
+      const dao = daos.find((item: any) => item.host === currentDAO.host);
+
+      if (!dao) {
+        router.push('/');
+        return;
+      }
+
+      dispatch(setCurrentDAO(dao));
+      dispatch(setDAOType('join'));
+
+      const members = await request({
+        name: 'utils',
+        method: 'getMembersFrom',
+        params: { chain: chainId, host: dao.host, owner: address },
       });
 
       if (members && members.length > 0) {
@@ -108,10 +107,37 @@ export default function BasicLayout({ children }: { children: ReactElement }) {
       }
     };
 
-    if (currentDAO?.host) {
-      onDAOChange();
+    if (address && chainId) {
+      if (isSupportChain) {
+        getDAOAndMember();
+      } else {
+        router.push('/');
+      }
     }
-  }, [currentDAO]);
+  }, [address, chainId, isSupportChain]);
+
+  // useEffect(() => {
+  //   const onDAOChange = async () => {
+  //     console.log('onDAOChange', currentDAO);
+  //     const members = await sdk.utils.methods.getMembersFrom({
+  //       chain: chainId,
+  //       host: currentDAO.host,
+  //       owner: address,
+  //     });
+
+  //     if (members && members.length > 0) {
+  //       dispatch(setUserMembers(members));
+  //       dispatch(setCurrentMember(members[0]));
+  //     } else {
+  //       dispatch(setUserMembers([]));
+  //       dispatch(setCurrentMember({ name: '' }));
+  //     }
+  //   };
+
+  //   if (currentDAO?.host) {
+  //     onDAOChange();
+  //   }
+  // }, [currentDAO]);
 
   // useEffect(() => {
   //   console.log('????');

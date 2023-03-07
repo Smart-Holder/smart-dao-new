@@ -1,4 +1,4 @@
-import { Avatar, Button, Modal } from 'antd';
+import { Modal } from 'antd';
 import { FC, useEffect, useState } from 'react';
 import Image from 'next/image';
 import styles from './put-modal.module.css';

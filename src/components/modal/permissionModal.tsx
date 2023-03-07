@@ -1,6 +1,6 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
 import { useRouter } from 'next/router';
-import { Button, Modal, Row, Col, message } from 'antd';
+import { Button, Modal, Row, Col } from 'antd';
 import { Checkbox, Form } from 'antd';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
@@ -12,12 +12,12 @@ import { setPermissions } from '@/api/member';
 import { useIntl } from 'react-intl';
 import { isRepeateArray } from '@/utils';
 
-const validateMessages = {
-  required: '${label} is required!',
-  string: {
-    range: "'${label}' must be between ${min} and ${max} characters",
-  },
-};
+// const validateMessages = {
+//   required: '${label} is required!',
+//   string: {
+//     range: "'${label}' must be between ${min} and ${max} characters",
+//   },
+// };
 
 const App = (props: any, ref: any) => {
   const { formatMessage } = useIntl();
@@ -54,22 +54,25 @@ const App = (props: any, ref: any) => {
   const onFinish = async (values: any) => {
     console.log('validate Success:', values);
 
-    const add = []as number[]; // 添加的权限
-    const remove: any = []as number[]; // 删除的权限
+    const add = [] as number[]; // 添加的权限
+    const remove: any = [] as number[]; // 删除的权限
 
     values.permissions.forEach((v: any) => {
-      if (!currentMember.permissions.includes(v))
-        add.push(v);
+      if (!currentMember.permissions.includes(v)) add.push(v);
     });
 
     currentMember.permissions.forEach((v: any) => {
-      if (!values.permissions.includes(v))
-        remove.push(v);
+      if (!values.permissions.includes(v)) remove.push(v);
     });
 
     try {
       setLoading(true);
-      await setPermissions(currentMember.tokenId, add, remove, values.permissions);
+      await setPermissions(
+        currentMember.tokenId,
+        add,
+        remove,
+        values.permissions,
+      );
       setLoading(false);
       handleCancel();
       // router.push('/dashboard/governance/votes');

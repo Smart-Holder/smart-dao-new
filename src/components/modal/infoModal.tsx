@@ -1,15 +1,13 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
 import { useRouter } from 'next/router';
-import { Button, Input, Modal, Typography, Image } from 'antd';
-import { Checkbox, Form, Upload, Tag, Space } from 'antd';
-import Icon, { RightCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Input, Modal, Image } from 'antd';
+import { Form, Upload, Space } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { setUserInfo } from '@/store/features/userSlice';
 
-import { connectType } from '@/config/enum';
-
-import { validateChinese, validateEthAddress } from '@/utils/validator';
+import { validateChinese } from '@/utils/validator';
 import { getCookie } from '@/utils/cookie';
 import { validateImage, getBase64 } from '@/utils/image';
 
@@ -18,8 +16,6 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 import sdk from 'hcstore/sdk';
 import { useIntl } from 'react-intl';
-
-const { Link } = Typography;
 
 const validateMessages = {
   required: '${label} is required!',

@@ -11,10 +11,10 @@ import { request } from '@/api';
 import styles from '@/styles/content.module.css';
 import { useAppSelector } from '@/store/hooks';
 
-import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
+import { formatDayjsValues, fromToken } from '@/utils';
 
 import type { PaginationProps } from 'antd';
-import { getBalance, release } from '@/api/asset';
+import { getBalance } from '@/api/asset';
 import { createVote } from '@/api/vote';
 import { useIntl, FormattedMessage } from 'react-intl';
 
@@ -57,7 +57,7 @@ const columns = [
 
 const App = () => {
   const { formatMessage } = useIntl();
-  const { chainId } = useAppSelector((store) => store.wallet);
+  const { chainId, address } = useAppSelector((store) => store.wallet);
   const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
   const { loading, searchText } = useAppSelector((store) => store.common);
 
@@ -208,10 +208,12 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    setPage(1);
-    getData(1);
-    getTotal();
-  }, [searchText, values, balance]);
+    if (currentDAO.host) {
+      setPage(1);
+      getData(1);
+      getTotal();
+    }
+  }, [searchText, values, balance, chainId, address, currentDAO.host]);
 
   const hideModal = () => {
     setIsModalOpen(false);

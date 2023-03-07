@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import {
   Button,
-  Checkbox,
   Form,
   Input,
   Upload,
@@ -18,52 +17,75 @@ import { useIntl } from 'react-intl';
 import { validateChinese, validateEthAddress } from '@/utils/validator';
 import { getCookie } from '@/utils/cookie';
 import { hexRandomNumber } from '@/utils';
-import { validateImage, getBase64 } from '@/utils/image';
+import { validateImage } from '@/utils/image';
 import { setMakeDAOStorage, getMakeDAOStorage } from '@/utils/launch';
-import { useAppSelector, useAppDispatch } from '@/store/hooks';
+import { useAppSelector } from '@/store/hooks';
 
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 import iconSuccess from '/public/images/icon-success.png';
-import { deployAssetSalesDAO } from '@/store/features/daoSlice';
 
-const validateMessages = {
-  required: '${label} is required!',
-  string: {
-    range: "'${label}' must be between ${min} and ${max} characters",
-  },
-};
+// const validateMessages = {
+//   required: '${label} is required!',
+//   string: {
+//     range: "'${label}' must be between ${min} and ${max} characters",
+//   },
+// };
 
-const FormGroup: React.FC = () => {
-  const dispatch = useAppDispatch();
+const App: React.FC = () => {
+  const { formatMessage } = useIntl();
   const router = useRouter();
+
   const { chainId, address } = useAppSelector((store) => store.wallet);
+  const { nickname, image, description } = useAppSelector(
+    (store) => store.user.userInfo,
+  );
 
-  const initialValues = getMakeDAOStorage('start') || {};
-
-  const defaultMember = [
+  // const [cacheDAO, setCacheDAO] = useState({}) as any;
+  const [members, setMembers] = useState([
     {
       id: hexRandomNumber(),
-      name: '',
-      description: '',
-      image: '',
+      name: nickname,
+      description,
+      image,
       votes: 1,
       owner: address,
     },
-  ];
-
-  const [members, setMembers] = useState(
-    initialValues.members || defaultMember,
-  );
-
-  const [avatar, setAvatar] = useState(initialValues.image);
+  ]);
+  const [avatar, setAvatar] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageMessage, setImageMessage] = useState('');
 
-  const { formatMessage } = useIntl();
-
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    const dao = getMakeDAOStorage('start');
+
+    if (dao) {
+      // setCacheDAO(dao);
+      form.setFieldsValue({
+        name: dao.name,
+        mission: dao.mission,
+        description: dao.description,
+      });
+      setMembers(dao.members);
+      setAvatar(dao.image);
+    } else {
+      form.resetFields();
+      setMembers([
+        {
+          id: hexRandomNumber(),
+          name: nickname,
+          description,
+          image,
+          votes: 1,
+          owner: address,
+        },
+      ]);
+      setAvatar('');
+    }
+  }, [chainId, address]);
 
   const onFinish = (values: any) => {
     if (!avatar) {
@@ -115,9 +137,9 @@ const FormGroup: React.FC = () => {
           ...members,
           {
             id: hexRandomNumber(),
-            name: '',
-            description: '',
-            image: '',
+            name: nickname,
+            description,
+            image,
             votes: 1,
             owner: value,
           },
@@ -171,14 +193,12 @@ const FormGroup: React.FC = () => {
       <Form
         name="basic"
         form={form}
-        labelCol={{ span: 6 }}
-        wrapperCol={{ span: 18 }}
-        initialValues={initialValues}
+        // initialValues={initialValues}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
         labelAlign="left"
-        requiredMark={false}
+        layout="vertical"
         validateTrigger="onBlur"
       >
         <div className="wrap">
@@ -190,6 +210,7 @@ const FormGroup: React.FC = () => {
             <div className="form-title2">
               {formatMessage({ id: 'start.desc' })}
             </div>
+
             <Form.Item
               label={formatMessage({ id: 'start.name' })}
               name="name"
@@ -199,10 +220,7 @@ const FormGroup: React.FC = () => {
                 { validator: validateChinese },
               ]}
             >
-              <Input
-              // className="input"
-              // prefix={<span style={{ color: '#000' }}>Name:</span>}
-              />
+              <Input style={{ height: 76, fontSize: 18 }} />
             </Form.Item>
 
             <Form.Item
@@ -213,7 +231,7 @@ const FormGroup: React.FC = () => {
                 { type: 'string', min: 20, max: 150 },
               ]}
             >
-              <Input.TextArea rows={4} />
+              <Input.TextArea rows={4} style={{ fontSize: 18 }} />
             </Form.Item>
 
             <Form.Item
@@ -224,12 +242,13 @@ const FormGroup: React.FC = () => {
                 { type: 'string', min: 20, max: 150 },
               ]}
             >
-              <Input.TextArea rows={4} />
+              <Input.TextArea rows={4} style={{ fontSize: 18 }} />
             </Form.Item>
 
             <Form.Item
               label="Logo"
               valuePropName="fileList"
+              required
               extra={<span style={{ color: 'red' }}>{imageMessage}</span>}
             >
               <Space>
@@ -275,21 +294,19 @@ const FormGroup: React.FC = () => {
             <Form.Item
               label={formatMessage({ id: 'name' })}
               name="member"
-              labelCol={{ span: 3 }}
-              wrapperCol={{ span: 21 }}
               rules={[
                 { validator: validateEthAddress },
                 { validator: validateRepeat },
               ]}
             >
               {/* <Input /> */}
-              <Space
-                className="input-member"
-                align="baseline"
-                direction="horizontal"
-              >
-                <Input />
-                <Button type="primary" onClick={addMember}>
+              <Space className="input-member" direction="horizontal">
+                <Input style={{ height: 76, fontSize: 18 }} />
+                <Button
+                  style={{ width: 100, height: 76, fontSize: 18 }}
+                  type="primary"
+                  onClick={addMember}
+                >
                   {formatMessage({ id: 'start.add' })}
                 </Button>
               </Space>
@@ -448,4 +465,4 @@ const FormGroup: React.FC = () => {
   );
 };
 
-export default FormGroup;
+export default App;

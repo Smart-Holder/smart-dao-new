@@ -1,7 +1,5 @@
-import { useState } from 'react';
 import { Form, Input } from 'antd';
 
-import Slider from '@/components/slider';
 import Footer from '@/containers/launch/steps/footer';
 
 import { useAppDispatch } from '@/store/hooks';

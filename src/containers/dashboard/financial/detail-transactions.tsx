@@ -1,9 +1,8 @@
 import { FC } from 'react';
 import styles from './detail-transactions.module.css';
 import contentStyles from '@/styles/content.module.css';
-import { Select, Table } from 'antd';
+import { Table } from 'antd';
 import { formatAddress } from '@/utils';
-import Image from 'next/image';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useIntl } from 'react-intl';

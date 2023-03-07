@@ -1,8 +1,6 @@
-import { Avatar, Statistic, Typography } from 'antd';
+import { Statistic, Typography } from 'antd';
 import { FC } from 'react';
 import styles from './vote-item.module.css';
-import iconUser from '/public/images/icon-user.png';
-import Image from 'next/image';
 import { useIntl, FormattedMessage } from 'react-intl';
 
 import { formatAddress } from '@/utils';
@@ -91,7 +89,13 @@ const VoteItem: FC<VoteItemProps> = (props) => {
     data,
   } = props;
 
-  const extra = desc ? JSON.parse(desc || '{}') : {};
+  let extra;
+
+  try {
+    extra = desc ? JSON.parse(desc || '{}') : {};
+  } catch (error) {
+    extra = { type: '', purpose: '' };
+  }
   // console.log('extra', extra);
   // console.log('-----------------', extra.type);
   const purpose = extra?.purpose;

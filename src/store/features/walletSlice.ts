@@ -30,7 +30,7 @@ const initialState: WalletState = {
   provider: undefined,
   connectType: Number(getCookie('connectType')),
   // connectType: 1,
-  isSupportChain: false,
+  isSupportChain: true,
   chainId: 0,
   address: getCookie('address'),
   addressFormat: formatAddress(getCookie('address')),
@@ -87,6 +87,9 @@ export const walletSlice = createSlice({
         state.currentChainInfo = {};
       }
     },
+    setSupportChain: (state, { payload }) => {
+      state.isSupportChain = payload;
+    },
     setBalance: (state, { payload }) => {
       state.balance = payload;
     },
@@ -95,11 +98,26 @@ export const walletSlice = createSlice({
       state.connectType = 0;
       state.address = '';
       state.chainId = 0;
+      state.isSupportChain = true;
       state.balance = 0;
       state.web3 = null;
       clearCookie('address');
       clearCookie('chainId');
       clearCookie('connectType');
+      localStorage.removeItem('step');
+      localStorage.removeItem('walletconnect');
+      sessionStorage.clear();
+      router.push('/');
+    },
+    notSupportChain: (state) => {
+      state.provider = undefined;
+      state.address = '';
+      // state.chainId = 0;
+      // state.isSupportChain = true;
+      state.balance = 0;
+      state.web3 = null;
+      clearCookie('address');
+      // clearCookie('chainId');
       localStorage.removeItem('step');
       localStorage.removeItem('walletconnect');
       sessionStorage.clear();
@@ -119,10 +137,11 @@ export const walletSlice = createSlice({
         const isSupport = Object.keys(ETH_CHAINS_INFO).includes(chainId);
 
         if (!isSupport) {
-          Modal.warning({
-            title: 'Supported networks: Ethereum, Goerli',
-            className: 'modal-small',
-          });
+          state.isSupportChain = false;
+          // Modal.warning({
+          //   title: 'Supported networks: Ethereum, Goerli',
+          //   className: 'modal-small',
+          // });
           return;
         }
 
@@ -134,6 +153,7 @@ export const walletSlice = createSlice({
         state.web3 = new Web3(provider);
         state.address = address;
         state.chainId = Number(chainId);
+        state.isSupportChain = true;
         state.connectType = type;
 
         // 钱包监听
@@ -176,6 +196,8 @@ export const {
   setChainId,
   setBalance,
   disconnect,
+  notSupportChain,
+  setSupportChain,
 } = walletSlice.actions;
 
 // 默认导出

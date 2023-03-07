@@ -15,16 +15,16 @@ import { setUserInfo } from '@/store/features/userSlice';
  */
 const App = (props: any) => {
   const dispatch = useAppDispatch();
-  const { address, chainId } = useAppSelector((store) => store.wallet);
+  const { address, chainId, isSupportChain } = useAppSelector(
+    (store) => store.wallet,
+  );
   const [init, setInit] = useState(false); // init api
 
   // init api
   useEffect(() => {
     const init = async () => {
       try {
-        const res1 = await initialize();
-        const qiniuToken = await sdk.utils.methods.qiniuToken();
-        setCookie('qiniuToken', qiniuToken);
+        await initialize();
         console.log('init api');
         setInit(true);
       } catch (error) {
@@ -39,7 +39,7 @@ const App = (props: any) => {
   useEffect(() => {
     const init = async () => {
       try {
-        const res1 = await initialize(address);
+        await initialize(address);
 
         const [token, user] = await Promise.all([
           sdk.utils.methods.qiniuToken(),
@@ -61,10 +61,10 @@ const App = (props: any) => {
       }
     };
 
-    if (address && chainId) {
+    if (address && chainId && isSupportChain) {
       init();
     }
-  }, [address, chainId]);
+  }, [address, chainId, isSupportChain, dispatch]);
 
   if (!init) {
     return null;

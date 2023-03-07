@@ -7,12 +7,10 @@ import {
   Form,
   Select,
   Tag,
-  Radio,
   Button,
   Space,
   message,
 } from 'antd';
-import { EllipsisOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
@@ -25,7 +23,7 @@ import Input from '@/containers/dashboard/mine/input-price';
 import { request } from '@/api';
 import { useAppSelector } from '@/store/hooks';
 import { getCookie } from '@/utils/cookie';
-import { formatAddress, formatDayjsValues, fromToken, toToken } from '@/utils';
+import { formatDayjsValues, fromToken, toToken } from '@/utils';
 import { useIntl } from 'react-intl';
 import { shelves } from '@/api/asset';
 

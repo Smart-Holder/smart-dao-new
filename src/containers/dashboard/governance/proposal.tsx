@@ -1,7 +1,6 @@
-import React, { useState, useImperativeHandle, forwardRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Input, Avatar, message, Modal } from 'antd';
-import { Checkbox, Form, Upload, Tag } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { Form } from 'antd';
 
 import { useIntl } from 'react-intl';
 
@@ -14,19 +13,16 @@ import { useRouter } from 'next/router';
 import { isPermission } from '@/api/member';
 import { Permissions } from '@/config/enum';
 
-const options = [
-  { label: 'Apple', value: 'Apple' },
-  { label: 'Pear', value: 'Pear' },
-  { label: 'Orange', value: 'Orange' },
-];
-
 const App = () => {
+  const [form] = Form.useForm();
   const { formatMessage } = useIntl();
   const router = useRouter();
   const dispatch = useAppDispatch();
+
   const { userInfo } = useAppSelector((store) => store.user);
   const { address } = useAppSelector((store) => store.wallet);
   // const { loading } = useAppSelector((store) => store.common);
+
   const [loading, setLoading] = useState(false);
 
   const initialValues = {
@@ -35,6 +31,10 @@ const App = () => {
 
   const url =
     'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg';
+
+  useEffect(() => {
+    form.setFieldsValue({ executor: address });
+  }, [address, form]);
 
   const onFinish = async (values: any) => {
     console.log('form success:', values);
@@ -91,6 +91,7 @@ const App = () => {
 
       <Form
         name="basic"
+        form={form}
         initialValues={initialValues}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import sdk from 'hcstore/sdk';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useIntl } from 'react-intl';
@@ -8,47 +8,41 @@ import Item from './daoItem';
 // import { getDAOList, setDAOList } from '@/store/features/daoSlice';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
-import { getCookie } from '@/utils/cookie';
+// import { getCookie } from '@/utils/cookie';
 import { debounce } from '@/utils';
-import { Divider, Skeleton } from 'antd';
+import { Skeleton, Empty } from 'antd';
 // import {
 //   setLikeDAOs,
 //   setDAOList as setMyDAOList,
 // } from '@/store/features/daoSlice';
 
-const testData = [
-  {
-    id: 1,
-    name: 'dao1',
-    avatar:
-      'data:image/png;base64,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',
-    status1: 1,
-    status2: 1,
-  },
-];
-
 const DAOList = () => {
   const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
 
-  const chainId = Number(getCookie('chainId'));
-  const address = getCookie('address');
+  // const chainId = Number(getCookie('chainId'));
+  // const address = getCookie('address');
 
   const { searchText, isInit } = useAppSelector((store) => store.common);
-  // const DAOList = testData;
+  const { chainId, address, isSupportChain } = useAppSelector(
+    (store) => store.wallet,
+  );
+
+  const pageSize = useRef(20);
   const [width, setWidth] = useState('');
   const [DAOList, setDAOList] = useState<any>([]);
   const [pageStart, setPageStart] = useState(0);
   const [total, setTotal] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [init, setInit] = useState(false);
+
   const defaultChain = process.env.NEXT_PUBLIC_DEFAULT_CHAIN;
 
   const onResize = () => {
-    console.log('onSesize');
     const el = document.querySelector('.wrap1') as any;
-
     const col = Math.floor(el.offsetWidth / (196 + 15));
     const w = 100 / col;
+
     setWidth(w ? w + '%' : 'auto');
   };
 
@@ -60,39 +54,38 @@ const DAOList = () => {
     const resize = debounce(onResize, 200);
 
     window.addEventListener('resize', resize);
+
     return () => {
       window.removeEventListener('resize', resize);
     };
   }, []);
 
   const getData = async () => {
-    // const t = await sdk.dao.methods.getAllDAOsTotal({
-    //   chain: chainId || defaultChain,
-    //   name: searchText,
-    // });
+    if (!isSupportChain) {
+      return;
+    }
 
-    // setTotal(t);
-
+    setLoading(true);
     const res = await sdk.dao.methods.getAllDAOs({
       chain: chainId || defaultChain,
       name: searchText,
-      limit: [pageStart, 20],
-      owner: address || '',
+      limit: [pageStart, pageSize.current],
+      // owner: address || '',
     });
 
     const nextList = [...DAOList, ...res];
 
-    // if (nextList.length >= t) {
-    //   setHasMore(false);
-    // }
-
-    setPageStart(pageStart + 20);
+    setPageStart(pageStart + pageSize.current);
     setDAOList(nextList);
+    setLoading(false);
   };
 
   const resetData = async () => {
-    // setDAOList([]);
+    if (!isSupportChain) {
+      return;
+    }
 
+    setLoading(true);
     const t = await sdk.dao.methods.getAllDAOsTotal({
       chain: chainId || defaultChain,
       name: searchText,
@@ -103,19 +96,21 @@ const DAOList = () => {
     const list = await sdk.dao.methods.getAllDAOs({
       chain: chainId || defaultChain,
       name: searchText,
-      limit: [0, 20],
-      owner: address || '',
+      limit: [0, pageSize.current],
+      // owner: address || '',
     });
 
-    setPageStart(20);
+    setPageStart(pageSize.current);
     setDAOList(list);
+    setLoading(false);
+    setInit(true);
   };
 
   useEffect(() => {
     setDAOList([]);
     setTotal(0);
     resetData();
-  }, [isInit, searchText, address, chainId]);
+  }, [searchText, address, chainId]);
 
   // useEffect(() => {
   //   if (searchText) {
@@ -150,11 +145,13 @@ const DAOList = () => {
 
   return (
     <div>
-      <div className="h1-2">
-        <div className="h1-2-content">
-          {formatMessage({ id: 'home.explore' })}
+      {width && (
+        <div className="h1-2">
+          <div className="h1-2-content">
+            {formatMessage({ id: 'home.explore' })}
+          </div>
         </div>
-      </div>
+      )}
       {/* <div className="h1">Discovery! Most Favorites Items</div> */}
       {/* <div className="h2">Lorem ipsum dolor sit amet, consectetur</div> */}
 
@@ -178,6 +175,12 @@ const DAOList = () => {
                 <Item data={item} />
               </div>
             ))}
+
+          {DAOList.length === 0 && !loading && init && (
+            <div className="empty">
+              <Empty />
+            </div>
+          )}
         </div>
       </InfiniteScroll>
 
@@ -230,6 +233,10 @@ const DAOList = () => {
           justify-content: center;
           flex-basis: ${width};
           margin-bottom: 59px;
+        }
+
+        .empty {
+          width: 100%;
         }
       `}</style>
     </div>

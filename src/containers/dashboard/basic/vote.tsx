@@ -9,12 +9,6 @@ import Slider from '@/components/slider';
 import { getLifespan } from '@/api/vote';
 import { Button } from 'antd';
 
-const options = [
-  { label: 'Apple', value: 'Apple' },
-  { label: 'Pear', value: 'Pear' },
-  { label: 'Orange', value: 'Orange' },
-];
-
 const App = () => {
   const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();

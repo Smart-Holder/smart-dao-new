@@ -3,6 +3,7 @@ import Vote from '@/config/abi/VotePool.json';
 import DAO from '@/config/abi/DAO.json';
 import Member from '@/config/abi/Member.json';
 import Ledger from '@/config/abi/Ledger.json';
+import Asset from '@/config/abi/Asset.json';
 import { rng } from 'somes/rng';
 import store from '@/store';
 import somes from 'somes';
@@ -11,6 +12,7 @@ const abiList: any = {
   member: Member,
   dao: DAO,
   ledger: Ledger,
+  asset: Asset,
 };
 
 export function getLifespan() {
@@ -31,10 +33,10 @@ export async function createVote({
   name: string;
   description: string;
   extra?: {
-    abi: string,
-    target: string,
-    method: string,
-    params: any[],
+    abi: string;
+    target: string;
+    method: string;
+    params: any[];
   }[];
 }) {
   const { web3, address } = store.getState().wallet;
@@ -43,19 +45,22 @@ export async function createVote({
   const lifespan = await contract.methods.lifespan().call();
   const data = [] as string[];
 
-  for (let {abi,target,method,params} of extra) {
+  for (let { abi, target, method, params } of extra) {
     const C = abiList[abi];
     const contract = getContract(web3, C.abi, target);
     somes.assert(C, '#vote.createVote, no match abi');
     await await contract.methods[method](...params).call({ from: address }); // try call
     data.push(
-      web3.eth.abi.encodeFunctionCall(C.abi.find((e: any) => e.name == method), params)
+      web3.eth.abi.encodeFunctionCall(
+        C.abi.find((e: any) => e.name == method),
+        params,
+      ),
     );
   }
 
   const params = [
     '0x' + rng(32).toString('hex'),
-    extra.map(e=>e.target),
+    extra.map((e) => e.target),
     Math.max(currentDAO.defaultVoteTime || 0, lifespan), //604800,
     5001,
     0,

@@ -1,14 +1,6 @@
-import { useEffect, useState } from 'react';
-import Head from 'next/head';
-import Image from 'next/image';
-import { Layout, Tabs } from 'antd';
-const { Content } = Layout;
-import { getCookie } from '@/utils/cookie';
-import type { TabsProps } from 'antd';
+import { useState } from 'react';
 import { Divider, Space, Button } from 'antd';
 
-import { getDAOList } from '@/store/features/daoSlice';
-import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { useIntl } from 'react-intl';
 
 import DAO from '@/containers/mine/daoList';
@@ -16,18 +8,6 @@ import Info from '@/containers/mine/info';
 
 export default function Mine() {
   const { formatMessage } = useIntl();
-  const dispatch = useAppDispatch();
-
-  const chainId = Number(getCookie('chainId'));
-  const address = getCookie('address');
-
-  // const { DAOList } = useAppSelector((store) => store.dao);
-
-  // useEffect(() => {
-  //   dispatch(getDAOList({ chain: chainId, owner: address }));
-  // }, []);
-
-  // console.log('DAOList', DAOList);
 
   const [active, setActive] = useState(1);
 

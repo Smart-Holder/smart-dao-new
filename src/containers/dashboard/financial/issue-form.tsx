@@ -25,7 +25,6 @@ import type { SelectProps } from 'antd';
 import { ETH_CHAINS_INFO } from '@/config/chains';
 import { request } from '@/api';
 import { safeMint } from '@/api/asset';
-import { fromToken } from '@/utils';
 import { useIntl } from 'react-intl';
 import { isPermission } from '@/api/member';
 import { Permissions } from '@/config/enum';
@@ -65,7 +64,7 @@ const IssueForm: FC<IssueFormProps> = () => {
         supply: 1,
       });
     }
-  }, []);
+  }, [chainId]);
 
   const createProposal = async (values: any, _tokenURI: string) => {
     const params = {
@@ -164,8 +163,9 @@ const IssueForm: FC<IssueFormProps> = () => {
       setLoading(false);
       form.resetFields();
       setImage('');
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      message.error(error?.message);
       setLoading(false);
     }
 

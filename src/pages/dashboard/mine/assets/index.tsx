@@ -60,6 +60,7 @@ const App: NextPageWithLayout = () => {
     let params = {
       chain: chainId,
       host: currentDAO.host,
+      owner: address,
       state: 0,
     } as {
       author?: string;
@@ -237,16 +238,18 @@ const App: NextPageWithLayout = () => {
             );
           })}
         </div>
-        <div className={styles['dashboard-content-pagination']}>
-          <Pagination
-            simple
-            defaultCurrent={1}
-            current={page}
-            total={total}
-            pageSize={pageSize}
-            onChange={onPageChange}
-          />
-        </div>
+        {total > 0 && (
+          <div className={styles['dashboard-content-pagination']}>
+            <Pagination
+              simple
+              defaultCurrent={1}
+              current={page}
+              total={total}
+              pageSize={pageSize}
+              onChange={onPageChange}
+            />
+          </div>
+        )}
       </div>
     </AntdLayout.Content>
   );

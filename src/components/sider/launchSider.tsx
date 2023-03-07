@@ -1,17 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
-import { Layout, Space, Button, Avatar, Typography } from 'antd';
+import { Layout, Space, Avatar, Typography } from 'antd';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
+import { UserOutlined } from '@ant-design/icons';
+// import Image from 'next/image';
 
 import Menu from '@/components/menu/launchMenu';
-
-import { useAppSelector, useAppDispatch } from '@/store/hooks';
-
-import logo from '/public/logo.png';
-import { UserOutlined } from '@ant-design/icons';
-import { formatAddress } from '@/utils';
 import RoleModal from '@/components/modal/roleModal';
+
+import { useAppSelector } from '@/store/hooks';
+
+import { formatAddress } from '@/utils';
 import { getMakeDAOStorage } from '@/utils/launch';
+
+// import logo from '/public/logo.png';
 
 const { Paragraph } = Typography;
 
@@ -19,25 +20,17 @@ const App = () => {
   const router = useRouter();
 
   const roleModal: any = useRef(null);
-  const { address } = useAppSelector((store) => store.wallet);
+  const { chainId, address } = useAppSelector((store) => store.wallet);
 
-  const [storageValues, setStorageValues] = useState({}) as any;
+  const [cacheDAO, setCacheDAO] = useState({}) as any;
 
   useEffect(() => {
-    if (address) {
-      const values = getMakeDAOStorage('start') || {};
-      setStorageValues(values);
-    }
-  }, [address]);
-
-  // const storageValues = getMakeDAOStorage('start') || {};
+    const values = getMakeDAOStorage('start') || {};
+    setCacheDAO(values);
+  }, [chainId, address]);
 
   const handleClick = () => {
     router.push('/');
-  };
-
-  const onChange = () => {
-    roleModal.current.show();
   };
 
   return (
@@ -73,17 +66,17 @@ const App = () => {
 
       <div className="user">
         <Space size={16}>
-          {storageValues.image ? (
-            <Avatar size={44} src={storageValues.image} />
+          {cacheDAO.image ? (
+            <Avatar size={44} src={cacheDAO.image} />
           ) : (
             <Avatar size={44} icon={<UserOutlined />} />
           )}
 
           <span className="username">
-            {storageValues.name ? (
-              <Paragraph ellipsis={{ rows: 1 }}>{storageValues.name}</Paragraph>
+            {cacheDAO.name ? (
+              <Paragraph ellipsis={{ rows: 1 }}>{cacheDAO.name}</Paragraph>
             ) : (
-              storageValues.address
+              cacheDAO.address
             )}
           </span>
         </Space>
@@ -94,12 +87,9 @@ const App = () => {
           <Avatar size={44} icon={<UserOutlined />} />
           <span className="rolename">
             {formatAddress(
-              storageValues?.members ? storageValues?.members[0]?.owner : '',
+              cacheDAO?.members ? cacheDAO?.members[0]?.owner : '',
             )}
           </span>
-          {/* <Button type="primary" onClick={onChange}>
-            Change
-          </Button> */}
         </Space>
       </div>
 

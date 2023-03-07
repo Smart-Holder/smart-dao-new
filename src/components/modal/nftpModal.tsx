@@ -1,5 +1,5 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
-import { Button, Input, Modal, Row, Col, message } from 'antd';
+import { Button, Input, Modal, Row, Col } from 'antd';
 import { Checkbox, Form } from 'antd';
 import { rng } from 'somes/rng';
 import { useAppSelector } from '@/store/hooks';
@@ -11,12 +11,12 @@ import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import store from '../../store';
 
-const validateMessages = {
-  required: '${label} is required!',
-  string: {
-    range: "'${label}' must be between ${min} and ${max} characters",
-  },
-};
+// const validateMessages = {
+//   required: '${label} is required!',
+//   string: {
+//     range: "'${label}' must be between ${min} and ${max} characters",
+//   },
+// };
 
 const App = (props: any, ref: any) => {
   const { formatMessage } = useIntl();
@@ -41,7 +41,7 @@ const App = (props: any, ref: any) => {
   const onFinish = async (values: any) => {
     console.log('validate Success:', values);
     const { address, votes, permissions } = values;
-    const {currentDAO} = store.getState().dao;
+    const { currentDAO } = store.getState().dao;
 
     const extra = [
       {

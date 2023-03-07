@@ -1,5 +1,3 @@
-import { useState } from 'react';
-import dynamic from 'next/dynamic';
 import { Layout as AntdLayout } from 'antd';
 
 import Layout from '@/components/layout';

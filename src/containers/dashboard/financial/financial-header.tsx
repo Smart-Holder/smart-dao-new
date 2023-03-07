@@ -4,11 +4,8 @@ import { useRouter } from 'next/router';
 import styles from './financial-header.module.css';
 import { Button, Typography } from 'antd';
 // import PutModal, { PutModalListItem } from './put-modal';
-import { FinancialItemType } from './financial-item';
 import { useAppSelector } from '@/store/hooks';
 import { useIntl } from 'react-intl';
-import { isPermission } from '@/api/member';
-import { Permissions } from '@/config/enum';
 
 const { Paragraph, Text } = Typography;
 
