@@ -1,17 +1,30 @@
 /* eslint-disable eqeqeq */
 // JS操作cookies方法!
 
-import cookie from 'somes/cookie_cli';
-
 // 设置cookie
 export function setCookie(cname, cvalue, exmins) {
   var d = new Date();
   d.setTime(d.getTime() + exmins * 24 * 3600 * 1000);
-  cookie.set(cname, cvalue, d, '/');
+  var expires = 'expires=' + d.toGMTString();
+
+  if (document) {
+    document.cookie =
+      cname + '=' + cvalue + '; path=/; sameSite=Strict; ' + expires;
+  }
 }
 // 读取cookie
 export function getCookie(cname) {
-  return cookie.get(cname) || '';
+  var name = cname + '=';
+
+  if (typeof document !== 'undefined') {
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i].trim();
+      if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+    }
+  }
+
+  return '';
 }
 
 // 检查cookie
@@ -29,5 +42,5 @@ export function checkCookie() {
 
 // 清除cookie
 export function clearCookie(name) {
-  cookie.remove(name);
+  setCookie(name, '', -1);
 }
