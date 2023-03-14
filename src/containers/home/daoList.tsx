@@ -36,7 +36,7 @@ const DAOList = () => {
   const [loading, setLoading] = useState(false);
   const [init, setInit] = useState(false);
 
-  const defaultChain = process.env.NEXT_PUBLIC_DEFAULT_CHAIN;
+  const defaultChain = Number(process.env.NEXT_PUBLIC_DEFAULT_CHAIN);
 
   const onResize = () => {
     const el = document.querySelector('.wrap1') as any;
