@@ -1,6 +1,6 @@
 import React, { memo, useCallback } from 'react';
 import type { MenuProps } from 'antd';
-import { Menu } from 'antd';
+import { Menu, Image } from 'antd';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
 
@@ -40,35 +40,80 @@ const App: React.FC = () => {
   const { pathname } = router;
 
   const items: MenuProps['items'] = [
-    {
-      label: formatMessage({ id: 'sider.visitor.home' }),
-      key: '/dashboard/mine/home',
-      // icon: <MailOutlined />,
-    },
+    // {
+    //   label: formatMessage({ id: 'sider.visitor.home' }),
+    //   key: '/dashboard/mine/home',
+    //   icon: <MailOutlined />,
+    // },
     {
       label: formatMessage({ id: 'sider.visitor.votes' }),
       key: '/dashboard/governance/votes',
-      // icon: <MailOutlined />,
+      icon: (
+        <Image
+          style={{ display: 'block' }}
+          src="/images/sider/icon_nav_side_polling_station_default.png"
+          width={20}
+          height={20}
+          alt="icon"
+          preview={false}
+        />
+      ),
     },
     {
       label: formatMessage({ id: 'sider.visitor.asset' }),
       key: '/dashboard/financial/assets',
-      // icon: <MailOutlined />,
+      icon: (
+        <Image
+          style={{ display: 'block' }}
+          src="/images/sider/icon_nav_side_assets_default.png"
+          width={20}
+          height={20}
+          alt="icon"
+          preview={false}
+        />
+      ),
     },
     {
       label: formatMessage({ id: 'sider.visitor.order' }),
       key: '/dashboard/financial/order',
-      // icon: <MailOutlined />,
+      icon: (
+        <Image
+          style={{ display: 'block' }}
+          src="/images/sider/icon_nav_side_order_default.png"
+          width={20}
+          height={20}
+          alt="icon"
+          preview={false}
+        />
+      ),
     },
     {
       label: formatMessage({ id: 'sider.visitor.income' }),
       key: '/dashboard/financial/income',
-      // icon: <MailOutlined />,
+      icon: (
+        <Image
+          style={{ display: 'block' }}
+          src="/images/sider/icon_nav_side_income_default.png"
+          width={20}
+          height={20}
+          alt="icon"
+          preview={false}
+        />
+      ),
     },
     {
       label: formatMessage({ id: 'sider.visitor.nftp' }),
       key: '/dashboard/member/nftp',
-      // icon: <MailOutlined />,
+      icon: (
+        <Image
+          style={{ display: 'block' }}
+          src="/images/sider/icon_nav_side_nftp_default.png"
+          width={20}
+          height={20}
+          alt="icon"
+          preview={false}
+        />
+      ),
     },
   ];
 
@@ -100,7 +145,7 @@ const App: React.FC = () => {
 
   return (
     <Menu
-      style={{ width: 240 }}
+      style={{ width: 234, marginTop: 12 }}
       mode="inline"
       items={items}
       // defaultOpenKeys={openKeys}

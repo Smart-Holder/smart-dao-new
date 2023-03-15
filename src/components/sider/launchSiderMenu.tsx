@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MailOutlined } from '@ant-design/icons';
-import type { MenuProps } from 'antd';
+import { Image, MenuProps } from 'antd';
 import { Menu } from 'antd';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
@@ -16,7 +16,7 @@ function getItem(
 ): MenuItem {
   return {
     key,
-    // icon,
+    icon,
     children,
     label,
     type,
@@ -28,17 +28,29 @@ const App: React.FC = () => {
   const router = useRouter();
 
   const items: MenuProps['items'] = [
-    getItem(formatMessage({ id: 'sider.launch' }), 'sub1', <MailOutlined />, [
-      getItem(formatMessage({ id: 'sider.launch.home' }), '/launch'),
-      getItem(
-        formatMessage({ id: 'sider.launch.information' }),
-        '/launch/information',
-      ),
-      getItem(
-        formatMessage({ id: 'sider.launch.template' }),
-        '/launch/setting',
-      ),
-    ]),
+    getItem(
+      formatMessage({ id: 'sider.launch' }),
+      'sub1',
+      <Image
+        style={{ display: 'block' }}
+        src="/images/sider/icon_nav_side_basic_setting_default.png"
+        width={20}
+        height={20}
+        alt="icon"
+        preview={false}
+      />,
+      [
+        // getItem(formatMessage({ id: 'sider.launch.home' }), '/launch'),
+        getItem(
+          formatMessage({ id: 'sider.launch.information' }),
+          '/launch/information',
+        ),
+        getItem(
+          formatMessage({ id: 'sider.launch.template' }),
+          '/launch/setting',
+        ),
+      ],
+    ),
   ];
 
   const [key, setKey] = useState(
@@ -53,12 +65,14 @@ const App: React.FC = () => {
 
   return (
     <Menu
-      onClick={onClick}
-      style={{ width: 240 }}
-      defaultSelectedKeys={[key]}
-      defaultOpenKeys={['sub1']}
+      style={{ width: 234, paddingBottom: 66 }}
       mode="inline"
       items={items}
+      defaultSelectedKeys={[key]}
+      openKeys={['sub1']}
+      defaultOpenKeys={['sub1']}
+      onClick={onClick}
+      expandIcon={() => null}
     />
   );
 };

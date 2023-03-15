@@ -9,6 +9,8 @@ import Footer from '@/components/footer';
 
 // const Header = dynamic(() => import('@/components/header'), { ssr: false });
 
+const { Content } = Layout;
+
 const BasicLayout = ({ children }: { children: ReactElement }) => {
   // const router = useRouter();
 
@@ -27,8 +29,8 @@ const BasicLayout = ({ children }: { children: ReactElement }) => {
         <link rel="icon" href="/icon.png" />
       </Head>
       <Layout>
-        <Header />
-        {children}
+        <Header type="fix" />
+        <Content className="basic">{children}</Content>
         <Footer />
       </Layout>
     </>

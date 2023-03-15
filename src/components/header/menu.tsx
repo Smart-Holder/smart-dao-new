@@ -188,32 +188,42 @@ const Menu = () => {
         overlayClassName="connect-menu"
         // overlayStyle={{ background: '#F9FAFF' }}
       >
-        <div className="dropdown-trigger" onClick={handleDropdownClick}>
-          {image ? (
-            // <Img
-            //   style={{ borderRadius: '50%' }}
-            //   src={image}
-            //   width={32}
-            //   height={32}
-            //   preview={false}
-            //   alt="avatar"
-            // />
-            <Avatar size={32} src={image} style={{ backgroundColor: '#fff' }} />
-          ) : (
-            <Image src={iconUser} alt="user" width={32} height={32} />
-          )}
-          <span className="dropdown-trigger-content">
-            {address ? (
-              <div className="label">
-                <span>{formatAddress(address)}</span>
-                <span>{ETH_CHAINS_INFO[chainId]?.name}</span>
-              </div>
+        {address ? (
+          <div className="dropdown-trigger" onClick={handleDropdownClick}>
+            {image ? (
+              // <Img
+              //   style={{ borderRadius: '50%' }}
+              //   src={image}
+              //   width={32}
+              //   height={32}
+              //   preview={false}
+              //   alt="avatar"
+              // />
+              <Avatar
+                size={32}
+                src={image}
+                style={{ backgroundColor: '#fff' }}
+              />
             ) : (
-              formatMessage({ id: 'home.connectWallet' })
+              <Image src={iconUser} alt="user" width={32} height={32} />
             )}
-          </span>
-          <DownOutlined />
-        </div>
+            <span className="dropdown-trigger-content">
+              {address ? (
+                <div className="label">
+                  <span>{formatAddress(address)}</span>
+                  <span>{ETH_CHAINS_INFO[chainId]?.name}</span>
+                </div>
+              ) : (
+                formatMessage({ id: 'home.connectWallet' })
+              )}
+            </span>
+            <DownOutlined />
+          </div>
+        ) : (
+          <div className="dropdown-trigger-login" onClick={handleDropdownClick}>
+            {formatMessage({ id: 'home.connectWallet' })}
+          </div>
+        )}
       </Dropdown>
 
       <WalletModal ref={walletModal} />
@@ -222,6 +232,22 @@ const Menu = () => {
 
       <style jsx>
         {`
+          .dropdown-trigger-login {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 46px;
+            padding: 0 26px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: PingFangSC-Semibold, PingFang SC;
+            line-height: 21px;
+            background: #000;
+            border-radius: 23px;
+            cursor: pointer;
+          }
+
           .dropdown-trigger {
             display: flex;
             justify-content: space-between;

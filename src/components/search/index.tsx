@@ -82,23 +82,38 @@ const Search: React.FC = () => {
         placeholder={formatMessage({ id: 'search' })}
         autoComplete="off"
         allowClear
-        suffix={<SearchOutlined style={{ fontSize: 24, color: '#a3a3a3' }} />}
+        prefix={
+          <SearchOutlined
+            style={{ fontSize: 24, color: '#a3a3a3', marginRight: 14 }}
+          />
+        }
         // onChange={debounceSearch}
         onChange={onChange}
       />
       <style jsx>
         {`
           .input-wrap {
-            display: inline-flex;
+            display: flex;
+            width: 100%;
           }
-          .input-wrap :global(.search-input) {
-            width: 466px;
-            height: 46px;
-            font-size: 14px;
 
+          .input-wrap :global(.search-input) {
+            width: 100%;
+            height: 46px;
+            padding-left: 20px;
+            padding-right: 20px;
+
+            font-size: 15px;
             color: #969ba0;
-            background-color: #fcfcfc;
-            border: 1px solid #eaeaea;
+
+            background-color: #f3f3f3;
+            border: 0;
+            border-radius: 23px;
+            box-shadow: none;
+          }
+
+          .input-wrap :global(input) {
+            background-color: #f3f3f3;
           }
         `}
       </style>

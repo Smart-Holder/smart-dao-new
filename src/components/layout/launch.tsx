@@ -9,6 +9,8 @@ import Footer from '@/components/footer';
 
 // const Header = dynamic(() => import('@/components/header'), { ssr: false });
 
+const { Content } = Layout;
+
 const LaunchLayout = ({ children }: { children: ReactElement }) => {
   return (
     <>
@@ -19,11 +21,13 @@ const LaunchLayout = ({ children }: { children: ReactElement }) => {
         <link rel="icon" href="/icon.png" />
       </Head>
       <Layout hasSider>
-        <Sider />
-        <Layout>
-          <Header />
-          {children}
-          <Footer />
+        <Header />
+        <Layout hasSider>
+          <Sider />
+          <Layout>
+            <Content className="launch">{children}</Content>
+            <Footer />
+          </Layout>
         </Layout>
       </Layout>
     </>

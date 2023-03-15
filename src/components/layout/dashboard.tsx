@@ -8,7 +8,7 @@ import SiderVisitor from '@/components/sider/dashboardSiderVisitor';
 import Footer from '@/components/footer';
 
 import { getSessionStorage } from '@/utils';
-import sdk from 'hcstore/sdk';
+// import sdk from 'hcstore/sdk';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import {
   setCurrentDAO,
@@ -20,6 +20,8 @@ import { useRouter } from 'next/router';
 import { request } from '@/api';
 
 // const Header = dynamic(() => import('@/components/header'), { ssr: false });
+
+const { Content } = Layout;
 
 export default function BasicLayout({ children }: { children: ReactElement }) {
   const dispatch = useAppDispatch();
@@ -164,13 +166,17 @@ export default function BasicLayout({ children }: { children: ReactElement }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/icon.png" />
       </Head>
-      <Layout hasSider>
-        {(DAOType === 'join' || DAOType === 'create') && <Sider />}
-        {(DAOType === 'follow' || DAOType === 'visitor') && <SiderVisitor />}
-        <Layout>
-          <Header />
-          {children}
-          <Footer />
+      <Layout>
+        <Header />
+        <Layout hasSider>
+          {(DAOType === 'join' || DAOType === 'create') && <Sider />}
+          {(DAOType === 'follow' || DAOType === 'visitor') && <SiderVisitor />}
+          <Layout>
+            <Content className="dashboard">
+              <div className="dashboard-content">{children}</div>
+            </Content>
+            <Footer />
+          </Layout>
         </Layout>
       </Layout>
     </>

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Layout, Space } from 'antd';
+import { Col, Layout, Row, Space } from 'antd';
+import Image from 'next/image';
 import router from 'next/router';
 import dynamic from 'next/dynamic';
 
@@ -8,6 +9,7 @@ import dynamic from 'next/dynamic';
 // import Language from '@/components/header/language';
 
 // import logo from '/public/logo.png';
+import logo from '/public/images/icon_logo_dark.png';
 
 const Search = dynamic(() => import('@/components/search'), { ssr: false });
 const Menu = dynamic(() => import('@/components/header/menu'), { ssr: false });
@@ -15,37 +17,74 @@ const Language = dynamic(() => import('@/components/header/language'), {
   ssr: false,
 });
 
-const Header = () => {
+const Header = ({ type }: { type?: string }) => {
   const handleClick = () => {
     router.push('/');
   };
 
   return (
-    <div className="wrap">
-      <Layout.Header className="header">
-        <div className="left">
-          <div className="logo" onClick={handleClick} />
-          {/* <Image style={{ cursor: 'pointer' }} src={logo} alt="logo" width={85} height={35} onClick={handleClick} /> */}
-          <span className="name" onClick={handleClick}>
-            SmartDAO
-          </span>
-          <Search />
+    <Layout.Header className="header">
+      <div
+        className={`${
+          type === 'fix' ? 'header-content-fix' : 'header-content'
+        }`}
+      >
+        <Row gutter={16} style={{ width: '100%' }} align="middle">
+          <Col span={8}>
+            <Image
+              style={{ cursor: 'pointer' }}
+              src={logo}
+              alt="logo"
+              width={175}
+              height={54}
+              onClick={handleClick}
+            />
+          </Col>
+          <Col span={8}>
+            <Search />
+          </Col>
+          <Col span={8} style={{ textAlign: 'right' }}>
+            <Space size={55}>
+              <Language />
+              <Menu />
+            </Space>
+          </Col>
+        </Row>
+        {/* <div className="left">
+          <Image
+            style={{ cursor: 'pointer' }}
+            src={logo}
+            alt="logo"
+            width={175}
+            height={54}
+            onClick={handleClick}
+          />
         </div>
-        <Space size={26}>
-          <Menu />
+        <Search />
+        <Space size={55}>
           <Language />
-        </Space>
-      </Layout.Header>
-
+          <Menu />
+        </Space> */}
+      </div>
       <style jsx>
         {`
-          .wrap :global(.header) {
+          .header-content-fix {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            height: 88px;
-            padding: 0 52px 0 31px;
-            background: #fff;
+            max-width: var(--width);
+            height: 76px;
+            padding: 0 80px;
+            margin: 0 auto;
+          }
+
+          .header-content {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 75px;
+            padding: 0 32px;
+            margin: 0 auto;
+            border-bottom: 1px solid #f5f5f5;
           }
 
           .left {
@@ -74,7 +113,7 @@ const Header = () => {
           }
         `}
       </style>
-    </div>
+    </Layout.Header>
   );
 };
 

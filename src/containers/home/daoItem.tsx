@@ -1,7 +1,8 @@
 import React, { useRef } from 'react';
-import { Image, Typography, Space, Button } from 'antd';
+import { Typography, Space, Button, Avatar } from 'antd';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
+import Image from 'next/image';
 
 import InfoModal from '@/components/modal/infoModal';
 import { useJoin, useFollow } from './useHooks';
@@ -10,6 +11,10 @@ import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { setCurrentDAO, setDAOType } from '@/store/features/daoSlice';
 
 import WalletModal from '@/components/modal/walletModal';
+import { UserOutlined } from '@ant-design/icons';
+
+import gradient from '/public/images/home/img_home_card_dao_gradient.png';
+import add from '/public/images/home/icon_home_card_dao_add.png';
 
 const { Paragraph } = Typography;
 
@@ -113,8 +118,12 @@ const DAOItem = (props: any) => {
   };
 
   return (
-    <div className="item">
-      <Image
+    <div className="item" onClick={handleClick}>
+      <div className="glass"></div>
+
+      <div className="item-content">
+        {/* <div className="glass"></div> */}
+        {/* <Image
         style={{ borderRadius: 10, cursor: 'pointer' }}
         src={props.data.image || img}
         width={196}
@@ -122,107 +131,302 @@ const DAOItem = (props: any) => {
         preview={false}
         alt="avatar"
         onClick={handleClick}
-      />
-      <div>
-        <Paragraph
-          className="name"
-          style={{ width: 196 }}
-          ellipsis={{ rows: 2 }}
-        >
-          {props.data.name}
-        </Paragraph>
-      </div>
-      {/* <div className="name">
-        {props.data.name}
-      </div> */}
-      <div className="imgs">
-        <Space size={6} align="center">
-          {avatars.map((item, index) => (
-            <Image
-              style={{ borderRadius: '50%' }}
-              src={props.data.avatar || item}
-              width={20}
-              height={20}
-              preview={false}
-              alt="avatar"
-              key={index}
-            />
-          ))}
-          <span className="total">
-            {formatMessage(
-              { id: 'home.total.member' },
-              { value: props.data.members || 1 },
-            )}
-          </span>
-        </Space>
-      </div>
-      <div className="buttons">
-        <Button
-          className="button-light"
-          type="primary"
-          disabled={join}
-          onClick={handleJoinClick}
-          loading={loading}
-        >
-          {formatMessage({ id: join ? 'home.joined' : 'home.join' })}
-        </Button>
-        <Button type="primary" shape="round" onClick={handleFollowClick}>
-          {/* {follow ? 'Followed' : 'Follow'} */}
-          {formatMessage({ id: follow ? 'home.followed' : 'home.follow' })}
-        </Button>
+      /> */}
+        <div style={{ textAlign: 'right' }}>
+          <Button
+            className="button-follow"
+            type="primary"
+            icon={
+              <Image
+                src={add}
+                alt="add"
+                width={10}
+                height={10}
+                style={{ marginRight: 10 }}
+              />
+            }
+            onClick={handleFollowClick}
+          >
+            {formatMessage({ id: follow ? 'home.followed' : 'home.follow' })}
+          </Button>
+        </div>
+
+        <div className="footer">
+          <Paragraph
+            className="name"
+            style={{ width: 386 }}
+            ellipsis={{ rows: 2 }}
+          >
+            {props.data.name}
+          </Paragraph>
+
+          <div className="bottom">
+            <Avatar.Group>
+              {avatars.map((item, index) => (
+                // <Avatar size={42} src={props.data.avatar || item} key={index} />
+                <Avatar
+                  size={42}
+                  style={{ backgroundColor: '#000' }}
+                  icon={<UserOutlined />}
+                  key={index}
+                />
+              ))}
+            </Avatar.Group>
+            <span className="total">
+              {formatMessage(
+                { id: 'home.total.member' },
+                { value: props.data.members || 1 },
+              )}
+            </span>
+            <Button
+              className="button-join"
+              ghost
+              disabled={join}
+              onClick={handleJoinClick}
+              loading={loading}
+            >
+              {formatMessage({ id: join ? 'home.joined' : 'home.join' })}
+            </Button>
+          </div>
+        </div>
       </div>
 
       <InfoModal ref={infoModal} />
       <WalletModal ref={walletModal} />
 
+      {/* background: linear-gradient(
+              180deg,
+              rgba(0, 0, 0, 0) 0%,
+              rgba(0, 0, 0, 0.16) 100%
+            ); */}
+
+      {/* background: url(${props.data.image || img}) no-repeat center,
+              url('/public/images/home/img_home_card_dao_gradient.png')
+                no-repeat center; */}
+
+      {/* background: url('/images/home/img_home_card_dao_gradient.png')
+                no-repeat center,
+              url(${props.data.image || img}) no-repeat center;
+            background-size: cover;
+            backdrop-filter: blur(10px); */}
+
+      {/* .item {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+            width: 632px;
+            height: 388px;
+            padding: 32px 30px 26px;
+
+            background: url('/images/home/img_home_card_dao_gradient.png')
+                no-repeat center,
+              url(${props.data.image || img}) no-repeat center;
+            background-size: cover;
+            border-radius: 16px;
+          }
+
+          .item::before {
+            content: '';
+            position: absolute;
+            top: 238px;
+            left: 0;
+
+            width: 632px;
+            height: 150px;
+
+            background-image: linear-gradient(
+              180deg,
+              rgba(255, 255, 255, 0),
+              rgba(255, 255, 255, 0.5)
+            );
+            filter: blur(2px);
+          } */}
+
+      {/* 
+.item {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+            width: 632px;
+            height: 388px;
+            overflow: hidden;
+
+            background: url('/images/home/img_home_card_dao_gradient.png')
+                no-repeat center,
+              url(${props.data.image || img}) no-repeat center;
+            background-size: cover;
+            border-radius: 16px;
+          }
+
+          .glass {
+            position: absolute;
+            top: 238px;
+            left: 0;
+            z-index: 2;
+            box-sizing: border-box;
+            width: 632px;
+            height: 150px;
+            padding: 0 30px 26px;
+
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+          }
+
+          .glass::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            z-index: -3;
+            margin: -30px;
+            background: url(${props.data.image || img}) no-repeat center;
+            background-size: cover;
+            filter: blur(20px);
+          } */}
+
       <style jsx>
         {`
           .item {
+            position: relative;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+            width: 100%;
+            height: 388px;
+            overflow: hidden;
+
+            background: url('/images/home/img_home_card_dao_gradient.png')
+                no-repeat center,
+              url(${props.data.image || img}) no-repeat bottom;
+            background-size: cover;
+            border-radius: 16px;
+
+            cursor: pointer;
           }
 
-          .name {
-            margin-top: 16px;
+          .gradient {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 100%;
+            height: 100%;
+          }
+
+          .glass {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 238px;
+            bottom: 0;
+            display: flex;
+            margin: -10px;
+            box-sizing: border-box;
+            background: inherit;
+            filter: blur(10px);
+
+             {
+              /* background: url('/images/home/img_home_card_dao_gradient.png')
+                no-repeat center,
+              url(${props.data.image || img}) no-repeat center;
+            background-size: cover;
+            clip-path: inset(238px 0 0 0);
+
+            border-radius: 16px; */
+            }
+          }
+
+           {
+            /* .glass::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            margin: -20px;
+            background: linear-gradient(
+              rgba(255, 255, 255, 0),
+              rgba(255, 255, 255, 0) 75%,
+              rgba(243, 243, 243, 0.3) 85%,
+              rgba(255, 255, 255, 0.3) 100%
+            );
+            filter: blur(4px);
+          } */
+          }
+
+          .item-content {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+            padding: 32px 30px 26px;
+          }
+
+          .item-content :global(.button-follow) {
+            width: 132px;
+            height: 32px;
+
             font-size: 16px;
-            color: #232323;
-            line-height: 24px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: #ffffff;
+            line-height: 18px;
+
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+
+            box-shadow: none;
           }
 
           .item :global(.name) {
-            height: 48px;
-            margin-top: 16px;
-            font-size: 16px;
-            color: #232323;
-            line-height: 24px;
+            font-size: 32px;
+            font-family: HelveticaNeue-Bold, HelveticaNeue;
+            font-weight: bold;
+            color: #ffffff;
+            line-height: 39px;
           }
 
-          .imgs {
-            margin-top: 10px;
+          .bottom {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 28px;
           }
 
           .total {
-            font-size: 12px;
-            color: #969ba0;
-            line-height: 24px;
-          }
-
-          .buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 17px;
-          }
-
-          .buttons :global(button) {
-            height: 40px;
+            margin-left: 36px;
+            width: 102px;
+            height: 36px;
             font-size: 16px;
-            border: 0;
+            font-family: PingFangSC-Semibold, PingFang SC;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 36px;
           }
 
-          .buttons :global(.button-light) {
-            font-size: 16px;
-            color: #2f4cdd;
-            background-color: #ebedfc;
+          .bottom :global(.button-join) {
+            width: 190px;
+            height: 46px;
+            font-size: 17px;
+            font-family: HelveticaNeue-Bold, HelveticaNeue;
+            font-weight: bold;
+            color: #ffffff;
+            line-height: 26px;
+            border-radius: 4px;
+            border: 1px solid #ffffff;
+          }
+
+          .bottom :global(.ant-avatar) {
             border: 0;
           }
 

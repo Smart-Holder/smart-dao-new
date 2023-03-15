@@ -42,6 +42,8 @@ const RoleModal = (props: any, ref: any) => {
     setIsModalOpen(false);
   };
 
+  console.log('isModalOpen', isModalOpen);
+
   return (
     <Modal width={512} open={isModalOpen} onCancel={handleCancel} footer={null}>
       <div className="content">

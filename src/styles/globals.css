@@ -1,4 +1,8 @@
 :root {
+  --width: 1440px;
+  --width-content: 1175px;
+  --height-header: 76px;
+  --height-footer: 322px;
   --color-primary: #546ff6;
   --color-secondary: #2f4cdd;
 
@@ -57,7 +61,7 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
   font-family: PingFangSC-Regular, PingFang SC;
-  background: #f8f8f8;
+  background: #fff;
 }
 
 a {
@@ -66,11 +70,50 @@ a {
 }
 
 .ant-layout {
-  background: #f8f8f8;
+  background: #fff;
+}
+
+.ant-layout .ant-layout-header {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  height: var(--height-header);
+  padding: 0;
+  background: #fff;
+}
+
+.ant-layout .ant-layout-content {
+  margin-top: var(--height-header);
+  padding: 0;
+}
+
+.ant-layout .ant-layout-content.basic {
+  min-height: calc(
+    100vh - var(--height-header) - var(--height-footer)
+  ) !important;
+}
+
+.ant-layout .ant-layout-content.dashboard {
+  box-sizing: border-box;
+  /* width: var(--width-content); */
+  min-height: calc(
+    100vh - var(--height-header) - var(--height-footer)
+  ) !important;
+  /* padding: 70px 66px 0 68px; */
+  margin-left: 298px;
+  /* margin-right: auto; */
+}
+
+.ant-layout .ant-layout-content.dashboard .dashboard-content {
+  box-sizing: border-box;
+  padding: 24px 33px 0 24px;
 }
 
 .ant-layout .ant-layout-footer {
-  background: #f8f8f8;
+  height: var(--height-footer);
+  padding: 0;
+  background: #000;
 }
 
 .ant-modal .ant-modal-content {
@@ -179,10 +222,71 @@ a {
 }
 
 /* -------------- Sider Menu ---------------- */
+.ant-menu {
+  border-inline-end: 0 !important;
+}
+
+.ant-menu .ant-menu-item-group {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.ant-menu .ant-menu-item-group:last-child {
+  border-bottom: 0;
+}
+
+.ant-menu .ant-menu-item-group-title {
+  padding-left: 10px;
+  margin-top: 20px;
+  font-size: 11px;
+  font-family: PingFangSC-Semibold, PingFang SC;
+  font-weight: 600;
+  color: #a9a9a9;
+  line-height: 21px;
+}
+
 .ant-menu .ant-menu-submenu-title {
-  padding-left: 48px !important;
+  padding-left: 6px !important;
+}
+
+.ant-menu .ant-menu-submenu-title .ant-menu-title-content {
+  padding-left: 18px;
+  font-size: 16px;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: #000000;
+  line-height: 22px;
 }
 
 .ant-menu .ant-menu-item {
-  padding-left: 58px !important;
+  padding-left: 6px !important;
+}
+
+.ant-menu .ant-menu-item .ant-menu-title-content {
+  margin-inline-start: 18px !important;
+
+  font-size: 16px;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: #000000;
+  line-height: 22px;
+}
+
+.ant-menu .ant-menu-sub {
+  background: #fff !important;
+}
+
+.ant-menu .ant-menu-sub .ant-menu-item {
+  padding-left: 44px !important;
+  padding-right: 0 !important;
+}
+
+.ant-menu .ant-menu-sub .ant-menu-item .ant-menu-title-content {
+  margin-inline-start: 0 !important;
+
+  font-size: 16px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #000000;
+  line-height: 22px;
 }

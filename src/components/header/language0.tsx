@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Dropdown, Space } from 'antd';
-import Image, { StaticImageData } from 'next/image';
 import { DownOutlined, GlobalOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { setLang } from '@/store/features/commonSlice';
-
-import iconEn from '/public/images/header/icon_navi_top_language_defult.png';
-import iconJa from '/public/images/header/icon_navi_top_language_defult.png';
 
 const langList: MenuProps['items'] = [
   {
@@ -17,11 +13,6 @@ const langList: MenuProps['items'] = [
   },
   { label: '日本語', key: 'ja' },
 ];
-
-const icons: { [index: string]: StaticImageData } = {
-  en: iconEn,
-  ja: iconJa,
-};
 
 const Lang = () => {
   const { lang } = useAppSelector((store) => store.common);
@@ -55,19 +46,11 @@ const Lang = () => {
         trigger={['click']}
         overlayClassName="language-menu"
       >
-        {/* <Space className="dropdown-trigger" size={3} align="center">
+        <Space className="dropdown-trigger" size={3} align="center">
           <GlobalOutlined style={{ fontSize: 22, verticalAlign: 'middle' }} />
           <span className="dropdown-trigger-content">{langLabel}</span>
           <DownOutlined />
-        </Space> */}
-
-        <Image
-          src={icons[lang]}
-          width={26}
-          height={20}
-          alt="language"
-          style={{ cursor: 'pointer' }}
-        />
+        </Space>
       </Dropdown>
       <style jsx>
         {`

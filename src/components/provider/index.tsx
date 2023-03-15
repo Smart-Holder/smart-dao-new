@@ -9,11 +9,11 @@ import getLanguageConfig, { languageList } from '@/utils/language';
 
 const theme = {
   token: {
-    colorPrimary: '#546FF6',
+    colorPrimary: '#2c2c2c',
   },
   components: {
     Button: {
-      colorPrimary: '#2F4CDD',
+      colorPrimary: '#2c2c2c',
     },
   },
 };
