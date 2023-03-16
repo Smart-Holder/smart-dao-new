@@ -12,6 +12,7 @@ import { getCookie } from '@/utils/cookie';
 import { request } from '@/api';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
+import Card from '@/components/card';
 
 const PriceIcon = () => (
   <Image
@@ -139,13 +140,19 @@ const App: NextPageWithLayout = () => {
 
   return (
     <div className="dashboard-content">
-      <div className={styles['dashboard-content-header']}>
-        <Counts
-          items={[
-            { num: total, title: formatMessage({ id: 'my.asset.total' }) },
-          ]}
-        />
-        <Space size={10}>
+      <Card
+        data={[
+          {
+            label: formatMessage({
+              id: 'my.asset.total',
+            }),
+            value: total,
+          },
+        ]}
+      />
+
+      <div className="table-card">
+        <div className="table-filter">
           <Filters
             items={[
               {
@@ -205,45 +212,47 @@ const App: NextPageWithLayout = () => {
               },
             ]}
           />
-          <Button type="primary" onClick={goShelves}>
+
+          <Button className="button-filter" type="primary" onClick={goShelves}>
             {formatMessage({ id: 'financial.asset.listing' })}
           </Button>
-        </Space>
-      </div>
-      <div className={styles['dashboard-content-body']}>
-        <div className={styles['financial-list']}>
-          {data.map((item: any, i) => {
-            return (
-              <div key={i} className={styles['financial-item']}>
-                <FinancialItem
-                  title={`${item.name} #${item.id}`}
-                  logo={item.mediaOrigin}
-                  price={
-                    item.properties.find((i: any) => i.trait_type === 'price')
-                      ?.value || ''
-                  }
-                  priceIcon={<PriceIcon />}
-                  onClick={() => {
-                    localStorage.setItem('asset', JSON.stringify(item));
-                    router.push(`assets/detail?id=${item.id}`);
-                  }}
-                />
-              </div>
-            );
-          })}
         </div>
-        {total > 0 && (
-          <div className={styles['dashboard-content-pagination']}>
-            <Pagination
-              simple
-              defaultCurrent={1}
-              current={page}
-              total={total}
-              pageSize={pageSize}
-              onChange={onPageChange}
-            />
+
+        <div className={styles['dashboard-content-body']}>
+          <div className={styles['financial-list']}>
+            {data.map((item: any, i) => {
+              return (
+                <div key={i} className={styles['financial-item']}>
+                  <FinancialItem
+                    title={`${item.name} #${item.id}`}
+                    logo={item.mediaOrigin}
+                    price={
+                      item.properties.find((i: any) => i.trait_type === 'price')
+                        ?.value || ''
+                    }
+                    priceIcon={<PriceIcon />}
+                    onClick={() => {
+                      localStorage.setItem('asset', JSON.stringify(item));
+                      router.push(`assets/detail?id=${item.id}`);
+                    }}
+                  />
+                </div>
+              );
+            })}
           </div>
-        )}
+          {total > 0 && (
+            <div className={styles['dashboard-content-pagination']}>
+              <Pagination
+                simple
+                defaultCurrent={1}
+                current={page}
+                total={total}
+                pageSize={pageSize}
+                onChange={onPageChange}
+              />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

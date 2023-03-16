@@ -15,6 +15,7 @@ import { formatDayjsValues } from '@/utils';
 import { useIntl } from 'react-intl';
 
 import type { PaginationProps } from 'antd';
+import Card from '@/components/card';
 
 const { RangePicker } = DatePicker;
 
@@ -119,14 +120,17 @@ const App = () => {
 
   return (
     <div className="wrap">
-      <div className={styles['dashboard-content-header']}>
-        <Counts
-          items={[
-            { num: total, title: formatMessage({ id: 'member.nftp.total' }) },
-          ]}
-        />
+      <Card
+        data={[
+          {
+            label: formatMessage({ id: 'member.nftp.total' }),
+            value: total,
+          },
+        ]}
+      />
 
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div className="table-card">
+        <div className="table-filter">
           <Form
             name="filter"
             layout="inline"
@@ -174,25 +178,27 @@ const App = () => {
                 ]}
               />
             </Form.Item> */}
-            <Form.Item name="time" label="Time">
+            <Form.Item name="time">
               <RangePicker format="MM/DD/YYYY" />
             </Form.Item>
           </Form>
 
           {currentMember.tokenId && (
-            <Button type="primary" onClick={showModal}>
+            <Button
+              className="button-filter"
+              type="primary"
+              onClick={showModal}
+            >
               {formatMessage({ id: 'member.nftp.addNFTP' })}
             </Button>
           )}
         </div>
-      </div>
-
-      <div className={styles['dashboard-content-body']}>
         <Table
           columns={columns}
           dataSource={data}
           rowKey="id"
           pagination={{
+            position: ['bottomCenter'],
             current: page,
             pageSize,
             total,

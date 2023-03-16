@@ -18,7 +18,7 @@ const searchList = [
   '/dashboard/mine/income',
   '/dashboard/governance/votes',
   '/dashboard/financial/assets',
-  '/dashboard/financial/order',
+  // '/dashboard/financial/order',
   '/dashboard/financial/income',
   // '/dashboard/member/nftp',
 ];

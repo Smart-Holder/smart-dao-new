@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 import Counts from '@/containers/dashboard/mine/counts';
-import NftpModal from '@/components/modal/nftpModal';
+// import NftpModal from '@/components/modal/nftpModal';
 
 import { request } from '@/api';
 
@@ -17,6 +17,7 @@ import type { PaginationProps } from 'antd';
 import { getBalance } from '@/api/asset';
 import { createVote } from '@/api/vote';
 import { useIntl, FormattedMessage } from 'react-intl';
+import Card from '@/components/card';
 
 const { RangePicker } = DatePicker;
 
@@ -73,7 +74,7 @@ const App = () => {
 
   const [balance, setBalance] = useState(0);
 
-  const nftpModal: any = useRef(null);
+  // const nftpModal: any = useRef(null);
 
   const showModal = () => {
     if (balance > 0) {
@@ -210,27 +211,23 @@ const App = () => {
 
   return (
     <div className="wrap">
-      <div className={styles['dashboard-content-header']}>
-        <Counts
-          items={[
-            {
-              num: fromToken(amount.amount) + ' ETH',
-              title: formatMessage({ id: 'my.income.total' }),
-            },
-            // { num: fromToken(amount.amount) + ' ETH', title: '累计发行税收入' },
-            // { num: fromToken(amount.amount) + ' ETH', title: '累计交易税收入' },
-            {
-              num: fromToken(balance || 0) + ' ETH',
-              title: formatMessage({ id: 'my.income.total.balance' }),
-            },
-          ]}
-        />
+      <Card
+        data={[
+          {
+            label: formatMessage({ id: 'my.income.total' }),
+            value: fromToken(amount.amount) + ' ETH',
+          },
+          // { num: fromToken(amount.amount) + ' ETH', title: '累计发行税收入' },
+          // { num: fromToken(amount.amount) + ' ETH', title: '累计交易税收入' },
+          {
+            label: formatMessage({ id: 'my.income.total.balance' }),
+            value: fromToken(balance || 0) + ' ETH',
+          },
+        ]}
+      />
 
-        <Button type="primary" onClick={showModal}>
-          {formatMessage({ id: 'financial.income.allocation' })}
-        </Button>
-
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div className="table-card">
+        <div className="table-filter">
           <Form
             name="filter"
             layout="inline"
@@ -272,23 +269,21 @@ const App = () => {
                 ]}
               />
             </Form.Item>
-            <Form.Item name="time" label="Time">
+            <Form.Item name="time">
               <RangePicker format="MM/DD/YYYY" />
             </Form.Item>
           </Form>
 
-          {/* <Button type="primary" onClick={showModal}>
-            添加NFTP
-          </Button> */}
+          <Button className="button-filter" type="primary" onClick={showModal}>
+            {formatMessage({ id: 'financial.income.allocation' })}
+          </Button>
         </div>
-      </div>
-
-      <div className={styles['dashboard-content-body']}>
         <Table
           columns={columns}
           dataSource={data}
           rowKey="id"
           pagination={{
+            position: ['bottomCenter'],
             current: page,
             pageSize,
             total,
@@ -298,7 +293,7 @@ const App = () => {
         />
       </div>
 
-      <NftpModal ref={nftpModal} />
+      {/* <NftpModal ref={nftpModal} /> */}
 
       <Modal width={512} open={isModalOpen} onCancel={hideModal} footer={null}>
         <div className={styles['dashboard-modal-content']}>

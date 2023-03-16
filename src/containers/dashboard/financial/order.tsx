@@ -1,14 +1,12 @@
-import { useEffect, useState, useRef } from 'react';
-import { Table, DatePicker, Form, Select, message } from 'antd';
+import { useEffect, useState } from 'react';
+import { Table, DatePicker, Form, Select, message, Image } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
-import Counts from '@/containers/dashboard/mine/counts';
-import NftpModal from '@/components/modal/nftpModal';
+import Card from '@/components/card';
 
 import { request } from '@/api';
 
-import styles from '@/styles/content.module.css';
 import { useAppSelector } from '@/store/hooks';
 
 import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
@@ -103,11 +101,7 @@ const App = () => {
 
   const [amount, setAmount] = useState({ total: 0, amount: '0' });
 
-  const nftpModal: any = useRef(null);
-
-  const showModal = () => {
-    nftpModal.current.show();
-  };
+  const [timer, setTimer] = useState() as any;
 
   const getData = async (page = 1) => {
     const res = await request({
@@ -146,6 +140,23 @@ const App = () => {
   const onValuesChange = (changedValues: any) => {
     let [[key, value]]: any = Object.entries(changedValues);
     const nextValues: any = { ...values };
+
+    if (key === 'name') {
+      clearTimeout(timer);
+      setTimer(
+        setTimeout(() => {
+          if (!value) {
+            delete nextValues[key];
+          } else {
+            nextValues[key] = value;
+          }
+
+          console.log('values', nextValues);
+          setValues(nextValues);
+        }, 1000),
+      );
+      return;
+    }
 
     if (!value) {
       delete nextValues[key];
@@ -189,25 +200,21 @@ const App = () => {
 
   return (
     <div className="wrap">
-      <div className={styles['dashboard-content-header']}>
-        <Counts
-          items={[
-            {
-              num: amount.total,
-              title: formatMessage({
-                id: 'financial.order.total',
-              }),
-            },
-            {
-              num: fromToken(amount.amount || 0) + ' ETH',
-              title: formatMessage({
-                id: 'financial.order.total.amount',
-              }),
-            },
-          ]}
-        />
+      <Card
+        data={[
+          {
+            label: formatMessage({ id: 'financial.order.total' }),
+            value: amount.total,
+          },
+          {
+            label: formatMessage({ id: 'financial.order.total.amount' }),
+            value: fromToken(amount.amount || 0) + ' ETH',
+          },
+        ]}
+      />
 
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div className="table-card">
+        <div className="table-filter">
           <Form
             name="filter"
             layout="inline"
@@ -221,6 +228,15 @@ const App = () => {
               <Select
                 style={{ width: 220 }}
                 placeholder="Sort"
+                suffixIcon={
+                  <Image
+                    src="/images/icon_table_drop_down_default.png"
+                    width={20}
+                    height={20}
+                    alt=""
+                    preview={false}
+                  />
+                }
                 options={[
                   { value: '', label: 'Default' },
                   {
@@ -261,23 +277,31 @@ const App = () => {
                 ]}
               />
             </Form.Item> */}
-            <Form.Item name="time" label="Time">
+            <Form.Item name="time">
               <RangePicker format="MM/DD/YYYY" />
             </Form.Item>
+            {/* <Form.Item name="name">
+              <Input
+                prefix={
+                  <Image
+                    src="/images/icon_table_search_default.png"
+                    width={20}
+                    height={20}
+                    alt=""
+                    preview={false}
+                  />
+                }
+              />
+            </Form.Item> */}
           </Form>
-
-          {/* <Button type="primary" onClick={showModal}>
-            添加NFTP
-          </Button> */}
         </div>
-      </div>
 
-      <div className={styles['dashboard-content-body']}>
         <Table
           columns={columns}
           dataSource={data}
           rowKey="id"
           pagination={{
+            position: ['bottomCenter'],
             current: page,
             pageSize,
             total,
@@ -286,8 +310,6 @@ const App = () => {
           loading={loading}
         />
       </div>
-
-      <NftpModal ref={nftpModal} />
     </div>
   );
 };

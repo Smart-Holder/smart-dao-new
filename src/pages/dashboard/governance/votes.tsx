@@ -195,13 +195,8 @@ const App: NextPageWithLayout = () => {
 
   return (
     <div className="dashboard-content dashboard-content-scroll">
-      <div className={styles['dashboard-content-header']}>
-        <div>
-          {/* <div className={styles.title1}>Governance</div> */}
-          {/* <div className={styles.title2}>Welcome to SmartDAO</div> */}
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div className="table-card" style={{ marginTop: 0 }}>
+        <div className="table-filter">
           <Form
             name="filter"
             layout="inline"
@@ -325,132 +320,48 @@ const App: NextPageWithLayout = () => {
             </Form.Item> */}
           </Form>
         </div>
-      </div>
-      <div
-        style={{ padding: '38px 16px' }}
-        className={`${styles['dashboard-content-body']}`}
-        id="scrollableVotes"
-      >
-        <InfiniteScroll
-          dataLength={data.length}
-          next={getData}
-          hasMore={data.length < total}
-          loader={loading && <Skeleton paragraph={{ rows: 1 }} active />}
-          scrollableTarget="scrollableVotes"
+
+        <div
+          className={`${styles['dashboard-content-body']}`}
+          id="scrollableVotes"
         >
-          <div className={styles['vote-list']}>
-            {data.map((item: any) => (
-              <div className={styles['vote-item']} key={item.id}>
-                <VoteItem
-                  status={getStatus(item)}
-                  title={item.name}
-                  owner={{
-                    name: 'Willy Wonca',
-                    address: item.origin,
-                  }}
-                  number={`#${item.id}`}
-                  description=""
-                  desc={item.description}
-                  type="normal"
-                  support={item.agreeTotal}
-                  opposed={item.voteTotal - item.agreeTotal}
-                  // endTime={item.expiry * 1000}
-                  endTime={item.modify}
-                  onClick={onClickItem}
-                  votes={item.votes}
-                  proposal_id={item.proposal_id}
-                  data={item}
-                />
-              </div>
-            ))}
-            {/* <div className={styles['vote-item']}>
-            <VoteItem
-              status="processing"
-              title="Meidum Spicy Spagethi Italiano"
-              owner={{
-                name: 'Willy Wonca',
-                address: '0x0b3E9A6950e4C434E927A4B1ec28593F6b283311',
-              }}
-              number="#123123"
-              description="The service was excellent; our waiter was  knowledgeable and attentive 
-                without being intrusive. "
-              type="normal"
-              support={1}
-              opposed={0}
-              endTime={1675845670252}
-              onClick={onClickItem}
-              votes={1}
-              proposal_id="1"
-            />
-          </div>
-          <div className={styles['vote-item']}>
-            <VoteItem
-              status="rejected"
-              title="Meidum Spicy Spagethi Italiano"
-              owner={{
-                name: 'Willy Wonca',
-                address: '0x0b3E9A6950e4C434E927A4B1ec28593F6b283311',
-              }}
-              number="#123123"
-              type="member"
-              description="The service was excellent; our waiter was  knowledgeable and attentive 
-                without being intrusive. "
-              support={1}
-              opposed={0}
-              onClick={onClickItem}
-              endTime={1675845670252}
-              votes={1}
-              proposal_id="1"
-            />
-          </div>
-          <div className={styles['vote-item']}>
-            <VoteItem
-              status="passed"
-              title="Meidum Spicy Spagethi Italiano"
-              owner={{
-                name: 'Willy Wonca',
-                address: '0x0b3E9A6950e4C434E927A4B1ec28593F6b283311',
-              }}
-              number="#123123"
-              type="basic"
-              description="The service was excellent; our waiter was  knowledgeable and attentive 
-                without being intrusive. "
-              support={1}
-              opposed={0}
-              onClick={onClickItem}
-              endTime={1875885670252}
-              votes={1}
-              proposal_id="1"
-            />
-          </div>
-          <div className={styles['vote-item']}>
-            <VoteItem
-              status="executed"
-              execTime={1475885670252}
-              execUser={{
-                name: 'Willy Wonca',
-                address: '0x0b3E9A6950e4C434E927A4B1ec28593F6b283311',
-              }}
-              title="Meidum Spicy Spagethi Italiano"
-              owner={{
-                name: 'Willy Wonca',
-                address: '0x0b3E9A6950e4C434E927A4B1ec28593F6b283311',
-              }}
-              number="#123123"
-              type="basic"
-              description="The service was excellent; our waiter was  knowledgeable and attentive 
-                without being intrusive. "
-              support={1}
-              opposed={0}
-              onClick={onClickItem}
-              endTime={1475885670252}
-              votes={1}
-              proposal_id="1"
-            />
-          </div> */}
-          </div>
-        </InfiniteScroll>
+          <InfiniteScroll
+            dataLength={data.length}
+            next={getData}
+            hasMore={data.length < total}
+            loader={loading && <Skeleton paragraph={{ rows: 1 }} active />}
+            scrollableTarget="scrollableVotes"
+          >
+            <div className={styles['vote-list']}>
+              {data.map((item: any) => (
+                <div className={styles['vote-item']} key={item.id}>
+                  <VoteItem
+                    status={getStatus(item)}
+                    title={item.name}
+                    owner={{
+                      name: 'Willy Wonca',
+                      address: item.origin,
+                    }}
+                    number={`#${item.id}`}
+                    description=""
+                    desc={item.description}
+                    type="normal"
+                    support={item.agreeTotal}
+                    opposed={item.voteTotal - item.agreeTotal}
+                    // endTime={item.expiry * 1000}
+                    endTime={item.modify}
+                    onClick={onClickItem}
+                    votes={item.votes}
+                    proposal_id={item.proposal_id}
+                    data={item}
+                  />
+                </div>
+              ))}
+            </div>
+          </InfiniteScroll>
+        </div>
       </div>
+
       <VoteModal open={openModal} onClose={onCloseModal} data={currentItem} />
     </div>
   );

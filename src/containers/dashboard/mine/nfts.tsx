@@ -1,45 +1,22 @@
-import { Avatar, Button, Col, Image, Row, Space, Typography } from 'antd';
-import { Form, Layout as AntdLayout, Select, Skeleton } from 'antd';
+import { Button, Col, Row } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import InfiniteScroll from 'react-infinite-scroll-component';
 
-import Layout from '@/components/layout';
-import { ReactElement, useEffect, useState } from 'react';
-import type { NextPageWithLayout } from '@/pages/_app';
+import { useEffect, useState } from 'react';
 
-import styles from '@/styles/content.module.css';
-import FinancialHeader from '@/containers/dashboard/financial/financial-header';
-import Counts from '@/containers/dashboard/mine/counts';
-import FinancialItem from '@/containers/dashboard/financial/financial-item';
 import { useAppSelector } from '@/store/hooks';
-import { ETH_CHAINS_INFO } from '@/config/chains';
-import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
 import { request } from '@/api';
-import { useRouter } from 'next/router';
-import { useIntl } from 'react-intl';
+// import { useRouter } from 'next/router';
 
 import NFT from '@/containers/dashboard/mine/nft';
-
-const { Paragraph, Text } = Typography;
 
 dayjs.extend(customParseFormat);
 
 const App = () => {
-  const router = useRouter();
+  // const router = useRouter();
   const { currentDAO } = useAppSelector((store) => store.dao);
   const { chainId, address } = useAppSelector((store) => store.wallet);
-  const { searchText, loading } = useAppSelector((store) => store.common);
 
-  const [chainData, setChainData] = useState({ name: '' }) as any;
-  const [summary, setSummary] = useState({
-    assetOrderAmountTotal: 0,
-    assetTotal: 0,
-  });
-  const [values, setValues] = useState({});
-
-  const pageSize = 20;
-  const [page, setPage] = useState(1);
   const [pageStart, setPageStart] = useState(0);
   const [total, setTotal] = useState(0);
   const [data, setData] = useState([]) as any;

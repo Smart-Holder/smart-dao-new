@@ -18,6 +18,7 @@ import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
 import { request } from '@/api';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
+import Card from '@/components/card';
 
 dayjs.extend(customParseFormat);
 
@@ -163,106 +164,106 @@ const App: NextPageWithLayout = () => {
           chain={chainData.name}
         />
       </div>
-      <div
-        className={`${styles['dashboard-content-header']} ${styles['dashboard-content-header-mt']}`}
-      >
-        <Counts
-          items={[
-            {
-              num: `${fromToken(summary?.assetOrderAmountTotal || 0)} ETH`,
-              title: formatMessage({ id: 'financial.asset.total.trading' }),
-              onClick: onCountClick,
-            },
-            // { num: 31232, title: '地板价' },
-            {
-              num: '3%',
-              title: formatMessage({ id: 'financial.asset.royalties' }),
-            },
-            {
-              num: summary?.assetTotal || 0,
-              title: formatMessage({ id: 'financial.asset.total' }),
-            },
-            // { num: 31232, title: '所有者' },
-            // { num: 31232, title: '挂单率' },
-            // { num: 31232, title: '交易市场' },
-          ]}
-        />
 
-        <Form
-          name="filter"
-          layout="inline"
-          onValuesChange={onValuesChange}
-          autoComplete="off"
-          labelAlign="left"
-          requiredMark={false}
-          validateTrigger="onBlur"
-        >
-          <Form.Item name="orderBy">
-            <Select
-              style={{ width: 140 }}
-              placeholder="Sort"
-              options={[
-                { value: '', label: 'Default' },
-                {
-                  value: 'sellPrice',
-                  label: formatMessage({ id: 'financial.asset.sort.price' }),
-                },
-                {
-                  value: 'sellPrice desc',
-                  label: formatMessage({
-                    id: 'financial.asset.sort.price.desc',
-                  }),
-                },
-                {
-                  value: 'sellingTime desc',
-                  label: formatMessage({ id: 'financial.asset.sort.released' }),
-                },
-                {
-                  value: 'blockNumber desc',
-                  label: formatMessage({ id: 'financial.asset.sort.created' }),
-                },
-                {
-                  value: 'soldTime desc',
-                  label: formatMessage({ id: 'financial.asset.sort.sold' }),
-                },
-              ]}
-            />
-          </Form.Item>
-        </Form>
-      </div>
-      <div
-        style={{ padding: '23px 30px' }}
-        className={styles['dashboard-content-body']}
-        id="scrollableAssets"
-      >
-        <InfiniteScroll
-          dataLength={data.length}
-          next={getData}
-          hasMore={data.length < total}
-          loader={loading && <Skeleton paragraph={{ rows: 1 }} active />}
-          scrollableTarget="scrollableAssets"
-        >
-          <div className={styles['financial-list']}>
-            {data.map((item: any) => {
-              return (
-                <div key={item.id} className={styles['financial-item']}>
-                  <FinancialItem
-                    title={`${item.name} #${item.id}`}
-                    logo={item.imageOrigin}
-                    price={item.sellPrice || 0}
-                    // priceIcon={<PriceIcon />}
-                    onClick={() => {
-                      localStorage.setItem('asset', JSON.stringify(item));
-                      router.push(
-                        `/dashboard/mine/assets/detail?id=${item.id}`,
-                      );
-                    }}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        </InfiniteScroll>
+      <Card
+        data={[
+          {
+            label: formatMessage({ id: 'financial.asset.total.trading' }),
+            value: `${fromToken(summary?.assetOrderAmountTotal || 0)} ETH`,
+            onClick: onCountClick,
+          },
+          {
+            label: formatMessage({ id: 'financial.asset.royalties' }),
+            value: '3%',
+          },
+          {
+            label: formatMessage({ id: 'financial.asset.total' }),
+            value: summary?.assetTotal || 0,
+          },
+          // { num: 31232, title: '所有者' },
+          // { num: 31232, title: '挂单率' },
+          // { num: 31232, title: '交易市场' },
+        ]}
+      />
+
+      <div className="table-card">
+        <div className="table-filter">
+          <Form
+            name="filter"
+            layout="inline"
+            onValuesChange={onValuesChange}
+            autoComplete="off"
+            labelAlign="left"
+            requiredMark={false}
+            validateTrigger="onBlur"
+          >
+            <Form.Item name="orderBy">
+              <Select
+                style={{ width: 140 }}
+                placeholder="Sort"
+                options={[
+                  { value: '', label: 'Default' },
+                  {
+                    value: 'sellPrice',
+                    label: formatMessage({ id: 'financial.asset.sort.price' }),
+                  },
+                  {
+                    value: 'sellPrice desc',
+                    label: formatMessage({
+                      id: 'financial.asset.sort.price.desc',
+                    }),
+                  },
+                  {
+                    value: 'sellingTime desc',
+                    label: formatMessage({
+                      id: 'financial.asset.sort.released',
+                    }),
+                  },
+                  {
+                    value: 'blockNumber desc',
+                    label: formatMessage({
+                      id: 'financial.asset.sort.created',
+                    }),
+                  },
+                  {
+                    value: 'soldTime desc',
+                    label: formatMessage({ id: 'financial.asset.sort.sold' }),
+                  },
+                ]}
+              />
+            </Form.Item>
+          </Form>
+        </div>
+        <div className={styles['dashboard-content-body']} id="scrollableAssets">
+          <InfiniteScroll
+            dataLength={data.length}
+            next={getData}
+            hasMore={data.length < total}
+            loader={loading && <Skeleton paragraph={{ rows: 1 }} active />}
+            scrollableTarget="scrollableAssets"
+          >
+            <div className={styles['financial-list']}>
+              {data.map((item: any) => {
+                return (
+                  <div key={item.id} className={styles['financial-item']}>
+                    <FinancialItem
+                      title={`${item.name} #${item.id}`}
+                      logo={item.imageOrigin}
+                      price={item.sellPrice || 0}
+                      // priceIcon={<PriceIcon />}
+                      onClick={() => {
+                        localStorage.setItem('asset', JSON.stringify(item));
+                        router.push(
+                          `/dashboard/mine/assets/detail?id=${item.id}`,
+                        );
+                      }}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </InfiniteScroll>
+        </div>
       </div>
     </div>
   );

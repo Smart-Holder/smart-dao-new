@@ -1,14 +1,10 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Table, DatePicker, Form, Select } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
-import Counts from '@/containers/dashboard/mine/counts';
-// import NftpModal from '@/components/modal/nftpModal';
-
 import { request } from '@/api';
 
-import styles from '@/styles/content.module.css';
 import { useAppSelector } from '@/store/hooks';
 
 import { formatDayjsValues, fromToken } from '@/utils';
@@ -16,6 +12,7 @@ import { formatDayjsValues, fromToken } from '@/utils';
 import type { PaginationProps } from 'antd';
 
 import { useIntl, FormattedMessage } from 'react-intl';
+import Card from '@/components/card';
 
 const { RangePicker } = DatePicker;
 
@@ -78,8 +75,6 @@ const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [amount, setAmount] = useState({ total: 0, amount: '0' });
-
-  const nftpModal: any = useRef(null);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -170,37 +165,25 @@ const App = () => {
 
   return (
     <div className="wrap">
-      <div className={styles['dashboard-content-header']}>
-        <Counts
-          items={[
-            {
-              num: amount.total,
-              title: formatMessage({
-                id: 'my.order.total',
-              }),
-            },
-            {
-              num: fromToken(amount.amount || 0) + ' ETH',
-              title: formatMessage({
-                id: 'my.order.amount',
-              }),
-            },
-          ]}
-        />
-        {/* <Counts
-          items={[
-            { num: fromToken(amount.amount) + ' ETH', title: '累计收入' },
-            { num: fromToken(amount.amount) + ' ETH', title: '累计发行税收入' },
-            { num: fromToken(amount.amount) + ' ETH', title: '累计交易税收入' },
-            { num: fromToken(amount.amount) + ' ETH', title: '未分配收入' },
-          ]}
-        /> */}
+      <Card
+        data={[
+          {
+            label: formatMessage({
+              id: 'my.order.total',
+            }),
+            value: amount.total,
+          },
+          {
+            label: formatMessage({
+              id: 'my.order.amount',
+            }),
+            value: fromToken(amount.amount || 0) + ' ETH',
+          },
+        ]}
+      />
 
-        {/* <Button type="primary" onClick={showModal}>
-          分配
-        </Button> */}
-
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div className="table-card">
+        <div className="table-filter">
           <Form
             name="filter"
             layout="inline"
@@ -242,23 +225,21 @@ const App = () => {
                 ]}
               />
             </Form.Item> */}
-            <Form.Item name="time" label="Time">
+            <Form.Item name="time">
               <RangePicker format="MM/DD/YYYY" />
             </Form.Item>
           </Form>
 
           {/* <Button type="primary" onClick={showModal}>
-            添加NFTP
-          </Button> */}
+          分配
+        </Button> */}
         </div>
-      </div>
-
-      <div className={styles['dashboard-content-body']}>
         <Table
           columns={columns}
           dataSource={data}
           rowKey="id"
           pagination={{
+            position: ['bottomCenter'],
             current: page,
             pageSize,
             total,
