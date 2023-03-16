@@ -1,4 +1,4 @@
-import { Form, Layout as AntdLayout, Select, Skeleton } from 'antd';
+import { Form, Select, Skeleton } from 'antd';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -194,9 +194,7 @@ const App: NextPageWithLayout = () => {
   };
 
   return (
-    <AntdLayout.Content
-      className={`${styles['dashboard-content']} ${styles['dashboard-content-scroll']}`}
-    >
+    <div className="dashboard-content dashboard-content-scroll">
       <div className={styles['dashboard-content-header']}>
         <div>
           {/* <div className={styles.title1}>Governance</div> */}
@@ -454,10 +452,10 @@ const App: NextPageWithLayout = () => {
         </InfiniteScroll>
       </div>
       <VoteModal open={openModal} onClose={onCloseModal} data={currentItem} />
-    </AntdLayout.Content>
+    </div>
   );
 };
 
-App.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
+App.getLayout = (page: ReactElement) => <Layout footer={false}>{page}</Layout>;
 
 export default App;

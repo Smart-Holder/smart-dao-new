@@ -1,4 +1,4 @@
-import { Layout as AntdLayout, PaginationProps } from 'antd';
+import { PaginationProps } from 'antd';
 import Layout from '@/components/layout';
 import { ReactElement, useEffect, useState } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
@@ -55,7 +55,7 @@ const App: NextPageWithLayout = () => {
   };
 
   return (
-    <AntdLayout.Content className={styles['dashboard-content']}>
+    <div className="dashboard-content">
       <div className={styles['dashboard-content-body']}>
         <div className={styles['detail-content']}>
           <DetailHeader
@@ -80,7 +80,7 @@ const App: NextPageWithLayout = () => {
           />
         </div>
       </div>
-    </AntdLayout.Content>
+    </div>
   );
 };
 

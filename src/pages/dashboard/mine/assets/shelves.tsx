@@ -1,5 +1,4 @@
 import {
-  Layout as AntdLayout,
   Table,
   PaginationProps,
   Image,
@@ -215,7 +214,7 @@ const App: NextPageWithLayout = () => {
   };
 
   return (
-    <AntdLayout.Content className={styles['dashboard-content']}>
+    <div className="dashboard-content">
       <div className={styles['dashboard-content-header']}>
         <div
           style={{
@@ -390,7 +389,7 @@ const App: NextPageWithLayout = () => {
           `}
         </style>
       </div>
-    </AntdLayout.Content>
+    </div>
   );
 };
 

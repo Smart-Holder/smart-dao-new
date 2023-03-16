@@ -1,5 +1,4 @@
 import dynamic from 'next/dynamic';
-import { Layout as AntdLayout } from 'antd';
 import { useIntl } from 'react-intl';
 
 import Layout from '@/components/layout';
@@ -16,7 +15,7 @@ const App: NextPageWithLayout = () => {
   const { formatMessage } = useIntl();
 
   return (
-    <div className="start">
+    <div>
       <div className={styles['basic-title1']}>
         {formatMessage({ id: 'home.welcome' })}
       </div>
@@ -27,19 +26,6 @@ const App: NextPageWithLayout = () => {
       <div className={styles.box}>
         <Start />
       </div>
-
-      <style jsx>
-        {`
-          .start {
-            display: flex;
-            flex-direction: column;
-            box-sizing: border-box;
-            max-width: var(--width);
-            padding: 0 54px;
-            margin: 0 auto;
-          }
-        `}
-      </style>
     </div>
   );
 };

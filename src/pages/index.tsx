@@ -7,20 +7,9 @@ import DAO from '@/containers/home/dao';
 
 const App: NextPageWithLayout = () => {
   return (
-    <div className="home">
+    <div>
       <Intro />
       <DAO />
-
-      <style jsx>
-        {`
-          .home {
-            box-sizing: border-box;
-            max-width: var(--width);
-            padding: 0 80px;
-            margin: 0 auto;
-          }
-        `}
-      </style>
     </div>
   );
 };

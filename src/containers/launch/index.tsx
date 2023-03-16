@@ -1,7 +1,6 @@
 import { useAppSelector } from '@/store/hooks';
 import { getMakeDAOStorage } from '@/utils/launch';
-import { Avatar, Space } from 'antd';
-import Image from 'next/image';
+import { Avatar, Space, Image, Row, Col, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
@@ -10,6 +9,8 @@ import icon1 from '/public/images/dashboard/mine/home-icon-1.png';
 import icon2 from '/public/images/dashboard/mine/home-icon-2.png';
 import icon3 from '/public/images/dashboard/mine/home-icon-3.png';
 import icon4 from '/public/images/dashboard/mine/home-icon-4.png';
+
+const { Paragraph } = Typography;
 
 const App = () => {
   const { formatMessage } = useIntl();
@@ -35,183 +36,297 @@ const App = () => {
 
   return (
     <div className="wrap">
-      <div className="top">
-        <Avatar
-          size={165}
+      <div className="image">
+        <Image
           src={cacheDAO.image}
-          style={{ backgroundColor: '#fff', marginRight: 26 }}
+          width="100%"
+          height={425}
+          preview={false}
+          alt="image"
         />
-        <div>
-          <div className="name">{cacheDAO.name}</div>
-          <div className="total">
-            {formatMessage({ id: 'my.summary.total.member' })}:
-            <span>{cacheDAO.members.length}</span>
-          </div>
-          <Space size={82}>
-            <div className="top-item">
-              <span className="num">0</span>
-              <span>{formatMessage({ id: 'my.summary.total.proposal' })}</span>
-            </div>
-            <div className="top-item">
-              <span className="num">0</span>
-              <span>{formatMessage({ id: 'my.summary.total.voting' })}</span>
-            </div>
-            <div className="top-item">
-              <span className="num">0</span>
-              <span>{formatMessage({ id: 'my.summary.total.complete' })}</span>
-            </div>
-          </Space>
-        </div>
       </div>
 
-      <div className="bottom">
-        <Space size={[39, 46]} wrap>
-          <div className="bottom-item">
-            <Image
-              style={{ marginRight: 28 }}
-              src={icon1}
-              width={84}
-              height={84}
-              alt="img"
-            />
-            <div className="bottom-item-right">
-              <span className="num">0 ETH</span>
-              <span>
-                {formatMessage({ id: 'my.summary.total.assetAmount' })}
-              </span>
+      <div className="content">
+        <Row gutter={24}>
+          <Col span={12}>
+            <div className="name">{cacheDAO.name}</div>
+          </Col>
+        </Row>
+
+        <Row gutter={24} style={{ marginTop: 55 }}>
+          <Col span={12}>
+            <div className="desc-header">Description</div>
+            <div className="desc-content">
+              <Paragraph
+                ellipsis={{
+                  rows: 4,
+                  expandable: true,
+                  symbol: <div style={{ color: '#000' }}>View More</div>,
+                }}
+              >
+                {cacheDAO.description}
+              </Paragraph>
             </div>
-          </div>
-          <div className="bottom-item">
-            <Image
-              style={{ marginRight: 28 }}
-              src={icon2}
-              width={84}
-              height={84}
-              alt="img"
-            />
-            <div className="bottom-item-right">
+          </Col>
+          <Col span={10} offset={2}>
+            <div className="member-header">
+              {cacheDAO.members.length} Members
+            </div>
+            <div className="member-content">
+              <Avatar.Group
+                maxCount={6}
+                size={52}
+                maxStyle={{
+                  color: '#fff',
+                  backgroundColor: '#000',
+                  cursor: 'pointer',
+                }}
+              >
+                {cacheDAO.members.map((item: any) => (
+                  <Avatar
+                    style={{ backgroundColor: '#000', borderWidth: 3 }}
+                    src={item.image}
+                    key={item.id}
+                  />
+                ))}
+              </Avatar.Group>
+            </div>
+          </Col>
+        </Row>
+
+        <Row gutter={24} style={{ marginTop: 55 }}>
+          <Col span={8}>
+            <div className="total-item">
+              <div className="total-item-top">
+                {formatMessage({ id: 'my.summary.total.proposal' })}
+                <Image
+                  src="/images/dashboard/summary/img_dao_dashboard_card_proposal_default.png"
+                  width={45}
+                  height={46}
+                  alt="img"
+                  preview={false}
+                />
+              </div>
               <span className="num">0</span>
-              <span>{formatMessage({ id: 'my.summary.total.asset' })}</span>
             </div>
-          </div>
-          <div className="bottom-item">
-            <Image
-              style={{ marginRight: 28 }}
-              src={icon3}
-              width={84}
-              height={84}
-              alt="img"
-            />
-            <div className="bottom-item-right">
+          </Col>
+          <Col span={8}>
+            <div className="total-item">
+              <div className="total-item-top">
+                {formatMessage({ id: 'my.summary.total.voting' })}
+                <Image
+                  src="/images/dashboard/summary/img_dao_dashboard_card_total_vote_default.png"
+                  width={45}
+                  height={46}
+                  alt="img"
+                  preview={false}
+                />
+              </div>
               <span className="num">0</span>
-              <span>{formatMessage({ id: 'my.summary.total.order' })}</span>
             </div>
-          </div>
-          <div className="bottom-item">
-            <Image
-              style={{ marginRight: 28 }}
-              src={icon4}
-              width={84}
-              height={84}
-              alt="img"
-            />
-            <div className="bottom-item-right">
-              <span className="num">0 ETH</span>
-              <span>{formatMessage({ id: 'my.summary.total.income' })}</span>
+          </Col>
+          <Col span={8}>
+            <div className="total-item">
+              <div className="total-item-top">
+                {formatMessage({ id: 'my.summary.total.complete' })}
+                <Image
+                  src="/images/dashboard/summary/img_dao_dashboard_card_voted_default.png"
+                  width={45}
+                  height={46}
+                  alt="img"
+                  preview={false}
+                />
+              </div>
+              <span className="num">0</span>
             </div>
-          </div>
-        </Space>
+          </Col>
+        </Row>
+
+        <Row gutter={[37, 40]} style={{ marginTop: 55 }}>
+          <Col span={12}>
+            <div className="total-item-2">
+              <div className="total-item-right">
+                <span className="num">0 ETH</span>
+                <span>
+                  {formatMessage({ id: 'my.summary.total.assetAmount' })}
+                </span>
+              </div>
+              <Image
+                src="/images/dashboard/summary/icon_dao_dashboard_card_assets_value_default.png"
+                width={60}
+                height={60}
+                alt="img"
+                preview={false}
+              />
+            </div>
+          </Col>
+          <Col span={12}>
+            <div className="total-item-2">
+              <div className="total-item-right">
+                <span className="num">0</span>
+                <span>{formatMessage({ id: 'my.summary.total.asset' })}</span>
+              </div>
+              <Image
+                src="/images/dashboard/summary/icon_dao_dashboard_card_assets_default.png"
+                width={60}
+                height={60}
+                alt="img"
+                preview={false}
+              />
+            </div>
+          </Col>
+          <Col span={12}>
+            <div className="total-item-2">
+              <div className="total-item-right">
+                <span className="num">0</span>
+                <span>{formatMessage({ id: 'my.summary.total.order' })}</span>
+              </div>
+              <Image
+                src="/images/dashboard/summary/icon_dao_dashboard_card_order_default.png"
+                width={60}
+                height={60}
+                alt="img"
+                preview={false}
+              />
+            </div>
+          </Col>
+          <Col span={12}>
+            <div className="total-item-2">
+              <div className="total-item-right">
+                <span className="num">0 ETH</span>
+                <span>{formatMessage({ id: 'my.summary.total.income' })}</span>
+              </div>
+              <Image
+                src="/images/dashboard/summary/icon_dao_dashboard_card_income_default.png"
+                width={60}
+                height={60}
+                alt="img"
+                preview={false}
+              />
+            </div>
+          </Col>
+        </Row>
       </div>
 
       <style jsx>
         {`
-          .top {
+          .content {
+            padding: 75px 60px 50px;
+          }
+
+          .info1 {
             display: flex;
+            justify-content: space-between;
           }
 
-          .top .name {
-            height: 27px;
-            font-size: 28px;
-            font-family: PingFangSC-Medium, PingFang SC;
-            font-weight: 500;
-            color: #3c4369;
-            line-height: 27px;
-          }
-
-          .top .total {
-            margin-top: 14px;
-            font-size: 14px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #393939;
-            line-height: 18px;
-          }
-
-          .top .total span {
-            margin-left: 4px;
-            color: #546ff6;
-            font-size: 30px;
-            line-height: 30px;
-            font-weight: bold;
-          }
-
-          .top-item {
-            display: flex;
-            flex-direction: column;
-            margin-top: 24px;
-          }
-
-          .top-item span {
-            font-size: 16px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #3e4954;
-            line-height: 24px;
-          }
-
-          .top-item .num {
-            font-size: 40px;
-            font-family: AppleSystemUIFont;
-            color: #0e0e0e;
+          .name {
+            width: 395px;
+            height: 50px;
+            font-size: 36px;
+            font-family: PingFangSC-Semibold, PingFang SC;
+            font-weight: 600;
+            color: #000000;
             line-height: 50px;
           }
 
-          .bottom {
-            width: 720px;
-            margin-top: 70px;
+          .desc-header {
+            font-size: 22px;
+            font-family: PingFangSC-Semibold, PingFang SC;
+            font-weight: 600;
+            color: #000000;
+            line-height: 30px;
           }
 
-          .bottom-item {
-            display: flex;
-            box-sizing: border-box;
-            width: 339px;
-            height: 168px;
-            padding: 51px 10px 33px 30px;
-            background: #ffffff;
-            box-shadow: 0px 12px 23px 0px rgba(62, 73, 84, 0.04);
+          .desc-content {
+            margin-top: 22px;
           }
 
-          .bottom-item .bottom-item-right {
+          .desc-content :global(.ant-typography) {
+            font-size: 14px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: #818181;
+            line-height: 28px;
+          }
+
+          .member-header {
+            font-size: 22px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: #000000;
+            line-height: 30px;
+          }
+
+          .member-content {
+            margin-top: 20px;
+          }
+
+          .total-item {
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+            max-width: 306px;
+            height: 160px;
+            padding: 26px 26px 30px 24px;
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1px solid #eaeaea;
           }
 
-          .bottom-item span {
-            height: 24px;
-            font-size: 16px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #3e4954;
-            line-height: 24px;
+          .total-item-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 20px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: #000000;
+            line-height: 28px;
           }
 
-          .bottom-item .num {
-            height: 55px;
-            font-size: 40px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #0e0e0e;
-            line-height: 55px;
+          .total-item .num {
+            font-size: 32px;
+            font-family: PingFangSC-Semibold, PingFang SC;
+            font-weight: 600;
+            color: #000000;
+            line-height: 45px;
+          }
+
+          .total-item-2 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            max-width: 465px;
+            height: 180px;
+            padding: 0 45px;
+            background: #ffffff;
+            box-shadow: -5px 5px 20px 0px rgba(30, 30, 30, 0.05);
+          }
+
+          .total-item-2 .total-item-right {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+          }
+
+          .total-item-2 span {
+            height: 29px;
+            font-size: 21px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: #282d32;
+            line-height: 29px;
+          }
+
+          .total-item-2 .num {
+            height: 59px;
+            font-size: 42px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: #282d32;
+            line-height: 59px;
           }
         `}
       </style>

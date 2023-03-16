@@ -20,13 +20,13 @@ const LaunchLayout = ({ children }: { children: ReactElement }) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/icon.png" />
       </Head>
-      <Layout hasSider>
+      <Layout>
         <Header />
         <Layout hasSider>
           <Sider />
           <Layout>
             <Content className="launch">{children}</Content>
-            <Footer />
+            <Footer hasSider />
           </Layout>
         </Layout>
       </Layout>

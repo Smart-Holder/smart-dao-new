@@ -16,17 +16,17 @@ const App: NextPageWithLayout = () => {
   const { formatMessage } = useIntl();
 
   return (
-    <AntdLayout.Content className={styles['launch-content']}>
-      <div className={styles.title1}>
+    <div>
+      <div className={styles['basic-title1']}>
         {formatMessage({ id: 'home.welcome' })}
       </div>
-      <div className={styles.title2}>
+      <div className={styles['basic-title2']}>
         {formatMessage({ id: 'home.createOwnDAO' })}
       </div>
       <div className={styles.box}>
         <Information />
       </div>
-    </AntdLayout.Content>
+    </div>
   );
 };
 

@@ -30,7 +30,9 @@ const BasicLayout = ({ children }: { children: ReactElement }) => {
       </Head>
       <Layout>
         <Header type="fix" />
-        <Content className="basic">{children}</Content>
+        <Content className="basic">
+          <div className="basic-content">{children}</div>
+        </Content>
         <Footer />
       </Layout>
     </>

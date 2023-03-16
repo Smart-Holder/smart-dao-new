@@ -1,4 +1,4 @@
-import { Form, Layout as AntdLayout, Select, Skeleton } from 'antd';
+import { Form, Select, Skeleton } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -151,9 +151,7 @@ const App: NextPageWithLayout = () => {
   };
 
   return (
-    <AntdLayout.Content
-      className={`${styles['dashboard-content']} ${styles['dashboard-content-scroll']}`}
-    >
+    <div className="dashboard-content dashboard-content-scroll">
       <div className={styles['dashboard-content-header']}>
         <FinancialHeader
           title={currentDAO.name}
@@ -266,10 +264,10 @@ const App: NextPageWithLayout = () => {
           </div>
         </InfiniteScroll>
       </div>
-    </AntdLayout.Content>
+    </div>
   );
 };
 
-App.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
+App.getLayout = (page: ReactElement) => <Layout footer={false}>{page}</Layout>;
 
 export default App;

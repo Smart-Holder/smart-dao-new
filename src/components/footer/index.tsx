@@ -1,21 +1,23 @@
-import { Col, Layout, Row, Space } from 'antd';
-import Image from 'next/image';
-
-import logo from '/public/images/icon_logo_white.png';
-import facebook from '/public/images/footer/icon_footer_social_facebook.png';
-import linkedin from '/public/images/footer/icon_footer_social_linkedin.png';
-import twitter from '/public/images/footer/icon_footer_social_twitter.png';
+import { Col, Layout, Row, Space, Image } from 'antd';
 
 const { Footer } = Layout;
 
-export default function Home() {
+const App = ({ hasSider }: { hasSider?: boolean }) => {
   return (
     <Footer className="footer">
-      <div className="footer-content">
+      <div
+        className={`${hasSider ? 'footer-content-hasSider' : 'footer-content'}`}
+      >
         <Row gutter={16} style={{ width: '100%' }}>
           <Col span={12}>
             <div className="left">
-              <Image src={logo} alt="logo" width={175} height={54} />
+              <Image
+                src="/images/icon_logo_white.png"
+                alt="logo"
+                width={175}
+                height={54}
+                preview={false}
+              />
               <div className="desc1">
                 Build a platform to help web2 stars, sports and artists quickly
                 enter the web3 world
@@ -32,9 +34,27 @@ export default function Home() {
                 <span>FAQ</span>
               </Space>
               <Space size={32} style={{ marginTop: 43 }}>
-                <Image src={facebook} alt="logo" width={30} height={30} />
-                <Image src={linkedin} alt="logo" width={30} height={30} />
-                <Image src={twitter} alt="logo" width={30} height={30} />
+                <Image
+                  src="/images/footer/icon_footer_social_facebook.png"
+                  alt="logo"
+                  width={30}
+                  height={30}
+                  preview={false}
+                />
+                <Image
+                  src="/images/footer/icon_footer_social_linkedin.png"
+                  alt="logo"
+                  width={30}
+                  height={30}
+                  preview={false}
+                />
+                <Image
+                  src="/images/footer/icon_footer_social_twitter.png"
+                  alt="logo"
+                  width={30}
+                  height={30}
+                  preview={false}
+                />
               </Space>
             </div>
           </Col>
@@ -48,9 +68,17 @@ export default function Home() {
       <style jsx>
         {`
           .footer-content {
-            max-width: var(--width);
+            max-width: var(--max-width);
+            height: var(--height-footer);
             padding: 63px 80px 5px;
             margin: 0 auto;
+          }
+
+          .footer-content-hasSider {
+            box-sizing: border-box;
+            height: var(--height-footer);
+            margin-left: 298px;
+            padding: 63px 80px 5px;
           }
 
           .desc1 {
@@ -95,4 +123,6 @@ export default function Home() {
       </style>
     </Footer>
   );
-}
+};
+
+export default App;

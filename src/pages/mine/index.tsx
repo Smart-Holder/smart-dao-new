@@ -1,7 +1,4 @@
-import { useEffect, useState } from 'react';
-import Head from 'next/head';
 import { useIntl } from 'react-intl';
-import { Layout as AntdLayout } from 'antd';
 
 import styles from '@/styles/content.module.css';
 
@@ -15,19 +12,18 @@ const App: NextPageWithLayout = () => {
   const { formatMessage } = useIntl();
 
   return (
-    <AntdLayout.Content className={styles.content}>
+    <div>
       <div>
-        <div className={styles.title1}>
+        <div className={styles['basic-title1']}>
           {formatMessage({ id: 'home.welcome' })}
         </div>
-        <div className={styles.title2}>
+        <div className={styles['basic-title2']}>
           {formatMessage({ id: 'home.createOwnDAO' })}
         </div>
       </div>
-      <div className={styles.box}>
-        <Mine />
-      </div>
-    </AntdLayout.Content>
+
+      <Mine />
+    </div>
   );
 };
 

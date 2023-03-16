@@ -1,5 +1,14 @@
 import sdk from 'hcstore/sdk';
-import { Avatar, Space, Image, Button, message, Row, Col } from 'antd';
+import {
+  Avatar,
+  Space,
+  Image,
+  Button,
+  message,
+  Row,
+  Col,
+  Typography,
+} from 'antd';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { rng } from 'somes/rng';
@@ -9,10 +18,12 @@ import { useIntl } from 'react-intl';
 import { request } from '@/api';
 import { Permissions } from '@/config/enum';
 import { join } from '@/api/member';
-import { setDAOType } from '@/store/features/daoSlice';
+import { getDAO, setDAOType } from '@/store/features/daoSlice';
 import { UserOutlined } from '@ant-design/icons';
 
-import NFT from '@/containers/dashboard/mine/nft';
+import NFTs from '@/containers/dashboard/mine/nfts';
+
+const { Paragraph } = Typography;
 
 const App = () => {
   const { formatMessage } = useIntl();
@@ -25,6 +36,7 @@ const App = () => {
   const { currentDAO, DAOType } = useAppSelector((store) => store.dao);
   const [DAOInfo, setDAOInfo] = useState() as any;
   const [loading, setLoading] = useState(false);
+  const [isLike, setIsLike] = useState(currentDAO?.isLike || false);
 
   useEffect(() => {
     const getData = async () => {
@@ -47,40 +59,38 @@ const App = () => {
 
   const setJoin = async () => {
     try {
-      const params = {
-        name: formatMessage({ id: 'proposal.basic.addNFTP' }),
-        description: JSON.stringify({
-          type: 'member',
-          purpose: `${formatMessage({
-            id: 'proposal.basic.addNFTP',
-          })}: ${address}`,
-        }),
-        extra: [
-          {
-            abi: 'member',
-            method: 'requestJoin',
-            params: [
-              address,
-              {
-                id: '0x' + rng(32).toString('hex'),
-                name: '',
-                description: '',
-                image: '',
-                votes: 1,
-              },
-              [
-                Permissions.Action_VotePool_Vote,
-                Permissions.Action_VotePool_Create,
-              ],
-            ],
-          },
-        ],
-      };
+      // const params = {
+      //   name: formatMessage({ id: 'proposal.basic.addNFTP' }),
+      //   description: JSON.stringify({
+      //     type: 'member',
+      //     purpose: `${formatMessage({
+      //       id: 'proposal.basic.addNFTP',
+      //     })}: ${address}`,
+      //   }),
+      //   extra: [
+      //     {
+      //       abi: 'member',
+      //       method: 'requestJoin',
+      //       params: [
+      //         address,
+      //         {
+      //           id: '0x' + rng(32).toString('hex'),
+      //           name: '',
+      //           description: '',
+      //           image: '',
+      //           votes: 1,
+      //         },
+      //         [
+      //           Permissions.Action_VotePool_Vote,
+      //           Permissions.Action_VotePool_Create,
+      //         ],
+      //       ],
+      //     },
+      //   ],
+      // };
 
       setLoading(true);
       await join({ votePool: currentDAO.root, member: currentDAO.member });
-      // message.success('success');
-      // await createDAOVote(params);
       message.success(formatMessage({ id: 'governance.proposal.success' }));
       setLoading(false);
       // dispatch(setDAOType('joining'));
@@ -102,7 +112,8 @@ const App = () => {
 
       message.success('success');
       dispatch(setDAOType('follow'));
-      window.location.reload();
+      setIsLike(true);
+      // window.location.reload();
     } catch (error) {
       console.error(error);
     }
@@ -137,13 +148,27 @@ const App = () => {
           </Col>
           <Col span={10} offset={2}>
             <Space size={20}>
-              {DAOType === 'visitor' && (
-                <Button type="primary" onClick={setFollow}>
-                  {formatMessage({ id: 'home.follow' })}
-                </Button>
-              )}
-              <Button type="primary" onClick={setJoin} loading={loading}>
-                {formatMessage({ id: 'home.join' })}
+              <Button
+                className="sm-button"
+                type="primary"
+                ghost
+                onClick={setFollow}
+                disabled={isLike}
+              >
+                {formatMessage({
+                  id: isLike ? 'home.followed' : 'home.follow',
+                })}
+              </Button>
+              <Button
+                className="sm-button"
+                type="primary"
+                onClick={setJoin}
+                loading={loading}
+                disabled={currentDAO.isJoin}
+              >
+                {formatMessage({
+                  id: currentDAO.isJoin ? 'home.joined' : 'home.join',
+                })}
               </Button>
             </Space>
           </Col>
@@ -152,26 +177,65 @@ const App = () => {
         <Row gutter={24} style={{ marginTop: 55 }}>
           <Col span={12}>
             <div className="desc-header">Description</div>
-            <div className="desc-content">{currentDAO.description}</div>
+            <div className="desc-content">
+              <Paragraph
+                ellipsis={{
+                  rows: 4,
+                  expandable: true,
+                  symbol: <div style={{ color: '#000' }}>View More</div>,
+                }}
+              >
+                {currentDAO.description}
+              </Paragraph>
+            </div>
           </Col>
           <Col span={10} offset={2}>
             <div className="member-header">{DAOInfo.membersTotal} Members</div>
             <div className="member-content">
-              <Avatar.Group>
+              <Avatar.Group
+                maxCount={6}
+                size={52}
+                maxStyle={{
+                  color: '#fff',
+                  backgroundColor: '#000',
+                  cursor: 'pointer',
+                }}
+              >
                 <Avatar
-                  size={42}
-                  style={{ backgroundColor: '#000' }}
-                  icon={<UserOutlined />}
+                  style={{ backgroundColor: '#000', borderWidth: 3 }}
+                  src="https://smart-dao-res.stars-mine.com/FvCDcP23jHCCRbAJY_x3yK0c7vSx"
                 />
                 <Avatar
-                  size={42}
-                  style={{ backgroundColor: '#000' }}
-                  icon={<UserOutlined />}
+                  style={{ backgroundColor: '#000', borderWidth: 3 }}
+                  src="https://smart-dao-res.stars-mine.com/FvCDcP23jHCCRbAJY_x3yK0c7vSx"
                 />
                 <Avatar
-                  size={42}
-                  style={{ backgroundColor: '#000' }}
-                  icon={<UserOutlined />}
+                  style={{ backgroundColor: '#000', borderWidth: 3 }}
+                  src="https://smart-dao-res.stars-mine.com/FvCDcP23jHCCRbAJY_x3yK0c7vSx"
+                />
+                <Avatar
+                  style={{ backgroundColor: '#000', borderWidth: 3 }}
+                  src="https://smart-dao-res.stars-mine.com/FvCDcP23jHCCRbAJY_x3yK0c7vSx"
+                />
+                <Avatar
+                  style={{ backgroundColor: '#000', borderWidth: 3 }}
+                  src="https://smart-dao-res.stars-mine.com/FvCDcP23jHCCRbAJY_x3yK0c7vSx"
+                />
+                <Avatar
+                  style={{ backgroundColor: '#000', borderWidth: 3 }}
+                  src="https://smart-dao-res.stars-mine.com/FvCDcP23jHCCRbAJY_x3yK0c7vSx"
+                />
+                <Avatar
+                  style={{ backgroundColor: '#000', borderWidth: 3 }}
+                  src="https://smart-dao-res.stars-mine.com/FvCDcP23jHCCRbAJY_x3yK0c7vSx"
+                />
+                <Avatar
+                  style={{ backgroundColor: '#000', borderWidth: 3 }}
+                  src="https://smart-dao-res.stars-mine.com/FvCDcP23jHCCRbAJY_x3yK0c7vSx"
+                />
+                <Avatar
+                  style={{ backgroundColor: '#000', borderWidth: 3 }}
+                  src="https://smart-dao-res.stars-mine.com/FvCDcP23jHCCRbAJY_x3yK0c7vSx"
                 />
               </Avatar.Group>
             </div>
@@ -295,24 +359,7 @@ const App = () => {
           </Col>
         </Row>
 
-        <div className="nfts-header">NFTs</div>
-        <Row gutter={[19, 20]}>
-          <Col span={8}>
-            <NFT />
-          </Col>
-          <Col span={8}>
-            <NFT />
-          </Col>
-          <Col span={8}>
-            <NFT />
-          </Col>
-          <Col span={8}>
-            <NFT />
-          </Col>
-          <Col span={8}>
-            <NFT />
-          </Col>
-        </Row>
+        {!currentDAO.isJoin && !currentDAO.isMember && <NFTs />}
       </div>
 
       <style jsx>
@@ -337,28 +384,31 @@ const App = () => {
           }
 
           .desc-header {
-            font-size: 20px;
+            font-size: 22px;
             font-family: PingFangSC-Semibold, PingFang SC;
             font-weight: 600;
             color: #000000;
-            line-height: 28px;
+            line-height: 30px;
           }
 
           .desc-content {
             margin-top: 22px;
-            font-size: 12px;
+          }
+
+          .desc-content :global(.ant-typography) {
+            font-size: 14px;
             font-family: PingFangSC-Medium, PingFang SC;
             font-weight: 500;
             color: #818181;
-            line-height: 17px;
+            line-height: 28px;
           }
 
           .member-header {
-            font-size: 28px;
+            font-size: 22px;
             font-family: PingFangSC-Medium, PingFang SC;
             font-weight: 500;
             color: #000000;
-            line-height: 40px;
+            line-height: 30px;
           }
 
           .member-content {
@@ -431,16 +481,6 @@ const App = () => {
             font-weight: 500;
             color: #282d32;
             line-height: 59px;
-          }
-
-          .nfts-header {
-            height: 30px;
-            margin: 70px 0 40px;
-            font-size: 38px;
-            font-family: AdobeDevanagari-Bold, AdobeDevanagari;
-            font-weight: bold;
-            color: #000000;
-            line-height: 30px;
           }
         `}
       </style>

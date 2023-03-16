@@ -1,11 +1,4 @@
-import {
-  Layout as AntdLayout,
-  Table,
-  PaginationProps,
-  Image,
-  DatePicker,
-  Form,
-} from 'antd';
+import { Table, PaginationProps, Image, DatePicker, Form } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -113,7 +106,7 @@ const App: NextPageWithLayout = () => {
   }, [searchText, values]);
 
   return (
-    <AntdLayout.Content className={styles['dashboard-content']}>
+    <div className="dashboard-content">
       <div className={styles['dashboard-content-header']}>
         <Counts
           items={[
@@ -229,7 +222,7 @@ const App: NextPageWithLayout = () => {
           dataSource={[...data]}
         />
       </div>
-    </AntdLayout.Content>
+    </div>
   );
 };
 

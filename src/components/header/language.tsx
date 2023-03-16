@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Dropdown, Space } from 'antd';
-import Image, { StaticImageData } from 'next/image';
-import { DownOutlined, GlobalOutlined } from '@ant-design/icons';
+import { Avatar, Dropdown, Image } from 'antd';
 import type { MenuProps } from 'antd';
+import Img from 'next/image';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { setLang } from '@/store/features/commonSlice';
-
-import iconEn from '/public/images/header/icon_navi_top_language_defult.png';
-import iconJa from '/public/images/header/icon_navi_top_language_defult.png';
 
 const langList: MenuProps['items'] = [
   {
@@ -18,9 +14,9 @@ const langList: MenuProps['items'] = [
   { label: '日本語', key: 'ja' },
 ];
 
-const icons: { [index: string]: StaticImageData } = {
-  en: iconEn,
-  ja: iconJa,
+const icons: { [index: string]: string } = {
+  en: '/images/header/icon_navi_top_language_defult.png',
+  ja: '/images/header/icon_navi_top_language_defult.png',
 };
 
 const Lang = () => {
@@ -66,26 +62,18 @@ const Lang = () => {
           width={26}
           height={20}
           alt="language"
-          style={{ cursor: 'pointer' }}
+          preview={false}
         />
       </Dropdown>
+
       <style jsx>
         {`
-          .wrap :global(.dropdown-trigger) {
-            height: 46px;
-            padding: 0 12px 0 7px;
-            color: #3e4954;
-            font-size: 14px;
-            line-height: 46px;
-            background: #f9faff;
-            border-radius: 23px;
-            cursor: pointer;
+          .wrap {
+            margin-right: 55px;
           }
 
-          .wrap :global(.dropdown-trigger-content) {
-            display: inline-block;
-            width: 70px;
-            padding: 0 10px 0 4px;
+          .wrap :global(.ant-image) {
+            line-height: 0;
           }
         `}
       </style>

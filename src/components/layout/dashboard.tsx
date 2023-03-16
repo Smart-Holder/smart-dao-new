@@ -23,7 +23,13 @@ import { request } from '@/api';
 
 const { Content } = Layout;
 
-export default function BasicLayout({ children }: { children: ReactElement }) {
+export default function BasicLayout({
+  children,
+  footer = true,
+}: {
+  children: ReactElement;
+  footer?: boolean;
+}) {
   const dispatch = useAppDispatch();
   const { address, chainId, isSupportChain } = useAppSelector(
     (store) => store.wallet,
@@ -172,10 +178,8 @@ export default function BasicLayout({ children }: { children: ReactElement }) {
           {(DAOType === 'join' || DAOType === 'create') && <Sider />}
           {(DAOType === 'follow' || DAOType === 'visitor') && <SiderVisitor />}
           <Layout>
-            <Content className="dashboard">
-              <div className="dashboard-content">{children}</div>
-            </Content>
-            <Footer />
+            <Content className="dashboard">{children}</Content>
+            {footer && <Footer hasSider />}
           </Layout>
         </Layout>
       </Layout>

@@ -1,15 +1,7 @@
 import React from 'react';
-import { Col, Layout, Row, Space } from 'antd';
-import Image from 'next/image';
+import { Col, Layout, Row, Space, Image } from 'antd';
 import router from 'next/router';
 import dynamic from 'next/dynamic';
-
-// import Search from '@/components/search';
-// import Menu from '@/components/header/menu';
-// import Language from '@/components/header/language';
-
-// import logo from '/public/logo.png';
-import logo from '/public/images/icon_logo_dark.png';
 
 const Search = dynamic(() => import('@/components/search'), { ssr: false });
 const Menu = dynamic(() => import('@/components/header/menu'), { ssr: false });
@@ -33,21 +25,22 @@ const Header = ({ type }: { type?: string }) => {
           <Col span={8}>
             <Image
               style={{ cursor: 'pointer' }}
-              src={logo}
+              src="/images/icon_logo_dark.png"
               alt="logo"
               width={175}
               height={54}
               onClick={handleClick}
+              preview={false}
             />
           </Col>
           <Col span={8}>
             <Search />
           </Col>
-          <Col span={8} style={{ textAlign: 'right' }}>
-            <Space size={55}>
+          <Col span={8}>
+            <div className="right">
               <Language />
               <Menu />
-            </Space>
+            </div>
           </Col>
         </Row>
         {/* <div className="left">
@@ -71,7 +64,7 @@ const Header = ({ type }: { type?: string }) => {
           .header-content-fix {
             display: flex;
             align-items: center;
-            max-width: var(--width);
+            max-width: var(--max-width);
             height: 76px;
             padding: 0 80px;
             margin: 0 auto;
@@ -110,6 +103,12 @@ const Header = ({ type }: { type?: string }) => {
             color: #3c4369;
             line-height: 53px;
             cursor: pointer;
+          }
+
+          .right {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
           }
         `}
       </style>

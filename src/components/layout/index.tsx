@@ -7,7 +7,15 @@ import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
 import { useRouter } from 'next/router';
 
-const App = ({ children, type }: { children: ReactElement; type?: string }) => {
+const App = ({
+  children,
+  type,
+  footer,
+}: {
+  children: ReactElement;
+  type?: string;
+  footer?: boolean;
+}) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -74,7 +82,7 @@ const App = ({ children, type }: { children: ReactElement; type?: string }) => {
     return <LaunchLayout>{children}</LaunchLayout>;
   }
 
-  return <DashboardLayout>{children}</DashboardLayout>;
+  return <DashboardLayout footer={footer}>{children}</DashboardLayout>;
 };
 
 export default App;

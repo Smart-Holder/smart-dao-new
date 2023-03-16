@@ -1,10 +1,4 @@
-import {
-  Button,
-  Layout as AntdLayout,
-  Pagination,
-  PaginationProps,
-  Space,
-} from 'antd';
+import { Button, Pagination, PaginationProps, Space } from 'antd';
 import Layout from '@/components/layout';
 import { ReactElement, useCallback, useEffect, useState } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
@@ -144,7 +138,7 @@ const App: NextPageWithLayout = () => {
   };
 
   return (
-    <AntdLayout.Content className={styles['dashboard-content']}>
+    <div className="dashboard-content">
       <div className={styles['dashboard-content-header']}>
         <Counts
           items={[
@@ -251,7 +245,7 @@ const App: NextPageWithLayout = () => {
           </div>
         )}
       </div>
-    </AntdLayout.Content>
+    </div>
   );
 };
 

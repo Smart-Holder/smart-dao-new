@@ -1,38 +1,40 @@
+import { formatAddress, fromToken } from '@/utils';
+import { UserOutlined } from '@ant-design/icons';
 import { Avatar, Image, Space, Typography } from 'antd';
 
 const { Paragraph, Text } = Typography;
 
-const App = () => {
+const testImage =
+  'https://smart-dao-res.stars-mine.com/FvCDcP23jHCCRbAJY_x3yK0c7vSx';
+
+const App = ({ data }: { data: any }) => {
   return (
     <div className="item">
       <Image
         className="image"
-        src="https://smart-dao-res.stars-mine.com/Fg0wNAmiiA6d_7C1Ul_UStCCSMNg"
-        width={280}
-        height={280}
+        src={data.imageOrigin}
         preview={false}
         alt="image"
       />
       <div className="name">
         <Paragraph ellipsis className="paragraph">
-          Medium Spicy Pizza with KemangioMedium Spicy Pizza with Kemangio
+          {data.name}
         </Paragraph>
       </div>
 
       <div className="owner">
         <Space size={6}>
-          <Avatar
-            size={28}
-            src="https://smart-dao-res.stars-mine.com/Fg0wNAmiiA6d_7C1Ul_UStCCSMNg"
-          />
-          @jim_scott
+          <Avatar size={28} icon={<UserOutlined />} />
+          {formatAddress(data.owner)}
         </Space>
       </div>
 
       <div className="bottom">
         <div className="left">
           <span className="label">Current Bid</span>
-          <span className="value">3.85 ETH</span>
+          <span className="value">
+            {fromToken(Math.max(data.minimumPrice, data.sellPrice))} ETH
+          </span>
         </div>
         <div className="right">
           <span className="label">Ends in</span>
@@ -52,6 +54,9 @@ const App = () => {
           }
 
           .item :global(.image) {
+            width: 280px;
+            height: 280px;
+            object-fit: cover;
             border-radius: 2px;
           }
 
@@ -104,6 +109,17 @@ const App = () => {
             font-weight: 600;
             color: #232323;
             line-height: 21px;
+          }
+
+          @media screen and (max-width: 1440px) {
+            .item {
+              width: 230px;
+            }
+
+            .item :global(.image) {
+              width: 200px;
+              height: 200px;
+            }
           }
         `}
       </style>

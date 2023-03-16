@@ -1,5 +1,3 @@
-import { Layout as AntdLayout } from 'antd';
-
 import Layout from '@/components/layout';
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
@@ -12,7 +10,7 @@ import { useIntl } from 'react-intl';
 const App: NextPageWithLayout = () => {
   const { formatMessage } = useIntl();
   return (
-    <AntdLayout.Content className={styles['dashboard-content']}>
+    <div className="dashboard-content">
       <div className={styles['dashboard-content-body']}>
         <div className={styles['financial-issue']}>
           <div className={styles['financial-issue-title']}>
@@ -24,7 +22,7 @@ const App: NextPageWithLayout = () => {
           <IssueForm />
         </div>
       </div>
-    </AntdLayout.Content>
+    </div>
   );
 };
 
