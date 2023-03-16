@@ -345,6 +345,10 @@ a {
   line-height: 22px;
 }
 
+.ant-menu .ant-menu-item-selected .ant-menu-title-content {
+  color: #fff !important;
+}
+
 /* -------------- Button ---------------- */
 .sm-button {
   width: 152px;
