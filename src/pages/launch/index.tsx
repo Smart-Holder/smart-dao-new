@@ -5,7 +5,11 @@ import type { NextPageWithLayout } from '@/pages/_app';
 import Index from '@/containers/launch';
 
 const App: NextPageWithLayout = () => {
-  return <Index />;
+  return (
+    <div className="launch-content">
+      <Index />
+    </div>
+  );
 };
 
 App.getLayout = (page: ReactElement) => <Layout type="launch">{page}</Layout>;

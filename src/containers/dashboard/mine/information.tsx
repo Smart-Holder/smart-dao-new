@@ -331,7 +331,6 @@ const App = () => {
           }
 
           .wrap :global(.input) {
-            height: 76px;
             margin-top: 39px;
 
             font-size: 18px;

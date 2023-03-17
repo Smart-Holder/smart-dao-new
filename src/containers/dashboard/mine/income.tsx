@@ -1,9 +1,10 @@
 import { useEffect, useState, useRef } from 'react';
-import { Table, Button, DatePicker, Form, Select, Modal, message } from 'antd';
+import { Table, Button, Form, Modal, message } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
-import Counts from '@/containers/dashboard/mine/counts';
+import Select from '@/components/form/filter/select';
+import RangePicker from '@/components/form/filter/rangePicker';
 // import NftpModal from '@/components/modal/nftpModal';
 
 import { request } from '@/api';
@@ -18,8 +19,6 @@ import { getBalance } from '@/api/asset';
 import { createVote } from '@/api/vote';
 import { useIntl, FormattedMessage } from 'react-intl';
 import Card from '@/components/card';
-
-const { RangePicker } = DatePicker;
 
 dayjs.extend(customParseFormat);
 
@@ -270,7 +269,7 @@ const App = () => {
               />
             </Form.Item>
             <Form.Item name="time">
-              <RangePicker format="MM/DD/YYYY" />
+              <RangePicker format="YYYY-MM-DD" />
             </Form.Item>
           </Form>
 

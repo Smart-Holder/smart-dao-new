@@ -1,21 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import {
-  Button,
-  Form,
-  Input,
-  Upload,
-  Tag,
-  Space,
-  Modal,
-  Image as Img,
-} from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { Button, Form, Input, Tag, Modal, Row, Col } from 'antd';
 import { useIntl } from 'react-intl';
 
+import Upload from '@/components/form/upload';
+
 import { validateChinese, validateEthAddress } from '@/utils/validator';
-import { getCookie } from '@/utils/cookie';
 import { hexRandomNumber } from '@/utils';
 import { validateImage } from '@/utils/image';
 import { setMakeDAOStorage, getMakeDAOStorage } from '@/utils/launch';
@@ -156,7 +147,6 @@ const App: React.FC = () => {
     //   setLoading(true);
     //   return;
     // }
-
     if (info.file.status === 'done') {
       setAvatar(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
       setImageMessage('');
@@ -178,10 +168,12 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="form-wrap">
+    <div className="card">
       <Form
+        className="form"
         name="basic"
         form={form}
+        wrapperCol={{ span: 17 }}
         // initialValues={initialValues}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
@@ -190,140 +182,102 @@ const App: React.FC = () => {
         layout="vertical"
         validateTrigger="onBlur"
       >
-        <div className="wrap">
-          {/* <Space size={0} wrap align="start" style={{ justifyContent: 'center' }}> */}
-          <div className="item-group">
-            <div className="form-title1">
-              {formatMessage({ id: 'start.basic' })}
-            </div>
-            <div className="form-title2">
-              {formatMessage({ id: 'start.desc' })}
-            </div>
+        <div className="h1">{formatMessage({ id: 'start.basic' })}</div>
+        <div className="h2">{formatMessage({ id: 'start.desc' })}</div>
 
-            <Form.Item
-              label={formatMessage({ id: 'start.name' })}
-              name="name"
-              rules={[
-                { required: true },
-                { type: 'string', min: 5, max: 12 },
-                { validator: validateChinese },
-              ]}
-            >
-              <Input style={{ height: 76, fontSize: 18 }} />
-            </Form.Item>
+        <Form.Item
+          name="name"
+          style={{ marginTop: 40 }}
+          label={formatMessage({ id: 'start.name' })}
+          rules={[
+            { required: true },
+            { type: 'string', min: 5, max: 12 },
+            { validator: validateChinese },
+          ]}
+        >
+          <Input />
+        </Form.Item>
 
-            <Form.Item
-              label={formatMessage({ id: 'start.mission' })}
-              name="mission"
-              rules={[
-                { required: true },
-                { type: 'string', min: 20, max: 150 },
-              ]}
-            >
-              <Input.TextArea rows={4} style={{ fontSize: 18 }} />
-            </Form.Item>
+        <Form.Item
+          name="mission"
+          label={formatMessage({ id: 'start.mission' })}
+          rules={[{ required: true }, { type: 'string', min: 20, max: 150 }]}
+        >
+          <Input.TextArea rows={8} />
+        </Form.Item>
 
-            <Form.Item
-              label={formatMessage({ id: 'start.introduce' })}
-              name="description"
-              rules={[
-                { required: true },
-                { type: 'string', min: 20, max: 150 },
-              ]}
-            >
-              <Input.TextArea rows={4} style={{ fontSize: 18 }} />
-            </Form.Item>
+        <Form.Item
+          name="description"
+          label={formatMessage({ id: 'start.introduce' })}
+          rules={[{ required: true }, { type: 'string', min: 20, max: 150 }]}
+        >
+          <Input.TextArea rows={8} />
+        </Form.Item>
 
-            <Form.Item
-              label="Logo"
-              valuePropName="fileList"
-              required
-              extra={<span style={{ color: 'red' }}>{imageMessage}</span>}
-            >
-              <Space>
-                <Upload
-                  action={process.env.NEXT_PUBLIC_QINIU_UPLOAD_URL}
-                  data={{ token: getCookie('qiniuToken') }}
-                  showUploadList={false}
-                  listType="picture-card"
-                  beforeUpload={beforeUpload}
-                  onChange={onImageChange}
-                >
-                  {avatar ? (
-                    <Img
-                      style={{ borderRadius: 10, cursor: 'pointer' }}
-                      src={avatar}
-                      width={100}
-                      height={100}
-                      preview={false}
-                      alt="image"
-                    />
-                  ) : (
-                    <div>
-                      <PlusOutlined />
-                    </div>
-                  )}
-                </Upload>
+        <Form.Item
+          label="Upload Rectangle Picture"
+          valuePropName="fileList"
+          required
+          extra={<span style={{ color: 'red' }}>{imageMessage}</span>}
+        >
+          <Upload value={avatar} onChange={onImageChange} />
+        </Form.Item>
 
-                <span className="upload-desc">
-                  {formatMessage({ id: 'start.upload' })}
-                </span>
-              </Space>
-            </Form.Item>
-          </div>
-
-          <div className="item-group">
-            <div className="form-title1">
-              {formatMessage({ id: 'start.members' })}
-            </div>
-            <div className="form-title2">
-              {formatMessage({ id: 'start.members.desc' })}
-            </div>
-
-            <Form.Item
-              label={formatMessage({ id: 'name' })}
-              name="member"
-              rules={[
-                { validator: validateEthAddress },
-                { validator: validateRepeat },
-              ]}
-            >
-              {/* <Input /> */}
-              <Space className="input-member" direction="horizontal">
-                <Input style={{ height: 76, fontSize: 18 }} />
-                <Button
-                  style={{ width: 100, height: 76, fontSize: 18 }}
-                  type="primary"
-                  onClick={addMember}
-                >
-                  {formatMessage({ id: 'start.add' })}
-                </Button>
-              </Space>
-            </Form.Item>
-
-            <div className="tags">
-              <Tag key={address} className="tag">
-                {address}
-              </Tag>
-              {members.slice(1).map((item: any) => (
-                <Tag
-                  closable
-                  onClose={(e) => {
-                    e.preventDefault();
-                    removeMember(item.owner);
-                  }}
-                  key={item.owner}
-                  data-value={item.owner}
-                  className="tag"
-                >
-                  {item.owner}
-                </Tag>
-              ))}
-            </div>
-          </div>
+        <div className="h1" style={{ marginTop: 56 }}>
+          {formatMessage({ id: 'start.members' })}
         </div>
+        <div className="h2">{formatMessage({ id: 'start.members.desc' })}</div>
 
-        <Form.Item>
+        <Form.Item
+          name="member"
+          style={{ marginTop: 40 }}
+          label={formatMessage({ id: 'name' })}
+          rules={[
+            { validator: validateEthAddress },
+            { validator: validateRepeat },
+          ]}
+          wrapperCol={{ span: 24 }}
+        >
+          <Row gutter={27}>
+            <Col span={17}>
+              <Input />
+            </Col>
+            <Col span={7}>
+              <Button
+                className="button-form"
+                type="primary"
+                onClick={addMember}
+              >
+                {formatMessage({ id: 'start.add' })}
+              </Button>
+            </Col>
+          </Row>
+        </Form.Item>
+
+        <Row gutter={[20, 20]}>
+          <Col span={15}>
+            <Tag key={address} className="tag">
+              {address}
+            </Tag>
+          </Col>
+          {members.slice(1).map((item: any) => (
+            <Col span={15} key={item.owner}>
+              <Tag
+                closable
+                onClose={(e) => {
+                  e.preventDefault();
+                  removeMember(item.owner);
+                }}
+                data-value={item.owner}
+                className="tag"
+              >
+                {item.owner}
+              </Tag>
+            </Col>
+          ))}
+        </Row>
+
+        <Form.Item style={{ marginTop: 100 }}>
           <Button className="button-submit" type="primary" htmlType="submit">
             {formatMessage({ id: 'start.release' })}
           </Button>
@@ -350,55 +304,7 @@ const App: React.FC = () => {
 
       <style jsx>
         {`
-          .wrap {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-          }
-
-          .item-group {
-            width: 48%;
-            min-width: 460px;
-          }
-
-          .form-title1 {
-            height: 30px;
-            font-size: 20px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #000000;
-            line-height: 30px;
-          }
-
-          .form-title2 {
-            height: 18px;
-            margin-top: 7px;
-            margin-bottom: 44px;
-            font-size: 12px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #969ba0;
-            line-height: 18px;
-          }
-
-          .wrap :global(.input) {
-          }
-
-          .upload-desc {
-            height: 21px;
-            font-size: 14px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #969ba0;
-            line-height: 21px;
-          }
-
-          .tags {
-            height: 300px;
-            overflow-y: auto;
-          }
-
-          .wrap :global(.tag) {
+          .card :global(.tag) {
             display: flex;
             justify-content: space-between;
             height: 54px;
@@ -406,27 +312,13 @@ const App: React.FC = () => {
             padding: 0 14px;
             margin-bottom: 4px;
             margin-right: 0;
-            font-size: 16px;
+            font-size: 18px;
             font-family: PingFangSC-Regular, PingFang SC;
             font-weight: 400;
-            color: #969ba0;
+            color: #000;
             line-height: 54px;
-            background: #f9faff;
+            background: #fafafa;
             border: none;
-          }
-
-          .wrap :global(.input-member) {
-            width: 100%;
-          }
-
-          .wrap :global(.input-member .ant-space-item:first-child) {
-            flex: 1;
-          }
-
-          .form-wrap :global(.button-submit) {
-            width: 170px;
-            height: 54px;
-            font-size: 18px;
           }
 
           .modal-content {

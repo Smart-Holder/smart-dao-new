@@ -1,6 +1,8 @@
-import { Select, Space, SelectProps } from 'antd';
+import { Space, SelectProps } from 'antd';
 import { FC } from 'react';
 import styles from './counts.module.css';
+
+import Select from '@/components/form/filter/select';
 
 type FiltersProps = {
   items?: Pick<

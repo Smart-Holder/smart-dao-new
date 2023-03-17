@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import Layout from '@/components/layout';
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
+import { Breadcrumb } from 'antd';
 
 const Information = dynamic(
   () => import('@/containers/dashboard/basic/information'),
@@ -11,13 +12,14 @@ const Information = dynamic(
 
 const App: NextPageWithLayout = () => {
   return (
-    <div className="dashboard-content">
-      {/* <div>
-        <div className={styles.title1}>Chose your mo ban elements</div>
-        <div className={styles.title2}>Welcome to SmartDAO</div>
-      </div> */}
+    <>
+      {/* <Breadcrumb>
+        <Breadcrumb.Item>sample</Breadcrumb.Item>
+        <Breadcrumb.Item>sample</Breadcrumb.Item>
+      </Breadcrumb> */}
+
       <Information />
-    </div>
+    </>
   );
 };
 

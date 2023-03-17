@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Table, DatePicker, Form, Select, message, Image } from 'antd';
+import { Table, Form, message, Image, Input } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 import Card from '@/components/card';
+import Select from '@/components/form/filter/select';
+import RangePicker from '@/components/form/filter/rangePicker';
 
 import { request } from '@/api';
 
@@ -14,8 +16,6 @@ import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
 import type { PaginationProps } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
 import { useIntl, FormattedMessage } from 'react-intl';
-
-const { RangePicker } = DatePicker;
 
 dayjs.extend(customParseFormat);
 
@@ -228,15 +228,6 @@ const App = () => {
               <Select
                 style={{ width: 220 }}
                 placeholder="Sort"
-                suffixIcon={
-                  <Image
-                    src="/images/icon_table_drop_down_default.png"
-                    width={20}
-                    height={20}
-                    alt=""
-                    preview={false}
-                  />
-                }
                 options={[
                   { value: '', label: 'Default' },
                   {
@@ -278,10 +269,11 @@ const App = () => {
               />
             </Form.Item> */}
             <Form.Item name="time">
-              <RangePicker format="MM/DD/YYYY" />
+              <RangePicker format="YYYY-MM-DD" />
             </Form.Item>
-            {/* <Form.Item name="name">
+            <Form.Item name="name">
               <Input
+                className="filter"
                 prefix={
                   <Image
                     src="/images/icon_table_search_default.png"
@@ -292,7 +284,7 @@ const App = () => {
                   />
                 }
               />
-            </Form.Item> */}
+            </Form.Item>
           </Form>
         </div>
 

@@ -38,7 +38,6 @@ export const debounce = (fn, time) => {
 
     timer = setTimeout(() => {
       fn.apply(this, arguments);
-      // console.log('???????');
     }, time);
   };
 };
@@ -152,8 +151,6 @@ export function stopClick(e) {
 // }
 
 export const isRepeateArray = (arr1, arr2) => {
-  console.log(arr1, arr2);
-
   if (!arr1 || !arr2) {
     return false;
   }

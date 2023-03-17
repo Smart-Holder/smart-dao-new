@@ -76,7 +76,7 @@ const Search: React.FC = () => {
   return (
     <div className="input-wrap">
       <Input
-        id="abc"
+        // id="abc"
         value={value}
         className="search-input"
         placeholder={formatMessage({ id: 'search' })}

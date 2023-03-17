@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Table, DatePicker, Form, Select } from 'antd';
+import { Table, Form } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+import Select from '@/components/form/filter/select';
+import RangePicker from '@/components/form/filter/rangePicker';
 
 import { request } from '@/api';
 
@@ -13,8 +16,6 @@ import type { PaginationProps } from 'antd';
 
 import { useIntl, FormattedMessage } from 'react-intl';
 import Card from '@/components/card';
-
-const { RangePicker } = DatePicker;
 
 dayjs.extend(customParseFormat);
 
@@ -226,7 +227,7 @@ const App = () => {
               />
             </Form.Item> */}
             <Form.Item name="time">
-              <RangePicker format="MM/DD/YYYY" />
+              <RangePicker format="YYYY-MM-DD" />
             </Form.Item>
           </Form>
 

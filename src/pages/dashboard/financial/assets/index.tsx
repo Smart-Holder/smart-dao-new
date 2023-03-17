@@ -1,10 +1,14 @@
-import { Form, Select, Skeleton } from 'antd';
+import { ReactElement, useEffect, useState } from 'react';
+import { Col, Form, Row, Skeleton } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Layout from '@/components/layout';
-import { ReactElement, useEffect, useState } from 'react';
+import Select from '@/components/form/filter/select';
+import Footer from '@/components/footer';
+import NFT from '@/containers/dashboard/mine/nft';
+
 import type { NextPageWithLayout } from '@/pages/_app';
 
 import styles from '@/styles/content.module.css';
@@ -152,119 +156,131 @@ const App: NextPageWithLayout = () => {
   };
 
   return (
-    <div className="dashboard-content dashboard-content-scroll">
-      <div className={styles['dashboard-content-header']}>
-        <FinancialHeader
-          title={currentDAO.name}
-          addr={formatAddress(currentDAO.address)}
-          createTime={dayjs(currentDAO.time).format('MM/DD/YYYY')}
-          amount={0}
-          desc={currentDAO.description}
-          logo={currentDAO.image}
-          chain={chainData.name}
+    <div className="dashboard-content-scroll" id="scrollTarget">
+      <div className="content-min-height">
+        <div className={styles['dashboard-content-header']}>
+          <FinancialHeader
+            title={currentDAO.name}
+            addr={formatAddress(currentDAO.address)}
+            createTime={dayjs(currentDAO.time).format('MM/DD/YYYY')}
+            amount={0}
+            desc={currentDAO.description}
+            logo={currentDAO.image}
+            chain={chainData.name}
+          />
+        </div>
+
+        <Card
+          data={[
+            {
+              label: formatMessage({ id: 'financial.asset.total.trading' }),
+              value: `${fromToken(summary?.assetOrderAmountTotal || 0)} ETH`,
+              onClick: onCountClick,
+            },
+            {
+              label: formatMessage({ id: 'financial.asset.royalties' }),
+              value: '3%',
+            },
+            {
+              label: formatMessage({ id: 'financial.asset.total' }),
+              value: summary?.assetTotal || 0,
+            },
+            // { num: 31232, title: '所有者' },
+            // { num: 31232, title: '挂单率' },
+            // { num: 31232, title: '交易市场' },
+          ]}
         />
-      </div>
 
-      <Card
-        data={[
-          {
-            label: formatMessage({ id: 'financial.asset.total.trading' }),
-            value: `${fromToken(summary?.assetOrderAmountTotal || 0)} ETH`,
-            onClick: onCountClick,
-          },
-          {
-            label: formatMessage({ id: 'financial.asset.royalties' }),
-            value: '3%',
-          },
-          {
-            label: formatMessage({ id: 'financial.asset.total' }),
-            value: summary?.assetTotal || 0,
-          },
-          // { num: 31232, title: '所有者' },
-          // { num: 31232, title: '挂单率' },
-          // { num: 31232, title: '交易市场' },
-        ]}
-      />
-
-      <div className="table-card">
-        <div className="table-filter">
-          <Form
-            name="filter"
-            layout="inline"
-            onValuesChange={onValuesChange}
-            autoComplete="off"
-            labelAlign="left"
-            requiredMark={false}
-            validateTrigger="onBlur"
-          >
-            <Form.Item name="orderBy">
-              <Select
-                style={{ width: 140 }}
-                placeholder="Sort"
-                options={[
-                  { value: '', label: 'Default' },
-                  {
-                    value: 'sellPrice',
-                    label: formatMessage({ id: 'financial.asset.sort.price' }),
-                  },
-                  {
-                    value: 'sellPrice desc',
-                    label: formatMessage({
-                      id: 'financial.asset.sort.price.desc',
-                    }),
-                  },
-                  {
-                    value: 'sellingTime desc',
-                    label: formatMessage({
-                      id: 'financial.asset.sort.released',
-                    }),
-                  },
-                  {
-                    value: 'blockNumber desc',
-                    label: formatMessage({
-                      id: 'financial.asset.sort.created',
-                    }),
-                  },
-                  {
-                    value: 'soldTime desc',
-                    label: formatMessage({ id: 'financial.asset.sort.sold' }),
-                  },
-                ]}
-              />
-            </Form.Item>
-          </Form>
-        </div>
-        <div className={styles['dashboard-content-body']} id="scrollableAssets">
-          <InfiniteScroll
-            dataLength={data.length}
-            next={getData}
-            hasMore={data.length < total}
-            loader={loading && <Skeleton paragraph={{ rows: 1 }} active />}
-            scrollableTarget="scrollableAssets"
-          >
-            <div className={styles['financial-list']}>
-              {data.map((item: any) => {
-                return (
-                  <div key={item.id} className={styles['financial-item']}>
-                    <FinancialItem
-                      title={`${item.name} #${item.id}`}
-                      logo={item.imageOrigin}
-                      price={item.sellPrice || 0}
-                      // priceIcon={<PriceIcon />}
-                      onClick={() => {
-                        localStorage.setItem('asset', JSON.stringify(item));
-                        router.push(
-                          `/dashboard/mine/assets/detail?id=${item.id}`,
-                        );
-                      }}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          </InfiniteScroll>
+        <div className="table-card">
+          <div className="table-filter">
+            <Form
+              name="filter"
+              layout="inline"
+              onValuesChange={onValuesChange}
+              autoComplete="off"
+              labelAlign="left"
+              requiredMark={false}
+              validateTrigger="onBlur"
+            >
+              <Form.Item name="orderBy">
+                <Select
+                  style={{ width: 200 }}
+                  placeholder="Sort"
+                  options={[
+                    { value: '', label: 'Default' },
+                    {
+                      value: 'sellPrice',
+                      label: formatMessage({
+                        id: 'financial.asset.sort.price',
+                      }),
+                    },
+                    {
+                      value: 'sellPrice desc',
+                      label: formatMessage({
+                        id: 'financial.asset.sort.price.desc',
+                      }),
+                    },
+                    {
+                      value: 'sellingTime desc',
+                      label: formatMessage({
+                        id: 'financial.asset.sort.released',
+                      }),
+                    },
+                    {
+                      value: 'blockNumber desc',
+                      label: formatMessage({
+                        id: 'financial.asset.sort.created',
+                      }),
+                    },
+                    {
+                      value: 'soldTime desc',
+                      label: formatMessage({ id: 'financial.asset.sort.sold' }),
+                    },
+                  ]}
+                />
+              </Form.Item>
+            </Form>
+          </div>
+          <div className={styles['dashboard-content-body']}>
+            <InfiniteScroll
+              dataLength={data.length}
+              next={getData}
+              hasMore={data.length < total}
+              loader={loading && <Skeleton paragraph={{ rows: 1 }} active />}
+              scrollableTarget="scrollTarget"
+              style={{ overflow: 'inherit' }}
+            >
+              <Row gutter={[19, 20]}>
+                {data.map((item: any) => {
+                  // return (
+                  //   <div key={item.id} className={styles['financial-item']}>
+                  //     <FinancialItem
+                  //       title={`${item.name} #${item.id}`}
+                  //       logo={item.imageOrigin}
+                  //       price={item.sellPrice || 0}
+                  //       // priceIcon={<PriceIcon />}
+                  //       onClick={() => {
+                  //         localStorage.setItem('asset', JSON.stringify(item));
+                  //         router.push(
+                  //           `/dashboard/mine/assets/detail?id=${item.id}`,
+                  //         );
+                  //       }}
+                  //     />
+                  //   </div>
+                  // );
+                  return (
+                    <Col span={8} key={item.id}>
+                      <NFT data={item} />
+                    </Col>
+                  );
+                })}
+              </Row>
+            </InfiniteScroll>
+          </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 };

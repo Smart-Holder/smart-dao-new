@@ -1,9 +1,11 @@
-import { Form, Select, Skeleton } from 'antd';
+import { Form, Skeleton } from 'antd';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
+import Select from '@/components/form/filter/select';
 import Layout from '@/components/layout';
+import Footer from '@/components/footer';
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
 
@@ -194,8 +196,8 @@ const App: NextPageWithLayout = () => {
   };
 
   return (
-    <div className="dashboard-content dashboard-content-scroll">
-      <div className="table-card" style={{ marginTop: 0 }}>
+    <div className="dashboard-content-scroll" id="scrollTarget">
+      <div className="table-card content-min-height">
         <div className="table-filter">
           <Form
             name="filter"
@@ -321,16 +323,13 @@ const App: NextPageWithLayout = () => {
           </Form>
         </div>
 
-        <div
-          className={`${styles['dashboard-content-body']}`}
-          id="scrollableVotes"
-        >
+        <div className={`${styles['dashboard-content-body']}`}>
           <InfiniteScroll
             dataLength={data.length}
             next={getData}
             hasMore={data.length < total}
             loader={loading && <Skeleton paragraph={{ rows: 1 }} active />}
-            scrollableTarget="scrollableVotes"
+            scrollableTarget="scrollTarget"
           >
             <div className={styles['vote-list']}>
               {data.map((item: any) => (
@@ -361,6 +360,8 @@ const App: NextPageWithLayout = () => {
           </InfiniteScroll>
         </div>
       </div>
+
+      <Footer />
 
       <VoteModal open={openModal} onClose={onCloseModal} data={currentItem} />
     </div>

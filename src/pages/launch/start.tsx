@@ -23,9 +23,7 @@ const App: NextPageWithLayout = () => {
         {formatMessage({ id: 'home.createOwnDAO' })}
       </div>
 
-      <div className={styles.box}>
-        <Start />
-      </div>
+      <Start />
     </div>
   );
 };

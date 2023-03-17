@@ -4,11 +4,12 @@ import {
   Button,
   Form,
   Input,
-  Upload,
   Space,
   Modal,
-  Image as Img,
+  Image,
   message,
+  Row,
+  Col,
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
@@ -28,6 +29,8 @@ import { createVote } from '@/api/vote';
 import { request } from '@/api';
 import { useIntl } from 'react-intl';
 import { isPermission } from '@/api/member';
+
+import Upload from '@/components/form/upload';
 
 // const validateMessages = {
 //   required: '${label} is required!',
@@ -235,108 +238,59 @@ const FormGroup: React.FC = () => {
   }
 
   return (
-    <div className="form-wrap">
+    <div className="card">
       <Form
+        className="form"
         name="basic"
         form={form}
-        labelCol={{ span: 6 }}
-        wrapperCol={{ span: 18 }}
+        wrapperCol={{ span: 17 }}
         initialValues={initialValues}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         onValuesChange={onValuesChange}
         autoComplete="off"
         labelAlign="left"
+        layout="vertical"
         requiredMark={false}
         validateTrigger="onBlur"
       >
-        <div className="wrap">
-          {/* <Space size={0} wrap align="start" style={{ justifyContent: 'center' }}> */}
-          <div className="item-group">
-            <div className="form-title1">
-              {formatMessage({ id: 'start.basic' })}
-            </div>
-            <div className="form-title2">
-              {formatMessage({ id: 'start.desc' })}
-            </div>
-            <Form.Item
-              label={formatMessage({ id: 'start.name' })}
-              name="name"
-              rules={[
-                { required: true },
-                { type: 'string', min: 5, max: 12 },
-                { validator: validateChinese },
-              ]}
-            >
-              <Input
-                disabled
-                // className="input"
-                // prefix={<span style={{ color: '#000' }}>Name:</span>}
-              />
-            </Form.Item>
+        <div className="h1">{formatMessage({ id: 'start.basic' })}</div>
+        <div className="h2">{formatMessage({ id: 'start.desc' })}</div>
 
-            <Form.Item
-              label={formatMessage({ id: 'start.mission' })}
-              name="mission"
-              rules={[
-                { required: true },
-                { type: 'string', min: 20, max: 150 },
-              ]}
-            >
-              <Input.TextArea rows={4} />
-            </Form.Item>
+        <Form.Item
+          name="name"
+          style={{ marginTop: 40 }}
+          label={formatMessage({ id: 'start.name' })}
+          rules={[
+            { required: true },
+            { type: 'string', min: 5, max: 12 },
+            { validator: validateChinese },
+          ]}
+        >
+          <Input disabled />
+        </Form.Item>
 
-            <Form.Item
-              label={formatMessage({ id: 'start.introduce' })}
-              name="description"
-              rules={[
-                { required: true },
-                { type: 'string', min: 20, max: 150 },
-              ]}
-            >
-              <Input.TextArea rows={4} />
-            </Form.Item>
+        <Form.Item
+          name="mission"
+          label={formatMessage({ id: 'start.mission' })}
+          rules={[{ required: true }, { type: 'string', min: 20, max: 150 }]}
+        >
+          <Input.TextArea rows={8} />
+        </Form.Item>
 
-            <Form.Item label="Logo" valuePropName="fileList">
-              <Space>
-                <Upload
-                  action={process.env.NEXT_PUBLIC_QINIU_UPLOAD_URL}
-                  data={{ token: getCookie('qiniuToken') }}
-                  showUploadList={false}
-                  listType="picture-card"
-                  beforeUpload={beforeUpload}
-                  onChange={handleChange}
-                  disabled
-                >
-                  {avatar ? (
-                    <Img
-                      style={{ borderRadius: 10 }}
-                      src={avatar}
-                      width={100}
-                      height={100}
-                      preview={false}
-                      alt="image"
-                    />
-                  ) : (
-                    <div>
-                      <PlusOutlined />
-                    </div>
-                  )}
-                </Upload>
+        <Form.Item
+          label={formatMessage({ id: 'start.introduce' })}
+          name="description"
+          rules={[{ required: true }, { type: 'string', min: 20, max: 150 }]}
+        >
+          <Input.TextArea rows={8} />
+        </Form.Item>
 
-                <span className="upload-desc">
-                  {formatMessage({ id: 'start.upload' })}
-                </span>
-              </Space>
-            </Form.Item>
-          </div>
+        <Form.Item label="Upload Rectangle Picture" valuePropName="fileList">
+          <Upload value={avatar} onChange={handleChange} disabled />
+        </Form.Item>
 
-          {/* <div className="item-group">
-            <div className="form-title1">Setting No.1 Member</div>
-            <div className="form-title2">
-              Lorem ipsum dolor sit amet, consectetur
-            </div>
-
+        {/* 
             <Form.Item
               label="Name"
               name="member"
@@ -376,9 +330,8 @@ const FormGroup: React.FC = () => {
               ))}
             </div>
           </div> */}
-        </div>
 
-        <Form.Item>
+        <Form.Item style={{ marginTop: 100 }}>
           <Button
             className="button-submit"
             type="primary"
@@ -393,26 +346,6 @@ const FormGroup: React.FC = () => {
 
       <style jsx>
         {`
-          .wrap {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-          }
-
-          .item-group {
-            width: 48%;
-            min-width: 460px;
-          }
-
-          .form-title1 {
-            height: 30px;
-            font-size: 20px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #000000;
-            line-height: 30px;
-          }
-
           .form-title2 {
             height: 18px;
             margin-top: 7px;
@@ -464,12 +397,6 @@ const FormGroup: React.FC = () => {
 
           .wrap :global(.input-member .ant-space-item:first-child) {
             flex: 1;
-          }
-
-          .form-wrap :global(.button-submit) {
-            width: 170px;
-            height: 54px;
-            font-size: 18px;
           }
 
           .modal-content {
