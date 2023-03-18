@@ -171,42 +171,45 @@ const App = () => {
   }
 
   return (
-    <div className="wrap">
-      <div className="h1">{formatMessage({ id: 'basic.executor.title' })}</div>
-      <div className="h2">
-        {formatMessage({ id: 'basic.executor.subtitle' })}
-      </div>
-
+    <div className="card">
       {/* <div style={{ marginTop: 15 }}>
         <span className="label">User Name:</span>
         <span className="value">abc</span>
       </div> */}
 
       <Form
-        style={{ marginTop: 16 }}
+        className="form"
         name="info"
         form={form}
+        wrapperCol={{ span: 17 }}
         initialValues={initialValues}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         onValuesChange={onValuesChange}
         autoComplete="off"
         labelAlign="left"
+        layout="vertical"
         requiredMark={false}
         validateTrigger="onBlur"
-        layout="inline"
       >
+        <div className="h1">
+          {formatMessage({ id: 'basic.executor.title' })}
+        </div>
+        <div className="h2">
+          {formatMessage({ id: 'basic.executor.subtitle' })}
+        </div>
+
         <Form.Item
-          style={{ width: 480 }}
           name="address"
+          style={{ marginTop: 40 }}
+          label={formatMessage({ id: 'address' })}
           rules={[{ required: true }, { validator: validateEthAddress }]}
         >
-          {/* <Input className="input" prefix={<Avatar size={30} src={url} />} /> */}
-          <Input className="input" />
+          <Input />
         </Form.Item>
-        <Form.Item>
+        <Form.Item style={{ marginTop: 100 }}>
           <Button
-            className="button"
+            className="button-submit"
             type="primary"
             htmlType="submit"
             loading={loading}
@@ -216,74 +219,6 @@ const App = () => {
           </Button>
         </Form.Item>
       </Form>
-
-      <style jsx>
-        {`
-          .wrap {
-            max-width: 690px;
-          }
-
-          .h1 {
-            height: 30px;
-            font-size: 20px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #000000;
-            line-height: 30px;
-          }
-
-          .h2 {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 18px;
-            margin-top: 7px;
-            font-size: 12px;
-            font-family: AppleSystemUIFont;
-            color: #969ba0;
-            line-height: 18px;
-          }
-
-          .wrap .label {
-            height: 21px;
-            font-size: 14px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #969ba0;
-            line-height: 21px;
-          }
-
-          .wrap .value {
-            height: 21px;
-            margin-left: 15px;
-            font-size: 14px;
-            font-family: PingFangSC-Medium, PingFang SC;
-            font-weight: 500;
-            color: #3c4369;
-            line-height: 21px;
-          }
-
-          .wrap .item-group {
-            display: flex;
-          }
-
-          .wrap :global(.input) {
-            flex: 1;
-            height: 54px;
-            font-size: 18px;
-          }
-
-          .wrap :global(.button) {
-            width: 140px;
-            height: 54px;
-            margin-left: 20px;
-            font-size: 18px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            line-height: 27px;
-          }
-        `}
-      </style>
     </div>
   );
 };

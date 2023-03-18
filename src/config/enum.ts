@@ -39,3 +39,10 @@ export const Permissions = {
   Action_Asset_Shell_Withdraw: 0x2e1a7d4d,
   Action_Ledger_Withdraw: 0xf108a7d2,
 };
+
+export enum DAOType {
+  Visit = 'visit', // 未关注，未加入
+  Follow = 'follow', // 已关注，未加入
+  Cache = 'cache', // 自己创建，还未提交的DAO，保存在 localStorage
+  Join = 'join', // 已加入或自己创建
+}

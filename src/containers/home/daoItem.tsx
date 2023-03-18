@@ -1,8 +1,7 @@
-import React, { useRef } from 'react';
-import { Typography, Space, Button, Avatar } from 'antd';
+import React, { useRef, MouseEvent } from 'react';
+import { Typography, Image, Button, Avatar, Space } from 'antd';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
-import Image from 'next/image';
 
 import InfoModal from '@/components/modal/infoModal';
 import { useJoin, useFollow } from './useHooks';
@@ -13,8 +12,8 @@ import { setCurrentDAO, setDAOType } from '@/store/features/daoSlice';
 import WalletModal from '@/components/modal/walletModal';
 import { UserOutlined } from '@ant-design/icons';
 
-import gradient from '/public/images/home/img_home_card_dao_gradient.png';
 import add from '/public/images/home/icon_home_card_dao_add.png';
+import { DAOType } from '@/config/enum';
 
 const { Paragraph } = Typography;
 
@@ -22,11 +21,14 @@ const DAOItem = (props: any) => {
   const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { status1 = 1, status2 = 1, id, isJoin, isLike, isMember } = props.data;
+  const { id, isJoin, isLike, host } = props.data;
 
-  const { web3, address, chainId } = useAppSelector((store) => store.wallet);
+  const { address, chainId } = useAppSelector((store) => store.wallet);
   const { nickname } = useAppSelector((store) => store.user.userInfo);
   const { isInit } = useAppSelector((store) => store.common);
+  const { DAOList } = useAppSelector((store) => store.dao);
+
+  const isMember = DAOList.some((item) => item.host === host);
 
   const { join, setJoin, loading } = useJoin(
     props.data.root,
@@ -68,13 +70,15 @@ const DAOItem = (props: any) => {
       return;
     }
 
-    const type = join ? 'join' : follow ? 'follow' : 'visitor';
+    const type = join ? DAOType.Join : follow ? DAOType.Follow : DAOType.Visit;
     dispatch(setDAOType(type));
     dispatch(setCurrentDAO(props.data));
     router.push('/dashboard/mine/home');
   };
 
-  const handleJoinClick = () => {
+  const handleJoinClick = (e: MouseEvent) => {
+    e.stopPropagation();
+
     if (!isInit) {
       walletModal.current.show();
       return;
@@ -103,7 +107,9 @@ const DAOItem = (props: any) => {
     // }
   };
 
-  const handleFollowClick = () => {
+  const handleFollowClick = (e: MouseEvent) => {
+    e.stopPropagation();
+
     if (!isInit) {
       walletModal.current.show();
       return;
@@ -138,11 +144,11 @@ const DAOItem = (props: any) => {
             type="primary"
             icon={
               <Image
-                src={add}
-                alt="add"
+                src="/images/home/icon_home_card_dao_add.png"
+                alt=""
                 width={10}
                 height={10}
-                style={{ marginRight: 10 }}
+                preview={false}
               />
             }
             onClick={handleFollowClick}

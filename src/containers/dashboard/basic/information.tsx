@@ -287,7 +287,12 @@ const FormGroup: React.FC = () => {
         </Form.Item>
 
         <Form.Item label="Upload Rectangle Picture" valuePropName="fileList">
-          <Upload value={avatar} onChange={handleChange} disabled />
+          <Upload
+            type="rectangle"
+            value={avatar}
+            onChange={handleChange}
+            disabled
+          />
         </Form.Item>
 
         {/* 

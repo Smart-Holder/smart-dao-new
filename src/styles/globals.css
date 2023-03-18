@@ -404,7 +404,20 @@ a {
 }
 
 /* -------------- Button ---------------- */
-.sm-button {
+.ant-btn {
+  box-shadow: none;
+}
+
+.ant-btn .ant-image {
+  line-height: 0;
+  margin-right: 10px;
+}
+
+.ant-btn .ant-image-img {
+  display: block;
+}
+
+.smart-button {
   width: 152px;
   height: 38px;
   font-size: 14px;
@@ -412,6 +425,9 @@ a {
   font-weight: 500;
   color: #fff;
   line-height: 22px;
+
+  background: #2c2c2c;
+  border-radius: 4px;
 }
 
 .button-filter {
@@ -448,6 +464,19 @@ a {
   line-height: 24px;
   background: #000000;
   border-radius: 4px;
+}
+
+.button-view-all {
+  width: 260px;
+  height: 46px;
+  font-size: 18px;
+  font-family: AdobeGurmukhi-Bold, AdobeGurmukhi;
+  font-weight: bold;
+  color: #000000;
+  line-height: 35px;
+  background: #ffffff;
+  border-radius: 5px;
+  border: 2px solid #000000;
 }
 
 /* -------------- Form ---------------- */
@@ -494,28 +523,40 @@ a {
 
 /* -------------- Filter Input ---------------- */
 .ant-input-affix-wrapper.filter {
+  height: 40px;
+
+  border-radius: 2px;
+  border-color: #000;
+  background-color: rgba(255, 255, 255, 0.6);
   box-shadow: none;
 }
 
+.ant-input-affix-wrapper.filter .ant-input {
+  font-weight: 600;
+}
+
 /* -------------- Form Select ---------------- */
-.ant-select .ant-select-selection-item {
-  /* font-weight: 600; */
-}
-
-.ant-select .ant-select-selector {
-  /* box-shadow: none !important; */
-}
-
 .ant-select-dropdown .ant-select-item-option-selected {
   color: #fff !important;
 }
 
 /* -------------- Filter Select ---------------- */
 .ant-select.filter .ant-select-selection-item {
-  /* font-weight: 600; */
+  font-weight: 600;
+  line-height: 38px;
+}
+
+.ant-select.filter .ant-select-selector .ant-select-selection-placeholder {
+  height: 40px;
+  line-height: 38px;
 }
 
 .ant-select.filter .ant-select-selector {
+  height: 40px;
+  line-height: 38px;
+  border-radius: 2px;
+  border-color: #000;
+  background-color: rgba(255, 255, 255, 0.6);
   box-shadow: none !important;
 }
 
@@ -523,18 +564,18 @@ a {
   color: #fff !important;
 }
 
-/* -------------- Form Picker ---------------- */
-.ant-picker {
-  /* box-shadow: none; */
-}
-
-.ant-picker-range .ant-picker-clear {
-  /* font-size: 20px; */
-}
-
 /* -------------- Filter Picker ---------------- */
 .ant-picker.filter {
+  height: 40px;
+  font-weight: 600;
+  border-radius: 2px;
+  border-color: #000;
+  background-color: rgba(255, 255, 255, 0.6);
   box-shadow: none;
+}
+
+.ant-picker.filter .ant-picker-input input {
+  font-weight: 600;
 }
 
 .ant-picker-range.filter .ant-picker-clear {

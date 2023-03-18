@@ -81,8 +81,8 @@ const App = () => {
   const handleSubmit = () => {};
 
   return (
-    <div className="wrap">
-      <div className="h1" style={{ marginBottom: 44 }}>
+    <div className="card">
+      <div className="h1">
         {formatMessage({ id: 'governance.proposal.title' })}
       </div>
       {/* <div className="h2">
@@ -90,8 +90,11 @@ const App = () => {
       </div> */}
 
       <Form
+        style={{ marginTop: 40 }}
+        className="form"
         name="basic"
         form={form}
+        wrapperCol={{ span: 17 }}
         initialValues={initialValues}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
@@ -114,7 +117,6 @@ const App = () => {
             placeholder={formatMessage({
               id: 'governance.proposal.name.placeholder',
             })}
-            style={{ height: 76, fontSize: 18 }}
           />
         </Form.Item>
 
@@ -123,11 +125,10 @@ const App = () => {
           name="purpose"
         >
           <Input.TextArea
-            rows={4}
+            rows={8}
             placeholder={formatMessage({
               id: 'governance.proposal.purpose.placeholder',
             })}
-            style={{ fontSize: 18 }}
           />
         </Form.Item>
 
@@ -136,11 +137,10 @@ const App = () => {
           name="content"
         >
           <Input.TextArea
-            rows={4}
+            rows={8}
             placeholder={formatMessage({
               id: 'governance.proposal.content.placeholder',
             })}
-            style={{ fontSize: 18 }}
           />
         </Form.Item>
 
@@ -149,24 +149,20 @@ const App = () => {
           name="result"
         >
           <Input.TextArea
-            rows={4}
+            rows={8}
             placeholder={formatMessage({
               id: 'governance.proposal.result.placeholder',
             })}
-            style={{ fontSize: 18 }}
           />
         </Form.Item>
 
         <Form.Item
-          style={{ width: '100%' }}
           label={formatMessage({ id: 'governance.proposal.executor' })}
           name="executor"
           rules={[{ required: true }, { validator: validateEthAddress }]}
         >
-          <Input
-            style={{ height: 76, fontSize: 18 }}
-            prefix={<Avatar size={30} src={url} />}
-          />
+          <Input />
+          {/* <Input prefix={<Avatar size={30} src={url} />} /> */}
           {/* <div className="item-group">
             <Button
               className="button"
@@ -179,7 +175,7 @@ const App = () => {
           </div> */}
         </Form.Item>
 
-        <Form.Item>
+        <Form.Item style={{ marginTop: 100 }}>
           <Button
             className="button-submit"
             type="primary"
@@ -190,48 +186,6 @@ const App = () => {
           </Button>
         </Form.Item>
       </Form>
-
-      <style jsx>
-        {`
-          .wrap {
-            max-width: 690px;
-          }
-
-          .h1 {
-            height: 30px;
-            font-size: 20px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #000000;
-            line-height: 30px;
-          }
-
-          .h2 {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 18px;
-            margin-top: 7px;
-            margin-bottom: 44px;
-            font-size: 12px;
-            font-family: AppleSystemUIFont;
-            color: #969ba0;
-            line-height: 18px;
-          }
-
-          .wrap .item-group {
-            display: flex;
-            align-items: center;
-          }
-
-          .wrap :global(.button-submit) {
-            width: 170px;
-            height: 54px;
-            margin-top: 40px;
-            font-size: 18px;
-          }
-        `}
-      </style>
     </div>
   );
 };

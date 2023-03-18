@@ -1,15 +1,13 @@
-import { useState } from 'react';
 import { Image, Upload } from 'antd';
 import { useIntl } from 'react-intl';
 
-import type { UploadChangeParam } from 'antd/es/upload';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { RcFile } from 'antd/es/upload/interface';
 
 import { getCookie } from '@/utils/cookie';
 import { validateImage } from '@/utils/image';
 
 const App = (props: any) => {
-  const { value, ...rest } = props;
+  const { value, type, ...rest } = props;
 
   const { formatMessage } = useIntl();
 
@@ -32,7 +30,7 @@ const App = (props: any) => {
   return (
     <div className="wrap">
       <Upload
-        className="upload"
+        className={type === 'rectangle' ? 'upload-rectangle' : ''}
         action={process.env.NEXT_PUBLIC_QINIU_UPLOAD_URL}
         data={{ token: getCookie('qiniuToken') }}
         showUploadList={false}
@@ -45,13 +43,11 @@ const App = (props: any) => {
           <Image
             className="upload-image"
             src={value}
-            width="100%"
-            height={220}
             preview={false}
             alt="image"
           />
         ) : (
-          <div className="upload-box-rectangle">
+          <div className="upload-box">
             <Image
               src="/images/home/icon_home_add_dao.png"
               width={20}
@@ -66,12 +62,38 @@ const App = (props: any) => {
 
       <style jsx>
         {`
-          .wrap :global(.upload) {
-            display: block;
+          .wrap :global(.ant-upload) {
+            width: 150px;
+            height: 150px;
           }
 
-          .wrap :global(.upload .ant-upload) {
+          .wrap :global(.upload-rectangle .ant-upload) {
             display: block;
+            width: 100%;
+            height: 220px;
+          }
+
+          .wrap .upload-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            font-size: 15px;
+            font-family: PingFangSC-Semibold, PingFang SC;
+            font-weight: 600;
+            color: #000000;
+            line-height: 24px;
+            background: #fbfbfb;
+            border-radius: 4px;
+            border: 1px dashed rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+          }
+
+          .wrap :global(.ant-upload-select .ant-image) {
+            width: 100%;
+            height: 100%;
           }
 
           .wrap :global(.upload-image) {
@@ -80,23 +102,6 @@ const App = (props: any) => {
             object-fit: cover;
             border-radius: 4px;
             cursor: pointer;
-          }
-
-          .wrap .upload-box-rectangle {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 220px;
-            background: #fbfbfb;
-            border-radius: 4px;
-            border: 1px dashed rgba(0, 0, 0, 0.15);
-          }
-
-          .wrap .upload-box-square {
-            width: 150px;
-            height: 150px;
-            border-radius: 4px;
           }
         `}
       </style>

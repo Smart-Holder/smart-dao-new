@@ -220,7 +220,7 @@ const App: React.FC = () => {
           required
           extra={<span style={{ color: 'red' }}>{imageMessage}</span>}
         >
-          <Upload value={avatar} onChange={onImageChange} />
+          <Upload type="rectangle" value={avatar} onChange={onImageChange} />
         </Form.Item>
 
         <div className="h1" style={{ marginTop: 56 }}>

@@ -10,6 +10,7 @@ import { useAppSelector, useAppDispatch } from '@/store/hooks';
 // import { getCookie } from '@/utils/cookie';
 import { debounce } from '@/utils';
 import { Skeleton, Empty, Button, Row, Col, Image, Space, Avatar } from 'antd';
+import { getDAOList } from '@/store/features/daoSlice';
 // import {
 //   setLikeDAOs,
 //   setDAOList as setMyDAOList,
@@ -35,6 +36,12 @@ const App = () => {
   const [init, setInit] = useState(false);
 
   const defaultChain = Number(process.env.NEXT_PUBLIC_DEFAULT_CHAIN);
+
+  useEffect(() => {
+    if (address && chainId) {
+      dispatch(getDAOList({ chain: chainId, owner: address }));
+    }
+  }, [address, chainId, dispatch]);
 
   const getData = async () => {
     if (!isSupportChain) {
@@ -148,7 +155,6 @@ const App = () => {
           className="button-add"
           icon={
             <Image
-              style={{ display: 'block' }}
               src="/images/home/icon_home_add_dao.png"
               width={20}
               height={20}
@@ -191,7 +197,12 @@ const App = () => {
 
       <div className="footer">
         {DAOList.length < total && (
-          <Button className="button-all" onClick={getAllData}>
+          <Button
+            className="button-view-all"
+            type="primary"
+            ghost
+            onClick={getAllData}
+          >
             VIEW ALL DAO
           </Button>
         )}
@@ -218,10 +229,6 @@ const App = () => {
           font-weight: bold;
           color: #000000;
           line-height: 32px;
-        }
-
-        .top :global(.button-add span) {
-          margin-left: 8px;
         }
 
         .h1 {
@@ -259,19 +266,6 @@ const App = () => {
         .footer {
           padding: 40px 0 50px;
           text-align: center;
-        }
-
-        .footer :global(.button-all) {
-          width: 260px;
-          height: 46px;
-          font-size: 18px;
-          font-family: AdobeGurmukhi-Bold, AdobeGurmukhi;
-          font-weight: bold;
-          color: #000000;
-          line-height: 27px;
-          background: #ffffff;
-          border-radius: 5px;
-          border: 1px solid #000000;
         }
       `}</style>
     </>

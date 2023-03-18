@@ -18,6 +18,7 @@ import {
 } from '@/store/features/daoSlice';
 import { useRouter } from 'next/router';
 import { request } from '@/api';
+import { DAOType } from '@/config/enum';
 
 // const Header = dynamic(() => import('@/components/header'), { ssr: false });
 
@@ -34,7 +35,7 @@ export default function BasicLayout({
   const { address, chainId, isSupportChain } = useAppSelector(
     (store) => store.wallet,
   );
-  const { currentDAO, currentMember, DAOType } = useAppSelector(
+  const { currentDAO, currentMember, daoType } = useAppSelector(
     (store) => store.dao,
   );
   const router = useRouter();
@@ -43,7 +44,7 @@ export default function BasicLayout({
   useEffect(() => {
     const initData = async () => {
       const dao = getSessionStorage('currentDAO');
-      const type = localStorage.getItem('DAOType');
+      let type = localStorage.getItem('daoType');
 
       if (!dao || !dao.address) {
         router.push('/');
@@ -51,9 +52,12 @@ export default function BasicLayout({
       }
 
       dispatch(setCurrentDAO(dao));
-      dispatch(setDAOType(type));
 
-      if (type === 'join' || type === 'create') {
+      if (type && Object.values(DAOType).includes(type as DAOType)) {
+        dispatch(setDAOType(type as DAOType));
+      }
+
+      if (type === DAOType.Join) {
         const members = await request({
           name: 'utils',
           method: 'getMembersFrom',
@@ -98,7 +102,7 @@ export default function BasicLayout({
       }
 
       dispatch(setCurrentDAO(dao));
-      dispatch(setDAOType('join'));
+      dispatch(setDAOType(DAOType.Join));
 
       const members = await request({
         name: 'utils',
@@ -162,7 +166,7 @@ export default function BasicLayout({
     return null;
   }
 
-  console.log('DAOType', DAOType);
+  console.log('daoType', daoType);
 
   return (
     <>
@@ -175,8 +179,10 @@ export default function BasicLayout({
       <Layout>
         <Header />
         <Layout hasSider>
-          {(DAOType === 'join' || DAOType === 'create') && <Sider />}
-          {(DAOType === 'follow' || DAOType === 'visitor') && <SiderVisitor />}
+          {daoType === DAOType.Join && <Sider />}
+          {(daoType === DAOType.Visit || daoType === DAOType.Follow) && (
+            <SiderVisitor />
+          )}
           <Layout>
             <Content className="dashboard">{children}</Content>
             {footer && <Footer hasSider />}

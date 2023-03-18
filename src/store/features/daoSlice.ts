@@ -19,9 +19,10 @@ import DAOs from '@/config/abi/DAOs.json';
 import { clearMakeDAOStorage } from '@/utils/launch';
 
 import router from 'next/router';
+import { DAOType } from '@/config/enum';
 
 export interface DAOState {
-  DAOType: string; // create/join/follow/visitor
+  daoType: DAOType; // create/join/follow/visit
   currentDAO: any;
   DAOList: Array<any>;
   currentMember: any;
@@ -32,7 +33,7 @@ export interface DAOState {
   joinDAOs: Array<any>;
 }
 const initialState: DAOState = {
-  DAOType: '',
+  daoType: DAOType.Visit,
   // currentDAO: getSessionStorage('currentDAO') || { name: '' },
   currentDAO: { name: '' },
   DAOList: [],
@@ -174,9 +175,9 @@ export const DAOSlice = createSlice({
   name: 'dao',
   initialState,
   reducers: {
-    setDAOType: (state, { payload }) => {
-      state.DAOType = payload;
-      localStorage.setItem('DAOType', payload);
+    setDAOType: (state, { payload }: { payload: DAOType }) => {
+      state.daoType = payload;
+      localStorage.setItem('daoType', payload);
     },
     setDAOList: (state, { payload }) => {
       state.DAOList = payload;
@@ -223,7 +224,7 @@ export const DAOSlice = createSlice({
         console.log('disconnect extraReducer: delete dao');
         state.DAOList = [];
         state.currentDAO = { name: '' };
-        state.DAOType = '';
+        state.daoType = DAOType.Visit;
       })
       .addCase(deployAssetSalesDAO.pending, (state) => {
         console.log('deployAssetSalesDAO pending!');
@@ -233,7 +234,7 @@ export const DAOSlice = createSlice({
         clearMakeDAOStorage();
         state.step = 0;
         state.currentDAO = payload;
-        state.DAOType = 'create';
+        state.daoType = DAOType.Join;
         sessionStorage.setItem('currentDAO', JSON.stringify(payload));
         router.push('/dashboard/mine/home');
         // state.DAOList = payload;

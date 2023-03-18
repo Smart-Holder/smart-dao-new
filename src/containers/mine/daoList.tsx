@@ -3,16 +3,21 @@ import { Space, Button, Divider, Skeleton, Empty } from 'antd';
 import sdk from 'hcstore/sdk';
 import { useIntl } from 'react-intl';
 
-import { useAppSelector } from '@/store/hooks';
+import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
 import Item from '@/containers/mine/daoItem';
 
 // import { getCookie } from '@/utils/cookie';
 import { getMakeDAOStorage } from '@/utils/launch';
 import { request } from '@/api';
+import { DAOType } from '@/config/enum';
+import { setDAOList } from '@/store/features/daoSlice';
+
+type Active = 'create' | DAOType.Join | DAOType.Follow;
 
 export default function List() {
   const { formatMessage } = useIntl();
+  const dispatch = useAppDispatch();
 
   // const chainId = Number(getCookie('chainId'));
   // const address = getCookie('address');
@@ -20,7 +25,7 @@ export default function List() {
   const { address, chainId } = useAppSelector((store) => store.wallet);
 
   // const { isInit } = useAppSelector((store) => store.common);
-  const [active, setActive] = useState('create'); // create, join, follow
+  const [active, setActive] = useState<Active>('create'); // create, join, follow
 
   const [createDAOs, setCreateDAOs] = useState([]);
   const [followDAOs, setFollowDAOs] = useState([]);
@@ -56,7 +61,11 @@ export default function List() {
       setJoinDAOs(res2);
       setFollowDAOs(res3);
 
-      setList(active === 'create' ? res1 : active === 'join' ? res2 : res3);
+      dispatch(setDAOList(res2));
+
+      setList(
+        active === 'create' ? res1 : active === DAOType.Join ? res2 : res3,
+      );
 
       setLoading(false);
     };
@@ -72,12 +81,12 @@ export default function List() {
   };
 
   const handleClick2 = () => {
-    setActive('join');
+    setActive(DAOType.Join);
     setList(joinDAOs);
   };
 
   const handleClick3 = () => {
-    setActive('follow');
+    setActive(DAOType.Follow);
     setList(followDAOs);
   };
 
@@ -92,14 +101,14 @@ export default function List() {
           {formatMessage({ id: 'my.home.dao.create' })}
         </Button>
         <Button
-          className={`list-button ${active === 'join' ? 'active' : ''}`}
+          className={`list-button ${active === DAOType.Join ? 'active' : ''}`}
           type="link"
           onClick={handleClick2}
         >
           {formatMessage({ id: 'my.home.dao.join' })}
         </Button>
         <Button
-          className={`list-button ${active === 'follow' ? 'active' : ''}`}
+          className={`list-button ${active === DAOType.Follow ? 'active' : ''}`}
           type="link"
           onClick={handleClick3}
         >
@@ -114,11 +123,15 @@ export default function List() {
 
         {!loading && list && list.length > 0 && (
           <Space size={34} wrap>
-            {(active === 'create' || active === 'join') && cacheDAO && (
-              <Item data={cacheDAO} DAOType="cache" />
+            {(active === 'create' || active === DAOType.Join) && cacheDAO && (
+              <Item data={cacheDAO} daoType={DAOType.Cache} />
             )}
             {list.map((item: any) => (
-              <Item data={item} DAOType={active} key={item.id} />
+              <Item
+                data={item}
+                daoType={active === 'create' ? DAOType.Join : active}
+                key={item.id}
+              />
             ))}
           </Space>
         )}

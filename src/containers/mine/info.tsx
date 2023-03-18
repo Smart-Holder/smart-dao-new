@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Input, Image, message } from 'antd';
-import { Form, Upload, Space } from 'antd';
+import { Form, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useIntl } from 'react-intl';
+
+import Upload from '@/components/form/upload';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { setUserInfo } from '@/store/features/userSlice';
@@ -95,42 +97,41 @@ const Info = () => {
   };
 
   return (
-    <div className="info-wrap">
+    <div className="card" style={{ margin: '50px 0' }}>
       <div className="h1">{formatMessage({ id: 'my.information.title' })}</div>
       {/* <div className="h2">Lorem ipsum dolor sit amet, consectetur</div> */}
 
       <Form
+        style={{ marginTop: 40 }}
+        className="form"
         name="info"
         form={form}
+        wrapperCol={{ span: 17 }}
         initialValues={initialValues}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         onValuesChange={onValuesChange}
         autoComplete="off"
         labelAlign="left"
+        layout="vertical"
         requiredMark={false}
         validateTrigger="onBlur"
       >
         <Form.Item
           name="nickname"
+          label={formatMessage({ id: 'my.information.nickname' })}
           rules={[
             { required: true },
             { type: 'string', min: 5, max: 12 },
             { validator: validateChinese },
           ]}
         >
-          <Input
-            className="smart-input"
-            prefix={
-              <span className="smart-input-prefix">
-                {formatMessage({ id: 'name' })}:
-              </span>
-            }
-          />
+          <Input />
         </Form.Item>
 
-        <Form.Item valuePropName="fileList">
-          <Space>
+        <Form.Item label="Upload Rectangle Picture" valuePropName="fileList">
+          <Upload value={image} onChange={onImageChange} />
+          {/* <Space>
             <Upload
               action={process.env.NEXT_PUBLIC_QINIU_UPLOAD_URL}
               data={{ token: getCookie('qiniuToken') }}
@@ -158,7 +159,7 @@ const Info = () => {
             <span className="upload-desc">
               {formatMessage({ id: 'my.information.upload' })}
             </span>
-          </Space>
+          </Space> */}
         </Form.Item>
 
         <Form.Item>
@@ -176,29 +177,6 @@ const Info = () => {
 
       <style jsx>
         {`
-          .info-wrap {
-            max-width: 690px;
-            padding: 60px 0 0 16px;
-          }
-
-          .h1 {
-            height: 30px;
-            font-size: 20px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #000000;
-            line-height: 30px;
-          }
-
-          .h2 {
-            height: 18px;
-            margin-top: 7px;
-            font-size: 12px;
-            font-family: AppleSystemUIFont;
-            color: #969ba0;
-            line-height: 18px;
-          }
-
           .info-wrap .upload-desc {
             height: 21px;
             font-size: 14px;
@@ -206,16 +184,6 @@ const Info = () => {
             font-weight: 400;
             color: #969ba0;
             line-height: 21px;
-          }
-
-          .info-wrap :global(.button-submit) {
-            width: 168px;
-            height: 53px;
-            margin-top: 132px;
-            font-size: 18px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            line-height: 27px;
           }
         `}
       </style>

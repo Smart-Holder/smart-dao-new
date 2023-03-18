@@ -20,7 +20,7 @@ const App = () => {
     <>
       <Row style={{ marginTop: 89 }} align="middle">
         <Col span={8} offset={2}>
-          <div>
+          <div className="left">
             <div className="h1">Welcome to SmartDAO World</div>
             <div className="h2">
               Build a platform to help web2 stars, sports and artists quickly
@@ -29,7 +29,7 @@ const App = () => {
             {!address && (
               <Button
                 type="primary"
-                className="button"
+                className="button-connect-home"
                 onClick={showWalletModal}
               >
                 {formatMessage({ id: 'home.connectWallet' })}
@@ -69,7 +69,7 @@ const App = () => {
             line-height: 40px;
           }
 
-          .left :global(.button) {
+          .left :global(.button-connect-home) {
             width: 238px;
             height: 58px;
             margin-top: 44px;
@@ -79,6 +79,7 @@ const App = () => {
             font-weight: 500;
             line-height: 32px;
 
+            background: #2c2c2c;
             border-radius: 5px;
           }
         `}
