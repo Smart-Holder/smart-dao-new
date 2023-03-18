@@ -473,7 +473,7 @@ a {
 }
 
 /* -------------- Form Input ---------------- */
-.ant-input {
+.form .ant-input {
   height: 50px;
   font-size: 15px;
   font-family: PingFangSC-Medium, PingFang SC;
@@ -483,9 +483,13 @@ a {
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 4px;
 }
-.ant-input:focus {
+.form .ant-input:focus {
   border-color: #000;
   box-shadow: 0 0 0 2px rgba(211, 191, 255, 1);
+}
+
+.form textarea.ant-input {
+  height: auto;
 }
 
 /* -------------- Filter Input ---------------- */
