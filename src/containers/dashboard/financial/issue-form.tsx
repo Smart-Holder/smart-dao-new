@@ -7,14 +7,12 @@ import {
   Form,
   Input,
   Space,
-  Upload,
   Image,
   UploadProps,
   Row,
   Col,
   Button,
   InputNumber,
-  Select,
   message,
   Modal,
 } from 'antd';
@@ -31,7 +29,9 @@ import { Permissions } from '@/config/enum';
 import { rng } from 'somes/rng';
 import { createVote } from '@/api/vote';
 
-const { Option } = Select;
+import Upload from '@/components/form/upload';
+import Select from '@/components/form/select';
+
 type IssueFormProps = {};
 
 const testTags = [
@@ -210,31 +210,37 @@ const IssueForm: FC<IssueFormProps> = () => {
   }
 
   return (
-    <Form
-      name="info"
-      form={form}
-      initialValues={initialValues}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-      autoComplete="off"
-      layout="vertical"
-      requiredMark={true}
-      validateTrigger="onBlur"
-      className={styles['container']}
-    >
-      <Form.Item
-        name="name"
-        label={formatMessage({ id: 'name' })}
-        rules={[{ required: true }, { type: 'string', min: 1, max: 30 }]}
+    <div className="card">
+      <Form
+        className="form"
+        name="info"
+        form={form}
+        wrapperCol={{ span: 17 }}
+        initialValues={initialValues}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
+        layout="vertical"
+        requiredMark={true}
+        validateTrigger="onBlur"
       >
-        <Input className={styles['input']} placeholder="" />
-      </Form.Item>
-      <Form.Item
-        name="tags"
-        rules={[{ required: true }]}
-        label={formatMessage({ id: 'financial.asset.tagname' })}
-      >
-        {/* <Row gutter={15}>
+        <div className="h1">
+          {formatMessage({ id: 'financial.asset.publish' })}
+        </div>
+        <Form.Item
+          name="name"
+          style={{ marginTop: 40 }}
+          label={formatMessage({ id: 'name' })}
+          rules={[{ required: true }, { type: 'string', min: 1, max: 30 }]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name="tags"
+          rules={[{ required: true }]}
+          label={formatMessage({ id: 'financial.asset.tagname' })}
+        >
+          {/* <Row gutter={15}>
           <Col span={20}>
             <Input className={styles['input']} placeholder="Write here" />
           </Col>
@@ -244,114 +250,101 @@ const IssueForm: FC<IssueFormProps> = () => {
             </Button>
           </Col>
         </Row> */}
-        <Select
-          size="large"
-          mode="tags"
-          style={{ width: '100%' }}
-          placeholder=""
-          options={tags}
-        />
-      </Form.Item>
-      <Form.Item
-        name="description"
-        rules={[{ type: 'string', max: 1000 }]}
-        label="Introduction"
-      >
-        <Input.TextArea className={styles['input']} placeholder="" rows={4} />
-      </Form.Item>
-      <Form.Item
-        valuePropName="fileList"
-        label="Image"
-        required
-        extra={<span style={{ color: 'red' }}>{imageMessage}</span>}
-      >
-        <Space>
-          <Upload
-            action={process.env.NEXT_PUBLIC_QINIU_UPLOAD_URL}
-            data={{ token: getCookie('qiniuToken') }}
-            showUploadList={false}
-            listType="picture-card"
-            beforeUpload={beforeUpload}
-            onChange={onImageChange}
+          <Select
+            // size="large"
+            mode="tags"
+            // style={{ width: '100%' }}
+            options={tags}
+            open={false}
+          />
+        </Form.Item>
+        <Form.Item
+          name="description"
+          rules={[{ type: 'string', max: 1000 }]}
+          label="Introduction"
+        >
+          <Input.TextArea rows={8} />
+        </Form.Item>
+        <Form.Item
+          valuePropName="fileList"
+          label="Upload Square Picture"
+          required
+          extra={<span style={{ color: 'red' }}>{imageMessage}</span>}
+        >
+          <Upload value={image} onChange={onImageChange} />
+        </Form.Item>
+        <Space size={10} align="end">
+          <Form.Item
+            name="label"
+            rules={[{ type: 'string', max: 20 }]}
+            label="Attributes"
           >
-            {image ? (
-              <Image
-                className={styles['upload-img']}
-                src={image}
-                width={88}
-                height={88}
-                preview={false}
-                alt="image"
-              />
-            ) : (
-              <PlusOutlined />
-            )}
-          </Upload>
-
-          <span className={styles['upload-desc']}>
-            {formatMessage({ id: 'start.upload' })}
-          </span>
+            <Input prefix={<span style={{ color: '#000' }}>属性项:</span>} />
+          </Form.Item>
+          <Form.Item name="value" rules={[{ type: 'string', max: 20 }]}>
+            <Input prefix={<span style={{ color: '#000' }}>属性值:</span>} />
+          </Form.Item>
+          <Form.Item
+            name="ratio"
+            rules={[
+              {
+                pattern: /^([1-9][0-9]?|100)$/,
+                message: 'not a valid number',
+              },
+            ]}
+          >
+            <Input prefix={<span style={{ color: '#000' }}>特征比例:</span>} />
+          </Form.Item>
         </Space>
-      </Form.Item>
-      <Space size={10} align="end">
-        <Form.Item
-          name="label"
-          rules={[{ type: 'string', max: 20 }]}
-          label="Attributes"
-        >
-          <Input
-            className={styles['input']}
-            prefix={<span style={{ color: '#000' }}>属性项:</span>}
+        <Form.Item name="supply" label="Supply">
+          <InputNumber min={0} disabled />
+        </Form.Item>
+        <Form.Item name="blockchain" label="Blockchain">
+          <Select
+            disabled
+            options={[{ value: chainData.name, label: chainData.name }]}
           />
         </Form.Item>
-        <Form.Item name="value" rules={[{ type: 'string', max: 20 }]}>
-          <Input
-            className={styles['input']}
-            prefix={<span style={{ color: '#000' }}>属性值:</span>}
-          />
+        <Form.Item name="tax" label="Taxes and dues (Set by the DAO system)">
+          <div className="tax">
+            <span>Issue Tax: {currentDAO.assetIssuanceTax / 100}%</span>
+            <span style={{ marginLeft: 100 }}>
+              Circulation Tax: {currentDAO.assetCirculationTax / 100}%
+            </span>
+          </div>
         </Form.Item>
-        <Form.Item
-          name="ratio"
-          rules={[
-            {
-              pattern: /^([1-9][0-9]?|100)$/,
-              message: 'not a valid number',
-            },
-          ]}
-        >
-          <Input
-            className={styles['input']}
-            prefix={<span style={{ color: '#000' }}>特征比例:</span>}
-          />
+        <Form.Item style={{ marginTop: 100 }}>
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="button-submit"
+            loading={loading}
+          >
+            Issue
+          </Button>
         </Form.Item>
-      </Space>
-      <Form.Item name="supply" label="Supply">
-        <InputNumber className={styles['input-number']} min={0} disabled />
-      </Form.Item>
-      <Form.Item name="blockchain" label="Blockchain">
-        <Select
-          disabled
-          className={styles['select']}
-          options={[{ value: chainData.name, label: chainData.name }]}
-        />
-      </Form.Item>
-      <Form.Item name="tax" label="Tax">
-        <Row gutter={15}>
-          <Col span={6}>发行税: {currentDAO.assetIssuanceTax / 100}%</Col>
-          <Col span={6}>流通税: {currentDAO.assetCirculationTax / 100}%</Col>
-        </Row>
-      </Form.Item>
-      <Form.Item>
-        <Button
-          type="primary"
-          htmlType="submit"
-          className={styles['button']}
-          loading={loading}
-        >
-          Issue
-        </Button>
-      </Form.Item>
-    </Form>
+      </Form>
+
+      <style jsx>
+        {`
+          .tax {
+            display: flex;
+            align-items: center;
+            height: 50px;
+            padding-left: 12px;
+
+            font-size: 15px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #000000;
+            line-height: 24px;
+
+            background: #fafafa;
+            border-radius: 4px;
+          }
+        `}
+      </style>
+    </div>
   );
 };
 

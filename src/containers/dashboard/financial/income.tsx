@@ -7,6 +7,7 @@ import Counts from '@/containers/dashboard/mine/counts';
 import NftpModal from '@/components/modal/nftpModal';
 import Select from '@/components/form/filter/select';
 import RangePicker from '@/components/form/filter/rangePicker';
+import DashboardHeader from '@/containers/dashboard/header';
 
 import { request } from '@/api';
 
@@ -221,23 +222,28 @@ const App = () => {
   };
 
   return (
-    <div className="wrap">
-      <Card
-        data={[
-          {
-            label: formatMessage({ id: 'financial.income.total' }),
-            value: fromToken(amount.amount) + ' ETH',
-          },
-          // { num: fromToken(amount.amount) + ' ETH', title: '累计发行税收入' },
-          // { num: fromToken(amount.amount) + ' ETH', title: '累计交易税收入' },
-          {
-            label: formatMessage({ id: 'financial.income.balance' }),
-            value: fromToken(balance || 0) + ' ETH',
-          },
-        ]}
-      />
+    <div>
+      <div style={{ padding: '30px 91px 0 83px' }}>
+        <DashboardHeader
+          title={formatMessage({ id: 'sider.financial.income' })}
+        />
+        <Card
+          data={[
+            {
+              label: formatMessage({ id: 'financial.income.total' }),
+              value: fromToken(amount.amount) + ' ETH',
+            },
+            // { num: fromToken(amount.amount) + ' ETH', title: '累计发行税收入' },
+            // { num: fromToken(amount.amount) + ' ETH', title: '累计交易税收入' },
+            {
+              label: formatMessage({ id: 'financial.income.balance' }),
+              value: fromToken(balance || 0) + ' ETH',
+            },
+          ]}
+        />
+      </div>
 
-      <div className="table-card">
+      <div className="table-card" style={{ margin: '39px 33px 50px 24px' }}>
         <div className="table-filter">
           <Form
             name="filter"

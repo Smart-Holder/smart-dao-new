@@ -8,6 +8,7 @@ import { useAppDispatch } from '@/store/hooks';
 import { prevStep, nextStep } from '@/store/features/daoSlice';
 
 import { setMakeDAOStorage, getMakeDAOStorage } from '@/utils/launch';
+import { Col, Row } from 'antd';
 
 const App = () => {
   const { formatMessage } = useIntl();
@@ -44,53 +45,39 @@ const App = () => {
   };
 
   return (
-    <div className="wrap">
+    <div className="card" style={{ margin: '40px 0 0' }}>
       <div className="h1">{formatMessage({ id: 'launch.tax.title' })}</div>
       <div className="h2">{formatMessage({ id: 'launch.tax.subtitle' })}</div>
 
-      <Slider
-        style={{ padding: '23px 0' }}
-        defaultValue={assetIssuanceTax}
-        label={formatMessage({ id: 'launch.tax.publish' })}
-        color="#FF6D4C"
-        min={1}
-        max={99}
-        onAfterChange={onTaxChange1}
-      />
-      <Slider
-        style={{ padding: '23px 0' }}
-        defaultValue={assetCirculationTax}
-        label={formatMessage({ id: 'launch.tax.circulation' })}
-        color="#2AC154"
-        min={1}
-        max={99}
-        onAfterChange={onTaxChange2}
-      />
+      <Row style={{ marginTop: 20 }}>
+        <Col span={17}>
+          <Slider
+            style={{ padding: '20px 0' }}
+            defaultValue={assetIssuanceTax}
+            label={formatMessage({ id: 'launch.tax.publish' })}
+            color="#FF6D4C"
+            min={1}
+            max={99}
+            onAfterChange={onTaxChange1}
+          />
+        </Col>
+      </Row>
+
+      <Row>
+        <Col span={17}>
+          <Slider
+            style={{ padding: '23px 0' }}
+            defaultValue={assetCirculationTax}
+            label={formatMessage({ id: 'launch.tax.circulation' })}
+            color="#2AC154"
+            min={1}
+            max={99}
+            onAfterChange={onTaxChange2}
+          />
+        </Col>
+      </Row>
 
       <Footer prev={prev} next={next} />
-
-      <style jsx>
-        {`
-          .h1 {
-            height: 42px;
-            margin-top: 59px;
-            font-size: 20px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #000000;
-            line-height: 42px;
-          }
-
-          .h2 {
-            height: 52px;
-            font-size: 16px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #3c4369;
-            line-height: 26px;
-          }
-        `}
-      </style>
     </div>
   );
 };

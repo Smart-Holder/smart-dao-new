@@ -5,11 +5,7 @@ import type { NextPageWithLayout } from '@/pages/_app';
 import NFTP from '@/containers/dashboard/member/nftp';
 
 const App: NextPageWithLayout = () => {
-  return (
-    <div className="dashboard-content">
-      <NFTP />
-    </div>
-  );
+  return <NFTP />;
 };
 
 App.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;

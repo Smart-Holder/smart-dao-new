@@ -56,9 +56,11 @@ const App: React.FC = () => {
       owner: address,
     },
   ]);
-  const [avatar, setAvatar] = useState('');
+  const [logo, setLogo] = useState('');
+  const [poster, setPoster] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [imageMessage, setImageMessage] = useState('');
+  const [imageMessage1, setImageMessage1] = useState('');
+  const [imageMessage2, setImageMessage2] = useState('');
 
   const [form] = Form.useForm();
 
@@ -66,6 +68,8 @@ const App: React.FC = () => {
     const dao = getMakeDAOStorage('start');
 
     if (dao) {
+      const extra = dao?.extra ? JSON.parse(dao.extra || '{}') : {};
+
       // setCacheDAO(dao);
       form.setFieldsValue({
         name: dao.name,
@@ -73,7 +77,8 @@ const App: React.FC = () => {
         description: dao.description,
       });
       setMembers(dao.members);
-      setAvatar(dao.image);
+      setLogo(dao.image);
+      setPoster(extra.poster || '');
     } else {
       form.resetFields();
       setMembers([
@@ -86,13 +91,27 @@ const App: React.FC = () => {
           owner: address,
         },
       ]);
-      setAvatar('');
+      setLogo('');
+      setPoster('');
     }
   }, [chainId, address]);
 
   const onFinish = (values: any) => {
-    if (!avatar) {
-      setImageMessage('Image is required');
+    if (!logo) {
+      setImageMessage1('Image is required');
+      document.querySelector('.logo-has-error')?.scrollIntoView({
+        block: 'center',
+        behavior: 'smooth',
+      });
+      return;
+    }
+
+    if (!poster) {
+      setImageMessage2('Image is required');
+      document.querySelector('.poster-has-error')?.scrollIntoView({
+        block: 'center',
+        behavior: 'smooth',
+      });
       return;
     }
 
@@ -104,7 +123,8 @@ const App: React.FC = () => {
       memberBaseName: values.name + '-NFTP',
       ...values,
       members,
-      image: avatar,
+      image: logo,
+      extra: JSON.stringify({ poster }),
 
       // defaultVoteTime: 0,
       // assetIssuanceTax: 6000,
@@ -168,7 +188,7 @@ const App: React.FC = () => {
     return Promise.resolve();
   };
 
-  const onImageChange: UploadProps['onChange'] = (
+  const onImageChange1: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>,
   ) => {
     // if (info.file.status === 'uploading') {
@@ -177,15 +197,23 @@ const App: React.FC = () => {
     // }
 
     if (info.file.status === 'done') {
-      setAvatar(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
-      setImageMessage('');
+      setLogo(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+      setImageMessage1('');
     }
   };
 
-  const beforeUpload = (file: RcFile) => {
-    const message = validateImage(file);
+  const onImageChange2: UploadProps['onChange'] = (
+    info: UploadChangeParam<UploadFile>,
+  ) => {
+    // if (info.file.status === 'uploading') {
+    //   setLoading(true);
+    //   return;
+    // }
 
-    return !message;
+    if (info.file.status === 'done') {
+      setPoster(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+      setImageMessage2('');
+    }
   };
 
   const handleCancel = () => {
@@ -245,12 +273,29 @@ const App: React.FC = () => {
         </Form.Item>
 
         <Form.Item
-          label="Upload Rectangle Picture"
+          label="Logo"
           valuePropName="fileList"
           required
-          extra={<span style={{ color: 'red' }}>{imageMessage}</span>}
+          extra={
+            <span className="logo-has-error" style={{ color: 'red' }}>
+              {imageMessage1}
+            </span>
+          }
         >
-          <Upload type="rectangle" value={avatar} onChange={onImageChange} />
+          <Upload value={logo} onChange={onImageChange1} />
+        </Form.Item>
+
+        <Form.Item
+          label="Poster"
+          valuePropName="fileList"
+          required
+          extra={
+            <span className="poster-has-error" style={{ color: 'red' }}>
+              {imageMessage2}
+            </span>
+          }
+        >
+          <Upload type="rectangle" value={poster} onChange={onImageChange2} />
         </Form.Item>
 
         <div className="h1" style={{ marginTop: 56 }}>

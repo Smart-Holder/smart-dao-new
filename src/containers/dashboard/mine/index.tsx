@@ -22,6 +22,7 @@ import { getDAO, setDAOType } from '@/store/features/daoSlice';
 import { UserOutlined } from '@ant-design/icons';
 
 import NFTs from '@/containers/dashboard/mine/nfts';
+import DashboardHeader from '@/containers/dashboard/header';
 
 const { Paragraph } = Typography;
 
@@ -128,56 +129,36 @@ const App = () => {
   }
 
   return (
-    <div className="wrap">
-      <div className="image">
-        <Image
-          src={currentDAO.image || img}
-          // src={img}
-          width="100%"
-          height={425}
-          preview={false}
-          alt="image"
-        />
-        {/* <Avatar
-          size={165}
-          src={currentDAO.image || img}
-          style={{ backgroundColor: '#fff', marginRight: 26 }}
-        /> */}
-      </div>
-
-      <div className="content">
-        <Row gutter={24}>
-          <Col span={12}>
-            <div className="name">{currentDAO.name}</div>
-          </Col>
-          <Col span={10} offset={2}>
-            <Space size={20}>
-              <Button
-                className="smart-button"
-                type="primary"
-                ghost
-                onClick={setFollow}
-                disabled={isLike}
-              >
-                {formatMessage({
-                  id: isLike ? 'home.followed' : 'home.follow',
-                })}
-              </Button>
-              <Button
-                className="smart-button"
-                type="primary"
-                onClick={setJoin}
-                loading={loading}
-                disabled={currentDAO.isJoin}
-              >
-                {formatMessage({
-                  id: currentDAO.isJoin ? 'home.joined' : 'home.join',
-                })}
-              </Button>
-            </Space>
-          </Col>
-        </Row>
-
+    <div style={{ padding: '24px 33px 0 24px' }}>
+      <DashboardHeader
+        padding
+        buttons={
+          <>
+            <Button
+              className="smart-button"
+              type="primary"
+              ghost
+              onClick={setFollow}
+              disabled={isLike}
+            >
+              {formatMessage({
+                id: isLike ? 'home.followed' : 'home.follow',
+              })}
+            </Button>
+            <Button
+              className="smart-button"
+              type="primary"
+              onClick={setJoin}
+              loading={loading}
+              disabled={currentDAO.isJoin}
+            >
+              {formatMessage({
+                id: currentDAO.isJoin ? 'home.joined' : 'home.join',
+              })}
+            </Button>
+          </>
+        }
+      >
         <Row gutter={24} style={{ marginTop: 55 }}>
           <Col span={12}>
             <div className="desc-header">Description</div>
@@ -245,8 +226,19 @@ const App = () => {
             </div>
           </Col>
         </Row>
+      </DashboardHeader>
+      {/* <div className="image">
+        <Image
+          src={currentDAO.image || img}
+          width="100%"
+          height={425}
+          preview={false}
+          alt="image"
+        />
+      </div> */}
 
-        <Row gutter={24} style={{ marginTop: 55 }}>
+      <div className="content">
+        <Row gutter={24}>
           <Col span={8}>
             <div className="total-item">
               <div className="total-item-top">
@@ -363,13 +355,14 @@ const App = () => {
           </Col>
         </Row>
 
-        {!currentDAO.isJoin && !currentDAO.isMember && <NFTs />}
+        {/* {!currentDAO.isJoin && !currentDAO.isMember && <NFTs />} */}
+        {daoType !== DAOType.Join && <NFTs />}
       </div>
 
       <style jsx>
         {`
           .content {
-            padding: 75px 60px 50px;
+            padding: 55px 58px 50px;
           }
 
           .info1 {
@@ -424,7 +417,6 @@ const App = () => {
             flex-direction: column;
             justify-content: space-between;
             box-sizing: border-box;
-            max-width: 306px;
             height: 160px;
             padding: 26px 26px 30px 24px;
             background: #ffffff;
@@ -456,7 +448,6 @@ const App = () => {
             justify-content: space-between;
             align-items: center;
             box-sizing: border-box;
-            max-width: 465px;
             height: 180px;
             padding: 0 45px;
             background: #ffffff;

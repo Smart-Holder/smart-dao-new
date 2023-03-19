@@ -124,10 +124,10 @@ const DAOItem = (props: any) => {
   };
 
   return (
-    <div className="item" onClick={handleClick}>
+    <div className="item">
       <div className="glass"></div>
 
-      <div className="item-content">
+      <div className="item-content" onClick={handleClick}>
         {/* <div className="glass"></div> */}
         {/* <Image
         style={{ borderRadius: 10, cursor: 'pointer' }}
@@ -142,7 +142,9 @@ const DAOItem = (props: any) => {
           <Button
             className="button-follow"
             type="primary"
-            icon={
+            onClick={handleFollowClick}
+          >
+            <div className="button-image-wrap">
               <Image
                 src="/images/home/icon_home_card_dao_add.png"
                 alt=""
@@ -150,10 +152,8 @@ const DAOItem = (props: any) => {
                 height={10}
                 preview={false}
               />
-            }
-            onClick={handleFollowClick}
-          >
-            {formatMessage({ id: follow ? 'home.followed' : 'home.follow' })}
+              {formatMessage({ id: follow ? 'home.followed' : 'home.follow' })}
+            </div>
           </Button>
         </div>
 

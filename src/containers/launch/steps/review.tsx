@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Modal, Input, Button } from 'antd';
+import { Modal, Input, Button, Col, Row } from 'antd';
 import { ExclamationOutlined } from '@ant-design/icons';
 
 import Slider from '@/components/slider';
@@ -55,28 +55,30 @@ const App = () => {
   };
 
   return (
-    <div className="wrap">
+    <div className="card form" style={{ margin: '40px 0 0' }}>
       <div className="h1">{formatMessage({ id: 'launch.review.title' })}</div>
       <div className="h2">
         {formatMessage({ id: 'launch.review.subtitle' })}
       </div>
 
-      <Slider
-        style={{ padding: '23px 0 10px' }}
-        value={tax?.assetIssuanceTax}
-        label={formatMessage({ id: 'launch.tax.publish' })}
-        color="#FF6D4C"
-        readOnly
-      />
-      <Slider
-        style={{ padding: '10px 0' }}
-        value={tax?.assetCirculationTax}
-        label={formatMessage({ id: 'launch.tax.circulation' })}
-        color="#2AC154"
-        readOnly
-      />
-
-      {/* <Slider
+      <Row style={{ marginTop: 40 }}>
+        <Col span={17}>
+          <Slider
+            value={tax?.assetIssuanceTax}
+            label={formatMessage({ id: 'launch.tax.publish' })}
+            color="#FF6D4C"
+            readOnly
+          />
+        </Col>
+        <Col span={17} style={{ marginTop: 40 }}>
+          <Slider
+            value={tax?.assetCirculationTax}
+            label={formatMessage({ id: 'launch.tax.circulation' })}
+            color="#2AC154"
+            readOnly
+          />
+        </Col>
+        {/* <Slider
         style={{ padding: '10px 0' }}
         value={vote?.defaultVoteRate}
         label="Issuance Tax"
@@ -90,25 +92,25 @@ const App = () => {
         color="#2AC154"
         readOnly
       /> */}
-      <Slider
-        style={{ padding: '10px 0' }}
-        value={vote?.hours}
-        label={formatMessage({ id: 'launch.vote.period' })}
-        unit="hr"
-        max={720}
-        readOnly
-      />
 
-      <Input
-        className="input"
-        defaultValue={executor?.address}
-        prefix={
-          <span style={{ color: '#000' }}>
-            {formatMessage({ id: 'launch.executor.address' })}:
-          </span>
-        }
-        readOnly
-      />
+        <Col span={17} style={{ marginTop: 40 }}>
+          <Slider
+            value={vote?.hours}
+            label={formatMessage({ id: 'launch.vote.period' })}
+            unit="hr"
+            max={720}
+            readOnly
+          />
+        </Col>
+        <Col span={17} style={{ marginTop: 40 }}>
+          <div>
+            <div className="label">
+              {formatMessage({ id: 'launch.executor.address' })}
+            </div>
+            <Input defaultValue={executor?.address} readOnly />
+          </div>
+        </Col>
+      </Row>
 
       <Footer
         prev={prev}
@@ -129,11 +131,16 @@ const App = () => {
           </div>
           {/* <div className="modal-content-text">Initialization successful!</div> */}
           <div className="buttons">
-            <Button className="button" type="primary" onClick={handleCancel}>
+            <Button
+              className="button-form"
+              type="primary"
+              ghost
+              onClick={handleCancel}
+            >
               {formatMessage({ id: 'launch.think' })}
             </Button>
             <Button
-              className="button"
+              className="button-form"
               type="primary"
               onClick={handleSubmit}
               loading={loading}
@@ -144,62 +151,54 @@ const App = () => {
         </div>
       </Modal>
 
-      <style jsx>{`
-        .h1 {
-          height: 42px;
-          margin-top: 59px;
-          font-size: 20px;
-          font-family: PingFangSC-Regular, PingFang SC;
-          font-weight: 400;
-          color: #000000;
-          line-height: 42px;
-        }
+      <style jsx>
+        {`
+          .wrap :global(.input) {
+            height: 54px;
+            margin-top: 23px;
+            font-size: 18px;
+          }
 
-        .h2 {
-          height: 52px;
-          font-size: 16px;
-          font-family: PingFangSC-Regular, PingFang SC;
-          font-weight: 400;
-          color: #3c4369;
-          line-height: 26px;
-        }
+          .label {
+            height: 24px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-family: HelveticaNeue-Bold, HelveticaNeue;
+            font-weight: bold;
+            color: #2d2d2d;
+            line-height: 24px;
+          }
 
-        .wrap :global(.input) {
-          height: 54px;
-          margin-top: 23px;
-          font-size: 18px;
-        }
+          .modal-content {
+            padding: 88px 0 77px;
+            text-align: center;
+          }
 
-        .modal-content {
-          padding: 88px 0 77px;
-          text-align: center;
-        }
+          .modal-content-text {
+            font-size: 28px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: #3c4369;
+            line-height: 40px;
+          }
 
-        .modal-content-text {
-          font-size: 28px;
-          font-family: PingFangSC-Medium, PingFang SC;
-          font-weight: 500;
-          color: #3c4369;
-          line-height: 40px;
-        }
+          .modal-content .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin: 58px 10px 0;
+          }
 
-        .modal-content .buttons {
-          display: flex;
-          justify-content: space-between;
-          width: 350px;
-          margin: 58px auto 0;
-        }
-
-        .modal-content :global(.button) {
-          min-width: 120px;
-          height: 54px;
-          font-size: 18px;
-          font-family: PingFangSC-Regular, PingFang SC;
-          font-weight: 400;
-          color: #ffffff;
-          line-height: 27px;
-        }
-      `}</style>
+          .modal-content :global(.button) {
+            min-width: 120px;
+            height: 54px;
+            font-size: 18px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #ffffff;
+            line-height: 27px;
+          }
+        `}
+      </style>
     </div>
   );
 };

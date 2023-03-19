@@ -51,6 +51,8 @@ const FormGroup: React.FC = () => {
   const [initialValues, setInitialValues] = useState() as any;
   const [isEdit, setIsEdit] = useState(false);
 
+  const extra = currentDAO?.extra ? JSON.parse(currentDAO.extra || '{}') : {};
+
   useEffect(() => {
     const getDAO = async () => {
       try {
@@ -86,7 +88,7 @@ const FormGroup: React.FC = () => {
   //     votes: 1,
   //     name: '',
   //     description: '',
-  //     avatar: '',
+  //     logo: '',
   //   },
   // ];
 
@@ -94,7 +96,8 @@ const FormGroup: React.FC = () => {
   //   initialValues.members || defaultMember,
   // );
 
-  const [avatar, setAvatar] = useState(currentDAO.image);
+  const [logo, setLogo] = useState(currentDAO.image);
+  const [poster, setPoster] = useState(extra.poster);
   // const [isModalOpen, setIsModalOpen] = useState(false);
 
   const setInfo = async (values: any) => {
@@ -186,7 +189,7 @@ const FormGroup: React.FC = () => {
   //           votes: 1,
   //           name: '',
   //           description: '',
-  //           avatar: '',
+  //           logo: '',
   //         },
   //       ];
 
@@ -214,15 +217,23 @@ const FormGroup: React.FC = () => {
     // }
 
     if (info.file.status === 'done') {
-      setAvatar(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+      setLogo(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
       setIsEdit(true);
     }
   };
 
-  const beforeUpload = (file: RcFile) => {
-    const message = validateImage(file);
+  const handleChange2: UploadProps['onChange'] = (
+    info: UploadChangeParam<UploadFile>,
+  ) => {
+    // if (info.file.status === 'uploading') {
+    //   setLoading(true);
+    //   return;
+    // }
 
-    return !message;
+    if (info.file.status === 'done') {
+      setPoster(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+      setIsEdit(true);
+    }
   };
 
   // const handleCancel = () => {
@@ -286,11 +297,15 @@ const FormGroup: React.FC = () => {
           <Input.TextArea rows={8} />
         </Form.Item>
 
-        <Form.Item label="Upload Rectangle Picture" valuePropName="fileList">
+        <Form.Item label="Logo" valuePropName="fileList">
+          <Upload value={logo} onChange={handleChange} disabled />
+        </Form.Item>
+
+        <Form.Item label="Poster" valuePropName="fileList">
           <Upload
             type="rectangle"
-            value={avatar}
-            onChange={handleChange}
+            value={poster || logo}
+            onChange={handleChange2}
             disabled
           />
         </Form.Item>

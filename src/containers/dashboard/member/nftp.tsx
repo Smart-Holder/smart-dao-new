@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { Table, Button, Form } from 'antd';
+import { Table, Button, Form, Image, Space } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
@@ -7,6 +7,7 @@ import Counts from '@/containers/dashboard/mine/counts';
 import NftpModal from '@/components/modal/nftpModal';
 import Select from '@/components/form/filter/select';
 import RangePicker from '@/components/form/filter/rangePicker';
+import DashboardHeader from '@/containers/dashboard/header';
 
 import { request } from '@/api';
 
@@ -119,17 +120,20 @@ const App = () => {
   }, [searchText, values, chainId, address]);
 
   return (
-    <div className="wrap">
-      <Card
-        data={[
-          {
-            label: formatMessage({ id: 'member.nftp.total' }),
-            value: total,
-          },
-        ]}
-      />
+    <div>
+      <div style={{ padding: '30px 91px 0 83px' }}>
+        <DashboardHeader title={formatMessage({ id: 'sider.member.nftp' })} />
+        <Card
+          data={[
+            {
+              label: formatMessage({ id: 'member.nftp.total' }),
+              value: total,
+            },
+          ]}
+        />
+      </div>
 
-      <div className="table-card">
+      <div className="table-card" style={{ margin: '39px 33px 50px 24px' }}>
         <div className="table-filter">
           <Form
             name="filter"
@@ -189,7 +193,16 @@ const App = () => {
               type="primary"
               onClick={showModal}
             >
-              {formatMessage({ id: 'member.nftp.addNFTP' })}
+              <div className="button-image-wrap">
+                <Image
+                  src="/images/icon_table_add_default.png"
+                  width={20}
+                  height={20}
+                  alt=""
+                  preview={false}
+                />
+                {formatMessage({ id: 'member.nftp.addNFTP' })}
+              </div>
             </Button>
           )}
         </div>

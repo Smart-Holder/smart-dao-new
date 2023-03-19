@@ -283,8 +283,9 @@ const VoteModal: FC<VoteModalProps> = (props) => {
           {currentMember.tokenId && !isVote && (
             <div className="footer">
               <Button
-                className="button"
+                className="smart-button"
                 type="primary"
+                ghost
                 onClick={onOk}
                 loading={loading1}
               >
@@ -292,7 +293,7 @@ const VoteModal: FC<VoteModalProps> = (props) => {
               </Button>
               <Button
                 style={{ marginLeft: 20 }}
-                className="button"
+                className="smart-button"
                 type="primary"
                 onClick={onCancel}
                 loading={loading2}
@@ -308,16 +309,6 @@ const VoteModal: FC<VoteModalProps> = (props) => {
           .footer {
             margin-top: 20px;
             text-align: center;
-          }
-
-          .footer :global(.button) {
-            width: 170px;
-            height: 54px;
-            font-size: 18px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #ffffff;
-            line-height: 27px;
           }
         `}
       </style>

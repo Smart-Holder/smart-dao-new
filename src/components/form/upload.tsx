@@ -88,7 +88,7 @@ const App = (props: any) => {
             background: #fbfbfb;
             border-radius: 4px;
             border: 1px dashed rgba(0, 0, 0, 0.15);
-            cursor: pointer;
+            cursor: ${rest.disabled ? 'not-allowed' : 'pointer'};
           }
 
           .wrap :global(.ant-upload-select .ant-image) {
@@ -101,7 +101,7 @@ const App = (props: any) => {
             height: 100%;
             object-fit: cover;
             border-radius: 4px;
-            cursor: pointer;
+            cursor: ${rest.disabled ? 'not-allowed' : 'pointer'};
           }
         `}
       </style>

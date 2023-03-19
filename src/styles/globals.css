@@ -92,7 +92,7 @@ a {
   min-height: calc(
     100vh - var(--height-header) - var(--height-footer)
   ) !important;
-  margin: 50px 24px;
+  /* margin: 50px 24px; */
 }
 
 .ant-layout .ant-layout-content.launch {
@@ -149,11 +149,6 @@ a {
   font-weight: 600;
   color: #aeaeae;
   box-shadow: 0px 6px 16px -15px rgba(0, 0, 0, 0.3);
-}
-
-/* -------------- Image ---------------- */
-.ant-image {
-  line-height: 0;
 }
 
 /* ------------ Modal ------------ */
@@ -307,6 +302,18 @@ a {
   background-color: #fafafa;
 }
 
+.ant-table-wrapper .ant-table-tbody > tr.ant-table-row-selected > td {
+  background: 0;
+}
+
+.ant-table-wrapper .ant-table-tbody > tr.ant-table-row-selected:hover > td {
+  background: 0;
+}
+
+.ant-table-wrapper .ant-table-tbody > tr.ant-table-row:hover > td {
+  background: 0;
+}
+
 /* -------------- Pagination ---------------- */
 .ant-pagination {
   margin-top: 40px !important;
@@ -403,22 +410,37 @@ a {
   color: #fff !important;
 }
 
+/* -------------- Image ---------------- */
+.ant-image {
+  line-height: 0;
+}
+
 /* -------------- Button ---------------- */
 .ant-btn {
   box-shadow: none;
 }
 
-.ant-btn .ant-image {
+/* .ant-btn .ant-image {
   line-height: 0;
   margin-right: 10px;
 }
 
 .ant-btn .ant-image-img {
   display: block;
+} */
+
+.button-image-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button-image-wrap .ant-image {
+  margin-right: 5px;
 }
 
 .smart-button {
-  width: 152px;
+  min-width: 152px;
   height: 38px;
   font-size: 14px;
   font-family: PingFangSC-Medium, PingFang SC;
@@ -455,7 +477,7 @@ a {
 }
 
 .button-form {
-  width: 148px;
+  min-width: 148px;
   height: 50px;
   font-size: 18px;
   font-family: PingFangSC-Semibold, PingFang SC;
@@ -512,6 +534,7 @@ a {
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 4px;
 }
+
 .form .ant-input:focus {
   border-color: #000;
   box-shadow: 0 0 0 2px rgba(211, 191, 255, 1);
@@ -519,6 +542,36 @@ a {
 
 .form textarea.ant-input {
   height: auto;
+}
+
+.form .ant-input-affix-wrapper .ant-input {
+  height: 40px;
+}
+
+.form .ant-input-affix-wrapper:focus {
+  border-color: #000 !important;
+  box-shadow: 0 0 0 2px rgba(211, 191, 255, 1) !important;
+}
+
+.form .ant-input-number {
+  width: 100%;
+  height: 50px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+}
+
+.form .ant-input-number:focus {
+  border-color: #000;
+  box-shadow: 0 0 0 2px rgba(211, 191, 255, 1);
+}
+
+.form .ant-input-number .ant-input-number-input {
+  height: 50px;
+  font-size: 15px;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: #000000;
+  line-height: 24px;
 }
 
 /* -------------- Filter Input ---------------- */
@@ -536,7 +589,34 @@ a {
 }
 
 /* -------------- Form Select ---------------- */
-.ant-select-dropdown .ant-select-item-option-selected {
+.ant-select.ant-select-focused .ant-select-selector {
+  box-shadow: 0 0 0 2px rgba(211, 191, 255, 1) !important;
+}
+
+.ant-select.ant-select-multiple.form .ant-select-selection-item {
+  height: 40px;
+  line-height: 38px;
+}
+
+.ant-select.form .ant-select-selection-item {
+  font-weight: 600;
+  line-height: 48px;
+}
+
+.ant-select.form .ant-select-selector .ant-select-selection-placeholder {
+  height: 50px;
+  line-height: 48px;
+}
+
+.ant-select.form .ant-select-selector {
+  height: 50px;
+  line-height: 48px;
+  border-radius: 4px;
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: none !important;
+}
+
+.ant-select-dropdown.form .ant-select-item-option-selected {
   color: #fff !important;
 }
 

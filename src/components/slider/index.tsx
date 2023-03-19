@@ -63,6 +63,7 @@ const App = ({
         .wrap {
           display: flex;
           align-items: center;
+          cursor: ${disabled ? 'not-allowed' : 'default'};
         }
 
         .extra {

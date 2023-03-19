@@ -1,6 +1,7 @@
 import { formatAddress, fromToken } from '@/utils';
 import { UserOutlined } from '@ant-design/icons';
 import { Avatar, Image, Space, Typography } from 'antd';
+import { useRouter } from 'next/router';
 
 const { Paragraph, Text } = Typography;
 
@@ -8,8 +9,15 @@ const testImage =
   'https://smart-dao-res.stars-mine.com/FvCDcP23jHCCRbAJY_x3yK0c7vSx';
 
 const App = ({ data }: { data: any }) => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    localStorage.setItem('asset', JSON.stringify(data));
+    router.push(`assets/detail?id=${data.id}`);
+  };
+
   return (
-    <div className="item">
+    <div className="item" onClick={handleClick}>
       <Image
         className="image"
         src={data.imageOrigin}
@@ -36,10 +44,10 @@ const App = ({ data }: { data: any }) => {
             {fromToken(Math.max(data.minimumPrice, data.sellPrice))} ETH
           </span>
         </div>
-        <div className="right">
+        {/* <div className="right">
           <span className="label">Ends in</span>
           <span className="value">11 : 03 : 35 </span>
-        </div>
+        </div> */}
       </div>
 
       <style jsx>
@@ -52,6 +60,7 @@ const App = ({ data }: { data: any }) => {
             background: #ffffff;
             box-shadow: 0px 1px 5px 0px rgba(167, 167, 167, 0.5);
             border-radius: 8px;
+            cursor: pointer;
           }
 
           .item :global(.ant-image) {
@@ -117,7 +126,7 @@ const App = ({ data }: { data: any }) => {
             line-height: 21px;
           }
 
-          @media screen and (max-width: 1440px) {
+          @media screen and (max-width: 1280px) {
             .item {
               width: 230px;
             }

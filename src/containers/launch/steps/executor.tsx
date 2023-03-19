@@ -58,35 +58,33 @@ const App = () => {
   };
 
   return (
-    <div className="wrap">
+    <div className="card" style={{ margin: '40px 0 0' }}>
       <div className="h1">{formatMessage({ id: 'launch.executor.title' })}</div>
       <div className="h2">
         {formatMessage({ id: 'launch.executor.subtitle' })}
       </div>
 
       <Form
+        className="form"
         form={form}
+        wrapperCol={{ span: 17 }}
         initialValues={storageValues}
         autoComplete="off"
+        layout="vertical"
         requiredMark={false}
         validateTrigger="onBlur"
       >
         <Form.Item
           name="address"
+          style={{ marginTop: 40 }}
+          label={formatMessage({ id: 'launch.executor.address' })}
           rules={[
             { required: true },
             { validator: validateEthAddress },
             { validator: validateExist },
           ]}
         >
-          <Input
-            className="input"
-            prefix={
-              <span style={{ color: '#000' }}>
-                {formatMessage({ id: 'launch.executor.address' })}:
-              </span>
-            }
-          />
+          <Input />
         </Form.Item>
       </Form>
 
@@ -96,42 +94,19 @@ const App = () => {
 
       <Footer prev={prev} next={next} />
 
-      <style jsx>{`
-        .h1 {
-          height: 42px;
-          margin-top: 59px;
-          font-size: 20px;
-          font-family: PingFangSC-Regular, PingFang SC;
-          font-weight: 400;
-          color: #000000;
-          line-height: 42px;
-        }
-
-        .h2 {
-          height: 52px;
-          font-size: 16px;
-          font-family: PingFangSC-Regular, PingFang SC;
-          font-weight: 400;
-          color: #3c4369;
-          line-height: 26px;
-        }
-
-        .wrap :global(.input) {
-          height: 54px;
-          margin-top: 50px;
-          font-size: 18px;
-        }
-
-        .desc {
-          height: 26px;
-          margin-top: 19px;
-          font-size: 16px;
-          font-family: PingFangSC-Regular, PingFang SC;
-          font-weight: 400;
-          color: #969ba0;
-          line-height: 26px;
-        }
-      `}</style>
+      <style jsx>
+        {`
+          .desc {
+            height: 26px;
+            margin-top: 19px;
+            font-size: 16px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #969ba0;
+            line-height: 26px;
+          }
+        `}
+      </style>
     </div>
   );
 };

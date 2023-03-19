@@ -52,7 +52,7 @@ const App = () => {
 
       {step === 0 && <Template />}
 
-      <div style={{ width: 550 }}>
+      <div>
         {step === 1 && <Tax />}
         {step === 2 && <Vote />}
         {step === 3 && <Executor />}
@@ -61,20 +61,14 @@ const App = () => {
 
       <style jsx>
         {`
-          .buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 50px;
-          }
-
-          .wrap :global(.button) {
-            width: 168px;
-            height: 53px;
-            font-size: 18px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #ffffff;
-            line-height: 27px;
+          .wrap
+            :global(
+              .ant-steps
+                .ant-steps-item-finish
+                .ant-steps-item-icon
+                > .ant-steps-icon
+            ) {
+            color: #fff;
           }
         `}
       </style>

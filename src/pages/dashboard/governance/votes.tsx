@@ -8,6 +8,7 @@ import Layout from '@/components/layout';
 import Footer from '@/components/footer';
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
+import Title from '@/containers/dashboard/header/title';
 
 import { useIntl } from 'react-intl';
 
@@ -197,7 +198,14 @@ const App: NextPageWithLayout = () => {
 
   return (
     <div className="dashboard-content-scroll" id="scrollTarget">
-      <div className="table-card content-min-height">
+      <div style={{ margin: '30px 80px 0' }}>
+        <Title title={formatMessage({ id: 'sider.governance.votes' })} />
+      </div>
+
+      <div
+        className="table-card content-min-height"
+        style={{ margin: '40px 24px 50px' }}
+      >
         <div className="table-filter">
           <Form
             name="filter"

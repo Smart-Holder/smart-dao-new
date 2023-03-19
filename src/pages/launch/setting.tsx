@@ -16,12 +16,12 @@ const App: NextPageWithLayout = () => {
 
   return (
     <div>
-      <div className={styles['basic-title1']}>
+      {/* <div className={styles['basic-title1']}>
         {formatMessage({ id: 'home.welcome' })}
       </div>
       <div className={styles['basic-title2']}>
         {formatMessage({ id: 'home.createOwnDAO' })}
-      </div>
+      </div> */}
       <div className={styles.box} style={{ padding: '68px 55px' }}>
         <Setting />
       </div>

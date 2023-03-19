@@ -150,10 +150,8 @@ const App = () => {
     <>
       <div className="top">
         {formatMessage({ id: 'home.explore' })}
-        <Button
-          type="link"
-          className="button-add"
-          icon={
+        <Button type="link" className="button-add">
+          <div className="button-image-wrap">
             <Image
               src="/images/home/icon_home_add_dao.png"
               width={20}
@@ -161,9 +159,8 @@ const App = () => {
               preview={false}
               alt="add"
             />
-          }
-        >
-          DAO
+            DAO
+          </div>
         </Button>
       </div>
 
@@ -225,8 +222,8 @@ const App = () => {
         .top :global(.button-add) {
           height: 40px;
           font-size: 32px;
-          font-family: AdobeDevanagari-Bold, AdobeDevanagari;
           font-weight: bold;
+          font-family: PingFangSC-Semibold, PingFang SC;
           color: #000000;
           line-height: 32px;
         }

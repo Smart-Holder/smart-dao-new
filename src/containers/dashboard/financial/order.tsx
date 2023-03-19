@@ -6,6 +6,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import Card from '@/components/card';
 import Select from '@/components/form/filter/select';
 import RangePicker from '@/components/form/filter/rangePicker';
+import DashboardHeader from '@/containers/dashboard/header';
 
 import { request } from '@/api';
 
@@ -199,21 +200,27 @@ const App = () => {
   }, [searchText, values, chainId, address, currentDAO.host]);
 
   return (
-    <div className="wrap">
-      <Card
-        data={[
-          {
-            label: formatMessage({ id: 'financial.order.total' }),
-            value: amount.total,
-          },
-          {
-            label: formatMessage({ id: 'financial.order.total.amount' }),
-            value: fromToken(amount.amount || 0) + ' ETH',
-          },
-        ]}
-      />
+    <div>
+      <div style={{ padding: '30px 91px 0 83px' }}>
+        <DashboardHeader
+          title={formatMessage({ id: 'sider.financial.order' })}
+        />
 
-      <div className="table-card">
+        <Card
+          data={[
+            {
+              label: formatMessage({ id: 'financial.order.total' }),
+              value: amount.total,
+            },
+            {
+              label: formatMessage({ id: 'financial.order.total.amount' }),
+              value: fromToken(amount.amount || 0) + ' ETH',
+            },
+          ]}
+        />
+      </div>
+
+      <div className="table-card" style={{ margin: '39px 33px 50px 24px' }}>
         <div className="table-filter">
           <Form
             name="filter"

@@ -1,4 +1,4 @@
-import { Button, Col, Row } from 'antd';
+import { Button, Col, Empty, Row } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
@@ -76,6 +76,9 @@ const App = () => {
   return (
     <>
       <div className="header">NFTs</div>
+
+      {data.length === 0 && <Empty />}
+
       <Row gutter={[19, 20]}>
         {data.map((item: any) => (
           <Col span={8} key={item.id}>

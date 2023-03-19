@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useState } from 'react';
-import { Col, Form, Row, Skeleton } from 'antd';
+import { Button, Col, Empty, Form, Row, Skeleton } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -8,6 +8,7 @@ import Layout from '@/components/layout';
 import Select from '@/components/form/filter/select';
 import Footer from '@/components/footer';
 import NFT from '@/containers/dashboard/mine/nft';
+import DashboardHeader from '@/containers/dashboard/header';
 
 import type { NextPageWithLayout } from '@/pages/_app';
 
@@ -155,10 +156,53 @@ const App: NextPageWithLayout = () => {
     router.push('/dashboard/financial/order');
   };
 
+  const onCreate = () => {
+    router.push('/dashboard/financial/assets/issue');
+  };
+
+  const onShelves = () => {
+    router.push('/dashboard/mine/assets/shelves');
+  };
+
   return (
     <div className="dashboard-content-scroll" id="scrollTarget">
-      <div className="content-min-height">
-        <div className={styles['dashboard-content-header']}>
+      <div
+        style={{ padding: '30px 91px 50px 82px' }}
+        className="content-min-height"
+      >
+        <DashboardHeader
+          title={formatMessage({ id: 'sider.financial.asset' })}
+          buttons={
+            <>
+              <Button
+                type="primary"
+                ghost
+                className="smart-button"
+                onClick={onCreate}
+              >
+                {formatMessage({ id: 'financial.asset.publish' })}
+              </Button>
+              <Button
+                type="primary"
+                className="smart-button"
+                onClick={onShelves}
+              >
+                {formatMessage({ id: 'financial.asset.listing' })}
+              </Button>
+            </>
+          }
+        >
+          <div style={{ marginTop: 15 }} className="dao-info-item">
+            {formatMessage({ id: 'address' })}:{' '}
+            {formatAddress(currentDAO.address)}
+          </div>
+          <div className="dao-info-item">
+            {formatMessage({ id: 'financial.asset.time.create' })}:{' '}
+            {dayjs(currentDAO.time).format('YYYY-MM-DD')}
+          </div>
+          <div className="dao-info-item">{chainData.name}</div>
+        </DashboardHeader>
+        {/* <div className={styles['dashboard-content-header']}>
           <FinancialHeader
             title={currentDAO.name}
             addr={formatAddress(currentDAO.address)}
@@ -168,7 +212,7 @@ const App: NextPageWithLayout = () => {
             logo={currentDAO.image}
             chain={chainData.name}
           />
-        </div>
+        </div> */}
 
         <Card
           data={[
@@ -191,7 +235,7 @@ const App: NextPageWithLayout = () => {
           ]}
         />
 
-        <div className="table-card">
+        <div style={{ marginTop: 69 }}>
           <div className="table-filter">
             <Form
               name="filter"
@@ -275,12 +319,26 @@ const App: NextPageWithLayout = () => {
                   );
                 })}
               </Row>
+              {data.length === 0 && <Empty />}
             </InfiniteScroll>
           </div>
         </div>
       </div>
-
       <Footer />
+
+      <style jsx>
+        {`
+          .dao-info-item {
+            height: 25px;
+            margin-top: 20px;
+            font-size: 18px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: #000000;
+            line-height: 25px;
+          }
+        `}
+      </style>
     </div>
   );
 };

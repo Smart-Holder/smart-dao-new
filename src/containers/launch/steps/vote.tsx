@@ -8,6 +8,7 @@ import { useAppDispatch } from '@/store/hooks';
 import { prevStep, nextStep } from '@/store/features/daoSlice';
 
 import { setMakeDAOStorage, getMakeDAOStorage } from '@/utils/launch';
+import { Col, Row } from 'antd';
 
 const App = () => {
   const { formatMessage } = useIntl();
@@ -75,7 +76,7 @@ const App = () => {
   }
 
   return (
-    <div className="wrap">
+    <div className="card" style={{ margin: '40px 0 0' }}>
       <div className="h1">{formatMessage({ id: 'launch.tax.title' })}</div>
       <div className="h2">{formatMessage({ id: 'launch.vote.subtitle' })}</div>
 
@@ -95,38 +96,21 @@ const App = () => {
         max={99}
         onAfterChange={onChange2}
       /> */}
-      <Slider
-        defaultValue={hours}
-        label={formatMessage({ id: 'launch.vote.period' })}
-        unit="hr"
-        min={min}
-        max={720}
-        onAfterChange={onChange3}
-      />
+
+      <Row style={{ marginTop: 40 }}>
+        <Col span={17}>
+          <Slider
+            defaultValue={hours}
+            label={formatMessage({ id: 'launch.vote.period' })}
+            unit="hr"
+            min={min}
+            max={720}
+            onAfterChange={onChange3}
+          />
+        </Col>
+      </Row>
 
       <Footer prev={prev} next={next} />
-
-      <style jsx>{`
-        .h1 {
-          height: 42px;
-          margin-top: 59px;
-          font-size: 20px;
-          font-family: PingFangSC-Regular, PingFang SC;
-          font-weight: 400;
-          color: #000000;
-          line-height: 42px;
-        }
-
-        .h2 {
-          height: 52px;
-          margin-bottom: 23px;
-          font-size: 16px;
-          font-family: PingFangSC-Regular, PingFang SC;
-          font-weight: 400;
-          color: #3c4369;
-          line-height: 26px;
-        }
-      `}</style>
     </div>
   );
 };

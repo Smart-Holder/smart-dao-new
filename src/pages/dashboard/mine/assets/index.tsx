@@ -1,4 +1,4 @@
-import { Button, Pagination, PaginationProps } from 'antd';
+import { Button, Col, Empty, Pagination, PaginationProps, Row } from 'antd';
 import { ReactElement, useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -9,6 +9,8 @@ import Layout from '@/components/layout';
 
 import Filters from '@/containers/dashboard/mine/filters';
 import FinancialItem from '@/containers/dashboard/financial/financial-item';
+import NFT from '@/containers/dashboard/mine/nft';
+import Title from '@/containers/dashboard/header/title';
 
 import type { NextPageWithLayout } from '@/pages/_app';
 
@@ -48,9 +50,11 @@ const App: NextPageWithLayout = () => {
   const { currentDAO } = useAppSelector((store) => store.dao);
   const address = getCookie('address');
 
+  const [init, setInit] = useState(false);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [data, setData] = useState<ItemType[]>([]);
+  const [pageStart, setPageStart] = useState(0);
 
   const [type, setType] = useState('');
   const [orderBy, setOrderBy] = useState('');
@@ -87,55 +91,99 @@ const App: NextPageWithLayout = () => {
     return params;
   }, [address, chainId, currentDAO.host, type, orderBy]);
 
-  const getData = useCallback(
-    async (page = 1) => {
-      const res = await request({
-        name: 'utils',
-        method: 'getAssetFrom',
-        params: {
-          ...getDataParams(),
-          limit: [(page - 1) * pageSize, pageSize],
-        },
-      });
-
-      setData(res);
-    },
-    [getDataParams],
-  );
-
-  const getTotal = useCallback(async () => {
+  const getData = async () => {
     const res = await request({
+      name: 'utils',
+      method: 'getAssetFrom',
+      params: {
+        ...getDataParams(),
+        limit: [pageStart, 100],
+      },
+    });
+
+    setData([...data, ...res]);
+  };
+
+  // const getData = useCallback(
+  //   async (page = 1) => {
+  //     const res = await request({
+  //       name: 'utils',
+  //       method: 'getAssetFrom',
+  //       params: {
+  //         ...getDataParams(),
+  //         limit: [(page - 1) * pageSize, pageSize],
+  //       },
+  //     });
+
+  //     setData(res);
+  //   },
+  //   [getDataParams],
+  // );
+
+  // const getTotal = useCallback(async () => {
+  //   const res = await request({
+  //     name: 'utils',
+  //     method: 'getAssetTotalFrom',
+  //     params: getDataParams(),
+  //   });
+
+  //   setTotal(res);
+  // }, [getDataParams]);
+
+  const resetData = async () => {
+    const t = await request({
       name: 'utils',
       method: 'getAssetTotalFrom',
       params: getDataParams(),
     });
 
-    setTotal(res);
-  }, [getDataParams]);
+    setTotal(t);
 
-  const onPageChange: PaginationProps['onChange'] = (p) => {
-    setPage(p);
-    getData(p);
+    const res = await request({
+      name: 'utils',
+      method: 'getAssetFrom',
+      params: {
+        ...getDataParams(),
+        limit: [0, 6],
+      },
+    });
+
+    setPageStart(6);
+    setData(res);
+    setInit(true);
   };
 
+  // const onPageChange: PaginationProps['onChange'] = (p) => {
+  //   setPage(p);
+  //   getData(p);
+  // };
+
+  // useEffect(() => {
+  //   setPage(1);
+  //   getData(1);
+  //   getTotal();
+  // }, [getData, getTotal]);
+
   useEffect(() => {
-    setPage(1);
-    getData(1);
-    getTotal();
-  }, [getData, getTotal]);
+    if (currentDAO.host) {
+      setData([]);
+      setTotal(0);
+      resetData();
+    }
+  }, [address, chainId, currentDAO.host, type, orderBy]);
 
   const onSelectType = (value: string) => {
     setType(value);
-    setPage(1);
-    getData(1);
-    getTotal();
+    // setPage(1);
+    // getData(1);
+    // getTotal();
   };
   // const onSelectTag = (value: string) => {};
   const onSelectOrderby = (value: string) => {
     setOrderBy(value);
-    setPage(1);
-    getData(1);
-    getTotal();
+    // setPage(1);
+    // getData(1);
+    // getTotal();
   };
 
   const goShelves = () => {
@@ -143,7 +191,9 @@ const App: NextPageWithLayout = () => {
   };
 
   return (
-    <div className="dashboard-content">
+    <div style={{ padding: '30px 80px 50px' }}>
+      <Title title={formatMessage({ id: 'sider.my.asset' })} />
+
       <Card
         data={[
           {
@@ -155,7 +205,7 @@ const App: NextPageWithLayout = () => {
         ]}
       />
 
-      <div className="table-card">
+      <div style={{ marginTop: 59 }}>
         <div className="table-filter">
           <Filters
             items={[
@@ -223,11 +273,12 @@ const App: NextPageWithLayout = () => {
         </div>
 
         <div className={styles['dashboard-content-body']}>
-          <div className={styles['financial-list']}>
+          <Row gutter={[22, 22]}>
             {data.map((item: any, i) => {
               return (
-                <div key={i} className={styles['financial-item']}>
-                  <FinancialItem
+                <Col span={8} key={i}>
+                  <NFT data={item} />
+                  {/* <FinancialItem
                     title={`${item.name} #${item.id}`}
                     logo={item.mediaOrigin}
                     price={
@@ -239,12 +290,23 @@ const App: NextPageWithLayout = () => {
                       localStorage.setItem('asset', JSON.stringify(item));
                       router.push(`assets/detail?id=${item.id}`);
                     }}
-                  />
-                </div>
+                  /> */}
+                </Col>
               );
             })}
-          </div>
-          {total > 0 && (
+          </Row>
+
+          {data.length === 0 && <Empty />}
+
+          {init && data.length < total && (
+            <div className="footer">
+              <Button className="button-all" onClick={getData}>
+                VIEW ALL NFTS
+              </Button>
+            </div>
+          )}
+
+          {/* {total > 0 && (
             <div className={styles['dashboard-content-pagination']}>
               <Pagination
                 simple
@@ -255,9 +317,31 @@ const App: NextPageWithLayout = () => {
                 onChange={onPageChange}
               />
             </div>
-          )}
+          )} */}
         </div>
       </div>
+
+      <style jsx>
+        {`
+          .footer {
+            padding-top: 40px;
+            text-align: center;
+          }
+
+          .footer :global(.button-all) {
+            width: 260px;
+            height: 46px;
+            font-size: 18px;
+            font-family: AdobeGurmukhi-Bold, AdobeGurmukhi;
+            font-weight: bold;
+            color: #000000;
+            line-height: 27px;
+            background: #ffffff;
+            border-radius: 5px;
+            border: 1px solid #000000;
+          }
+        `}
+      </style>
     </div>
   );
 };
