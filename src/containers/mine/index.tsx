@@ -1,15 +1,33 @@
 import { useState } from 'react';
-import { Divider, Space, Button } from 'antd';
-
-import { useIntl } from 'react-intl';
+import { Divider, Space, Button, Avatar, Tabs } from 'antd';
+import { useIntl, FormattedMessage } from 'react-intl';
 
 import DAO from '@/containers/mine/daoList';
 import Info from '@/containers/mine/info';
+import { useAppSelector } from '@/store/hooks';
+
+import type { TabsProps } from 'antd';
+
+const items: TabsProps['items'] = [
+  {
+    key: '1',
+    label: <FormattedMessage id="my.home.dao" />,
+    children: <DAO />,
+  },
+  {
+    key: '2',
+    label: <FormattedMessage id="my.home.information" />,
+    children: <Info />,
+  },
+];
 
 export default function Mine() {
   const { formatMessage } = useIntl();
 
+  const { userInfo } = useAppSelector((store) => store.user);
+
   const [active, setActive] = useState(1);
+  const [current, setCurrent] = useState('mail');
 
   const handleDAOClick = () => {
     setActive(1);
@@ -21,30 +39,39 @@ export default function Mine() {
 
   return (
     <div className="wrap">
-      <Space size={50} split={<Divider className="divider" type="vertical" />}>
-        <Button
-          className={`button ${active === 1 ? 'active' : ''}`}
-          type="link"
-          onClick={handleDAOClick}
-        >
-          {formatMessage({ id: 'my.home.dao' })}
-        </Button>
-        <Button
-          className={`button ${active === 2 ? 'active' : ''}`}
-          type="link"
-          onClick={handleInfoClick}
-        >
-          {formatMessage({ id: 'my.home.information' })}
-        </Button>
-      </Space>
-      {/* <Tabs defaultActiveKey="1" items={items} onChange={onChange} /> */}
-      <div>
-        {active === 1 && <DAO />}
-        {active === 2 && <Info />}
+      <div className="header">
+        <div className="avatar">
+          <Avatar
+            className="avatar"
+            src={userInfo.image}
+            size={110}
+            style={{ border: '4px solid #fff' }}
+          />
+        </div>
       </div>
+
+      <Tabs defaultActiveKey="1" items={items} />
+
+      {/* <div>
+        {current === 'dao' && <DAO />}
+        {current === 'information' && <Info />}
+      </div> */}
 
       <style jsx>
         {`
+          .wrap .header {
+            position: relative;
+            height: 300px;
+            background: url('/images/my/img_me_bg.png') no-repeate center;
+            background-size: cover;
+          }
+
+          .wrap .avatar {
+            position: absolute;
+            left: 80px;
+            bottom: -55px;
+          }
+
           .wrap :global(.divider) {
             height: 32px;
             border-width: 3px;

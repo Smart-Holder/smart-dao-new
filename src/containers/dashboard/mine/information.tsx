@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button, Input, Space, Image, Row, Col, message } from 'antd';
-import { Checkbox, Form, Upload } from 'antd';
+import { Checkbox, Form } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useIntl } from 'react-intl';
 
@@ -18,6 +18,7 @@ import { Permissions } from '@/config/enum';
 
 import TransferModal from '@/components/modal/transferModal';
 import PermissionModal from '@/components/modal/permissionModal';
+import Upload from '@/components/form/upload';
 
 import { setMemberInfo } from '@/api/member';
 
@@ -88,12 +89,6 @@ const App = () => {
     }
   };
 
-  const beforeUpload = (file: RcFile) => {
-    const message = validateImage(file);
-
-    return !message;
-  };
-
   // 转让
   const showTransferModal = () => {
     transferModal.current.show();
@@ -110,21 +105,41 @@ const App = () => {
   };
 
   return (
-    <div className="wrap">
+    <div className="card">
       <div className="h1">{formatMessage({ id: 'sider.my.information' })}</div>
-      <div className="h2">
-        {/* Lorem ipsum dolor sit amet, consectetur */}
-        <div className="h2-item">
-          {formatMessage({ id: 'my.information.address' })}:{' '}
-          <span>{addressFormat}</span>
+
+      <div className="info">
+        <div className="info-item">
+          <span className="label">
+            {formatMessage({ id: 'my.information.address' })}:
+          </span>
+          <span className="value">{addressFormat}</span>
         </div>
-        <div className="h2-item">
-          {formatMessage({ id: 'my.information.id' })}:{' '}
-          <span>{userInfo.id}</span>
+        <div className="info-item">
+          <span className="label">
+            {formatMessage({ id: 'my.information.id' })}:
+          </span>
+          <span className="value">{userInfo.id}</span>
+        </div>
+
+        <div className="info-item">
+          <span className="label">NFTP:</span>
+          <span className="value">{formatAddress(currentMember.host)}</span>
+        </div>
+        <div className="info-item">
+          <span className="label">ID:</span>
+          <span className="value">{currentMember.id}</span>
+        </div>
+        <div className="info-item">
+          <span className="label">
+            {formatMessage({ id: 'my.information.copies' })}:
+          </span>
+          <span className="value">{currentMember.votes}</span>
         </div>
       </div>
 
       <Form
+        className="form"
         name="info"
         form={form}
         initialValues={initialValues}
@@ -133,103 +148,53 @@ const App = () => {
         onValuesChange={onValuesChange}
         autoComplete="off"
         labelAlign="left"
+        layout="vertical"
         requiredMark={false}
         validateTrigger="onBlur"
       >
         <Form.Item
           name="name"
+          label={formatMessage({ id: 'name' })}
           rules={[
             { required: true },
             { type: 'string', min: 5, max: 12 },
             { validator: validateChinese },
           ]}
         >
-          <Input
-            className="input"
-            prefix={
-              <span style={{ color: '#000' }}>
-                {formatMessage({ id: 'name' })}:
-              </span>
-            }
-          />
+          <Input />
         </Form.Item>
 
         <Form.Item
+          label="Avatar"
           valuePropName="fileList"
           extra={<span style={{ color: 'red' }}>{imageMessage}</span>}
         >
-          <Space>
-            <Upload
-              action={process.env.NEXT_PUBLIC_QINIU_UPLOAD_URL}
-              data={{ token: getCookie('qiniuToken') }}
-              showUploadList={false}
-              listType="picture-card"
-              beforeUpload={beforeUpload}
-              onChange={onImageChange}
-            >
-              {image ? (
-                <Image
-                  style={{ borderRadius: 10, cursor: 'pointer' }}
-                  src={image}
-                  width={100}
-                  height={100}
-                  preview={false}
-                  alt="image"
-                />
-              ) : (
-                <div>
-                  <PlusOutlined />
-                </div>
-              )}
-            </Upload>
-
-            <span className="upload-desc">
-              {formatMessage({ id: 'my.information.upload' })}
-            </span>
-          </Space>
+          <Upload value={image} onChange={onImageChange} />
         </Form.Item>
 
-        <div className="items">
-          <div className="item">
-            <span>{formatAddress(currentMember.host)}</span>
-            <span className="label">NFTP</span>
-          </div>
-          <div className="item" style={{ margin: '0 20px' }}>
-            <span>{currentMember.id}</span>
-            <span className="label">ID</span>
-          </div>
-          <div className="item">
-            <span>{currentMember.votes}</span>
-            <span className="label">
-              {formatMessage({ id: 'my.information.copies' })}
-            </span>
-          </div>
-        </div>
-
-        <Form.Item>
-          <div className="buttons">
-            <Button
-              className="button"
-              type="primary"
-              htmlType="submit"
-              disabled={!isEdit}
-              loading={loading}
-            >
-              {formatMessage({ id: 'my.information.save' })}
-            </Button>
-            <Button
-              className="button"
-              type="primary"
-              htmlType="button"
-              onClick={showTransferModal}
-            >
-              {formatMessage({ id: 'my.information.transfer' })}
-            </Button>
-          </div>
+        <Form.Item style={{ marginTop: 50 }}>
+          <Button
+            className="button-submit"
+            type="primary"
+            ghost
+            htmlType="submit"
+            disabled={!isEdit}
+            loading={loading}
+          >
+            {formatMessage({ id: 'my.information.save' })}
+          </Button>
+          <Button
+            className="button-submit"
+            type="primary"
+            htmlType="button"
+            onClick={showTransferModal}
+          >
+            {formatMessage({ id: 'my.information.transfer' })}
+          </Button>
         </Form.Item>
       </Form>
 
-      <div className="h1" style={{ marginTop: 30 }}>
+      <div className="h1" style={{ marginTop: 100 }}>
         {formatMessage({ id: 'my.information.rights' })}
       </div>
       {/* <div className="h2">Lorem ipsum dolor sit amet, consectetur</div> */}
@@ -273,8 +238,12 @@ const App = () => {
         </Row>
       </Checkbox.Group>
 
-      <div className="buttons">
-        <Button className="button" type="primary" onClick={showPermissionModal}>
+      <div style={{ marginTop: 50 }}>
+        <Button
+          className="button-submit"
+          type="primary"
+          onClick={showPermissionModal}
+        >
           {formatMessage({ id: 'my.information.change' })}
         </Button>
       </div>
@@ -284,100 +253,36 @@ const App = () => {
 
       <style jsx>
         {`
-          .wrap {
-            max-width: 690px;
+          .info-item {
+            margin: 40px 0;
           }
 
-          .h1 {
-            height: 30px;
-            font-size: 20px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
+          .info-item .label {
+            display: inline-block;
+            width: 113px;
+            height: 24px;
+            font-size: 16px;
+            font-family: SFUIText-Bold, SFUIText;
+            font-weight: bold;
             color: #000000;
-            line-height: 30px;
+            line-height: 24px;
           }
 
-          .h2 {
-            display: flex;
-            align-items: center;
-            height: 18px;
-            margin-top: 7px;
-            font-size: 12px;
-            font-family: AppleSystemUIFont;
-            color: #969ba0;
-            line-height: 18px;
+          .info-item .value {
+            height: 24px;
+            font-size: 16px;
+            font-family: SFUIText-Semibold, SFUIText;
+            font-weight: 600;
+            color: #818181;
+            line-height: 24px;
           }
 
-          .h2-item {
-            display: flex;
-            align-items: center;
-            height: 21px;
-            margin-right: 20px;
-            font-size: 14px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #969ba0;
-            line-height: 21px;
-          }
-
-          .h2-item span {
-            height: 21px;
-            margin-left: 9px;
-            font-size: 14px;
-            font-family: PingFangSC-Medium, PingFang SC;
-            font-weight: 500;
-            color: #3c4369;
-            line-height: 21px;
-          }
-
-          .wrap :global(.input) {
-            margin-top: 39px;
-
-            font-size: 18px;
-          }
-
-          .wrap .upload-desc {
-            height: 21px;
-            font-size: 14px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #969ba0;
-            line-height: 21px;
-          }
-
-          .items {
-            display: flex;
-            justify-content: space-between;
-          }
-
-          .items .item {
-            display: flex;
-            flex-direction: column;
-            min-width: 200px;
-            height: 113px;
-            padding: 24px 16px 15px;
-            border: 1px solid #f2f2f2;
-            border-radius: 10px;
-
-            font-size: 28px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #3c4369;
-            line-height: 48px;
-          }
-
-          .items .item .label {
-            font-size: 14px;
-            color: #969ba0;
-            line-height: 27px;
-          }
-
-          .wrap :global(.checkbox-group) {
+          .card :global(.checkbox-group) {
             width: 100%;
             margin-top: 55px;
           }
 
-          .wrap :global(.ant-checkbox-wrapper span:last-child) {
+          .card :global(.ant-checkbox-wrapper span:last-child) {
             padding-inline-start: 12px;
             font-size: 16px;
             font-family: PingFangSC-Regular, PingFang SC;
@@ -386,24 +291,9 @@ const App = () => {
             line-height: 19px;
           }
 
-          .wrap :global(.ant-checkbox-inner) {
+          .card :global(.ant-checkbox-inner) {
             width: 19px;
             height: 19px;
-          }
-
-          .wrap .buttons {
-            margin-top: 40px;
-            text-align: right;
-          }
-
-          .wrap :global(.button) {
-            width: 168px;
-            height: 53px;
-            margin-left: 20px;
-            font-size: 18px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            line-height: 27px;
           }
         `}
       </style>

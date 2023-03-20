@@ -5,11 +5,7 @@ import type { NextPageWithLayout } from '@/pages/_app';
 import Information from '@/containers/dashboard/mine/information';
 
 const App: NextPageWithLayout = () => {
-  return (
-    <div className="dashboard-content">
-      <Information />
-    </div>
-  );
+  return <Information />;
 };
 
 App.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
