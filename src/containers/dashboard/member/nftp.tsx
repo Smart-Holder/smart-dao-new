@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { Table, Button, Form, Image, Space } from 'antd';
+import { Table, Button, Form, Image, Space, Input } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
@@ -26,7 +26,7 @@ const App = () => {
   const { formatMessage } = useIntl();
   const { chainId, address } = useAppSelector((store) => store.wallet);
   const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
-  const { loading, searchText } = useAppSelector((store) => store.common);
+  const { loading } = useAppSelector((store) => store.common);
 
   const pageSize = 10;
   const [values, setValues] = useState({});
@@ -68,7 +68,6 @@ const App = () => {
         chain: chainId,
         host: currentDAO.host,
         limit: [(page - 1) * pageSize, pageSize],
-        name: searchText,
         ...values,
       },
     });
@@ -86,7 +85,6 @@ const App = () => {
       params: {
         chain: chainId,
         host: currentDAO.host,
-        name: searchText,
         ...filterValues,
       },
     });
@@ -117,7 +115,7 @@ const App = () => {
     setPage(1);
     getData(1);
     getTotal();
-  }, [searchText, values, chainId, address]);
+  }, [values, chainId, address]);
 
   return (
     <div>

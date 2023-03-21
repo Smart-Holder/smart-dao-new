@@ -213,6 +213,13 @@ const items: MenuProps['items'] = [
 const App: React.FC = () => {
   const router = useRouter();
   const { pathname } = router;
+  let selectedKey = pathname;
+
+  if (selectedKey === '/dashboard/mine/assets/shelves') {
+    selectedKey = '/dashboard/mine/assets';
+  } else if (selectedKey === '/dashboard/mine/assets/detail') {
+    selectedKey = '/dashboard/mine/assets';
+  }
 
   // const openKey = rootSubmenuKeys.find((key) => pathname.indexOf(key) >= 0);
   // const [openKeys, setOpenKeys] = useState([openKey || '']);
@@ -252,7 +259,7 @@ const App: React.FC = () => {
       mode="inline"
       items={items}
       openKeys={openKeys}
-      selectedKeys={[pathname]}
+      selectedKeys={[selectedKey]}
       // onOpenChange={onOpenChange}
       onClick={onClick}
       expandIcon={() => null}

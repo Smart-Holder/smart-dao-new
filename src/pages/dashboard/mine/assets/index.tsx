@@ -1,16 +1,14 @@
-import { Button, Col, Empty, Pagination, PaginationProps, Row } from 'antd';
 import { ReactElement, useCallback, useEffect, useState } from 'react';
-import Image from 'next/image';
+import { Button, Col, Empty, Form, Input, Row, Image, Skeleton } from 'antd';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
 
 import Card from '@/components/card';
 import Layout from '@/components/layout';
 
-import Filters from '@/containers/dashboard/mine/filters';
-import FinancialItem from '@/containers/dashboard/financial/financial-item';
 import NFT from '@/containers/dashboard/mine/nft';
 import Title from '@/containers/dashboard/header/title';
+import Select from '@/components/form/filter/select';
 
 import type { NextPageWithLayout } from '@/pages/_app';
 
@@ -19,15 +17,7 @@ import styles from '@/styles/content.module.css';
 import { useAppSelector } from '@/store/hooks';
 import { getCookie } from '@/utils/cookie';
 import { request } from '@/api';
-
-const PriceIcon = () => (
-  <Image
-    src="https://storage.nfte.ai/icon/currency/eth.svg"
-    alt="eth"
-    width={15}
-    height={15}
-  />
-);
+import { formatDayjsValues } from '@/utils';
 
 type ItemProperty = {
   trait_type: string;
@@ -48,6 +38,7 @@ const App: NextPageWithLayout = () => {
   const pageSize = 20;
   const { chainId } = useAppSelector((store) => store.wallet);
   const { currentDAO } = useAppSelector((store) => store.dao);
+  const { loading } = useAppSelector((store) => store.common);
   const address = getCookie('address');
 
   const [init, setInit] = useState(false);
@@ -55,41 +46,45 @@ const App: NextPageWithLayout = () => {
   const [total, setTotal] = useState(0);
   const [data, setData] = useState<ItemType[]>([]);
   const [pageStart, setPageStart] = useState(0);
-
-  const [type, setType] = useState('');
-  const [orderBy, setOrderBy] = useState('');
+  const [values, setValues] = useState({});
 
   const getDataParams = useCallback(() => {
-    let params = {
+    return {
       chain: chainId,
       host: currentDAO.host,
       owner: address,
       state: 0,
-    } as {
-      author?: string;
-      author_not?: string;
-      owner?: string;
-      orderBy?: string;
+      ...values,
     };
-    if (type === '1') {
-      params.author = address;
-    } else if (type === '2') {
-      params.owner = address;
-      params.author_not = address;
+  }, [address, chainId, currentDAO.host, values]);
+
+  const onValuesChange = (changedValues: any) => {
+    let [[key, value]]: any = Object.entries(changedValues);
+    let nextValues: any = { ...values };
+
+    if (key === 'type') {
+      delete nextValues.author;
+      delete nextValues.author_not;
+
+      if (value === '1') {
+        nextValues = { ...nextValues, author: address };
+      } else if (value === '2') {
+        nextValues = { ...nextValues, author_not: address };
+      }
+
+      setValues(nextValues);
+      return;
     }
-    if (orderBy === '0') {
-      params.orderBy = 'sellPrice desc';
-    } else if (orderBy === '1') {
-      params.orderBy = 'sellPrice asc';
-    } else if (orderBy === '2') {
-      params.orderBy = 'sellingTime desc';
-    } else if (orderBy === '3') {
-      params.orderBy = 'blockNumber desc';
-    } else if (orderBy === '4') {
-      params.orderBy = 'soldTime desc';
+
+    if (!value) {
+      delete nextValues[key];
+    } else {
+      nextValues[key] = key === 'time' ? formatDayjsValues(value) : value;
     }
-    return params;
-  }, [address, chainId, currentDAO.host, type, orderBy]);
+
+    console.log('values', nextValues);
+    setValues(nextValues);
+  };
 
   const getData = async () => {
     const res = await request({
@@ -170,21 +165,7 @@ const App: NextPageWithLayout = () => {
       setTotal(0);
       resetData();
     }
-  }, [address, chainId, currentDAO.host, type, orderBy]);
-
-  const onSelectType = (value: string) => {
-    setType(value);
-    // setPage(1);
-    // getData(1);
-    // getTotal();
-  };
-  // const onSelectTag = (value: string) => {};
-  const onSelectOrderby = (value: string) => {
-    setOrderBy(value);
-    // setPage(1);
-    // getData(1);
-    // getTotal();
-  };
+  }, [address, chainId, currentDAO.host, values]);
 
   const goShelves = () => {
     router.push('/dashboard/mine/assets/shelves');
@@ -207,11 +188,20 @@ const App: NextPageWithLayout = () => {
 
       <div style={{ marginTop: 59 }}>
         <div className="table-filter">
-          <Filters
-            items={[
-              {
-                defaultValue: '',
-                options: [
+          <Form
+            name="filter"
+            layout="inline"
+            onValuesChange={onValuesChange}
+            autoComplete="off"
+            labelAlign="left"
+            requiredMark={false}
+            validateTrigger="onBlur"
+          >
+            <Form.Item name="type">
+              <Select
+                style={{ width: 200 }}
+                placeholder={formatMessage({ id: 'my.asset.allTypes' })}
+                options={[
                   {
                     value: '',
                     label: formatMessage({ id: 'my.asset.allTypes' }),
@@ -224,48 +214,56 @@ const App: NextPageWithLayout = () => {
                     value: '2',
                     label: formatMessage({ id: 'my.asset.purchased' }),
                   },
-                ],
-                onSelect: onSelectType,
-              },
-              // {
-              //   defaultValue: '',
-              //   options: [
-              //     { value: '', label: '全部标签' },
-              //     { value: '1', label: '标签1' },
-              //     { value: '2', label: '标签2' },
-              //   ],
-              //   onSelect: onSelectTag,
-              // },
-              {
-                defaultValue: '0',
-                options: [
+                ]}
+              />
+            </Form.Item>
+            <Form.Item name="orderBy">
+              <Select
+                style={{ width: 200 }}
+                placeholder="Sort"
+                options={[
+                  { value: '', label: 'Default' },
                   {
-                    value: '0',
+                    value: 'sellPrice desc',
                     label: formatMessage({ id: 'my.asset.sort.price.desc' }),
                   },
                   {
-                    value: '1',
+                    value: 'sellPrice asc',
                     label: formatMessage({ id: 'my.asset.sort.price' }),
                   },
                   // { value: '2', label: 'offer从低到高' },
                   // { value: '3', label: 'offer从高到低' },
                   {
-                    value: '2',
+                    value: 'sellingTime desc',
                     label: formatMessage({ id: 'my.asset.sort.release' }),
                   },
                   {
-                    value: '3',
+                    value: 'blockNumber desc',
                     label: formatMessage({ id: 'my.asset.sort.created' }),
                   },
                   {
-                    value: '4',
+                    value: 'soldTime desc',
                     label: formatMessage({ id: 'my.asset.sort.sold' }),
                   },
-                ],
-                onSelect: onSelectOrderby,
-              },
-            ]}
-          />
+                ]}
+              />
+            </Form.Item>
+            <Form.Item name="name">
+              <Input
+                className="filter"
+                placeholder="Search name"
+                prefix={
+                  <Image
+                    src="/images/icon_table_search_default.png"
+                    width={20}
+                    height={20}
+                    alt=""
+                    preview={false}
+                  />
+                }
+              />
+            </Form.Item>
+          </Form>
 
           <Button className="button-filter" type="primary" onClick={goShelves}>
             {formatMessage({ id: 'financial.asset.listing' })}
@@ -296,9 +294,11 @@ const App: NextPageWithLayout = () => {
             })}
           </Row>
 
-          {data.length === 0 && <Empty />}
+          {loading && <Skeleton active />}
 
-          {init && data.length < total && (
+          {!loading && data.length === 0 && <Empty />}
+
+          {init && !loading && data.length < total && (
             <div className="footer">
               <Button className="button-all" onClick={getData}>
                 VIEW ALL NFTS

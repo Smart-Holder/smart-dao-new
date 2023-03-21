@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useState } from 'react';
-import { Button, Col, Empty, Form, Row, Skeleton } from 'antd';
+import { Button, Col, Empty, Form, Input, Row, Image, Skeleton } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -16,7 +16,6 @@ import styles from '@/styles/content.module.css';
 import FinancialHeader from '@/containers/dashboard/financial/financial-header';
 import Counts from '@/containers/dashboard/mine/counts';
 import FinancialItem from '@/containers/dashboard/financial/financial-item';
-import Image from 'next/image';
 import { useAppSelector } from '@/store/hooks';
 import { ETH_CHAINS_INFO } from '@/config/chains';
 import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
@@ -27,21 +26,12 @@ import Card from '@/components/card';
 
 dayjs.extend(customParseFormat);
 
-const PriceIcon = () => (
-  <Image
-    src="https://storage.nfte.ai/icon/currency/eth.svg"
-    alt="eth"
-    width={15}
-    height={15}
-  />
-);
-
 const App: NextPageWithLayout = () => {
   const { formatMessage } = useIntl();
   const router = useRouter();
   const { currentDAO } = useAppSelector((store) => store.dao);
   const { chainId, address } = useAppSelector((store) => store.wallet);
-  const { searchText, loading } = useAppSelector((store) => store.common);
+  const { loading } = useAppSelector((store) => store.common);
 
   const [chainData, setChainData] = useState({ name: '' }) as any;
   const [summary, setSummary] = useState({
@@ -88,7 +78,6 @@ const App: NextPageWithLayout = () => {
         host: currentDAO.host,
         state: 0,
         limit: [(page - 1) * pageSize, pageSize],
-        name: searchText,
         ...values,
       },
     });
@@ -105,7 +94,6 @@ const App: NextPageWithLayout = () => {
         chain: chainId,
         host: currentDAO.host,
         state: 0,
-        name: searchText,
         ...values,
       },
     });
@@ -120,7 +108,6 @@ const App: NextPageWithLayout = () => {
         host: currentDAO.host,
         state: 0,
         limit: [0, pageSize],
-        name: searchText,
         ...values,
       },
     });
@@ -150,7 +137,7 @@ const App: NextPageWithLayout = () => {
       resetData();
       // getTotal();
     }
-  }, [searchText, values, chainId, address, currentDAO.host]);
+  }, [values, chainId, address, currentDAO.host]);
 
   const onCountClick = () => {
     router.push('/dashboard/financial/order');
@@ -283,6 +270,21 @@ const App: NextPageWithLayout = () => {
                   ]}
                 />
               </Form.Item>
+              <Form.Item name="name">
+                <Input
+                  className="filter"
+                  placeholder="Search name"
+                  prefix={
+                    <Image
+                      src="/images/icon_table_search_default.png"
+                      width={20}
+                      height={20}
+                      alt=""
+                      preview={false}
+                    />
+                  }
+                />
+              </Form.Item>
             </Form>
           </div>
           <div className={styles['dashboard-content-body']}>
@@ -290,7 +292,7 @@ const App: NextPageWithLayout = () => {
               dataLength={data.length}
               next={getData}
               hasMore={data.length < total}
-              loader={loading && <Skeleton paragraph={{ rows: 1 }} active />}
+              loader={loading && <Skeleton active />}
               scrollableTarget="scrollTarget"
               style={{ overflow: 'inherit' }}
             >
@@ -319,7 +321,7 @@ const App: NextPageWithLayout = () => {
                   );
                 })}
               </Row>
-              {data.length === 0 && <Empty />}
+              {!loading && data.length === 0 && <Empty />}
             </InfiniteScroll>
           </div>
         </div>

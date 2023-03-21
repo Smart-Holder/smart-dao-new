@@ -118,7 +118,7 @@ export default function List() {
       </Space>
 
       <div className="dao-list">
-        {loading && <Skeleton />}
+        {loading && <Skeleton active />}
 
         {!loading && list && list.length === 0 && <Empty />}
 

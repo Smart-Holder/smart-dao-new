@@ -162,7 +162,7 @@ const Info = () => {
           </Space> */}
         </Form.Item>
 
-        <Form.Item>
+        <Form.Item style={{ marginTop: 100 }}>
           <Button
             className="button-submit"
             type="primary"

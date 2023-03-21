@@ -1,4 +1,4 @@
-import { PaginationProps } from 'antd';
+import { Breadcrumb, PaginationProps } from 'antd';
 import Layout from '@/components/layout';
 import { ReactElement, useEffect, useState } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
@@ -11,8 +11,10 @@ import DetailTransactions, {
 } from '@/containers/dashboard/financial/detail-transactions';
 import { request } from '@/api';
 import { useAppSelector } from '@/store/hooks';
+import { useIntl } from 'react-intl';
 
 const App: NextPageWithLayout = () => {
+  const { formatMessage } = useIntl();
   const { chainId } = useAppSelector((store) => store.wallet);
   const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
   const pageSize = 20;
@@ -55,9 +57,16 @@ const App: NextPageWithLayout = () => {
   };
 
   return (
-    <div className="dashboard-content">
-      <div className={styles['dashboard-content-body']}>
-        <div className={styles['detail-content']}>
+    <div>
+      <Breadcrumb>
+        <Breadcrumb.Item href="/dashboard/mine/assets">
+          {formatMessage({ id: 'sider.my.asset' })}
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>Detail</Breadcrumb.Item>
+      </Breadcrumb>
+
+      <div style={{ margin: '50px 80px' }}>
+        <div>
           <DetailHeader
             title={`${storageData.name} #${storageData.id}`}
             logo={storageData.imageOrigin}

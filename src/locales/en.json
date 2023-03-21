@@ -179,6 +179,10 @@
   "my.asset.sort.created": "recently created",
   "my.asset.sort.sold": "recently sold",
   "my.asset.loading": "slide load more",
+  "my.asset.shelves.asset": "Asset",
+  "my.asset.shelves.label": "Label",
+  "my.asset.shelves.name": "Name/ID",
+  "my.asset.shelves.price": "Price",
 
   "my.order.total": "Total number of orders",
   "my.order.total.amount": "Total transaction value",

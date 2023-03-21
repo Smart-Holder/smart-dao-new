@@ -13,13 +13,13 @@ import { useIntl } from 'react-intl';
 // 有搜索框的页面
 const searchList = [
   '/',
-  '/dashboard/mine/assets',
-  '/dashboard/mine/order',
-  '/dashboard/mine/income',
-  '/dashboard/governance/votes',
-  '/dashboard/financial/assets',
+  // '/dashboard/mine/assets',
+  // '/dashboard/mine/order',
+  // '/dashboard/mine/income',
+  // '/dashboard/governance/votes',
+  // '/dashboard/financial/assets',
   // '/dashboard/financial/order',
-  '/dashboard/financial/income',
+  // '/dashboard/financial/income',
   // '/dashboard/member/nftp',
 ];
 

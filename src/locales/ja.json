@@ -179,6 +179,10 @@
   "my.asset.sort.created": "新作成順",
   "my.asset.sort.sold": "新取引順",
   "my.asset.loading": "読み込む",
+  "my.asset.shelves.asset": "資産",
+  "my.asset.shelves.label": "ラベル",
+  "my.asset.shelves.name": "名称/ID",
+  "my.asset.shelves.price": "価格",
 
   "my.order.total": "オーダー数",
   "my.order.total.amount": "総取引額",

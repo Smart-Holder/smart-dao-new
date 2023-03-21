@@ -4,16 +4,17 @@ import {
   Image,
   DatePicker,
   Form,
-  Select,
   Tag,
   Button,
   Space,
   message,
+  Breadcrumb,
 } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 import Layout from '@/components/layout';
+import Select from '@/components/form/filter/select';
 import { ReactElement, useCallback, useEffect, useState } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
 
@@ -214,16 +215,18 @@ const App: NextPageWithLayout = () => {
   };
 
   return (
-    <div className="dashboard-content">
-      <div className={styles['dashboard-content-header']}>
-        <div
-          style={{
-            flex: 1,
-            display: 'flex',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-          }}
-        >
+    <div>
+      <Breadcrumb>
+        <Breadcrumb.Item href="/dashboard/mine/assets">
+          {formatMessage({ id: 'sider.my.asset' })}
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
+          {formatMessage({ id: 'financial.asset.listing' })}
+        </Breadcrumb.Item>
+      </Breadcrumb>
+
+      <div className="table-card" style={{ margin: '24px 24px 50px' }}>
+        <div className="table-filter">
           <Form
             name="filter"
             layout="inline"
@@ -235,7 +238,7 @@ const App: NextPageWithLayout = () => {
           >
             <Form.Item name="type" style={{ marginRight: 0 }}>
               <Select
-                style={{ width: 140 }}
+                style={{ width: 200 }}
                 placeholder={formatMessage({ id: 'my.asset.allTypes' })}
                 options={[
                   {
@@ -273,8 +276,7 @@ const App: NextPageWithLayout = () => {
             添加NFTP
           </Button> */}
         </div>
-      </div>
-      <div className={styles['dashboard-content-body']}>
+
         <Table
           className={styles['dashboard-content-table']}
           pagination={{
@@ -292,7 +294,7 @@ const App: NextPageWithLayout = () => {
           }}
           columns={[
             {
-              title: '资产',
+              title: formatMessage({ id: 'my.asset.shelves.asset' }),
               dataIndex: 'mediaOrigin',
               key: 'mediaOrigin',
               render: (url, item: any) => (
@@ -306,7 +308,7 @@ const App: NextPageWithLayout = () => {
               ),
             },
             {
-              title: 'Tag',
+              title: formatMessage({ id: 'my.asset.shelves.label' }),
               dataIndex: 'tag',
               key: 'tag',
               render: (text: string, { properties }: any) => {
@@ -325,13 +327,13 @@ const App: NextPageWithLayout = () => {
               },
             },
             {
-              title: '名字/编号',
+              title: formatMessage({ id: 'my.asset.shelves.name' }),
               dataIndex: 'name',
               key: 'name',
               render: (text: string, item: any) => text || `#${item.id}`,
             },
             {
-              title: '价格',
+              title: formatMessage({ id: 'my.asset.shelves.price' }),
               dataIndex: 'minimumPrice',
               key: 'minimumPrice',
               render: (value, item) => (
@@ -346,7 +348,6 @@ const App: NextPageWithLayout = () => {
           ]}
           dataSource={[...data]}
         />
-
         <div className="footer">
           <Space style={{ display: 'flex' }} direction="vertical" align="end">
             <Select
@@ -375,20 +376,20 @@ const App: NextPageWithLayout = () => {
             </Button>
           </Space>
         </div>
-
-        <style jsx>
-          {`
-            .footer :global(.button) {
-              height: 40px;
-              margin-left: 20px;
-              font-size: 16px;
-              font-family: PingFangSC-Regular, PingFang SC;
-              font-weight: 400;
-              line-height: 27px;
-            }
-          `}
-        </style>
       </div>
+
+      <style jsx>
+        {`
+          .footer :global(.button) {
+            height: 40px;
+            margin-left: 20px;
+            font-size: 16px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            line-height: 27px;
+          }
+        `}
+      </style>
     </div>
   );
 };
