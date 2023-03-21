@@ -127,11 +127,11 @@
   "sider.member": "Member",
   "sider.member.nftp": "NFTP list",
 
-  "my.home.dao": "我的DAO",
+  "my.home.dao": "My DAO",
   "my.home.information": "Personal information",
-  "my.home.dao.create": "我创建的",
-  "my.home.dao.join": "我加入的",
-  "my.home.dao.follow": "我关注的",
+  "my.home.dao.create": "Creation",
+  "my.home.dao.join": "Joined",
+  "my.home.dao.follow": "Followed",
 
   "my.summary.change": "change",
   "my.summary.template": "business template",

@@ -1,26 +1,13 @@
+import router from 'next/router';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-// import { increment } from './counterSlice';
-// import connector from '@/utils/connect';
-// import { connect as connectMetaMask } from "@/utils/metamask";
-// import { connectType } from '@/config/enum';
-// import { getCookie, setCookie, clearCookie } from '@/utils/cookie';
-// import Web3 from 'web3';
-// import { ETH_CHAINS_INFO } from '@/config/chains';
-// import { initialize as initApi } from '@/api';
-import sdk from 'hcstore/sdk';
-// import { getSessionStorage } from '@/utils';
-import { request, waitBlockNumber } from '@/api';
+
 import { disconnect } from './walletSlice';
 
-import { getContract, contractSend } from '@/utils/contract';
-// import { abi as DAOABI } from '@/config/abi/DAO.json';
-// import { abi as DAOsABI } from '@/config/abi/DAOs.json';
-import DAOs from '@/config/abi/DAOs.json';
+import { request } from '@/api';
+import { createDAO } from '@/api/dao';
+
 import { clearMakeDAOStorage } from '@/utils/launch';
-
-import router from 'next/router';
 import { DAOType } from '@/config/enum';
-
 export interface DAOState {
   daoType: DAOType; // create/join/follow/visit
   currentDAO: any;
@@ -49,99 +36,8 @@ const initialState: DAOState = {
 export const deployAssetSalesDAO = createAsyncThunk(
   'dao/initDAO',
   async (params: any) => {
-    const {
-      web3,
-      address,
-      chain,
-      name,
-      mission,
-      description,
-      memberBaseName,
-      members,
-      image,
-      assetIssuanceTax,
-      assetCirculationTax,
-      defaultVoteRate,
-      defaultVotePassRate,
-      executor,
-      hours,
-    } = params;
-    const contract = getContract(
-      web3,
-      DAOs.abi,
-      process.env.NEXT_PUBLIC_DAOS_PROXY_ADDRESS,
-    );
-    const baseURI = `${process.env.NEXT_PUBLIC_BASE_URL}/service-api/utils/printJSON`;
-    let addr = '';
-
-    const param = [
-      {
-        name,
-        mission,
-        description,
-        image,
-      },
-      address,
-      {
-        // InitMemberArgs
-        name: memberBaseName,
-        description: memberBaseName,
-        baseURI: baseURI,
-        members: members.map((e: any) => {
-          return {
-            owner: e.owner,
-            info: { ...e, image: '' },
-            permissions: [0xdc6b0b72, 0x678ea396],
-          };
-        }),
-        executor,
-      },
-      {
-        //InitVotePoolArgs
-        description: 'VotePool description',
-        lifespan: Math.max(hours, 7 * 24 /*7 days*/) * 60 * 60,
-      },
-      {
-        // InitLedgerArgs
-        description: 'Ledger description',
-      },
-      {
-        // InitAssetArgs
-        name: name, // string  name;
-        description: 'Asset description',
-        image: image,
-        external_link: process.env.NEXT_PUBLIC_BASE_URL,
-        seller_fee_basis_points_first: assetIssuanceTax * 100, // 30%
-        seller_fee_basis_points_second: assetCirculationTax * 100, // 10%
-        fee_recipient: '0x0000000000000000000000000000000000000000', // auto set
-        contractURIPrefix: baseURI,
-      },
-    ];
-
-    const res = await contractSend(
-      contract,
-      address,
-      'deployAssetSalesDAO',
-      param,
-      async (receipt) => {
-        addr = await contract.methods.get(name).call();
-        await waitBlockNumber(receipt.blockNumber, addr, chain, 2);
-      },
-    );
-
-    console.log('init DAO success');
-
-    const currentDAO = await sdk.utils.methods.getDAO({ chain, address: addr });
-
+    const currentDAO = await createDAO(params);
     return currentDAO;
-
-    // let dao = await request({
-    //   method: "getDAO",
-    //   name: "utils",
-    //   params: { chain, address: addr },
-    // });
-
-    // commit("SET_CURRENT_DAO", dao);
   },
 );
 

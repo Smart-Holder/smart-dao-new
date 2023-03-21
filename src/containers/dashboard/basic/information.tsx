@@ -12,6 +12,7 @@ import {
   Col,
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import buffer from 'somes/buffer';
 
 import { validateChinese } from '@/utils/validator';
 import { getCookie } from '@/utils/cookie';
@@ -51,7 +52,12 @@ const FormGroup: React.FC = () => {
   const [initialValues, setInitialValues] = useState() as any;
   const [isEdit, setIsEdit] = useState(false);
 
-  const extra = currentDAO?.extra ? JSON.parse(currentDAO.extra || '{}') : {};
+  // const extend = currentDAO?.extend
+  //   ? JSON.parse(currentDAO.extend || '{}')
+  //   : {};
+  const extend = { poster: '' };
+
+  console.log('extend', buffer.from(currentDAO.extend.data).toString());
 
   useEffect(() => {
     const getDAO = async () => {
@@ -97,7 +103,7 @@ const FormGroup: React.FC = () => {
   // );
 
   const [logo, setLogo] = useState(currentDAO.image);
-  const [poster, setPoster] = useState(extra.poster);
+  const [poster, setPoster] = useState(extend?.poster);
   // const [isModalOpen, setIsModalOpen] = useState(false);
 
   const setInfo = async (values: any) => {

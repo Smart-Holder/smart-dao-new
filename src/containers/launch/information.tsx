@@ -56,8 +56,6 @@ const App: React.FC = () => {
     const dao = getMakeDAOStorage('start');
 
     if (dao) {
-      const extra = dao?.extra ? JSON.parse(dao.extra || '{}') : {};
-
       // setCacheDAO(dao);
       form.setFieldsValue({
         name: dao.name,
@@ -66,7 +64,7 @@ const App: React.FC = () => {
       });
       setMembers(dao.members);
       setLogo(dao.image);
-      setPoster(extra.poster || '');
+      setPoster(dao?.extend?.poster || '');
     } else {
       router.replace('/');
     }
@@ -100,7 +98,7 @@ const App: React.FC = () => {
       ...values,
       members,
       image: logo,
-      extra: JSON.stringify({ poster }),
+      extend: { poster, test: 'test' },
 
       // defaultVoteTime: 0,
       // assetIssuanceTax: 6000,

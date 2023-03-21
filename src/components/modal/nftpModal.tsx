@@ -235,15 +235,6 @@ const App = (props: any, ref: any) => {
             font-size: 16px;
           }
 
-          .content :global(.button-submit) {
-            height: 54px;
-            font-size: 18px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #ffffff;
-            line-height: 27px;
-          }
-
           .content :global(.ant-form-item .ant-form-item-label > label) {
             font-size: 16px;
           }

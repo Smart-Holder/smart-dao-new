@@ -177,52 +177,37 @@ const App = () => {
           <Col span={10} offset={2}>
             <div className="member-header">{DAOInfo.membersTotal} Members</div>
             <div className="member-content">
-              <Avatar.Group
-                maxCount={6}
-                size={52}
-                maxStyle={{
-                  color: '#fff',
-                  backgroundColor: '#000',
-                  cursor: 'pointer',
-                }}
-              >
-                <Avatar
-                  style={{ backgroundColor: '#000', borderWidth: 3 }}
-                  src="https://smart-dao-res.stars-mine.com/FvCDcP23jHCCRbAJY_x3yK0c7vSx"
-                />
-                <Avatar
-                  style={{ backgroundColor: '#000', borderWidth: 3 }}
-                  src="https://smart-dao-res.stars-mine.com/FvCDcP23jHCCRbAJY_x3yK0c7vSx"
-                />
-                <Avatar
-                  style={{ backgroundColor: '#000', borderWidth: 3 }}
-                  src="https://smart-dao-res.stars-mine.com/FvCDcP23jHCCRbAJY_x3yK0c7vSx"
-                />
-                <Avatar
-                  style={{ backgroundColor: '#000', borderWidth: 3 }}
-                  src="https://smart-dao-res.stars-mine.com/FvCDcP23jHCCRbAJY_x3yK0c7vSx"
-                />
-                <Avatar
-                  style={{ backgroundColor: '#000', borderWidth: 3 }}
-                  src="https://smart-dao-res.stars-mine.com/FvCDcP23jHCCRbAJY_x3yK0c7vSx"
-                />
-                <Avatar
-                  style={{ backgroundColor: '#000', borderWidth: 3 }}
-                  src="https://smart-dao-res.stars-mine.com/FvCDcP23jHCCRbAJY_x3yK0c7vSx"
-                />
-                <Avatar
-                  style={{ backgroundColor: '#000', borderWidth: 3 }}
-                  src="https://smart-dao-res.stars-mine.com/FvCDcP23jHCCRbAJY_x3yK0c7vSx"
-                />
-                <Avatar
-                  style={{ backgroundColor: '#000', borderWidth: 3 }}
-                  src="https://smart-dao-res.stars-mine.com/FvCDcP23jHCCRbAJY_x3yK0c7vSx"
-                />
-                <Avatar
-                  style={{ backgroundColor: '#000', borderWidth: 3 }}
-                  src="https://smart-dao-res.stars-mine.com/FvCDcP23jHCCRbAJY_x3yK0c7vSx"
-                />
-              </Avatar.Group>
+              {currentDAO?.memberObjs?.length > 0 && (
+                <Avatar.Group
+                  maxCount={6}
+                  size={52}
+                  maxStyle={{
+                    color: '#fff',
+                    backgroundColor: '#000',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {currentDAO.memberObjs.map((item: any, index: number) => {
+                    if (item.image) {
+                      return (
+                        <Avatar
+                          style={{ backgroundColor: '#000', borderWidth: 3 }}
+                          src={item.image}
+                          key={index}
+                        />
+                      );
+                    }
+
+                    return (
+                      <Avatar
+                        style={{ backgroundColor: '#000', borderWidth: 3 }}
+                        icon={<UserOutlined />}
+                        key={index}
+                      />
+                    );
+                  })}
+                </Avatar.Group>
+              )}
             </div>
           </Col>
         </Row>

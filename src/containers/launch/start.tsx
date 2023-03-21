@@ -68,8 +68,6 @@ const App: React.FC = () => {
     const dao = getMakeDAOStorage('start');
 
     if (dao) {
-      const extra = dao?.extra ? JSON.parse(dao.extra || '{}') : {};
-
       // setCacheDAO(dao);
       form.setFieldsValue({
         name: dao.name,
@@ -78,7 +76,7 @@ const App: React.FC = () => {
       });
       setMembers(dao.members);
       setLogo(dao.image);
-      setPoster(extra.poster || '');
+      setPoster(dao?.extend?.poster || '');
     } else {
       form.resetFields();
       setMembers([
@@ -124,7 +122,7 @@ const App: React.FC = () => {
       ...values,
       members,
       image: logo,
-      extra: JSON.stringify({ poster }),
+      extend: { poster },
 
       // defaultVoteTime: 0,
       // assetIssuanceTax: 6000,
@@ -156,7 +154,12 @@ const App: React.FC = () => {
   };
 
   const addMember = () => {
-    const value = form.getFieldValue('member');
+    const [name, description, image, member] = form.getFieldsValue([
+      'name',
+      'description',
+      'image',
+      'member',
+    ]);
 
     form
       .validateFields(['member'])
@@ -165,11 +168,11 @@ const App: React.FC = () => {
           ...members,
           {
             id: hexRandomNumber(),
-            name: nickname,
+            name,
             description,
             image,
             votes: 1,
-            owner: value,
+            owner: member,
           },
         ];
 

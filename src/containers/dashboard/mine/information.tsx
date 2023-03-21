@@ -27,7 +27,7 @@ const App = () => {
   const { formatMessage } = useIntl();
 
   const { userInfo } = useAppSelector((store) => store.user);
-  const { addressFormat } = useAppSelector((store) => store.wallet);
+  const { address } = useAppSelector((store) => store.wallet);
   const { currentMember } = useAppSelector((store) => store.dao);
   // const { loading } = useAppSelector((store) => store.common);
 
@@ -113,7 +113,7 @@ const App = () => {
           <span className="label">
             {formatMessage({ id: 'my.information.address' })}:
           </span>
-          <span className="value">{addressFormat}</span>
+          <span className="value">{address}</span>
         </div>
         <div className="info-item">
           <span className="label">
@@ -124,7 +124,7 @@ const App = () => {
 
         <div className="info-item">
           <span className="label">NFTP:</span>
-          <span className="value">{formatAddress(currentMember.host)}</span>
+          <span className="value">{currentMember.host}</span>
         </div>
         <div className="info-item">
           <span className="label">ID:</span>
@@ -142,6 +142,7 @@ const App = () => {
         className="form"
         name="info"
         form={form}
+        wrapperCol={{ span: 17 }}
         initialValues={initialValues}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
@@ -184,6 +185,7 @@ const App = () => {
             {formatMessage({ id: 'my.information.save' })}
           </Button>
           <Button
+            style={{ marginLeft: 25 }}
             className="button-submit"
             type="primary"
             htmlType="button"
@@ -205,27 +207,27 @@ const App = () => {
         onChange={onCheckboxChange}
       >
         <Row style={{ width: '100%' }} gutter={[20, 48]}>
-          <Col span={8}>
+          <Col span={6}>
             <Checkbox disabled value={Permissions.Action_VotePool_Vote}>
               {formatMessage({ id: 'my.information.rights.vote' })}
             </Checkbox>
           </Col>
-          <Col span={8}>
+          <Col span={6}>
             <Checkbox disabled value={Permissions.Action_VotePool_Create}>
               {formatMessage({ id: 'my.information.rights.proposal' })}
             </Checkbox>
           </Col>
-          <Col span={8}>
+          <Col span={12}>
             <Checkbox disabled value={Permissions.Action_Member_Create}>
               {formatMessage({ id: 'my.information.rights.add' })}
             </Checkbox>
           </Col>
-          <Col span={8}>
+          <Col span={6}>
             <Checkbox disabled value={Permissions.Action_Asset_SafeMint}>
               {formatMessage({ id: 'my.information.rights.publish' })}
             </Checkbox>
           </Col>
-          {/* <Col span={8}>
+          {/* <Col span={6}>
             <Checkbox value={Permissions.Action_Asset_Shell_Withdraw}>
               上架资产
             </Checkbox>

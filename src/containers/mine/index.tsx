@@ -40,17 +40,23 @@ export default function Mine() {
   return (
     <div className="wrap">
       <div className="header">
-        <div className="avatar">
+        <div className="user">
           <Avatar
             className="avatar"
             src={userInfo.image}
             size={110}
             style={{ border: '4px solid #fff' }}
           />
+          <div className="nickname">{userInfo.nickname}</div>
         </div>
       </div>
 
-      <Tabs defaultActiveKey="1" items={items} />
+      <Tabs
+        className="tabs"
+        style={{ margin: '0 80px 50px' }}
+        defaultActiveKey="1"
+        items={items}
+      />
 
       {/* <div>
         {current === 'dao' && <DAO />}
@@ -61,35 +67,40 @@ export default function Mine() {
         {`
           .wrap .header {
             position: relative;
+            width: 100%;
             height: 300px;
-            background: url('/images/my/img_me_bg.png') no-repeate center;
+            margin-bottom: 134px;
+            background: url('/images/me/img_me_bg.png') no-repeat center;
             background-size: cover;
           }
 
-          .wrap .avatar {
+          .wrap .user {
             position: absolute;
             left: 80px;
-            bottom: -55px;
+            top: 242px;
           }
 
-          .wrap :global(.divider) {
-            height: 32px;
-            border-width: 3px;
-            border-color: #000;
+          .wrap .nickname {
+            height: 34px;
+            margin-top: 20px;
+            font-size: 28px;
+            font-family: SFUIDisplay-Bold, SFUIDisplay;
+            font-weight: bold;
+            color: #000000;
+            line-height: 34px;
           }
 
-          .wrap :global(.button) {
-            height: 40px;
-            font-size: 30px;
-            font-family: PingFangSC-Medium, PingFang SC;
-            font-weight: 500;
-            color: #000;
+          .tabs :global(.ant-tabs-tab) {
+            height: 30px;
+            font-size: 14px;
+            font-family: SFUIText-Semibold, SFUIText;
+            font-weight: 600;
+            color: #b1b1b1;
             line-height: 30px;
-            outline: none;
           }
 
-          .wrap :global(.active) {
-            color: #546ff6;
+          .tabs :global(.ant-tabs-tab.ant-tabs-tab-active) {
+            color: #000;
           }
         `}
       </style>

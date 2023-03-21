@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useAppSelector } from '@/store/hooks';
 import { Avatar, Button, Col, Image, Row, Space } from 'antd';
+import buffer from 'somes/buffer';
 
 import Title from '@/containers/dashboard/header/title';
 
@@ -13,6 +14,14 @@ type Data = {
 
 const App = ({ title, buttons, children, padding }: Data) => {
   const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
+
+  const extend = { poster: '' };
+  // const extend = currentDAO?.extend
+  //   ? JSON.parse(currentDAO.extend || '{}')
+  //   : {};
+
+  console.log('extend', buffer.from(currentDAO.extend.data).toString());
+
   return (
     <div>
       {title && <Title title={title} />}
@@ -20,8 +29,8 @@ const App = ({ title, buttons, children, padding }: Data) => {
       {currentDAO.image && (
         <div className="image-box">
           <Image
-            className="banner"
-            src={currentDAO.image}
+            className="poster"
+            src={extend?.poster || currentDAO.image}
             width="100%"
             height={380}
             preview={false}
@@ -35,7 +44,7 @@ const App = ({ title, buttons, children, padding }: Data) => {
                 borderRadius: 10,
               }}
               size={70}
-              src={currentDAO.avatar || currentDAO.image}
+              src={currentDAO.image}
               shape="square"
             />
           </div>
@@ -69,7 +78,7 @@ const App = ({ title, buttons, children, padding }: Data) => {
             border: 1px solid #f1f1f1;
           }
 
-          .image-box :global(.banner) {
+          .image-box :global(.poster) {
             object-fit: cover;
             border-radius: 2px;
           }

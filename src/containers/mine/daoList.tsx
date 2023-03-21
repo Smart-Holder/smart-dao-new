@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Space, Button, Divider, Skeleton, Empty } from 'antd';
+import { Space, Button, Divider, Skeleton, Empty, Row, Col } from 'antd';
 import sdk from 'hcstore/sdk';
 import { useIntl } from 'react-intl';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
-import Item from '@/containers/mine/daoItem';
+import Item from '@/containers/home/daoItem';
+import ItemCache from '@/containers/mine/daoItemCache';
 
 // import { getCookie } from '@/utils/cookie';
 import { getMakeDAOStorage } from '@/utils/launch';
@@ -92,24 +93,24 @@ export default function List() {
 
   return (
     <div className="dao-list-wrap">
-      <Space size={50} split={<Divider className="divider" type="vertical" />}>
+      <Space size={28}>
         <Button
-          className={`list-button ${active === 'create' ? 'active' : ''}`}
-          type="link"
+          className="button-tab"
+          type={active === 'create' ? 'primary' : 'link'}
           onClick={handleClick1}
         >
           {formatMessage({ id: 'my.home.dao.create' })}
         </Button>
         <Button
-          className={`list-button ${active === DAOType.Join ? 'active' : ''}`}
-          type="link"
+          className="button-tab"
+          type={active === DAOType.Join ? 'primary' : 'link'}
           onClick={handleClick2}
         >
           {formatMessage({ id: 'my.home.dao.join' })}
         </Button>
         <Button
-          className={`list-button ${active === DAOType.Follow ? 'active' : ''}`}
-          type="link"
+          className="button-tab"
+          type={active === DAOType.Follow ? 'primary' : 'link'}
           onClick={handleClick3}
         >
           {formatMessage({ id: 'my.home.dao.follow' })}
@@ -122,25 +123,29 @@ export default function List() {
         {!loading && list && list.length === 0 && <Empty />}
 
         {!loading && list && list.length > 0 && (
-          <Space size={34} wrap>
+          <Row gutter={[16, 16]}>
             {(active === 'create' || active === DAOType.Join) && cacheDAO && (
-              <Item data={cacheDAO} daoType={DAOType.Cache} />
+              <Col xs={24} sm={24} lg={12}>
+                <ItemCache data={cacheDAO} daoType={DAOType.Cache} />
+              </Col>
             )}
             {list.map((item: any) => (
-              <Item
-                data={item}
-                daoType={active === 'create' ? DAOType.Join : active}
-                key={item.id}
-              />
+              <Col xs={24} sm={24} lg={12} key={item.id}>
+                <Item
+                  data={item}
+                  daoType={active === 'create' ? DAOType.Join : active}
+                  readOnly
+                />
+              </Col>
             ))}
-          </Space>
+          </Row>
         )}
       </div>
 
       <style jsx>
         {`
           .dao-list-wrap {
-            margin-top: 60px;
+            margin-top: 9px;
           }
 
           .dao-list-wrap :global(.divider) {
@@ -149,25 +154,24 @@ export default function List() {
             border-color: #000;
           }
 
-          .dao-list-wrap :global(.list-button) {
-            height: 40px;
+          .dao-list-wrap :global(.button-tab) {
+            height: 35px;
 
-            height: 30px;
-            font-size: 20px;
-            font-family: PingFangSC-Medium, PingFang SC;
-            font-weight: 500;
-            color: #000;
-            line-height: 20px;
+            font-size: 14px;
+            font-family: SFUIText-Bold, SFUIText;
+            font-weight: bold;
+            line-height: 17px;
 
+            border-radius: 18px;
             outline: none;
           }
 
-          .dao-list-wrap :global(.active) {
-            color: #546ff6;
+          .dao-list-wrap :global(.button-tab.ant-btn-link) {
+            color: #000;
           }
 
           .dao-list {
-            padding: 57px 0 0 14px;
+            margin-top: 25px;
           }
         `}
       </style>
