@@ -10,7 +10,7 @@ import { prevStep, nextStep } from '@/store/features/daoSlice';
 import { setMakeDAOStorage, getMakeDAOStorage } from '@/utils/launch';
 import { Col, Row } from 'antd';
 
-const App = () => {
+const App = ({ type }: { type?: string }) => {
   const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
 
@@ -25,10 +25,24 @@ const App = () => {
 
   const onTaxChange1 = (value: number) => {
     setAssetIssuanceTax(value);
+
+    if (type === 'review') {
+      setMakeDAOStorage('tax', {
+        assetIssuanceTax: value,
+        assetCirculationTax,
+      });
+    }
   };
 
   const onTaxChange2 = (value: number) => {
     setAssetCirculationTax(value);
+
+    if (type === 'review') {
+      setMakeDAOStorage('tax', {
+        assetIssuanceTax,
+        assetCirculationTax: value,
+      });
+    }
   };
 
   const prev = () => {
@@ -40,44 +54,96 @@ const App = () => {
       assetIssuanceTax,
       assetCirculationTax,
     });
-    console.log('form:', getMakeDAOStorage('tax'));
+
     dispatch(nextStep());
   };
 
-  return (
-    <div className="card" style={{ margin: '40px 0 0' }}>
-      <div className="h1">{formatMessage({ id: 'launch.tax.title' })}</div>
-      <div className="h2">{formatMessage({ id: 'launch.tax.subtitle' })}</div>
+  if (type === 'review') {
+    return (
+      <div style={{ margin: '76px 0 0' }}>
+        <div className="setting-h1">
+          {formatMessage({ id: 'launch.tax.title' })}
+        </div>
 
-      <Row style={{ marginTop: 20 }}>
+        <Row style={{ marginTop: 50 }}>
+          <Col span={17}>
+            <Slider
+              label={formatMessage({ id: 'launch.tax.publish' })}
+              value={assetIssuanceTax}
+              min={1}
+              max={99}
+              onChange={onTaxChange1}
+            />
+          </Col>
+          <Col span={17} style={{ marginTop: 50 }}>
+            <Slider
+              label={formatMessage({ id: 'launch.tax.circulation' })}
+              value={assetCirculationTax}
+              min={1}
+              max={99}
+              onChange={onTaxChange2}
+            />
+          </Col>
+        </Row>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ margin: '40px 0 0' }}>
+      <div className="setting-h1">
+        {formatMessage({ id: 'launch.tax.title' })}
+      </div>
+
+      <div className="setting-h2">
+        {formatMessage({ id: 'launch.tax.subtitle' })}
+      </div>
+
+      <Row style={{ marginTop: 50 }}>
         <Col span={17}>
           <Slider
-            style={{ padding: '20px 0' }}
-            defaultValue={assetIssuanceTax}
             label={formatMessage({ id: 'launch.tax.publish' })}
-            color="#FF6D4C"
+            value={assetIssuanceTax}
             min={1}
             max={99}
-            onAfterChange={onTaxChange1}
+            onChange={onTaxChange1}
           />
         </Col>
-      </Row>
-
-      <Row>
-        <Col span={17}>
+        <Col span={17} style={{ marginTop: 55 }}>
           <Slider
-            style={{ padding: '23px 0' }}
-            defaultValue={assetCirculationTax}
             label={formatMessage({ id: 'launch.tax.circulation' })}
-            color="#2AC154"
+            value={assetCirculationTax}
             min={1}
             max={99}
-            onAfterChange={onTaxChange2}
+            onChange={onTaxChange2}
           />
+        </Col>
+
+        <Col span={17}>
+          <div className="desc">
+            Asset issuance tax is The percentage of revenue received from the
+            initial sale of an asset. Asset circulation tax The percentage of
+            revenue earned from secondary sales of the asset. It can be modified
+            by dao governance.
+          </div>
         </Col>
       </Row>
 
       <Footer prev={prev} next={next} />
+
+      <style jsx>
+        {`
+          .desc {
+            height: 66px;
+            margin-top: 50px;
+            font-size: 16px;
+            font-family: PingFangSC-Semibold, PingFang SC;
+            font-weight: 600;
+            color: #818181;
+            line-height: 22px;
+          }
+        `}
+      </style>
     </div>
   );
 };

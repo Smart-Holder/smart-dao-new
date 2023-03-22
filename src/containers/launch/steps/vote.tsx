@@ -10,7 +10,7 @@ import { prevStep, nextStep } from '@/store/features/daoSlice';
 import { setMakeDAOStorage, getMakeDAOStorage } from '@/utils/launch';
 import { Col, Row } from 'antd';
 
-const App = () => {
+const App = ({ type }: { type?: string }) => {
   const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
 
@@ -55,6 +55,14 @@ const App = () => {
   };
   const onChange3 = (value: number) => {
     setHours(value);
+
+    if (type === 'review') {
+      setMakeDAOStorage('vote', {
+        defaultVoteRate,
+        defaultVotePassRate,
+        hours: value,
+      });
+    }
   };
 
   const prev = () => {
@@ -67,7 +75,7 @@ const App = () => {
       defaultVotePassRate,
       hours,
     });
-    console.log('form:', getMakeDAOStorage('vote'));
+
     dispatch(nextStep());
   };
 
@@ -75,10 +83,37 @@ const App = () => {
     return null;
   }
 
+  if (type === 'review') {
+    return (
+      <div style={{ marginTop: 100 }}>
+        <div className="setting-h1">
+          {formatMessage({ id: 'launch.vote.title' })}
+        </div>
+
+        <Row style={{ marginTop: 50 }}>
+          <Col span={17}>
+            <Slider
+              label={formatMessage({ id: 'launch.vote.period' })}
+              value={hours}
+              unit="hr"
+              min={min}
+              max={720}
+              onChange={onChange3}
+            />
+          </Col>
+        </Row>
+      </div>
+    );
+  }
+
   return (
-    <div className="card" style={{ margin: '40px 0 0' }}>
-      <div className="h1">{formatMessage({ id: 'launch.tax.title' })}</div>
-      <div className="h2">{formatMessage({ id: 'launch.vote.subtitle' })}</div>
+    <div style={{ margin: '40px 0 0' }}>
+      <div className="setting-h1">
+        {formatMessage({ id: 'launch.vote.title' })}
+      </div>
+      <div className="setting-h2">
+        {formatMessage({ id: 'launch.vote.subtitle' })}
+      </div>
 
       {/* <Slider
         defaultValue={defaultVoteRate}
@@ -97,15 +132,15 @@ const App = () => {
         onAfterChange={onChange2}
       /> */}
 
-      <Row style={{ marginTop: 40 }}>
+      <Row style={{ marginTop: 50 }}>
         <Col span={17}>
           <Slider
-            defaultValue={hours}
             label={formatMessage({ id: 'launch.vote.period' })}
+            value={hours}
             unit="hr"
             min={min}
             max={720}
-            onAfterChange={onChange3}
+            onChange={onChange3}
           />
         </Col>
       </Row>

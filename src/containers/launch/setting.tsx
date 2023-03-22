@@ -29,6 +29,8 @@ const App = () => {
     { description: formatMessage({ id: 'launch.review.title' }) },
   ]);
 
+  const template = getMakeDAOStorage('template');
+
   useEffect(() => {
     const cacheDAO = getMakeDAOStorage('start');
 
@@ -41,8 +43,13 @@ const App = () => {
 
   return (
     <div className="wrap">
+      <div className="title">
+        {step === 0 ? 'Select service stencil' : template?.title}
+      </div>
+
       {step !== 0 && (
         <Steps
+          style={{ marginTop: 40 }}
           current={step - 1}
           items={items.current}
           labelPlacement="vertical"
@@ -50,9 +57,8 @@ const App = () => {
         />
       )}
 
-      {step === 0 && <Template />}
-
       <div>
+        {step === 0 && <Template />}
         {step === 1 && <Tax />}
         {step === 2 && <Vote />}
         {step === 3 && <Executor />}
@@ -61,6 +67,19 @@ const App = () => {
 
       <style jsx>
         {`
+          .wrap {
+            padding: 30px 80px 100px;
+          }
+
+          .title {
+            height: 45px;
+            font-size: 38px;
+            font-family: SFUIDisplay-Semibold, SFUIDisplay;
+            font-weight: 600;
+            color: #000000;
+            line-height: 45px;
+          }
+
           .wrap
             :global(
               .ant-steps

@@ -9,7 +9,13 @@ import { validateEthAddress } from '@/utils/validator';
 import { setMakeDAOStorage, getMakeDAOStorage } from '@/utils/launch';
 import { useIntl } from 'react-intl';
 
-const App = () => {
+const App = ({
+  type,
+  onFinish,
+}: {
+  type?: string;
+  onFinish?: (isFinish: boolean) => void;
+}) => {
   const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
 
@@ -17,12 +23,6 @@ const App = () => {
   const storageValues = getMakeDAOStorage('executor') || {};
 
   const [form] = Form.useForm();
-
-  const onFinish = (values: any) => {};
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
-  };
 
   const prev = () => {
     dispatch(prevStep());
@@ -57,10 +57,85 @@ const App = () => {
     return Promise.resolve();
   };
 
+  const onValuesChange = (changedValues: any) => {
+    // let [[key, value]]: any = Object.entries(changedValues);
+    // const nextValues: any = { ...values };
+
+    // if (!value) {
+    //   delete nextValues[key];
+    // } else {
+    //   nextValues[key] = key === 'time' ? formatDayjsValues(value) : value;
+    // }
+
+    // console.log('values', nextValues);
+    // setValues(nextValues);
+
+    form
+      .validateFields()
+      .then((res) => {
+        const values = { ...res };
+
+        const member = (startValues?.members || []).find(
+          (item: any) =>
+            item.owner.toLowerCase() === values.address.toLowerCase(),
+        );
+
+        values.executor = member?.id || 0;
+
+        setMakeDAOStorage('executor', values);
+
+        if (onFinish) {
+          onFinish(true);
+        }
+      })
+      .catch(() => {
+        if (onFinish) {
+          onFinish(false);
+        }
+      });
+  };
+
+  if (type === 'review') {
+    return (
+      <div style={{ marginTop: 100 }}>
+        <div className="setting-h1">
+          {formatMessage({ id: 'launch.executor.title' })}
+        </div>
+
+        <Form
+          className="form"
+          form={form}
+          wrapperCol={{ span: 17 }}
+          initialValues={storageValues}
+          autoComplete="off"
+          layout="vertical"
+          requiredMark={false}
+          validateTrigger="onBlur"
+          onValuesChange={onValuesChange}
+        >
+          <Form.Item
+            name="address"
+            style={{ marginTop: 40 }}
+            label={formatMessage({ id: 'launch.executor.address' })}
+            rules={[
+              { required: true },
+              { validator: validateEthAddress },
+              { validator: validateExist },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+        </Form>
+      </div>
+    );
+  }
+
   return (
-    <div className="card" style={{ margin: '40px 0 0' }}>
-      <div className="h1">{formatMessage({ id: 'launch.executor.title' })}</div>
-      <div className="h2">
+    <div style={{ margin: '40px 0 0' }}>
+      <div className="setting-h1">
+        {formatMessage({ id: 'launch.executor.title' })}
+      </div>
+      <div className="setting-h2">
         {formatMessage({ id: 'launch.executor.subtitle' })}
       </div>
 
@@ -97,13 +172,13 @@ const App = () => {
       <style jsx>
         {`
           .desc {
-            height: 26px;
-            margin-top: 19px;
+            height: 22px;
+            margin-top: 16px;
             font-size: 16px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #969ba0;
-            line-height: 26px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: #b1b1b1;
+            line-height: 22px;
           }
         `}
       </style>

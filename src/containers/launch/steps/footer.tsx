@@ -11,14 +11,14 @@ const App = ({ prev, next, nextLabel }: Params) => {
   const { formatMessage } = useIntl();
 
   return (
-    <Row style={{ marginTop: 77 }}>
+    <Row style={{ marginTop: 100 }}>
       <Col span={17}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Button className="button-form" type="primary" onClick={prev}>
+          <Button className="button-submit" type="primary" ghost onClick={prev}>
             {formatMessage({ id: 'launch.back' })}
           </Button>
 
-          <Button className="button-form" type="primary" onClick={next}>
+          <Button className="button-submit" type="primary" onClick={next}>
             {nextLabel || formatMessage({ id: 'launch.next' })}
           </Button>
         </div>

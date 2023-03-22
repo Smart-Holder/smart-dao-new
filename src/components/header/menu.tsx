@@ -17,8 +17,6 @@ import { formatAddress } from '@/utils';
 import { ETH_CHAINS_INFO } from '@/config/chains';
 import { connectType as type } from '@/config/enum';
 
-import iconUser from '/public/images/icon-user.png';
-
 import iconMetamask from '/public/images/icon-metamask.png';
 import iconWallet from '/public/images/icon-wallet.png';
 import iconAdd from '/public/images/icon-add.png';
@@ -205,7 +203,6 @@ const Menu = () => {
                 style={{ backgroundColor: '#fff' }}
               />
             ) : (
-              // <Image src={iconUser} alt="user" width={32} height={32} />
               <Avatar size={32} icon={<UserOutlined />} />
             )}
             <span className="dropdown-trigger-content">

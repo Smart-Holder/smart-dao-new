@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { Modal, Input, Button, Col, Row } from 'antd';
 import { ExclamationOutlined } from '@ant-design/icons';
 
+import Tax from './tax';
+import Vote from './vote';
+import Executor from './executor';
 import Slider from '@/components/slider';
 import Footer from '@/containers/launch/steps/footer';
 
@@ -20,6 +23,7 @@ const App = () => {
 
   const { start, tax, vote, executor } = storageValues;
 
+  const [executorFinish, setExecutorFinish] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   // const [loading, setLoading] = useState(false);
   const { web3 } = useAppSelector((store) => store.wallet);
@@ -30,7 +34,10 @@ const App = () => {
   };
 
   const next = () => {
-    // dispatch(nextStep());
+    if (!executorFinish) {
+      return;
+    }
+
     setIsModalOpen(true);
   };
 
@@ -44,6 +51,10 @@ const App = () => {
     };
   };
 
+  const onExecutorFinish = (isFinish: boolean) => {
+    setExecutorFinish(isFinish);
+  };
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -55,62 +66,17 @@ const App = () => {
   };
 
   return (
-    <div className="card form" style={{ margin: '40px 0 0' }}>
-      <div className="h1">{formatMessage({ id: 'launch.review.title' })}</div>
-      <div className="h2">
+    <div className="form" style={{ margin: '40px 0 0' }}>
+      <div className="setting-h1">
+        {formatMessage({ id: 'launch.review.title' })}
+      </div>
+      <div className="setting-h2">
         {formatMessage({ id: 'launch.review.subtitle' })}
       </div>
 
-      <Row style={{ marginTop: 40 }}>
-        <Col span={17}>
-          <Slider
-            value={tax?.assetIssuanceTax}
-            label={formatMessage({ id: 'launch.tax.publish' })}
-            color="#FF6D4C"
-            readOnly
-          />
-        </Col>
-        <Col span={17} style={{ marginTop: 40 }}>
-          <Slider
-            value={tax?.assetCirculationTax}
-            label={formatMessage({ id: 'launch.tax.circulation' })}
-            color="#2AC154"
-            readOnly
-          />
-        </Col>
-        {/* <Slider
-        style={{ padding: '10px 0' }}
-        value={vote?.defaultVoteRate}
-        label="Issuance Tax"
-        color="#FF6D4C"
-        readOnly
-      />
-      <Slider
-        style={{ padding: '10px 0' }}
-        value={vote?.defaultVotePassRate}
-        label="Circulation Tax"
-        color="#2AC154"
-        readOnly
-      /> */}
-
-        <Col span={17} style={{ marginTop: 40 }}>
-          <Slider
-            value={vote?.hours}
-            label={formatMessage({ id: 'launch.vote.period' })}
-            unit="hr"
-            max={720}
-            readOnly
-          />
-        </Col>
-        <Col span={17} style={{ marginTop: 40 }}>
-          <div>
-            <div className="label">
-              {formatMessage({ id: 'launch.executor.address' })}
-            </div>
-            <Input defaultValue={executor?.address} readOnly />
-          </div>
-        </Col>
-      </Row>
+      <Tax type="review" />
+      <Vote type="review" />
+      <Executor type="review" onFinish={onExecutorFinish} />
 
       <Footer
         prev={prev}
