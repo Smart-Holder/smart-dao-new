@@ -276,7 +276,7 @@ const App: NextPageWithLayout = () => {
                   placeholder="Search name"
                   prefix={
                     <Image
-                      src="/images/icon_table_search_default.png"
+                      src="/images/filter/icon_table_search_default@2x.png"
                       width={20}
                       height={20}
                       alt=""

@@ -13,7 +13,7 @@ const App = (props: RangePickerProps) => {
       className={`${className || ''} filter`}
       suffixIcon={
         <Image
-          src="/images/icon_table_calender_default.png"
+          src="/images/filter/icon_table_calender_default@2x.png"
           width={20}
           height={20}
           alt=""

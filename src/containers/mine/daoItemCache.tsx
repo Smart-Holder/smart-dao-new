@@ -12,9 +12,6 @@ import { setCurrentDAO, setDAOType } from '@/store/features/daoSlice';
 import WalletModal from '@/components/modal/walletModal';
 import { UserOutlined } from '@ant-design/icons';
 
-import add from '/public/images/home/icon_home_card_dao_add.png';
-import { DAOType } from '@/config/enum';
-
 const { Paragraph } = Typography;
 
 const DAOItem = (props: any) => {
@@ -196,7 +193,7 @@ const DAOItem = (props: any) => {
             height: 388px;
             overflow: hidden;
 
-            background: url('/images/home/img_home_card_dao_gradient.png')
+            background: url('/images/home/img_home_card_dao_gradient@2x.png')
                 no-repeat center,
               url(${props.data.image || img}) no-repeat bottom;
             background-size: cover;

@@ -64,11 +64,12 @@ const App = () => {
       <style jsx>
         {`
           .market {
-            margin-top: 60px;
+            margin-top: 40px;
           }
           .market .title {
             font-size: 22px;
             color: #3c4369;
+            font-weight: bold;
           }
 
           .market-list {

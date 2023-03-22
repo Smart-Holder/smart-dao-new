@@ -25,7 +25,7 @@ const Header = ({ type }: { type?: string }) => {
           <Col span={8}>
             <Image
               style={{ cursor: 'pointer' }}
-              src="/images/icon_logo_dark.png"
+              src="/images/icon_logo_dark@2x.png"
               alt="logo"
               width={175}
               height={54}

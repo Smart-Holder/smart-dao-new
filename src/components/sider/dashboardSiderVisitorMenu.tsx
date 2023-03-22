@@ -51,7 +51,7 @@ const App: React.FC = () => {
       icon: (
         <Image
           style={{ display: 'block' }}
-          src="/images/sider/icon_nav_side_polling_station_default.png"
+          src="/images/sider/icon_nav_side_polling_station_default@2x.png"
           width={20}
           height={20}
           alt="icon"
@@ -65,7 +65,7 @@ const App: React.FC = () => {
       icon: (
         <Image
           style={{ display: 'block' }}
-          src="/images/sider/icon_nav_side_assets_default.png"
+          src="/images/sider/icon_nav_side_assets_default@2x.png"
           width={20}
           height={20}
           alt="icon"
@@ -79,7 +79,7 @@ const App: React.FC = () => {
       icon: (
         <Image
           style={{ display: 'block' }}
-          src="/images/sider/icon_nav_side_order_default.png"
+          src="/images/sider/icon_nav_side_order_default@2x.png"
           width={20}
           height={20}
           alt="icon"
@@ -93,7 +93,7 @@ const App: React.FC = () => {
       icon: (
         <Image
           style={{ display: 'block' }}
-          src="/images/sider/icon_nav_side_income_default.png"
+          src="/images/sider/icon_nav_side_income_default@2x.png"
           width={20}
           height={20}
           alt="icon"
@@ -107,7 +107,7 @@ const App: React.FC = () => {
       icon: (
         <Image
           style={{ display: 'block' }}
-          src="/images/sider/icon_nav_side_nftp_default.png"
+          src="/images/sider/icon_nav_side_nftp_default@2x.png"
           width={20}
           height={20}
           alt="icon"

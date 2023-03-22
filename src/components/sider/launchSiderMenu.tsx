@@ -33,7 +33,7 @@ const App: React.FC = () => {
       'sub1',
       <Image
         style={{ display: 'block' }}
-        src="/images/sider/icon_nav_side_basic_setting_default.png"
+        src="/images/sider/icon_nav_side_basic_setting_default@2x.png"
         width={20}
         height={20}
         alt="icon"

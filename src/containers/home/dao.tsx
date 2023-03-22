@@ -153,7 +153,7 @@ const App = () => {
         <Button type="link" className="button-add">
           <div className="button-image-wrap">
             <Image
-              src="/images/home/icon_home_add_dao.png"
+              src="/images/home/icon_home_add_dao_default@2x.png"
               width={20}
               height={20}
               preview={false}

@@ -49,7 +49,7 @@ const App = (props: any) => {
         ) : (
           <div className="upload-box">
             <Image
-              src="/images/home/icon_home_add_dao.png"
+              src="/images/home/icon_home_add_dao_default@2x.png"
               width={20}
               height={20}
               preview={false}

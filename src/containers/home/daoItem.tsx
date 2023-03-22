@@ -153,7 +153,7 @@ const DAOItem = (props: any) => {
             >
               <div className="button-image-wrap">
                 <Image
-                  src="/images/home/icon_home_card_dao_add.png"
+                  src="/images/home/icon_home_card_dao_add@2x.png"
                   alt=""
                   width={10}
                   height={10}
@@ -334,7 +334,7 @@ const DAOItem = (props: any) => {
             height: 388px;
             overflow: hidden;
 
-            background: url('/images/home/img_home_card_dao_gradient.png')
+            background: url('/images/home/img_home_card_dao_gradient@2x.png')
                 no-repeat center,
               url(${props.data.image || img}) no-repeat bottom;
             background-size: cover;

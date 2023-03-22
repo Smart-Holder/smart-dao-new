@@ -39,7 +39,7 @@ const App = () => {
         </Col>
         <Col span={12}>
           <Image
-            src="/images/home/img_home_banner.png"
+            src="/images/home/img_home_banner@2x.png"
             width="100%"
             height="auto"
             preview={false}

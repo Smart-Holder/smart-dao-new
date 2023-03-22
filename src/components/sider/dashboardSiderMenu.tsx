@@ -46,7 +46,7 @@ const items: MenuProps['items'] = [
         '/dashboard/mine/home',
         <Image
           style={{ display: 'block' }}
-          src="/images/sider/icon_nav_side_home_default.png"
+          src="/images/sider/icon_nav_side_home_default@2x.png"
           width={20}
           height={20}
           alt="icon"
@@ -58,7 +58,7 @@ const items: MenuProps['items'] = [
         '/dashboard/mine/information',
         <Image
           style={{ display: 'block' }}
-          src="/images/sider/icon_nav_side_person_info_default.png"
+          src="/images/sider/icon_nav_side_person_info_default@2x.png"
           width={20}
           height={20}
           alt="icon"
@@ -70,7 +70,7 @@ const items: MenuProps['items'] = [
         '/dashboard/mine/assets',
         <Image
           style={{ display: 'block' }}
-          src="/images/sider/icon_nav_side_assets_default.png"
+          src="/images/sider/icon_nav_side_assets_default@2x.png"
           width={20}
           height={20}
           alt="icon"
@@ -82,7 +82,7 @@ const items: MenuProps['items'] = [
         '/dashboard/mine/order',
         <Image
           style={{ display: 'block' }}
-          src="/images/sider/icon_nav_side_order_default.png"
+          src="/images/sider/icon_nav_side_order_default@2x.png"
           width={20}
           height={20}
           alt="icon"
@@ -94,7 +94,7 @@ const items: MenuProps['items'] = [
         '/dashboard/mine/income',
         <Image
           style={{ display: 'block' }}
-          src="/images/sider/icon_nav_side_income_default.png"
+          src="/images/sider/icon_nav_side_income_default@2x.png"
           width={20}
           height={20}
           alt="icon"
@@ -114,7 +114,7 @@ const items: MenuProps['items'] = [
         '/dashboard/basic',
         <Image
           style={{ display: 'block' }}
-          src="/images/sider/icon_nav_side_basic_setting_default.png"
+          src="/images/sider/icon_nav_side_basic_setting_default@2x.png"
           width={20}
           height={20}
           alt="icon"
@@ -144,7 +144,7 @@ const items: MenuProps['items'] = [
         '/dashboard/governance',
         <Image
           style={{ display: 'block' }}
-          src="/images/sider/icon_nav_side_dao_govern_default.png"
+          src="/images/sider/icon_nav_side_dao_govern_default@2x.png"
           width={20}
           height={20}
           alt="icon"
@@ -166,7 +166,7 @@ const items: MenuProps['items'] = [
         '/dashboard/financial',
         <Image
           style={{ display: 'block' }}
-          src="/images/sider/icon_nav_side_financial_default.png"
+          src="/images/sider/icon_nav_side_financial_default@2x.png"
           width={20}
           height={20}
           alt="icon"
@@ -192,7 +192,7 @@ const items: MenuProps['items'] = [
         '/dashboard/member',
         <Image
           style={{ display: 'block' }}
-          src="/images/sider/icon_nav_side_member_default.png"
+          src="/images/sider/icon_nav_side_member_default@2x.png"
           width={20}
           height={20}
           alt="icon"

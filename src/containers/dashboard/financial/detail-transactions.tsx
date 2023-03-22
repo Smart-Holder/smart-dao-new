@@ -30,7 +30,7 @@ const DetailTransactions: FC<DetailTransactionsProps> = (props) => {
   const { formatMessage } = useIntl();
   const { data, currentPage = 1, pageSize, total, onPageChange } = props;
   return (
-    <div className={styles['container']}>
+    <div className="table-card" style={{ margin: '39px 33px 50px 24px' }}>
       <div className={styles['header']}>
         <div className={styles['title']}>
           <div>
@@ -49,65 +49,63 @@ const DetailTransactions: FC<DetailTransactionsProps> = (props) => {
           />
         </div> */}
       </div>
-      <div className={styles['items']}>
-        <Table
-          className={contentStyles['dashboard-content-table']}
-          // pagination={{
-          //   position: ['bottomRight'],
-          //   current: currentPage,
-          //   pageSize,
-          //   total,
-          //   onChange: onPageChange,
-          // }}
-          pagination={false}
-          rowKey="id"
-          columns={[
-            // { title: '市场', dataIndex: 'market', key: 'market' },
-            {
-              title: formatMessage({ id: 'financial.asset.event' }),
-              dataIndex: 'event',
-              key: 'event',
-              render: (str) => str || '--',
-            },
-            {
-              title: formatMessage({ id: 'financial.asset.price' }),
-              dataIndex: 'value',
-              key: 'value',
-              render: (value) => (
-                <div className={styles['price']}>
-                  {/* <Image
+      <Table
+        style={{ marginTop: 20 }}
+        // pagination={{
+        //   position: ['bottomRight'],
+        //   current: currentPage,
+        //   pageSize,
+        //   total,
+        //   onChange: onPageChange,
+        // }}
+        pagination={false}
+        rowKey="id"
+        columns={[
+          // { title: '市场', dataIndex: 'market', key: 'market' },
+          {
+            title: formatMessage({ id: 'financial.asset.event' }),
+            dataIndex: 'event',
+            key: 'event',
+            render: (str) => str || '--',
+          },
+          {
+            title: formatMessage({ id: 'financial.asset.price' }),
+            dataIndex: 'value',
+            key: 'value',
+            render: (value) => (
+              <div className={styles['price']}>
+                {/* <Image
                     src="https://storage.nfte.ai/icon/currency/eth.svg"
                     alt="eth"
                     width={15}
                     height={15}
                   /> */}
-                  {value / 1e18}
-                </div>
-              ),
-            },
-            {
-              title: formatMessage({ id: 'financial.asset.sender' }),
-              dataIndex: 'fromAddres',
-              key: 'fromAddres',
-              render: (str) => formatAddress(str),
-            },
+                {value / 1e18}
+              </div>
+            ),
+          },
+          {
+            title: formatMessage({ id: 'financial.asset.sender' }),
+            dataIndex: 'fromAddres',
+            key: 'fromAddres',
+            render: (str) => formatAddress(str),
+          },
 
-            {
-              title: formatMessage({ id: 'financial.asset.recipient' }),
-              dataIndex: 'toAddress',
-              key: 'toAddress',
-              render: (str) => formatAddress(str),
-            },
-            {
-              title: formatMessage({ id: 'financial.asset.date' }),
-              dataIndex: 'time',
-              key: 'time',
-              render: (text: string) => dayjs(text).format('MM/DD/YYYY'),
-            },
-          ]}
-          dataSource={[...data]}
-        />
-      </div>
+          {
+            title: formatMessage({ id: 'financial.asset.recipient' }),
+            dataIndex: 'toAddress',
+            key: 'toAddress',
+            render: (str) => formatAddress(str),
+          },
+          {
+            title: formatMessage({ id: 'financial.asset.date' }),
+            dataIndex: 'time',
+            key: 'time',
+            render: (text: string) => dayjs(text).format('MM/DD/YYYY'),
+          },
+        ]}
+        dataSource={[...data]}
+      />
     </div>
   );
 };

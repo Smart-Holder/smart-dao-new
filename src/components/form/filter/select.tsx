@@ -10,7 +10,7 @@ const App = (props: SelectProps) => {
       popupClassName={`${popupClassName || ''} filter`}
       suffixIcon={
         <Image
-          src="/images/icon_table_drop_down_default.png"
+          src="/images/filter/icon_table_drop_down_default@2x.png"
           width={20}
           height={20}
           alt=""

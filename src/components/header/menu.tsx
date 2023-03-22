@@ -1,7 +1,7 @@
 import React, { useState, MouseEvent, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Dropdown, Image as Img, Avatar, Button } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
+import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { useRouter } from 'next/router';
 
@@ -205,7 +205,8 @@ const Menu = () => {
                 style={{ backgroundColor: '#fff' }}
               />
             ) : (
-              <Image src={iconUser} alt="user" width={32} height={32} />
+              // <Image src={iconUser} alt="user" width={32} height={32} />
+              <Avatar size={32} icon={<UserOutlined />} />
             )}
             <span className="dropdown-trigger-content">
               {address ? (

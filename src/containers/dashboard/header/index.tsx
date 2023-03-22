@@ -7,12 +7,14 @@ import Title from '@/containers/dashboard/header/title';
 
 type Data = {
   title?: string;
+  avatar?: string;
+  name?: string;
   buttons?: ReactNode;
   children?: ReactNode;
   padding?: boolean;
 };
 
-const App = ({ title, buttons, children, padding }: Data) => {
+const App = ({ title, avatar, name, buttons, children, padding }: Data) => {
   const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
 
   const extend = { poster: '' };
@@ -44,7 +46,7 @@ const App = ({ title, buttons, children, padding }: Data) => {
                 borderRadius: 10,
               }}
               size={70}
-              src={currentDAO.image}
+              src={avatar || currentDAO.image}
               shape="square"
             />
           </div>
@@ -54,7 +56,7 @@ const App = ({ title, buttons, children, padding }: Data) => {
       <div className={padding ? 'padding' : ''}>
         <Row gutter={24} style={{ marginTop: 55 }}>
           <Col span={12}>
-            <div className="name">{currentDAO.name}</div>
+            <div className="name">{name || currentDAO.name}</div>
           </Col>
           {buttons && (
             <Col

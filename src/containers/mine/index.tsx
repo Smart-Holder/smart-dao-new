@@ -70,7 +70,7 @@ export default function Mine() {
             width: 100%;
             height: 300px;
             margin-bottom: 134px;
-            background: url('/images/me/img_me_bg.png') no-repeat center;
+            background: url('/images/me/img_me_bg@2x.png') no-repeat center;
             background-size: cover;
           }
 

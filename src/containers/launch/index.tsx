@@ -5,11 +5,6 @@ import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 
-import icon1 from '/public/images/dashboard/mine/home-icon-1.png';
-import icon2 from '/public/images/dashboard/mine/home-icon-2.png';
-import icon3 from '/public/images/dashboard/mine/home-icon-3.png';
-import icon4 from '/public/images/dashboard/mine/home-icon-4.png';
-
 const { Paragraph } = Typography;
 
 const App = () => {
@@ -100,7 +95,7 @@ const App = () => {
               <div className="total-item-top">
                 {formatMessage({ id: 'my.summary.total.proposal' })}
                 <Image
-                  src="/images/dashboard/summary/img_dao_dashboard_card_proposal_default.png"
+                  src="/images/dashboard/summary/img_dao_dashboard_card_proposal_default@2x.png"
                   width={45}
                   height={46}
                   alt="img"
@@ -115,7 +110,7 @@ const App = () => {
               <div className="total-item-top">
                 {formatMessage({ id: 'my.summary.total.voting' })}
                 <Image
-                  src="/images/dashboard/summary/img_dao_dashboard_card_total_vote_default.png"
+                  src="/images/dashboard/summary/img_dao_dashboard_card_total_vote_default@2x.png"
                   width={45}
                   height={46}
                   alt="img"
@@ -130,7 +125,7 @@ const App = () => {
               <div className="total-item-top">
                 {formatMessage({ id: 'my.summary.total.complete' })}
                 <Image
-                  src="/images/dashboard/summary/img_dao_dashboard_card_voted_default.png"
+                  src="/images/dashboard/summary/img_dao_dashboard_card_voted_default@2x.png"
                   width={45}
                   height={46}
                   alt="img"
@@ -152,7 +147,7 @@ const App = () => {
                 </span>
               </div>
               <Image
-                src="/images/dashboard/summary/icon_dao_dashboard_card_assets_value_default.png"
+                src="/images/dashboard/summary/icon_dao_dashboard_card_assets_value_default@2x.png"
                 width={60}
                 height={60}
                 alt="img"
@@ -167,7 +162,7 @@ const App = () => {
                 <span>{formatMessage({ id: 'my.summary.total.asset' })}</span>
               </div>
               <Image
-                src="/images/dashboard/summary/icon_dao_dashboard_card_assets_default.png"
+                src="/images/dashboard/summary/icon_dao_dashboard_card_assets_default@2x.png"
                 width={60}
                 height={60}
                 alt="img"
@@ -182,7 +177,7 @@ const App = () => {
                 <span>{formatMessage({ id: 'my.summary.total.order' })}</span>
               </div>
               <Image
-                src="/images/dashboard/summary/icon_dao_dashboard_card_order_default.png"
+                src="/images/dashboard/summary/icon_dao_dashboard_card_order_default@2x.png"
                 width={60}
                 height={60}
                 alt="img"
@@ -197,7 +192,7 @@ const App = () => {
                 <span>{formatMessage({ id: 'my.summary.total.income' })}</span>
               </div>
               <Image
-                src="/images/dashboard/summary/icon_dao_dashboard_card_income_default.png"
+                src="/images/dashboard/summary/icon_dao_dashboard_card_income_default@2x.png"
                 width={60}
                 height={60}
                 alt="img"

@@ -193,7 +193,7 @@ const App = () => {
             >
               <div className="button-image-wrap">
                 <Image
-                  src="/images/icon_table_add_default.png"
+                  src="/images/filter/icon_table_add_default@2x.png"
                   width={20}
                   height={20}
                   alt=""

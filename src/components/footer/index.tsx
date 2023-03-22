@@ -12,7 +12,7 @@ const App = ({ hasSider }: { hasSider?: boolean }) => {
           <Col span={12}>
             <div className="left">
               <Image
-                src="/images/icon_logo_white.png"
+                src="/images/icon_logo_white@2x.png"
                 alt="logo"
                 width={175}
                 height={54}
@@ -35,21 +35,21 @@ const App = ({ hasSider }: { hasSider?: boolean }) => {
               </Space>
               <Space size={32} style={{ marginTop: 43 }}>
                 <Image
-                  src="/images/footer/icon_footer_social_facebook.png"
+                  src="/images/footer/icon_footer_social_facebook@2x.png"
                   alt="logo"
                   width={30}
                   height={30}
                   preview={false}
                 />
                 <Image
-                  src="/images/footer/icon_footer_social_linkedin.png"
+                  src="/images/footer/icon_footer_social_linkedin@2x.png"
                   alt="logo"
                   width={30}
                   height={30}
                   preview={false}
                 />
                 <Image
-                  src="/images/footer/icon_footer_social_twitter.png"
+                  src="/images/footer/icon_footer_social_twitter@2x.png"
                   alt="logo"
                   width={30}
                   height={30}

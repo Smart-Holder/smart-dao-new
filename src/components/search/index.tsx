@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { Input } from 'antd';
+import { Image, Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 
@@ -83,8 +83,15 @@ const Search: React.FC = () => {
         autoComplete="off"
         allowClear
         prefix={
-          <SearchOutlined
-            style={{ fontSize: 24, color: '#a3a3a3', marginRight: 14 }}
+          // <SearchOutlined
+          //   style={{ fontSize: 24, color: '#a3a3a3', marginRight: 14 }}
+          // />
+          <Image
+            src="/images/header/icon_navi_top_search@2x.png"
+            width={18}
+            height={18}
+            alt=""
+            preview={false}
           />
         }
         // onChange={debounceSearch}
@@ -110,6 +117,11 @@ const Search: React.FC = () => {
             border: 0;
             border-radius: 23px;
             box-shadow: none;
+          }
+
+          .input-wrap
+            :global(.ant-input-affix-wrapper.search-input .ant-input-prefix) {
+            margin-inline-end: 22px;
           }
 
           .input-wrap :global(input) {

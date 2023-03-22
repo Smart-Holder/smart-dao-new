@@ -15,8 +15,8 @@ const langList: MenuProps['items'] = [
 ];
 
 const icons: { [index: string]: string } = {
-  en: '/images/header/icon_navi_top_language_defult.png',
-  ja: '/images/header/icon_navi_top_language_defult.png',
+  en: '/images/header/icon_navi_top_language_defult@2x.png',
+  ja: '/images/header/icon_navi_top_language_defult@2x.png',
 };
 
 const Lang = () => {

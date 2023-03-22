@@ -56,7 +56,7 @@ const App = ({ type }: { type?: string }) => {
             )}
           </span>
           <Image
-            src="/images/icon_nav_side_switch_default.png"
+            src="/images/arrow/icon_nav_side_switch_default@2x.png"
             width={10}
             height={10}
             alt=""

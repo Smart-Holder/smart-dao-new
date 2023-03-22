@@ -1,34 +1,34 @@
-import { Col, Image, Row, Space } from 'antd';
+import { Col, Image, Row, Typography } from 'antd';
 
-type Data = {
+const { Text } = Typography;
+
+export type CardDataProps = {
   image?: string;
   value: string | number;
   label: string;
   onClick?: () => void;
 };
 
-const Card = ({ data }: { data: Data[] }) => {
+const Card = ({ data }: { data: CardDataProps[] }) => {
   return (
     <div className="cards">
       <Row gutter={[24, 24]}>
         {data.map((item, index) => (
           <Col span={6} key={index}>
             <div className="item">
-              {/* <Image
-                src={
-                  item.image || '/images/card/img_table_data-chart_default.png'
-                }
-                width={56}
-                height={56}
-                alt=""
-              /> */}
-              <span className="label">{item.label}</span>
+              <Text ellipsis={true}>
+                <span className="label">{item.label}</span>
+              </Text>
               {item.onClick ? (
-                <span className="value value-hover" onClick={item.onClick}>
-                  {item.value}
-                </span>
+                <Text ellipsis={true}>
+                  <span className="value value-hover" onClick={item.onClick}>
+                    {item.value}
+                  </span>
+                </Text>
               ) : (
-                <span className="value">{item.value}</span>
+                <Text ellipsis={true}>
+                  <span className="value">{item.value}</span>
+                </Text>
               )}
             </div>
           </Col>
