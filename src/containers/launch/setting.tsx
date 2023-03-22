@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Steps } from 'antd';
+import { Col, Row, Steps } from 'antd';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 
@@ -48,13 +48,18 @@ const App = () => {
       </div>
 
       {step !== 0 && (
-        <Steps
-          style={{ marginTop: 40 }}
-          current={step - 1}
-          items={items.current}
-          labelPlacement="vertical"
-          responsive={false}
-        />
+        <Row>
+          <Col span={22}>
+            <Steps
+              className="steps"
+              style={{ marginTop: 40 }}
+              current={step - 1}
+              items={items.current}
+              labelPlacement="vertical"
+              responsive={false}
+            />
+          </Col>
+        </Row>
       )}
 
       <div>
@@ -88,6 +93,26 @@ const App = () => {
                 > .ant-steps-icon
             ) {
             color: #fff;
+          }
+          .wrap :global(.steps .ant-steps-item:last-child) {
+            flex: 1;
+          }
+          .wrap :global(.steps .ant-steps-item-icon) {
+            margin-left: 0;
+          }
+          .wrap :global(.steps .ant-steps-item-tail) {
+            margin-left: 16px !important;
+          }
+          .wrap :global(.steps .ant-steps-item-content) {
+            width: 90%;
+          }
+          .wrap :global(.steps .ant-steps-item-description) {
+            font-size: 14px;
+            font-family: PingFangSC-Semibold, PingFang SC;
+            font-weight: 600;
+            color: #000000;
+            line-height: 20px;
+            text-align: left;
           }
         `}
       </style>
