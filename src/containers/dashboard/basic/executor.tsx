@@ -103,7 +103,6 @@ const App = () => {
           await createVote(params);
           Modal.success({
             title: formatMessage({ id: 'proposal.create.message' }),
-            className: 'modal-small',
           });
           // message.success(formatMessage({ id: 'governance.proposal.success' }));
         } else {

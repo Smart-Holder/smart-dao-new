@@ -2,7 +2,6 @@ import {
   Table,
   PaginationProps,
   Image,
-  DatePicker,
   Form,
   Tag,
   Button,
@@ -18,7 +17,6 @@ import Select from '@/components/form/filter/select';
 import { ReactElement, useCallback, useEffect, useState } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
 
-import styles from '@/styles/content.module.css';
 import Input from '@/containers/dashboard/mine/input-price';
 import { request } from '@/api';
 import { useAppSelector } from '@/store/hooks';
@@ -27,7 +25,7 @@ import { formatDayjsValues, fromToken, toToken } from '@/utils';
 import { useIntl } from 'react-intl';
 import { shelves } from '@/api/asset';
 
-const { RangePicker } = DatePicker;
+// const { RangePicker } = DatePicker;
 
 dayjs.extend(customParseFormat);
 
@@ -47,7 +45,7 @@ const App: NextPageWithLayout = () => {
   const [tableLoading, setTableLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(true);
-  const [market, setMarket] = useState('');
+  const [market, setMarket] = useState('opensea');
   const [priceList, setPriceList] = useState({}) as any;
   const [price, setPrice] = useState('');
   const [selectedRow, setSelectedRow] = useState({}) as any;
@@ -278,7 +276,6 @@ const App: NextPageWithLayout = () => {
         </div>
 
         <Table
-          className={styles['dashboard-content-table']}
           pagination={{
             position: ['bottomRight'],
             current: page,
@@ -353,6 +350,7 @@ const App: NextPageWithLayout = () => {
             <Select
               style={{ width: 200 }}
               size="large"
+              defaultValue="opensea"
               placeholder={formatMessage({
                 id: 'financial.asset.tradingMarket',
               })}

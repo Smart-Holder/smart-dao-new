@@ -1,20 +1,8 @@
-import {
-  Avatar,
-  Breadcrumb,
-  Button,
-  Image,
-  message,
-  Modal,
-  PaginationProps,
-  Row,
-} from 'antd';
+import { Avatar, Breadcrumb, Button, message, PaginationProps } from 'antd';
 import Layout from '@/components/layout';
 import { ReactElement, useEffect, useState } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
-import modalStyles from '@/containers/dashboard/financial/put-modal.module.css';
-import DetailHeader from '@/containers/dashboard/financial/detail-header';
 import DetailMarket from '@/containers/dashboard/financial/detail-market';
-import DetailAttributes from '@/containers/dashboard/financial/detail-attributes';
 import DetailTransactions, {
   DetailTransactionItem,
 } from '@/containers/dashboard/financial/detail-transactions';
@@ -26,6 +14,7 @@ import DashboardHeader from '@/containers/dashboard/header';
 import { formatAddress } from '@/utils';
 import { shelves } from '@/api/asset';
 import { LoadingOutlined } from '@ant-design/icons';
+import Modal from '@/components/modal';
 
 const list = [{ name: 'OpenSea', image: '/images/opensea.png' }];
 
@@ -198,46 +187,28 @@ const App: NextPageWithLayout = () => {
         data={data}
       />
 
-      <Modal
-        width={512}
-        open={isModalOpen}
-        onCancel={hideModal}
-        footer={null}
-        destroyOnClose
-      >
-        <div className={modalStyles['content']}>
-          <div className={modalStyles['title']}>
-            {formatMessage({ id: 'financial.asset.tradingMarket' })}
-          </div>
-          {/* <div className={modalStyles['sub-title']}>
-            Create your own DAO in a few minutes!
-          </div> */}
-          <div className={modalStyles['list']}>
-            {list.map((item, i) => (
-              <div
-                key={i}
-                className={modalStyles['item']}
-                onClick={() => {
-                  onShelves(item.name);
-                }}
-              >
-                {!loading ? (
-                  <Image
-                    className={modalStyles['item-icon']}
-                    src={item.image}
-                    alt="img"
-                    width={88}
-                    height={88}
-                    preview={false}
-                  />
-                ) : (
-                  // <LoadingOutlined style={{ fontSize: 88 }} />
-                  <Avatar size={88} icon={<LoadingOutlined />} />
-                )}
-                <div className={modalStyles['item-title']}>{item.name}</div>
-              </div>
-            ))}
-          </div>
+      <Modal type="normal" open={isModalOpen} onCancel={hideModal}>
+        <div className="title">
+          {formatMessage({ id: 'financial.asset.tradingMarket' })}
+        </div>
+        <div className="market-list">
+          {list.map((item, i) => (
+            <div
+              key={i}
+              className="market-list-item"
+              onClick={() => {
+                onShelves(item.name);
+              }}
+            >
+              {!loading ? (
+                <Avatar src={item.image} size={88} alt="" />
+              ) : (
+                // <LoadingOutlined style={{ fontSize: 88 }} />
+                <Avatar size={88} icon={<LoadingOutlined />} />
+              )}
+              <div className="market-list-item-name">{item.name}</div>
+            </div>
+          ))}
         </div>
       </Modal>
 
@@ -251,6 +222,28 @@ const App: NextPageWithLayout = () => {
             font-weight: 500;
             color: #000000;
             line-height: 25px;
+          }
+
+          .market-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 50px;
+          }
+
+          .market-list-item {
+            margin: 0 30px;
+            cursor: pointer;
+          }
+
+          .market-list-item-name {
+            height: 24px;
+            margin-top: 32px;
+            font-size: 20px;
+            font-family: SFUIText-Semibold, SFUIText;
+            font-weight: 600;
+            color: #000000;
+            line-height: 24px;
           }
         `}
       </style>

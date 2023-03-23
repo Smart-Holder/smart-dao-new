@@ -3,7 +3,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import styles from './financial-header.module.css';
 import { Button, Typography } from 'antd';
-// import PutModal, { PutModalListItem } from './put-modal';
 import { useAppSelector } from '@/store/hooks';
 import { useIntl } from 'react-intl';
 

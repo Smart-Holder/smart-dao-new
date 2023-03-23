@@ -1,7 +1,9 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
 import { useRouter } from 'next/router';
-import { Modal, Avatar } from 'antd';
+import { Avatar } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
+
+import Modal from '@/components/modal';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { setCurrentMember } from '@/store/features/daoSlice';
@@ -45,7 +47,7 @@ const RoleModal = (props: any, ref: any) => {
   console.log('isModalOpen', isModalOpen);
 
   return (
-    <Modal width={512} open={isModalOpen} onCancel={handleCancel} footer={null}>
+    <Modal type="normal" open={isModalOpen} onCancel={handleCancel}>
       <div className="content">
         <div className="h1">{formatMessage({ id: 'home.selectIdentity' })}</div>
         {/* <div className="h2">Create your own DAO</div> */}
@@ -77,31 +79,20 @@ const RoleModal = (props: any, ref: any) => {
       <style jsx>
         {`
           .content {
-            padding: 25px 16px;
             text-align: center;
           }
 
           .h1 {
-            height: 40px;
-            font-size: 28px;
-            font-family: PingFangSC-Semibold, PingFang SC;
+            height: 29px;
+            font-size: 24px;
+            font-family: SFUIDisplay-Semibold, SFUIDisplay;
             font-weight: 600;
-            color: #3c4369;
-            line-height: 40px;
-          }
-
-          .h2 {
-            height: 50px;
-            margin-top: 7px;
-            font-size: 18px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #969ba0;
-            line-height: 50px;
+            color: #000000;
+            line-height: 29px;
           }
 
           .roles {
-            margin-top: 75px;
+            margin-top: 50px;
           }
 
           .role-item {
@@ -112,12 +103,12 @@ const RoleModal = (props: any, ref: any) => {
 
           .role-item-name {
             height: 28px;
-            margin-top: 33px;
+            margin-top: 32px;
             font-size: 20px;
-            font-family: PingFangSC-Semibold, PingFang SC;
+            font-family: SFUIText-Semibold, SFUIText;
             font-weight: 600;
-            color: #3c4369;
-            line-height: 28px;
+            color: #000000;
+            line-height: 24px;
           }
         `}
       </style>

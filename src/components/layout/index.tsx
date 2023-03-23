@@ -58,7 +58,6 @@ const App = ({
   //       } else {
   //         Modal.warning({
   //           title: `Supported networks: Ethereum, Goerli`,
-  //           className: 'modal-small',
   //           onOk: () => {
   //             dispatch(disconnect());
   //           },

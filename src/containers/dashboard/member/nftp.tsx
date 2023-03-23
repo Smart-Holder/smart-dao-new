@@ -1,9 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
-import { Table, Button, Form, Image, Space, Input } from 'antd';
+import { Table, Button, Form, Image } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
-import Counts from '@/containers/dashboard/mine/counts';
 import NftpModal from '@/components/modal/nftpModal';
 import Select from '@/components/form/filter/select';
 import RangePicker from '@/components/form/filter/rangePicker';
@@ -11,7 +10,6 @@ import DashboardHeader from '@/containers/dashboard/header';
 
 import { request } from '@/api';
 
-import styles from '@/styles/content.module.css';
 import { useAppSelector } from '@/store/hooks';
 
 import { formatDayjsValues } from '@/utils';

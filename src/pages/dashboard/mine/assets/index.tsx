@@ -12,8 +12,6 @@ import Select from '@/components/form/filter/select';
 
 import type { NextPageWithLayout } from '@/pages/_app';
 
-import styles from '@/styles/content.module.css';
-
 import { useAppSelector } from '@/store/hooks';
 import { getCookie } from '@/utils/cookie';
 import { request } from '@/api';
@@ -270,13 +268,12 @@ const App: NextPageWithLayout = () => {
           </Button>
         </div>
 
-        <div className={styles['dashboard-content-body']}>
-          <Row gutter={[22, 22]}>
-            {data.map((item: any, i) => {
-              return (
-                <Col span={8} key={i}>
-                  <NFT data={item} />
-                  {/* <FinancialItem
+        <Row gutter={[22, 22]}>
+          {data.map((item: any, i) => {
+            return (
+              <Col span={8} key={i}>
+                <NFT data={item} />
+                {/* <FinancialItem
                     title={`${item.name} #${item.id}`}
                     logo={item.mediaOrigin}
                     price={
@@ -289,24 +286,24 @@ const App: NextPageWithLayout = () => {
                       router.push(`assets/detail?id=${item.id}`);
                     }}
                   /> */}
-                </Col>
-              );
-            })}
-          </Row>
+              </Col>
+            );
+          })}
+        </Row>
 
-          {loading && <Skeleton active />}
+        {loading && <Skeleton active />}
 
-          {!loading && data.length === 0 && <Empty />}
+        {!loading && data.length === 0 && <Empty />}
 
-          {init && !loading && data.length < total && (
-            <div className="footer">
-              <Button className="button-all" onClick={getData}>
-                VIEW ALL NFTS
-              </Button>
-            </div>
-          )}
+        {init && !loading && data.length < total && (
+          <div className="footer">
+            <Button className="button-all" onClick={getData}>
+              VIEW ALL NFTS
+            </Button>
+          </div>
+        )}
 
-          {/* {total > 0 && (
+        {/* {total > 0 && (
             <div className={styles['dashboard-content-pagination']}>
               <Pagination
                 simple
@@ -318,7 +315,6 @@ const App: NextPageWithLayout = () => {
               />
             </div>
           )} */}
-        </div>
       </div>
 
       <style jsx>

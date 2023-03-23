@@ -171,12 +171,119 @@ a {
 }
 
 /* ------------ Modal ------------ */
-.ant-modal .ant-modal-content {
-  border-radius: 30px;
+.ant-modal.modal .ant-modal-content {
+  padding: 32px;
+  border-radius: 18px;
 }
 
-.modal-small .ant-modal-content {
+.ant-modal.modal .modal-normal {
+  padding: 48px 32px 32px;
+  text-align: center;
+}
+
+.ant-modal.modal .title {
+  font-size: 24px;
+  font-family: SFUIDisplay-Semibold, SFUIDisplay;
+  font-weight: 600;
+  color: #000000;
+  line-height: 29px;
+}
+
+.ant-modal.modal .title2 {
+  font-size: 22px;
+  font-family: SFUIDisplay-Semibold, SFUIDisplay;
+  font-weight: 600;
+  color: #000000;
+  line-height: 26px;
+}
+
+.ant-modal.modal .subtitle {
+  height: 21px;
+  margin-top: 32px;
+  font-size: 18px;
+  font-family: SFUIText-Medium, SFUIText;
+  font-weight: 500;
+  color: #818181;
+  line-height: 21px;
+}
+
+.ant-modal.modal .modal-form .title {
+  height: 26px;
+  font-size: 22px;
+  line-height: 26px;
+}
+
+/* .ant-modal.modal .title {
+  height: 26px;
+  font-size: 22px;
+  font-family: SFUIDisplay-Semibold, SFUIDisplay;
+  font-weight: 600;
+  color: #2c2c2c;
+  line-height: 26px;
+} */
+
+/* .modal-small .ant-modal-content {
   border-radius: 8px;
+} */
+
+.ant-modal.modal .ant-modal-close {
+  top: 32px;
+  right: 32px;
+}
+
+.ant-modal.modal.modal-vote .ant-modal-close {
+  top: 64px;
+  right: 64px;
+}
+
+.ant-modal.modal .form {
+  margin-top: 40px;
+}
+
+.ant-modal.modal .button-submit {
+  min-width: 239px;
+}
+
+/* ------------------ Modal.success / Modal.warning / ... ---------------------- */
+.ant-modal.modal.ant-modal-confirm .ant-modal-content {
+  padding: 90px 64px 64px;
+  text-align: center;
+}
+
+.ant-modal.modal.ant-modal-confirm .ant-modal-confirm-body {
+  display: block;
+}
+
+.ant-modal.modal.ant-modal-confirm .ant-modal-confirm-body > .anticon {
+  display: none;
+}
+
+.ant-modal.modal.ant-modal-confirm .modal-content-text {
+  width: 300px;
+  margin: 32px auto 0;
+  font-size: 18px;
+  font-family: SFUIText-Medium, SFUIText;
+  font-weight: 500;
+  color: #000000;
+  line-height: 21px;
+}
+
+.ant-modal.modal.ant-modal-confirm .ant-modal-confirm-btns {
+  margin-top: 60px;
+  text-align: center;
+}
+
+.ant-modal.modal.ant-modal-confirm .ant-modal-confirm-btns .ant-btn {
+  min-width: 239px;
+  height: 50px;
+
+  font-size: 18px;
+  font-family: PingFangSC-Semibold, PingFang SC;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 24px;
+  background: #000000;
+  border-radius: 4px;
 }
 
 /* ------------ smart-input v1 ------------ */
@@ -679,4 +786,27 @@ a {
 
 .ant-picker-range.filter .ant-picker-clear {
   font-size: 20px;
+}
+
+/* ------------------- Progress ---------------------- */
+.ant-progress-line.vote-progress {
+  display: block;
+  height: 4px;
+  margin: 0;
+  line-height: 0;
+}
+
+.ant-progress-line.vote-progress .ant-progress-outer {
+  height: 4px;
+}
+
+.ant-progress-line.vote-progress .ant-progress-bg {
+  height: 4px !important;
+  background: #000;
+  border-radius: 2px;
+}
+
+.ant-progress-line.vote-progress .ant-progress-inner {
+  background: #dedede;
+  border-radius: 2px;
 }

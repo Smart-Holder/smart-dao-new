@@ -1,4 +1,4 @@
-import { Form, Skeleton } from 'antd';
+import { Col, Form, Image, Input, Row, Skeleton } from 'antd';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -12,9 +12,7 @@ import Title from '@/containers/dashboard/header/title';
 
 import { useIntl } from 'react-intl';
 
-import styles from '@/styles/content.module.css';
 import VoteItem, {
-  StatusType,
   VoteItemType,
 } from '@/containers/dashboard/governance/vote-item';
 import VoteModal from '@/containers/dashboard/governance/vote-modal';
@@ -35,7 +33,7 @@ const App: NextPageWithLayout = () => {
   const pageSize = 10;
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(-1);
-  const [values, setValues] = useState({});
+  const [values, setValues] = useState({ orderBy: 'time desc' });
   const [data, setData] = useState([]) as any;
 
   const [openModal, setOpenModal] = useState(false);
@@ -166,7 +164,8 @@ const App: NextPageWithLayout = () => {
     }
   }, [searchText, values, chainId, address, currentDAO.root]);
 
-  const onClickItem = (item: VoteItemType) => {
+  const onClickItem = (item: any) => {
+    console.log('item', item);
     setCurrentItem(item);
     setOpenModal(true);
   };
@@ -176,46 +175,39 @@ const App: NextPageWithLayout = () => {
     setOpenModal(false);
   };
 
-  const getStatus = (item: any) => {
-    let status: StatusType = 'processing';
-
-    if (!item.isClose) {
-      status = 'processing';
-    } else {
-      if (item.isAgree) {
-        status = 'passed';
-
-        if (item.isExecuted) {
-          status = 'executed';
-        }
-      } else {
-        status = 'rejected';
-      }
-    }
-
-    return status;
-  };
-
   return (
     <div className="dashboard-content-scroll" id="scrollTarget">
       <div style={{ margin: '30px 80px 0' }}>
         <Title title={formatMessage({ id: 'sider.governance.votes' })} />
       </div>
 
-      <div
-        className="table-card content-min-height"
-        style={{ margin: '40px 24px 50px' }}
-      >
+      <div className="content-min-height" style={{ margin: '40px 80px 50px' }}>
         <div className="table-filter">
           <Form
             name="filter"
             layout="inline"
+            initialValues={{ orderBy: 'time desc' }}
             onValuesChange={onValuesChange}
             autoComplete="off"
             labelAlign="left"
             requiredMark={false}
             validateTrigger="onBlur"
           >
+            <Form.Item name="name" style={{ marginBottom: 20 }}>
+              <Input
+                className="filter"
+                placeholder="Search name"
+                prefix={
+                  <Image
+                    src="/images/filter/icon_table_search_default@2x.png"
+                    width={20}
+                    height={20}
+                    alt=""
+                    preview={false}
+                  />
+                }
+              />
+            </Form.Item>
             <Form.Item name="status">
               <Select
                 style={{ width: 200 }}
@@ -331,7 +323,7 @@ const App: NextPageWithLayout = () => {
           </Form>
         </div>
 
-        <div className={`${styles['dashboard-content-body']}`}>
+        <div>
           <InfiniteScroll
             dataLength={data.length}
             next={getData}
@@ -339,32 +331,13 @@ const App: NextPageWithLayout = () => {
             loader={loading && <Skeleton paragraph={{ rows: 1 }} active />}
             scrollableTarget="scrollTarget"
           >
-            <div className={styles['vote-list']}>
+            <Row gutter={[35, 35]} style={{ width: '100%' }}>
               {data.map((item: any) => (
-                <div className={styles['vote-item']} key={item.id}>
-                  <VoteItem
-                    status={getStatus(item)}
-                    title={item.name}
-                    owner={{
-                      name: 'Willy Wonca',
-                      address: item.origin,
-                    }}
-                    number={`#${item.id}`}
-                    description=""
-                    desc={item.description}
-                    type="normal"
-                    support={item.agreeTotal}
-                    opposed={item.voteTotal - item.agreeTotal}
-                    // endTime={item.expiry * 1000}
-                    endTime={item.modify}
-                    onClick={onClickItem}
-                    votes={item.votes}
-                    proposal_id={item.proposal_id}
-                    data={item}
-                  />
-                </div>
+                <Col span={12} key={item.id}>
+                  <VoteItem data={item} onClick={onClickItem} />
+                </Col>
               ))}
-            </div>
+            </Row>
           </InfiniteScroll>
         </div>
       </div>

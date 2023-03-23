@@ -62,7 +62,6 @@ const App = () => {
 
       Modal.success({
         title: formatMessage({ id: 'proposal.create.message' }),
-        className: 'modal-small',
         onOk: () => {
           router.push('/dashboard/governance/votes');
         },

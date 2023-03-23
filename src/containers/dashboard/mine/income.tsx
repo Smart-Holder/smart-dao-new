@@ -1,16 +1,16 @@
 import { useEffect, useState, useRef } from 'react';
-import { Table, Button, Form, Modal, message } from 'antd';
+import { Table, Button, Form, message } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 import Select from '@/components/form/filter/select';
+import Modal from '@/components/modal';
 import RangePicker from '@/components/form/filter/rangePicker';
 // import NftpModal from '@/components/modal/nftpModal';
 import Title from '@/containers/dashboard/header/title';
 
 import { request } from '@/api';
 
-import styles from '@/styles/content.module.css';
 import { useAppSelector } from '@/store/hooks';
 
 import { formatDayjsValues, fromToken } from '@/utils';
@@ -172,7 +172,6 @@ const App = () => {
       await createVote(params);
       Modal.success({
         title: formatMessage({ id: 'proposal.create.message' }),
-        className: 'modal-small',
       });
       // window.location.reload();
       hideModal();
@@ -298,26 +297,19 @@ const App = () => {
 
       {/* <NftpModal ref={nftpModal} /> */}
 
-      <Modal width={512} open={isModalOpen} onCancel={hideModal} footer={null}>
-        <div className={styles['dashboard-modal-content']}>
-          <div
-            className={styles['dashboard-modal-title']}
-            style={{ marginBottom: 40 }}
-          >
-            {formatMessage({ id: 'financial.income.auto' })}
-          </div>
-          {/* <div className={styles['dashboard-modal-subtitle']}>
-            Create your own DAO in a few minutes!
-          </div> */}
-          <Button
-            type="primary"
-            className={styles['dashboard-modal-button']}
-            onClick={onDone}
-            loading={loading}
-          >
-            {formatMessage({ id: 'financial.income.submit' })}
-          </Button>
+      <Modal type="normal" open={isModalOpen} onCancel={hideModal}>
+        <div className="title">
+          {formatMessage({ id: 'financial.income.auto' })}
         </div>
+        <Button
+          style={{ marginTop: 50 }}
+          className="button-submit"
+          type="primary"
+          onClick={onDone}
+          loading={loading}
+        >
+          {formatMessage({ id: 'financial.income.submit' })}
+        </Button>
       </Modal>
     </div>
   );

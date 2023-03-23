@@ -12,10 +12,9 @@ import DashboardHeader from '@/containers/dashboard/header';
 
 import type { NextPageWithLayout } from '@/pages/_app';
 
-import styles from '@/styles/content.module.css';
-import FinancialHeader from '@/containers/dashboard/financial/financial-header';
-import Counts from '@/containers/dashboard/mine/counts';
-import FinancialItem from '@/containers/dashboard/financial/financial-item';
+// import FinancialHeader from '@/containers/dashboard/financial/financial-header';
+// import Counts from '@/containers/dashboard/mine/counts';
+// import FinancialItem from '@/containers/dashboard/financial/financial-item';
 import { useAppSelector } from '@/store/hooks';
 import { ETH_CHAINS_INFO } from '@/config/chains';
 import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
@@ -287,43 +286,41 @@ const App: NextPageWithLayout = () => {
               </Form.Item>
             </Form>
           </div>
-          <div className={styles['dashboard-content-body']}>
-            <InfiniteScroll
-              dataLength={data.length}
-              next={getData}
-              hasMore={data.length < total}
-              loader={loading && <Skeleton active />}
-              scrollableTarget="scrollTarget"
-              style={{ overflow: 'inherit' }}
-            >
-              <Row gutter={[19, 20]}>
-                {data.map((item: any) => {
-                  // return (
-                  //   <div key={item.id} className={styles['financial-item']}>
-                  //     <FinancialItem
-                  //       title={`${item.name} #${item.id}`}
-                  //       logo={item.imageOrigin}
-                  //       price={item.sellPrice || 0}
-                  //       // priceIcon={<PriceIcon />}
-                  //       onClick={() => {
-                  //         localStorage.setItem('asset', JSON.stringify(item));
-                  //         router.push(
-                  //           `/dashboard/mine/assets/detail?id=${item.id}`,
-                  //         );
-                  //       }}
-                  //     />
-                  //   </div>
-                  // );
-                  return (
-                    <Col span={8} key={item.id}>
-                      <NFT data={item} />
-                    </Col>
-                  );
-                })}
-              </Row>
-              {!loading && data.length === 0 && <Empty />}
-            </InfiniteScroll>
-          </div>
+          <InfiniteScroll
+            dataLength={data.length}
+            next={getData}
+            hasMore={data.length < total}
+            loader={loading && <Skeleton active />}
+            scrollableTarget="scrollTarget"
+            style={{ overflow: 'inherit' }}
+          >
+            <Row gutter={[19, 20]}>
+              {data.map((item: any) => {
+                // return (
+                //   <div key={item.id} className={styles['financial-item']}>
+                //     <FinancialItem
+                //       title={`${item.name} #${item.id}`}
+                //       logo={item.imageOrigin}
+                //       price={item.sellPrice || 0}
+                //       // priceIcon={<PriceIcon />}
+                //       onClick={() => {
+                //         localStorage.setItem('asset', JSON.stringify(item));
+                //         router.push(
+                //           `/dashboard/mine/assets/detail?id=${item.id}`,
+                //         );
+                //       }}
+                //     />
+                //   </div>
+                // );
+                return (
+                  <Col span={8} key={item.id}>
+                    <NFT data={item} />
+                  </Col>
+                );
+              })}
+            </Row>
+            {!loading && data.length === 0 && <Empty />}
+          </InfiniteScroll>
         </div>
       </div>
       <Footer />

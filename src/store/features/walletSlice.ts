@@ -140,7 +140,6 @@ export const walletSlice = createSlice({
           state.isSupportChain = false;
           // Modal.warning({
           //   title: 'Supported networks: Ethereum, Goerli',
-          //   className: 'modal-small',
           // });
           return;
         }

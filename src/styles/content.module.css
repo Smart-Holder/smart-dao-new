@@ -111,19 +111,6 @@
   padding: 30px 25px;
 }
 
-.vote-list {
-  /* padding: 38px 16px; */
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.vote-item {
-  width: 49%;
-  margin-bottom: 20px;
-  box-sizing: border-box;
-}
-
 .financial-list {
   display: flex;
   flex-wrap: wrap;

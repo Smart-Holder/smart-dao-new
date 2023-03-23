@@ -38,7 +38,6 @@ const App = (props: any) => {
     if (!isSupportChain) {
       Modal.warning({
         title: `Supported networks: Ethereum, Goerli`,
-        className: 'modal-small',
         onOk: () => {
           dispatch({ type: 'wallet/notSupportChain', payload: null });
         },

@@ -1,16 +1,10 @@
 import { useAppSelector } from '@/store/hooks';
-import { getCookie } from '@/utils/cookie';
 import { validateImage } from '@/utils/image';
-import { validateChinese } from '@/utils/validator';
-import { PlusOutlined } from '@ant-design/icons';
 import {
   Form,
   Input,
   Space,
-  Image,
   UploadProps,
-  Row,
-  Col,
   Button,
   InputNumber,
   message,
@@ -18,7 +12,6 @@ import {
 } from 'antd';
 import { RcFile, UploadChangeParam, UploadFile } from 'antd/es/upload';
 import { FC, useEffect, useState } from 'react';
-import styles from './issue-form.module.css';
 import type { SelectProps } from 'antd';
 import { ETH_CHAINS_INFO } from '@/config/chains';
 import { request } from '@/api';
@@ -33,12 +26,6 @@ import Upload from '@/components/form/upload';
 import Select from '@/components/form/select';
 
 type IssueFormProps = {};
-
-const testTags = [
-  { label: 'aaa', value: 'aaa' },
-  { label: 'bbb', value: 'bbb' },
-  { label: 'ccc', value: 'ccc' },
-];
 
 const IssueForm: FC<IssueFormProps> = () => {
   const { formatMessage } = useIntl();
@@ -153,7 +140,6 @@ const IssueForm: FC<IssueFormProps> = () => {
         await createProposal(params, _tokenURI);
         Modal.success({
           title: formatMessage({ id: 'proposal.create.message' }),
-          className: 'modal-small',
         });
       } else {
         await safeMint({ _tokenURI });

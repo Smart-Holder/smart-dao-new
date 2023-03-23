@@ -1,6 +1,7 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
-import Image from 'next/image';
-import { Modal, Space, Button, Typography } from 'antd';
+import { Space, Button, Typography, Image } from 'antd';
+
+import Modal from '@/components/modal';
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { connectWallet } from '@/store/features/walletSlice';
@@ -24,7 +25,7 @@ const ConnectModal = (props: any, ref: any) => {
 
   const chainData = ETH_CHAINS_INFO[chainId];
 
-  const [active, setActive] = useState(chainData?.name);
+  const [active, setActive] = useState(chainData?.name || 'Ethereum');
 
   // 通过useDispatch 派发事件
   const dispatch = useAppDispatch();
@@ -43,7 +44,6 @@ const ConnectModal = (props: any, ref: any) => {
     if (!isSupportChain) {
       Modal.warning({
         title: 'Supported networks: Ethereum, Goerli',
-        className: 'modal-small',
       });
 
       handleCancel();
@@ -60,12 +60,15 @@ const ConnectModal = (props: any, ref: any) => {
     handleCancel();
   };
 
+  console.log('0000', active);
+
   return (
-    <Modal width={512} open={isModalOpen} onCancel={handleCancel} footer={null}>
+    <Modal open={isModalOpen} onCancel={handleCancel}>
       <div className="wallet">
-        <div className="h1">
+        <div className="title">
           <span>{formatMessage({ id: 'home.selectNetwork' })}</span>
         </div>
+
         <Space size={30} className="types">
           <Button
             className={active === 'Ethereum' ? 'active' : ''}
@@ -87,22 +90,36 @@ const ConnectModal = (props: any, ref: any) => {
           </Button>
         </Space>
 
-        <div className="h1">
+        <div className="title" style={{ marginTop: 64 }}>
           <span>{formatMessage({ id: 'home.selectWallet' })}</span>
         </div>
+
         <div className="buttons">
           <div className="button" onClick={handleMetaMask}>
-            <Image src={iconMetamask} width={76} height={75} alt="metamask" />
+            <Image
+              src="/images/wallet/icon-metamask@2x.png"
+              width={76}
+              height={75}
+              alt="metamask"
+              preview={false}
+            />
             <div style={{ marginTop: 7 }}>MetaMask</div>
           </div>
           <div className="button" onClick={handleWallet}>
-            <Image src={iconWallet} width={76} height={75} alt="wallet" />
+            <Image
+              src="/images/wallet/icon-wallet@2x.png"
+              width={76}
+              height={75}
+              alt="wallet"
+              preview={false}
+            />
             <div style={{ marginTop: 7 }}>Wallet Connect</div>
           </div>
         </div>
 
         <div className="footer">
           <Link
+            style={{ color: '#818181' }}
             href="https://smartdao.gitbook.io/smartdao/guides/shu-zi-qian-bao-cha-jian-zhun-bei"
             target="_blank"
           >
@@ -115,45 +132,17 @@ const ConnectModal = (props: any, ref: any) => {
             text-align: center;
           }
 
-          .wallet .h1 {
-            margin-top: 32px;
-          }
-
-          .wallet .h1 span {
-            position: relative;
-            display: inline-block;
-            width: 220px;
-            height: 36px;
-            font-size: 30px;
-            font-family: HelveticaNeue-Medium, HelveticaNeue;
-            font-weight: 500;
-            color: #3c4369;
-            line-height: 37px;
-            text-align: center;
-          }
-
-          .wallet .h1 span::before {
-            content: '';
-            position: absolute;
-            left: -81px;
-            top: 18px;
-            width: 68px;
-            height: 1px;
-            background: #696969;
-          }
-
-          .wallet .h1 span::after {
-            content: '';
-            position: absolute;
-            right: -81px;
-            top: 18px;
-            width: 68px;
-            height: 1px;
-            background: #696969;
+          .wallet .title {
+            height: 26px;
+            font-size: 22px;
+            font-family: SFUIDisplay-Semibold, SFUIDisplay;
+            font-weight: 600;
+            color: #2c2c2c;
+            line-height: 26px;
           }
 
           .wallet :global(.types) {
-            margin: 31px 0 20px;
+            margin-top: 50px;
           }
 
           .wallet :global(.types button) {
@@ -166,11 +155,16 @@ const ConnectModal = (props: any, ref: any) => {
             border: 0;
           }
 
+          .wallet :global(.types .active) {
+            background: #000;
+            color: #fff;
+          }
+
           .wallet .buttons {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: 7px;
+            margin-top: 15px;
             text-align: center;
           }
 
@@ -188,11 +182,6 @@ const ConnectModal = (props: any, ref: any) => {
 
             border-radius: 8px;
             cursor: pointer;
-          }
-
-          .wallet :global(.types .active) {
-            background: #546ff6;
-            color: #fff;
           }
 
           .footer {

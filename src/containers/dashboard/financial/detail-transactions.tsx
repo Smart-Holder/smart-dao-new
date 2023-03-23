@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import styles from './detail-transactions.module.css';
-import contentStyles from '@/styles/content.module.css';
 import { Table } from 'antd';
 import { formatAddress } from '@/utils';
 import dayjs from 'dayjs';

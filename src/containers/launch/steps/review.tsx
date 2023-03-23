@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Modal, Input, Button, Col, Row } from 'antd';
+import { Input, Button, Col, Row } from 'antd';
 import { ExclamationOutlined } from '@ant-design/icons';
 
 import Tax from './tax';
@@ -14,6 +14,8 @@ import { prevStep } from '@/store/features/daoSlice';
 import { getMakeDAOStorage } from '@/utils/launch';
 import { deployAssetSalesDAO } from '@/store/features/daoSlice';
 import { useIntl } from 'react-intl';
+
+import Modal from '@/components/modal';
 
 const App = () => {
   const { formatMessage } = useIntl();
@@ -84,29 +86,24 @@ const App = () => {
         nextLabel={formatMessage({ id: 'launch.release' })}
       />
 
-      <Modal
-        width={512}
-        open={isModalOpen}
-        onCancel={handleCancel}
-        footer={null}
-      >
+      <Modal type="normal" open={isModalOpen} onCancel={handleCancel}>
         <div className="modal-content">
-          <ExclamationOutlined style={{ fontSize: 88 }} />
-          <div style={{ marginTop: 55 }} className="modal-content-text">
+          <ExclamationOutlined style={{ fontSize: 60 }} />
+          <div className="modal-content-text">
             {formatMessage({ id: 'launch.warning' })}
           </div>
           {/* <div className="modal-content-text">Initialization successful!</div> */}
-          <div className="buttons">
-            <Button
-              className="button-form"
+          <div style={{ marginTop: 60 }}>
+            {/* <Button
+              className="button-submit"
               type="primary"
               ghost
               onClick={handleCancel}
             >
               {formatMessage({ id: 'launch.think' })}
-            </Button>
+            </Button> */}
             <Button
-              className="button-form"
+              className="button-submit"
               type="primary"
               onClick={handleSubmit}
               loading={loading}
@@ -119,49 +116,17 @@ const App = () => {
 
       <style jsx>
         {`
-          .wrap :global(.input) {
-            height: 54px;
-            margin-top: 23px;
-            font-size: 18px;
-          }
-
-          .label {
-            height: 24px;
-            margin-bottom: 10px;
-            font-size: 16px;
-            font-family: HelveticaNeue-Bold, HelveticaNeue;
-            font-weight: bold;
-            color: #2d2d2d;
-            line-height: 24px;
-          }
-
           .modal-content {
-            padding: 88px 0 77px;
-            text-align: center;
           }
 
           .modal-content-text {
-            font-size: 28px;
-            font-family: PingFangSC-Medium, PingFang SC;
-            font-weight: 500;
-            color: #3c4369;
-            line-height: 40px;
-          }
-
-          .modal-content .buttons {
-            display: flex;
-            justify-content: space-between;
-            margin: 58px 10px 0;
-          }
-
-          .modal-content :global(.button) {
-            min-width: 120px;
-            height: 54px;
+            width: 300px;
+            margin: 32px auto 0;
             font-size: 18px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #ffffff;
-            line-height: 27px;
+            font-family: SFUIText-Medium, SFUIText;
+            font-weight: 500;
+            color: #000000;
+            line-height: 21px;
           }
         `}
       </style>

@@ -146,7 +146,6 @@ const FormGroup: React.FC = () => {
       await createVote(params);
       Modal.success({
         title: formatMessage({ id: 'proposal.create.message' }),
-        className: 'modal-small',
       });
       setIsEdit(false);
     } catch (error) {

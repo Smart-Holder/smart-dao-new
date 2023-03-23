@@ -219,6 +219,8 @@ const App: React.FC = () => {
     selectedKey = '/dashboard/mine/assets';
   } else if (selectedKey === '/dashboard/mine/assets/detail') {
     selectedKey = '/dashboard/mine/assets';
+  } else if (selectedKey === '/dashboard/financial/assets/issue') {
+    selectedKey = '/dashboard/financial/assets';
   }
 
   // const openKey = rootSubmenuKeys.find((key) => pathname.indexOf(key) >= 0);

@@ -1,8 +1,11 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
 import { useRouter } from 'next/router';
-import { Button, Input, Modal, Image } from 'antd';
-import { Form, Upload, Space } from 'antd';
+import { Button, Input, Image } from 'antd';
+import { Form, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+
+import Modal from '@/components/modal';
+import Upload from '@/components/form/upload';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { setUserInfo } from '@/store/features/userSlice';
@@ -87,136 +90,55 @@ const InfoModal = (props: any, ref: any) => {
   const handleSubmit = () => {};
 
   return (
-    <Modal width={512} open={isModalOpen} onCancel={handleCancel} footer={null}>
-      <div className="content">
-        <div className="h1">
-          {formatMessage({ id: 'my.information.title' })}
-        </div>
-        {/* <div className="h2">Lorem ipsum dolor sit amet, consectetur</div> */}
-
-        <Form
-          name="info"
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off"
-          labelAlign="left"
-          requiredMark={false}
-          validateMessages={validateMessages}
-          validateTrigger="onBlur"
-        >
-          <Form.Item
-            name="nickname"
-            rules={[
-              { required: true },
-              { type: 'string', min: 5, max: 12 },
-              { validator: validateChinese },
-            ]}
-          >
-            <Input
-              className="input"
-              prefix={
-                <span style={{ color: '#000' }}>
-                  {formatMessage({ id: 'name' })}:
-                </span>
-              }
-            />
-          </Form.Item>
-
-          <Form.Item valuePropName="fileList">
-            <Space>
-              <Upload
-                action={process.env.NEXT_PUBLIC_QINIU_UPLOAD_URL}
-                data={{ token: getCookie('qiniuToken') }}
-                showUploadList={false}
-                listType="picture-card"
-                beforeUpload={beforeUpload}
-                onChange={handleChange}
-              >
-                {image ? (
-                  <Image
-                    style={{ borderRadius: 10, cursor: 'pointer' }}
-                    src={image}
-                    width={100}
-                    height={100}
-                    preview={false}
-                    alt="image"
-                  />
-                ) : (
-                  <div>
-                    <PlusOutlined />
-                  </div>
-                )}
-              </Upload>
-
-              <span className="upload-desc">
-                {formatMessage({ id: 'my.information.upload' })}
-              </span>
-            </Space>
-          </Form.Item>
-
-          <Form.Item>
-            <Button
-              className="button-submit"
-              type="primary"
-              htmlType="submit"
-              onClick={handleSubmit}
-            >
-              {formatMessage({ id: 'save' })}
-            </Button>
-          </Form.Item>
-        </Form>
+    <Modal type="form" open={isModalOpen} onCancel={handleCancel}>
+      <div className="title">
+        {formatMessage({ id: 'my.information.title' })}
       </div>
 
-      <style jsx>
-        {`
-          .content {
-            padding: 25px 16px;
-          }
+      <Form
+        className="form"
+        name="info"
+        initialValues={{ remember: true }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
+        labelAlign="left"
+        layout="vertical"
+        requiredMark={false}
+        validateMessages={validateMessages}
+        validateTrigger="onBlur"
+      >
+        <Form.Item
+          name="nickname"
+          label={formatMessage({ id: 'name' })}
+          rules={[
+            { required: true },
+            { type: 'string', min: 5, max: 12 },
+            { validator: validateChinese },
+          ]}
+        >
+          <Input />
+        </Form.Item>
 
-          .h1 {
-            font-size: 20px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #000000;
-            line-height: 30px;
-          }
+        <Form.Item
+          label="Upload Square Picture"
+          required
+          valuePropName="fileList"
+        >
+          <Upload value={image} onChange={handleChange} />
+        </Form.Item>
 
-          .h2 {
-            margin-top: 7px;
-            font-size: 12px;
-            font-family: AppleSystemUIFont;
-            color: #969ba0;
-            line-height: 18px;
-          }
-
-          .content :global(.input) {
-            height: 76px;
-            margin-top: 39px;
-
-            font-size: 18px;
-          }
-
-          .upload-desc {
-            height: 21px;
-            font-size: 14px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #969ba0;
-            line-height: 21px;
-          }
-
-          .content :global(.button-submit) {
-            width: 170px;
-            height: 54px;
-            font-size: 18px;
-            font-family: PingFangSC-Regular, PingFang SC;
-            font-weight: 400;
-            color: #ffffff;
-            line-height: 27px;
-          }
-        `}
-      </style>
+        <Form.Item style={{ marginTop: 50, marginBottom: 0 }}>
+          <Button
+            className="button-submit"
+            type="primary"
+            htmlType="submit"
+            onClick={handleSubmit}
+          >
+            {formatMessage({ id: 'save' })}
+          </Button>
+        </Form.Item>
+      </Form>
     </Modal>
   );
 };

@@ -1,21 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
-import {
-  Button,
-  Form,
-  Input,
-  Tag,
-  Space,
-  Modal,
-  Image as Img,
-  Row,
-  Col,
-} from 'antd';
+import { Button, Form, Input, Tag, Space, Image, Row, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useIntl } from 'react-intl';
 
 import Upload from '@/components/form/upload';
+import Modal from '@/components/modal';
 
 import { validateChinese, validateEthAddress } from '@/utils/validator';
 import { getCookie } from '@/utils/cookie';
@@ -362,21 +352,23 @@ const App: React.FC = () => {
         </Form.Item>
       </Form>
 
-      <Modal
-        width={512}
-        open={isModalOpen}
-        onCancel={handleCancel}
-        footer={null}
-      >
+      <Modal type="normal" open={isModalOpen} onCancel={handleCancel}>
         <div className="modal-content">
-          <Image src={iconSuccess} width={88} height={88} alt="success" />
-          <div style={{ marginTop: 55 }} className="modal-content-text">
+          <Image
+            src="/images/modal/icon_dialog_scucess@2x.png"
+            width={80}
+            height={80}
+            alt=""
+            preview={false}
+          />
+          <div className="modal-content-text">
             {formatMessage({ id: 'start.success' })}
           </div>
-          {/* <div className="modal-content-text">Initialization successful!</div> */}
-          <Button className="button-done" type="primary" onClick={next}>
-            {formatMessage({ id: 'start.determine' })}
-          </Button>
+          <div style={{ marginTop: 60 }}>
+            <Button className="button-submit" type="primary" onClick={next}>
+              {formatMessage({ id: 'start.determine' })}
+            </Button>
+          </div>
         </div>
       </Modal>
 
@@ -399,24 +391,14 @@ const App: React.FC = () => {
             border: none;
           }
 
-          .modal-content {
-            padding: 88px 0 77px;
-            text-align: center;
-          }
-
           .modal-content-text {
-            font-size: 28px;
-            font-family: PingFangSC-Medium, PingFang SC;
-            font-weight: 500;
-            color: #3c4369;
-            line-height: 40px;
-          }
-
-          .modal-content :global(.button-done) {
-            width: 169px;
-            height: 54px;
-            margin-top: 58px;
+            width: 300px;
+            margin: 32px auto 0;
             font-size: 18px;
+            font-family: SFUIText-Medium, SFUIText;
+            font-weight: 500;
+            color: #000000;
+            line-height: 21px;
           }
         `}
       </style>

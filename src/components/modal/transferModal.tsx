@@ -1,9 +1,11 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
 import { useRouter } from 'next/router';
-import { Button, Input, Modal } from 'antd';
+import { Button, Input } from 'antd';
 import { Form } from 'antd';
 
 import { validateEthAddress } from '@/utils/validator';
+
+import Modal from '@/components/modal';
 
 import { transfer } from '@/api/member';
 import { useIntl } from 'react-intl';
@@ -19,8 +21,6 @@ const App = (props: any, ref: any) => {
   const { formatMessage } = useIntl();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
-
-  const [modal, contextHolder] = Modal.useModal();
 
   const [loading, setLoading] = useState(false);
 
@@ -42,9 +42,8 @@ const App = (props: any, ref: any) => {
       await transfer({ to: values.address });
       setLoading(false);
       handleCancel();
-      modal.success({
+      Modal.success({
         title: 'Transfer successful.',
-        className: 'modal-small',
         onOk: () => {
           router.push('/');
         },
@@ -60,20 +59,15 @@ const App = (props: any, ref: any) => {
 
   return (
     <>
-      <Modal
-        width={512}
-        open={isModalOpen}
-        onCancel={handleCancel}
-        footer={null}
-        destroyOnClose
-      >
+      <Modal type="form" open={isModalOpen} onCancel={handleCancel}>
         <div className="content">
-          <div className="h1">
+          <div className="title">
             {formatMessage({ id: 'my.information.transfer' })}
           </div>
-          <div className="h2">将您的身份与权利转让给他人</div>
+          {/* <div className="h2">将您的身份与权利转让给他人</div> */}
 
           <Form
+            className="form"
             name="info"
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
@@ -85,13 +79,14 @@ const App = (props: any, ref: any) => {
           >
             <Form.Item
               name="address"
-              label="受让方地址"
+              // label="受让方地址"
+              label={formatMessage({ id: 'address' })}
               rules={[{ required: true }, { validator: validateEthAddress }]}
             >
-              <Input className="input" />
+              <Input />
             </Form.Item>
 
-            <Form.Item style={{ margin: '60px 0 0', textAlign: 'center' }}>
+            <Form.Item style={{ marginTop: 50, marginBottom: 0 }}>
               <Button
                 className="button-submit"
                 type="primary"
@@ -104,52 +99,8 @@ const App = (props: any, ref: any) => {
           </Form>
         </div>
 
-        <style jsx>
-          {`
-            .content {
-              padding: 25px 16px;
-            }
-
-            .h1 {
-              font-size: 20px;
-              font-family: PingFangSC-Regular, PingFang SC;
-              font-weight: 400;
-              color: #000000;
-              line-height: 30px;
-            }
-
-            .h2 {
-              margin-top: 7px;
-              margin-bottom: 30px;
-              font-size: 12px;
-              font-family: AppleSystemUIFont;
-              color: #969ba0;
-              line-height: 18px;
-            }
-
-            .content :global(.input) {
-              height: 76px;
-              font-size: 16px;
-            }
-
-            .content :global(.button-submit) {
-              width: 170px;
-              height: 54px;
-              font-size: 18px;
-              font-family: PingFangSC-Regular, PingFang SC;
-              font-weight: 400;
-              color: #ffffff;
-              line-height: 27px;
-            }
-
-            .content :global(.ant-form-item .ant-form-item-label > label) {
-              font-size: 16px;
-            }
-          `}
-        </style>
+        <style jsx>{``}</style>
       </Modal>
-
-      {contextHolder}
     </>
   );
 };
