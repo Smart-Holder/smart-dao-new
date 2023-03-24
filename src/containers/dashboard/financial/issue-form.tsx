@@ -320,7 +320,7 @@ const IssueForm: FC<IssueFormProps> = () => {
             padding-left: 12px;
 
             font-size: 15px;
-            font-family: PingFangSC-Regular, PingFang SC;
+            font-family: SFUIText-Regular;
             font-weight: 400;
             color: #000000;
             line-height: 24px;

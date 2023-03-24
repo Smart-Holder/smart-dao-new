@@ -60,7 +60,7 @@ const Card = ({ data }: { data: CardDataProps[] }) => {
           .label {
             height: 21px;
             font-size: 18px;
-            font-family: SFUIDisplay-Semibold, SFUIDisplay;
+            font-family: SFUIText-Semibold;
             font-weight: 600;
             color: #000000;
             line-height: 21px;
@@ -69,7 +69,7 @@ const Card = ({ data }: { data: CardDataProps[] }) => {
           .value {
             height: 36px;
             font-size: 30px;
-            font-family: SFUIDisplay-Bold, SFUIDisplay;
+            font-family: SFUIDisplay-Bold;
             font-weight: bold;
             color: #000000;
             line-height: 36px;

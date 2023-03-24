@@ -382,7 +382,7 @@ const App: NextPageWithLayout = () => {
             height: 40px;
             margin-left: 20px;
             font-size: 16px;
-            font-family: PingFangSC-Regular, PingFang SC;
+            font-family: SFUIText-Regular;
             font-weight: 400;
             line-height: 27px;
           }

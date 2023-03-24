@@ -81,7 +81,7 @@ const App = (props: any) => {
             width: 100%;
             height: 100%;
             font-size: 15px;
-            font-family: PingFangSC-Semibold, PingFang SC;
+            font-family: SFUIText-Semibold;
             font-weight: 600;
             color: #000000;
             line-height: 24px;

@@ -85,7 +85,7 @@ const App = ({ type }: { type?: string }) => {
 
           .role .rolename {
             font-size: 16px;
-            font-family: PingFangSC-Medium, PingFang SC;
+            font-family: SFUIText-Medium;
             font-weight: 500;
             color: #000000;
             line-height: 22px;
@@ -95,7 +95,7 @@ const App = ({ type }: { type?: string }) => {
             width: 80px;
             margin-bottom: 0;
             font-size: 16px;
-            font-family: PingFangSC-Medium, PingFang SC;
+            font-family: SFUIText-Medium;
             font-weight: 500;
             color: #000000;
             line-height: 22px;

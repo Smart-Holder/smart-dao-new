@@ -54,7 +54,7 @@ const App = () => {
         {`
           .h1 {
             font-size: 80px;
-            font-family: AdobeDevanagari-Bold, AdobeDevanagari;
+            font-family: SFUIDisplay-Bold;
             font-weight: bold;
             color: #000000;
             line-height: 81px;
@@ -63,7 +63,7 @@ const App = () => {
           .h2 {
             margin-top: 25px;
             font-size: 28px;
-            font-family: PingFangSC-Semibold, PingFang SC;
+            font-family: SFUIDisplay-Semibold;
             font-weight: 600;
             color: #323232;
             line-height: 40px;
@@ -75,7 +75,7 @@ const App = () => {
             margin-top: 44px;
 
             font-size: 20px;
-            font-family: PingFangSC-Medium, PingFang SC;
+            font-family: SFUIText-Medium;
             font-weight: 500;
             line-height: 32px;
 

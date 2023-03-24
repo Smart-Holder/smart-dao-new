@@ -180,7 +180,7 @@ const Info = () => {
           .info-wrap .upload-desc {
             height: 21px;
             font-size: 14px;
-            font-family: PingFangSC-Regular, PingFang SC;
+            font-family: SFUIText-Regular;
             font-weight: 400;
             color: #969ba0;
             line-height: 21px;

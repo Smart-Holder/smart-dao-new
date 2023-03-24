@@ -107,7 +107,7 @@ Params) => {
           .label {
             height: 22px;
             font-size: 16px;
-            font-family: PingFangSC-Semibold, PingFang SC;
+            font-family: SFUIText-Semibold;
             font-weight: 600;
             color: #818181;
             line-height: 22px;
@@ -124,7 +124,7 @@ Params) => {
             display: inline-block;
             width: 56px;
             font-size: 16px;
-            font-family: SFUIText-Semibold, SFUIText;
+            font-family: SFUIText-Semibold;
             font-weight: 600;
             color: #000000;
             line-height: 19px;

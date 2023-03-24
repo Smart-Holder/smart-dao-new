@@ -239,7 +239,7 @@ const Menu = () => {
             color: #fff;
             font-size: 14px;
             font-weight: 600;
-            font-family: PingFangSC-Semibold, PingFang SC;
+            font-family: SFUIText-Semibold;
             line-height: 21px;
             background: #000;
             border-radius: 23px;
@@ -270,7 +270,7 @@ const Menu = () => {
             flex-direction: column;
             padding: 0 13px 0 4px;
             font-size: 16px;
-            font-family: PingFangSC-Regular, PingFang SC;
+            font-family: SFUIText-Regular;
             font-weight: 400;
             color: #3e4954;
             line-height: 21px;

@@ -137,7 +137,7 @@ const App = ({ type }: { type?: string }) => {
             height: 66px;
             margin-top: 50px;
             font-size: 16px;
-            font-family: PingFangSC-Semibold, PingFang SC;
+            font-family: SFUIText-Semibold;
             font-weight: 600;
             color: #818181;
             line-height: 22px;

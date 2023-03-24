@@ -56,7 +56,7 @@ const App = ({
             height: 20px;
             margin-top: 11px;
             font-size: 14px;
-            font-family: SFUIText-Medium, SFUIText;
+            font-family: SFUIText-Medium;
             font-weight: 500;
             color: #000000;
             line-height: 20px;
@@ -64,7 +64,7 @@ const App = ({
 
           .item-number .end {
             font-size: 14px;
-            font-family: SFUIText-Medium, SFUIText;
+            font-family: SFUIText-Medium;
             font-weight: 500;
             color: #818181;
             line-height: 16px;
@@ -72,7 +72,7 @@ const App = ({
 
           .item-number :global(.countdown .ant-statistic-content-value) {
             font-size: 14px;
-            font-family: SFUIText-Medium, SFUIText;
+            font-family: SFUIText-Medium;
             font-weight: 500;
             color: #818181;
             line-height: 16px;

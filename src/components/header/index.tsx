@@ -27,8 +27,8 @@ const Header = ({ type }: { type?: string }) => {
               style={{ cursor: 'pointer' }}
               src="/images/icon_logo_dark@2x.png"
               alt="logo"
-              width={175}
-              height={54}
+              width={174}
+              height={60}
               onClick={handleClick}
               preview={false}
             />

@@ -270,7 +270,7 @@ const DAOItem = (props: any) => {
             height: 32px;
 
             font-size: 16px;
-            font-family: PingFangSC-Medium, PingFang SC;
+            font-family: SFUIText-Medium;
             font-weight: 500;
             color: #ffffff;
             line-height: 18px;
@@ -283,7 +283,7 @@ const DAOItem = (props: any) => {
 
           .item :global(.name) {
             font-size: 32px;
-            font-family: HelveticaNeue-Bold, HelveticaNeue;
+            font-family: SFUIDisplay-Bold;
             font-weight: bold;
             color: #ffffff;
             line-height: 39px;
@@ -300,7 +300,7 @@ const DAOItem = (props: any) => {
             width: 102px;
             height: 36px;
             font-size: 16px;
-            font-family: PingFangSC-Semibold, PingFang SC;
+            font-family: SFUIText-Semibold;
             font-weight: 600;
             color: #ffffff;
             line-height: 36px;
@@ -310,7 +310,7 @@ const DAOItem = (props: any) => {
             width: 190px;
             height: 46px;
             font-size: 17px;
-            font-family: HelveticaNeue-Bold, HelveticaNeue;
+            font-family: SFUIText-Bold;
             font-weight: bold;
             color: #ffffff;
             line-height: 26px;

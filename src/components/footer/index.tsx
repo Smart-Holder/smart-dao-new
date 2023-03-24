@@ -14,8 +14,8 @@ const App = ({ hasSider }: { hasSider?: boolean }) => {
               <Image
                 src="/images/icon_logo_white@2x.png"
                 alt="logo"
-                width={175}
-                height={54}
+                width={174}
+                height={60}
                 preview={false}
               />
               <div className="desc1">
@@ -85,7 +85,7 @@ const App = ({ hasSider }: { hasSider?: boolean }) => {
             width: 400px;
             margin-top: 17px;
             font-size: 16px;
-            font-family: HelveticaNeue;
+            font-family: SFUIText-Regular;
             color: #ffffff;
             line-height: 28px;
           }
@@ -93,7 +93,7 @@ const App = ({ hasSider }: { hasSider?: boolean }) => {
           .desc2 {
             margin-top: 5px;
             font-size: 14px;
-            font-family: PingFangSC-Regular, PingFang SC;
+            font-family: SFUIText-Regular;
             font-weight: 400;
             color: #ffffff;
             line-height: 20px;
@@ -104,7 +104,7 @@ const App = ({ hasSider }: { hasSider?: boolean }) => {
             flex-direction: column;
             align-items: flex-end;
             font-size: 12px;
-            font-family: HelveticaNeue;
+            font-family: SFUIText-Regular;
             color: #ffffff;
             line-height: 37px;
           }
@@ -112,7 +112,7 @@ const App = ({ hasSider }: { hasSider?: boolean }) => {
           .bottom {
             margin-top: 65px;
             font-size: 12px;
-            font-family: PingFangSC-Regular, PingFang SC;
+            font-family: SFUIText-Regular;
             font-weight: 400;
             color: #6f6f6f;
             line-height: 37px;

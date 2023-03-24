@@ -19,6 +19,11 @@ const icons: { [index: string]: string } = {
   ja: '/images/header/icon_navi_top_language_defult@2x.png',
 };
 
+const hoverIcons: { [index: string]: string } = {
+  en: '/images/header/icon_navi_top_language_hover@2x.png',
+  ja: '/images/header/icon_navi_top_language_hover@2x.png',
+};
+
 const Lang = () => {
   const { lang } = useAppSelector((store) => store.common);
   const dispatch = useAppDispatch();
@@ -57,13 +62,14 @@ const Lang = () => {
           <DownOutlined />
         </Space> */}
 
-        <Image
+        <span className="language-icon" />
+        {/* <Image
           src={icons[lang]}
           width={26}
           height={20}
           alt="language"
           preview={false}
-        />
+        /> */}
       </Dropdown>
 
       <style jsx>
@@ -74,6 +80,20 @@ const Lang = () => {
 
           .wrap :global(.ant-image) {
             line-height: 0;
+          }
+
+          .language-icon {
+            display: inline-block;
+            width: 26px;
+            height: 20px;
+            vertical-align: middle;
+            background: url(${icons[lang]}) no-repeat center;
+            background-size: cover;
+            cursor: pointer;
+          }
+
+          .language-icon:hover {
+            background-image: url(${hoverIcons[lang]});
           }
         `}
       </style>

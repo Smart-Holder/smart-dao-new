@@ -218,7 +218,7 @@ const App: NextPageWithLayout = () => {
             height: 25px;
             margin-top: 20px;
             font-size: 18px;
-            font-family: PingFangSC-Medium, PingFang SC;
+            font-family: SFUIText-Medium;
             font-weight: 500;
             color: #000000;
             line-height: 25px;
@@ -240,7 +240,7 @@ const App: NextPageWithLayout = () => {
             height: 24px;
             margin-top: 32px;
             font-size: 20px;
-            font-family: SFUIText-Semibold, SFUIText;
+            font-family: SFUIText-Semibold;
             font-weight: 600;
             color: #000000;
             line-height: 24px;

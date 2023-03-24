@@ -99,7 +99,7 @@ const App = ({ title, avatar, name, buttons, children, padding }: Data) => {
           .name {
             height: 50px;
             font-size: 28px;
-            font-family: PingFangSC-Semibold, PingFang SC;
+            font-family: SFUIDisplay-Semibold;
             font-weight: 600;
             color: #000000;
             line-height: 40px;

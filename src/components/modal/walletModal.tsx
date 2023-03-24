@@ -135,7 +135,7 @@ const ConnectModal = (props: any, ref: any) => {
           .wallet .title {
             height: 26px;
             font-size: 22px;
-            font-family: SFUIDisplay-Semibold, SFUIDisplay;
+            font-family: SFUIDisplay-Semibold;
             font-weight: 600;
             color: #2c2c2c;
             line-height: 26px;
@@ -175,7 +175,7 @@ const ConnectModal = (props: any, ref: any) => {
             padding: 15px;
 
             font-size: 18px;
-            font-family: PingFangSC-Medium, PingFang SC;
+            font-family: SFUIText-Medium;
             font-weight: 500;
             color: #3c4369;
             line-height: 25px;
@@ -189,7 +189,6 @@ const ConnectModal = (props: any, ref: any) => {
             margin-bottom: 14px;
             height: 16px;
             font-size: 14px;
-            font-family: HelveticaNeue;
             color: #969ba0;
             line-height: 16px;
           }

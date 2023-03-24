@@ -142,7 +142,7 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
             height: 32px;
             padding: 0 14px;
             font-size: 16px;
-            font-family: SFUIText-Semibold, SFUIText;
+            font-family: SFUIText-Semibold;
             font-weight: 600;
             color: #6271d2;
             line-height: 32px;
@@ -155,9 +155,9 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
             color: rgba(98, 113, 210, 1);
             background: rgba(98, 113, 210, 0.1);
           }
-          .item .type.financial {
-            color: rgba(98, 113, 210, 1);
-            background: rgba(98, 113, 210, 0.1);
+          .item .type.finance {
+            color: rgba(61, 174, 67, 1);
+            background: rgba(61, 174, 67, 0.1);
           }
           .item .type.member {
             color: rgba(199, 128, 94, 1);
@@ -173,7 +173,7 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
             height: 32px;
             padding: 0 14px;
             font-size: 16px;
-            font-family: SFUIText-Semibold, SFUIText;
+            font-family: SFUIText-Semibold;
             font-weight: 600;
             color: #000000;
             line-height: 32px;
@@ -186,7 +186,7 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
             position: relative;
             height: 16px;
             font-size: 14px;
-            font-family: SFUIText-Bold, SFUIText;
+            font-family: SFUIText-Bold;
             font-weight: bold;
             color: #161616;
             line-height: 16px;
@@ -210,7 +210,7 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
             border-color: #34b53a;
           }
           .item .status.rejected::before {
-            border-color: #7f68fa;
+            border-color: #f23c2c;
           }
           .item .status.executed::before {
             border-color: #02a0fc;
@@ -223,7 +223,7 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
           .item-title {
             height: 24px;
             font-size: 20px;
-            font-family: SFUIText-Semibold, SFUIText;
+            font-family: SFUIText-Semibold;
             font-weight: 600;
             color: #000000;
             line-height: 24px;
@@ -233,7 +233,7 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
             height: 56px;
             margin-top: 2px;
             font-size: 16px;
-            font-family: SFUIText-Medium, SFUIText;
+            font-family: SFUIText-Medium;
             font-weight: 500;
             color: #818181;
             line-height: 28px;
@@ -246,7 +246,7 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
           .item-owner-address {
             height: 19px;
             font-size: 16px;
-            font-family: SFUIText-Medium, SFUIText;
+            font-family: SFUIText-Medium;
             font-weight: 500;
             color: #000000;
             line-height: 19px;

@@ -47,7 +47,7 @@ const App = ({ type }: { type?: string }) => {
 
           .dao-name {
             font-size: 20px;
-            font-family: PingFangSC-Regular, PingFang SC;
+            font-family: SFUIText-Regular;
             font-weight: 400;
             color: #393939;
             line-height: 28px;
@@ -57,7 +57,7 @@ const App = ({ type }: { type?: string }) => {
             width: 130px;
             margin-bottom: 0;
             font-size: 16px;
-            font-family: PingFangSC-Regular, PingFang SC;
+            font-family: SFUIText-Regular;
             font-weight: 400;
             color: #393939;
             line-height: 22px;

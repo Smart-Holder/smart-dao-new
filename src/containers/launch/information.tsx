@@ -362,7 +362,7 @@ const App: React.FC = () => {
             margin-bottom: 4px;
             margin-right: 0;
             font-size: 18px;
-            font-family: PingFangSC-Regular, PingFang SC;
+            font-family: SFUIText-Regular;
             font-weight: 400;
             color: #000;
             line-height: 54px;
@@ -374,7 +374,7 @@ const App: React.FC = () => {
             width: 300px;
             margin: 32px auto 0;
             font-size: 18px;
-            font-family: SFUIText-Medium, SFUIText;
+            font-family: SFUIText-Medium;
             font-weight: 500;
             color: #000000;
             line-height: 21px;

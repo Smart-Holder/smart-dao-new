@@ -175,7 +175,7 @@ const App = ({
             height: 22px;
             margin-top: 16px;
             font-size: 16px;
-            font-family: PingFangSC-Medium, PingFang SC;
+            font-family: SFUIText-Medium;
             font-weight: 500;
             color: #b1b1b1;
             line-height: 22px;

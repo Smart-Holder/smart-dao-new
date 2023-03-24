@@ -381,7 +381,7 @@ const FormGroup: React.FC = () => {
             margin-top: 7px;
             margin-bottom: 44px;
             font-size: 12px;
-            font-family: PingFangSC-Regular, PingFang SC;
+            font-family: SFUIText-Regular;
             font-weight: 400;
             color: #969ba0;
             line-height: 18px;
@@ -393,7 +393,7 @@ const FormGroup: React.FC = () => {
           .upload-desc {
             height: 21px;
             font-size: 14px;
-            font-family: PingFangSC-Regular, PingFang SC;
+            font-family: SFUIText-Regular;
             font-weight: 400;
             color: #969ba0;
             line-height: 21px;
@@ -413,7 +413,7 @@ const FormGroup: React.FC = () => {
             margin-bottom: 4px;
             margin-right: 0;
             font-size: 16px;
-            font-family: PingFangSC-Regular, PingFang SC;
+            font-family: SFUIText-Regular;
             font-weight: 400;
             color: #969ba0;
             line-height: 54px;
@@ -436,7 +436,7 @@ const FormGroup: React.FC = () => {
 
           .modal-content-text {
             font-size: 28px;
-            font-family: PingFangSC-Medium, PingFang SC;
+            font-family: SFUIDisplay-Medium;
             font-weight: 500;
             color: #3c4369;
             line-height: 40px;

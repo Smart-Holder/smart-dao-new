@@ -239,7 +239,7 @@ const App = () => {
           height: 102px;
 
           font-size: 34px;
-          font-family: AdobeDevanagari-Bold, AdobeDevanagari;
+          font-family: SFUIDisplay-Bold;
           font-weight: bold;
           color: #000000;
           line-height: 30px;
@@ -249,7 +249,7 @@ const App = () => {
           height: 40px;
           font-size: 32px;
           font-weight: bold;
-          font-family: PingFangSC-Semibold, PingFang SC;
+          font-family: SFUIDisplay-Semibold;
           color: #000000;
           line-height: 32px;
         }
