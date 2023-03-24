@@ -17,11 +17,11 @@ type Data = {
 const App = ({ title, avatar, name, buttons, children, padding }: Data) => {
   const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
 
-  const extend = { poster: '' };
+  // const extend = { poster: '' };
   // const extend = currentDAO?.extend
   //   ? JSON.parse(currentDAO.extend || '{}')
   //   : {};
-
+  const poster = buffer.from(currentDAO?.extend?.data).toString();
   console.log('extend', buffer.from(currentDAO.extend.data).toString());
 
   return (
@@ -32,7 +32,8 @@ const App = ({ title, avatar, name, buttons, children, padding }: Data) => {
         <div className="image-box">
           <Image
             className="poster"
-            src={extend?.poster || currentDAO.image}
+            // src={extend?.poster || currentDAO.image}
+            src={poster || currentDAO.image}
             width="100%"
             height={380}
             preview={false}

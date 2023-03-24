@@ -11,6 +11,10 @@ import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { debounce } from '@/utils';
 import { Skeleton, Empty, Button, Row, Col, Image, Space, Avatar } from 'antd';
 import { getDAOList } from '@/store/features/daoSlice';
+import WalletModal from '@/components/modal/walletModal';
+import CreateModal from '@/components/modal/createModal';
+import InfoModal from '@/components/modal/infoModal';
+
 // import {
 //   setLikeDAOs,
 //   setDAOList as setMyDAOList,
@@ -23,6 +27,7 @@ const App = () => {
   // const chainId = Number(getCookie('chainId'));
   // const address = getCookie('address');
 
+  const { nickname } = useAppSelector((store) => store.user.userInfo);
   const { searchText, isInit } = useAppSelector((store) => store.common);
   const { chainId, address, isSupportChain } = useAppSelector(
     (store) => store.wallet,
@@ -36,6 +41,23 @@ const App = () => {
   const [init, setInit] = useState(false);
 
   const defaultChain = Number(process.env.NEXT_PUBLIC_DEFAULT_CHAIN);
+
+  const walletModal: any = useRef(null);
+  const createModal: any = useRef(null);
+  const infoModal: any = useRef(null);
+
+  const showModal = () => {
+    if (!isInit) {
+      walletModal.current.show();
+      return;
+    }
+
+    if (!nickname) {
+      infoModal.current.show();
+      return;
+    }
+    createModal.current.show();
+  };
 
   useEffect(() => {
     if (address && chainId) {
@@ -150,7 +172,7 @@ const App = () => {
     <>
       <div className="top">
         {formatMessage({ id: 'home.explore' })}
-        <Button type="link" className="button-add">
+        <Button type="link" className="button-add" onClick={showModal}>
           <div className="button-image-wrap">
             <Image
               src="/images/home/icon_home_add_dao_default@2x.png"
@@ -204,6 +226,10 @@ const App = () => {
           </Button>
         )}
       </div>
+
+      <WalletModal ref={walletModal} />
+      <CreateModal ref={createModal} />
+      <InfoModal ref={infoModal} />
 
       <style jsx>{`
         .top {

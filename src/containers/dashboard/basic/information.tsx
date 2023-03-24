@@ -55,9 +55,8 @@ const FormGroup: React.FC = () => {
   // const extend = currentDAO?.extend
   //   ? JSON.parse(currentDAO.extend || '{}')
   //   : {};
-  const extend = { poster: '' };
-
-  console.log('extend', buffer.from(currentDAO.extend.data).toString());
+  // const poster = buffer.from(currentDAO?.extend?.data).toString();
+  // console.log('extend', buffer.from(currentDAO.extend.data).toString());
 
   useEffect(() => {
     const getDAO = async () => {
@@ -103,7 +102,13 @@ const FormGroup: React.FC = () => {
   // );
 
   const [logo, setLogo] = useState(currentDAO.image);
-  const [poster, setPoster] = useState(extend?.poster);
+  const [poster, setPoster] = useState(
+    buffer.from(currentDAO?.extend?.data).toString(),
+  );
+
+  // const decoder = new TextDecoder('utf8');
+  // console.log(decoder.decode(buffer.from(currentDAO?.extend?.data)));
+
   // const [isModalOpen, setIsModalOpen] = useState(false);
 
   const setInfo = async (values: any) => {
