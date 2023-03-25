@@ -8,9 +8,6 @@ import { connectWallet } from '@/store/features/walletSlice';
 
 import { connectType as types } from '@/config/enum';
 
-import iconMetamask from '/public/images/icon-metamask.png';
-import iconWallet from '/public/images/icon-wallet.png';
-
 import { useIntl } from 'react-intl';
 import { ETH_CHAINS_INFO } from '@/config/chains';
 
@@ -59,8 +56,6 @@ const ConnectModal = (props: any, ref: any) => {
     dispatch(connectWallet(types.WalletConnect));
     handleCancel();
   };
-
-  console.log('0000', active);
 
   return (
     <Modal open={isModalOpen} onCancel={handleCancel}>

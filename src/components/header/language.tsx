@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Avatar, Dropdown, Image } from 'antd';
+import { Dropdown } from 'antd';
 import type { MenuProps } from 'antd';
-import Img from 'next/image';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { setLang } from '@/store/features/commonSlice';
@@ -56,13 +55,9 @@ const Lang = () => {
         trigger={['click']}
         overlayClassName="language-menu"
       >
-        {/* <Space className="dropdown-trigger" size={3} align="center">
-          <GlobalOutlined style={{ fontSize: 22, verticalAlign: 'middle' }} />
-          <span className="dropdown-trigger-content">{langLabel}</span>
-          <DownOutlined />
-        </Space> */}
-
-        <span className="language-icon" />
+        <div className="language-trigger">
+          <span className="language-icon" />
+        </div>
         {/* <Image
           src={icons[lang]}
           width={26}
@@ -79,6 +74,13 @@ const Lang = () => {
           }
 
           .wrap :global(.ant-image) {
+            line-height: 0;
+          }
+
+          .language-trigger {
+            display: flex;
+            align-items: center;
+            height: 32px;
             line-height: 0;
           }
 

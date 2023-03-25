@@ -391,43 +391,81 @@ a {
 
 /* ------------ header menu ------------ */
 .language-menu .ant-dropdown-menu {
-  background: #f9faff;
-}
-.connect-menu {
+  background: #fff;
+  box-shadow: -6px 5px 20px 9px rgba(30, 30, 30, 0.05);
 }
 .connect-menu .ant-dropdown-menu {
-  background: #f9faff;
+  width: 270px;
+  /* height: 435px; */
+  padding: 32px 14px 10px;
+  background: #fff;
+  box-shadow: -6px 5px 20px 9px rgba(30, 30, 30, 0.05);
+  border-radius: 18px;
 }
-.connect-menu .ant-dropdown-menu li:last-child {
+.connect-menu .ant-dropdown-menu li {
+  padding: 0 !important;
+  border-bottom: 1px solid #f7f7f7;
+}
+.connect-menu .ant-dropdown-menu li:first-child {
   cursor: default;
 }
-.connect-menu .ant-dropdown-menu li:last-child:hover {
-  background-color: #f9faff;
+.connect-menu .ant-dropdown-menu li:first-child:hover {
+  background-color: #fff;
 }
-.connect-menu-item {
+.connect-menu .ant-dropdown-menu li:last-child {
+  border: 0;
+}
+.connect-menu-top {
+  padding: 0 26px 32px;
+}
+.connect-menu-top-item {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  height: 46px;
-
-  font-size: 16px;
-  font-family: SFUIText-Regular;
-  font-weight: 400;
-  color: #3e4954;
-  line-height: 21px;
+  font-size: 14px;
+  font-family: SFUIDisplay-Medium;
+  font-weight: 500;
+  color: #2c2c2c;
+  line-height: 20px;
+}
+.connect-menu-top-item .label {
+  height: 16px;
 }
 
-.connect-menu-info-left {
+.connect-menu-top-item .connect-type {
+  height: 36px;
+  width: 92px;
+  /* padding: 11px 17px; */
+  padding: 11px 0;
+  font-size: 12px;
+  font-family: SFUIDisplay-Medium;
+  font-weight: 500;
+  text-align: center;
+  color: #ffffff;
+  line-height: 14px;
+  background: #2c2c2c;
+  border-radius: 25px;
+}
+
+.connect-menu-top-item .connect-menu-wallet {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-right: 14px;
+  width: 92px;
+}
 
-  font-size: 12px;
-  font-family: SFUIText-Medium;
-  font-weight: 500;
-  color: #3c4369;
-  line-height: 17px;
+.connect-menu-item {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 26px;
+
+  font-size: 16px;
+  font-family: SFUIDisplay-Semibold;
+  font-weight: 600;
+  color: #2c2c2c;
+  line-height: 19px;
 }
 
 /* ----------------- Table ----------------- */

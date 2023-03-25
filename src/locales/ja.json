@@ -6,8 +6,11 @@
   "change": "変更",
   "revoke": "Revoke",
   "proposal.create.message": "需要投票后才可以生效",
+  "network": "ネットワーク",
+  "wallet": "ウォレット",
 
   "home.connectWallet": "ウォレット接続",
+  "home.disconnectWallet": "Disconnect Wallet",
   "home.selectNetwork": "ネットワークを選択",
   "home.mainNetwork": "メインネットワーク",
   "home.testNetwork": "テストネットワーク",
