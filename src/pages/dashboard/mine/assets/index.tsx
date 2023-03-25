@@ -298,7 +298,7 @@ const App: NextPageWithLayout = () => {
         {init && !loading && data.length < total && (
           <div className="footer">
             <Button className="button-all" onClick={getData}>
-              VIEW ALL NFTS
+              {formatMessage({ id: 'viewAllNfts' })}
             </Button>
           </div>
         )}

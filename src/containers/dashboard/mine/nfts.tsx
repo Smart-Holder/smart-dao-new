@@ -1,6 +1,7 @@
 import { Button, Col, Empty, Row } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { useIntl } from 'react-intl';
 
 import { useEffect, useState } from 'react';
 
@@ -13,6 +14,7 @@ import NFT from '@/containers/dashboard/mine/nft';
 dayjs.extend(customParseFormat);
 
 const App = () => {
+  const { formatMessage } = useIntl();
   // const router = useRouter();
   const { currentDAO } = useAppSelector((store) => store.dao);
   const { chainId, address } = useAppSelector((store) => store.wallet);
@@ -90,7 +92,7 @@ const App = () => {
       {data.length < total && (
         <div className="footer">
           <Button className="button-all" onClick={getData}>
-            VIEW ALL NFTS
+            {formatMessage({ id: 'viewAllNfts' })}
           </Button>
         </div>
       )}

@@ -80,7 +80,7 @@ const App = () => {
     if (balance > 0) {
       setIsModalOpen(true);
     } else {
-      message.warning('没有未分配的收入');
+      // message.warning('没有未分配的收入');
     }
   };
 
@@ -266,8 +266,18 @@ const App = () => {
                 placeholder={formatMessage({ id: 'my.income.type' })}
                 options={[
                   { value: '', label: 'Default' },
-                  { value: '1', label: '发行税收入' },
-                  { value: '2', label: '交易税收入' },
+                  {
+                    value: '1',
+                    label: formatMessage({
+                      id: 'my.income.sort.tax1',
+                    }),
+                  },
+                  {
+                    value: '2',
+                    label: formatMessage({
+                      id: 'my.income.sort.tax2',
+                    }),
+                  },
                 ]}
               />
             </Form.Item>

@@ -30,7 +30,9 @@ const App = ({
       />
 
       <div className="item-number">
-        <span>{data.agreeTotal} Support</span>
+        <span>
+          {data.agreeTotal} {formatMessage({ id: 'governance.votes.support' })}
+        </span>
         {data.isClose ? (
           <>
             {showDetail && (
@@ -44,7 +46,10 @@ const App = ({
         ) : (
           <Countdown className="countdown" value={data.expiry * 1000} />
         )}
-        <span>{data.voteTotal - data.agreeTotal} Against</span>
+        <span>
+          {data.voteTotal - data.agreeTotal}{' '}
+          {formatMessage({ id: 'governance.votes.against' })}
+        </span>
       </div>
 
       <style jsx>

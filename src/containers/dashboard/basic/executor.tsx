@@ -117,7 +117,7 @@ const App = () => {
         setLoading(false);
       }
     } else {
-      message.error('没有该成员');
+      message.error('no such member');
     }
   };
 

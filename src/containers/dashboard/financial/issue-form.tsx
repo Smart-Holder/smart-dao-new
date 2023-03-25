@@ -247,13 +247,13 @@ const IssueForm: FC<IssueFormProps> = () => {
         <Form.Item
           name="description"
           rules={[{ type: 'string', max: 1000 }]}
-          label="Introduction"
+          label={formatMessage({ id: 'description' })}
         >
           <Input.TextArea rows={8} />
         </Form.Item>
         <Form.Item
           valuePropName="fileList"
-          label="Upload Square Picture"
+          label="Image"
           required
           extra={<span style={{ color: 'red' }}>{imageMessage}</span>}
         >
@@ -263,12 +263,24 @@ const IssueForm: FC<IssueFormProps> = () => {
           <Form.Item
             name="label"
             rules={[{ type: 'string', max: 20 }]}
-            label="Attributes"
+            label={formatMessage({ id: 'financial.asset.issue.attributes' })}
           >
-            <Input prefix={<span style={{ color: '#000' }}>属性项:</span>} />
+            <Input
+              prefix={
+                <span style={{ color: '#000' }}>
+                  {formatMessage({ id: 'financial.asset.issue.label' })}:
+                </span>
+              }
+            />
           </Form.Item>
           <Form.Item name="value" rules={[{ type: 'string', max: 20 }]}>
-            <Input prefix={<span style={{ color: '#000' }}>属性值:</span>} />
+            <Input
+              prefix={
+                <span style={{ color: '#000' }}>
+                  {formatMessage({ id: 'financial.asset.issue.value' })}:
+                </span>
+              }
+            />
           </Form.Item>
           <Form.Item
             name="ratio"
@@ -279,13 +291,25 @@ const IssueForm: FC<IssueFormProps> = () => {
               },
             ]}
           >
-            <Input prefix={<span style={{ color: '#000' }}>特征比例:</span>} />
+            <Input
+              prefix={
+                <span style={{ color: '#000' }}>
+                  {formatMessage({ id: 'financial.asset.issue.rate' })}:
+                </span>
+              }
+            />
           </Form.Item>
         </Space>
-        <Form.Item name="supply" label="Supply">
+        <Form.Item
+          name="supply"
+          label={formatMessage({ id: 'financial.asset.issue.supply' })}
+        >
           <InputNumber min={0} disabled />
         </Form.Item>
-        <Form.Item name="blockchain" label="Blockchain">
+        <Form.Item
+          name="blockchain"
+          label={formatMessage({ id: 'financial.asset.issue.blockchain' })}
+        >
           <Select
             disabled
             options={[{ value: chainData.name, label: chainData.name }]}
@@ -293,9 +317,13 @@ const IssueForm: FC<IssueFormProps> = () => {
         </Form.Item>
         <Form.Item name="tax" label="Taxes and dues (Set by the DAO system)">
           <div className="tax">
-            <span>Issue Tax: {currentDAO.assetIssuanceTax / 100}%</span>
+            <span>
+              {formatMessage({ id: 'launch.tax.publish' })}:{' '}
+              {currentDAO.assetIssuanceTax / 100}%
+            </span>
             <span style={{ marginLeft: 100 }}>
-              Circulation Tax: {currentDAO.assetCirculationTax / 100}%
+              {formatMessage({ id: 'launch.tax.circulation' })}:{' '}
+              {currentDAO.assetCirculationTax / 100}%
             </span>
           </div>
         </Form.Item>
@@ -306,7 +334,7 @@ const IssueForm: FC<IssueFormProps> = () => {
             className="button-submit"
             loading={loading}
           >
-            Issue
+            {formatMessage({ id: 'financial.asset.issue.issue' })}
           </Button>
         </Form.Item>
       </Form>

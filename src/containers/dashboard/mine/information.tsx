@@ -166,7 +166,7 @@ const App = () => {
         </Form.Item>
 
         <Form.Item
-          label="Avatar"
+          label={formatMessage({ id: 'avatar' })}
           valuePropName="fileList"
           extra={<span style={{ color: 'red' }}>{imageMessage}</span>}
         >

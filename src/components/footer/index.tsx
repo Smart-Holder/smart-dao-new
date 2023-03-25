@@ -1,8 +1,11 @@
 import { Col, Layout, Row, Space, Image } from 'antd';
+import { useIntl } from 'react-intl';
 
 const { Footer } = Layout;
 
 const App = ({ hasSider }: { hasSider?: boolean }) => {
+  const { formatMessage } = useIntl();
+
   return (
     <Footer className="footer">
       <div
@@ -19,19 +22,20 @@ const App = ({ hasSider }: { hasSider?: boolean }) => {
                 preview={false}
               />
               <div className="desc1">
-                Build a platform to help web2 stars, sports and artists quickly
-                enter the web3 world
+                {formatMessage({ id: 'footer.txt1' })}
               </div>
-              <div className="desc2">Powered by Smartholder.</div>
+              <div className="desc2">
+                {formatMessage({ id: 'footer.txt2' })}
+              </div>
             </div>
           </Col>
           <Col span={12}>
             <div className="right">
               <Space size={38}>
-                <span>TERM & CONDITION</span>
-                <span>PRIVACY POLICY</span>
-                <span>ABOUT US</span>
-                <span>FAQ</span>
+                <span>{formatMessage({ id: 'footer.li1' })}</span>
+                <span>{formatMessage({ id: 'footer.li2' })}</span>
+                <span>{formatMessage({ id: 'footer.li3' })}</span>
+                <span>{formatMessage({ id: 'footer.li4' })}</span>
               </Space>
               <Space size={32} style={{ marginTop: 43 }}>
                 <Image

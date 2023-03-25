@@ -3,7 +3,7 @@ import Member from '@/config/abi/Member.json';
 import DAO from '@/config/abi/DAO.json';
 import { rng } from 'somes/rng';
 import store from '@/store';
-import {createVote} from './vote';
+import { createVote } from './vote';
 import { getMessage } from '../utils/language';
 
 export function getMemberId() {
@@ -71,7 +71,10 @@ export async function isPermission(
     if (owner != operator.toLowerCase()) {
       let root = await dao.methods.root().call();
       if (owner != root.toLowerCase()) {
-        if (!action || !(await contract.methods.isPermission(owner, action).call())) {
+        if (
+          !action ||
+          !(await contract.methods.isPermission(owner, action).call())
+        ) {
           return false;
         }
       }
@@ -161,25 +164,25 @@ export function transfer({ to }: { to: string }) {
   ]);
 }
 
-export async function setPermissions(tokenId: string, addActions: number[], removeActions: number[], permissions: number[]) {
+export async function setPermissions(
+  tokenId: string,
+  addActions: number[],
+  removeActions: number[],
+  permissions: number[],
+  PermissionMap: any,
+) {
   const { web3, address } = store.getState().wallet;
   const { currentDAO } = store.getState().dao;
   const contract = getContract(web3, Member.abi, currentDAO.member);
 
-  if (await isPermission(0, address)) { // match OnlyDAO
+  if (await isPermission(0, address)) {
+    // match OnlyDAO
     await contractSend(contract, address, 'setPermissions', [
       tokenId,
       addActions,
       removeActions,
     ]);
   } else {
-    const PermissionMap: { [index: number]: string } = {
-      0x22a25870: '添加NFTP',
-      0xdc6b0b72: '发起提案',
-      0x678ea396: '投票',
-      0x59baef2a: '发行资产',
-      0xd0a4ad96: '修改DAO的基础设置',
-    };
     const labels = permissions.map((v: number) => PermissionMap[v]);
 
     await createVote({
@@ -188,12 +191,14 @@ export async function setPermissions(tokenId: string, addActions: number[], remo
         type: 'basic',
         purpose: `${getMessage('proposal.basic.rights')}: ${labels.valueOf()}`,
       }),
-      extra: [{
-        abi: 'member',
-        target: currentDAO.member,
-        method: 'setPermissions',
-        params: [tokenId, addActions, removeActions],
-      }],
-    })
+      extra: [
+        {
+          abi: 'member',
+          target: currentDAO.member,
+          method: 'setPermissions',
+          params: [tokenId, addActions, removeActions],
+        },
+      ],
+    });
   }
 }

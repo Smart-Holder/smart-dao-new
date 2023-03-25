@@ -120,11 +120,7 @@ const InfoModal = (props: any, ref: any) => {
           <Input />
         </Form.Item>
 
-        <Form.Item
-          label="Upload Square Picture"
-          required
-          valuePropName="fileList"
-        >
+        <Form.Item label="Image" required valuePropName="fileList">
           <Upload value={image} onChange={handleChange} />
         </Form.Item>
 

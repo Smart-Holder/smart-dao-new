@@ -11,7 +11,7 @@ import { Permissions } from '@/config/enum';
 
 // import { createVote } from '@/api/vote';
 import { setPermissions } from '@/api/member';
-import { useIntl } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
 import { isRepeateArray } from '@/utils';
 
 // const validateMessages = {
@@ -66,6 +66,14 @@ const App = (props: any, ref: any) => {
       if (!values.permissions.includes(v)) remove.push(v);
     });
 
+    const PermissionMap: { [index: number]: string } = {
+      0x22a25870: formatMessage({ id: 'my.information.rights.add' }),
+      0xdc6b0b72: formatMessage({ id: 'my.information.rights.proposal' }),
+      0x678ea396: formatMessage({ id: 'my.information.rights.vote' }),
+      0x59baef2a: formatMessage({ id: 'my.information.rights.publish' }),
+      0xd0a4ad96: formatMessage({ id: 'my.information.rights.basic' }),
+    };
+
     try {
       setLoading(true);
       await setPermissions(
@@ -73,6 +81,7 @@ const App = (props: any, ref: any) => {
         add,
         remove,
         values.permissions,
+        PermissionMap,
       );
       setLoading(false);
       handleCancel();

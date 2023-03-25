@@ -13,7 +13,7 @@ const App = ({ data }: { data: any }) => {
 
   const handleClick = () => {
     localStorage.setItem('asset', JSON.stringify(data));
-    router.push(`assets/detail?id=${data.id}`);
+    router.push(`/dashboard/mine/assets/detail?id=${data.id}`);
   };
 
   return (

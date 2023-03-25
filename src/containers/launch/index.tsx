@@ -50,13 +50,19 @@ const App = () => {
 
         <Row gutter={24} style={{ marginTop: 55 }}>
           <Col span={12}>
-            <div className="desc-header">Description</div>
+            <div className="desc-header">
+              {formatMessage({ id: 'description' })}
+            </div>
             <div className="desc-content">
               <Paragraph
                 ellipsis={{
                   rows: 4,
                   expandable: true,
-                  symbol: <div style={{ color: '#000' }}>View More</div>,
+                  symbol: (
+                    <div style={{ color: '#000' }}>
+                      {formatMessage({ id: 'viewMore' })}
+                    </div>
+                  ),
                 }}
               >
                 {cacheDAO.description}
@@ -65,7 +71,10 @@ const App = () => {
           </Col>
           <Col span={10} offset={2}>
             <div className="member-header">
-              {cacheDAO.members.length} Members
+              {cacheDAO.members.length}{' '}
+              {formatMessage({
+                id: cacheDAO.members.length === 1 ? 'member' : 'members',
+              })}
             </div>
             <div className="member-content">
               <Avatar.Group

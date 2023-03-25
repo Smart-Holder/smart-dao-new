@@ -146,14 +146,18 @@ const VoteModal: FC<VoteModalProps> = (props) => {
             <div style={{ marginTop: 25 }}>
               {data.extra.executor && (
                 <div className="item-result">
-                  <span className="label">Executor:</span>
+                  <span className="label">
+                    {formatMessage({ id: 'governance.votes.executor' })}:
+                  </span>
                   <span className="value">
                     {formatAddress(data.extra.executor)}
                   </span>
                 </div>
               )}
               <div className="item-result">
-                <span className="label">Executor time:</span>
+                <span className="label">
+                  {formatMessage({ id: 'governance.votes.time.execution' })}:
+                </span>
                 <span className="value">
                   {dayjs(data.executeTime).format('A HH:mm, MM/DD/YYYY')}
                 </span>

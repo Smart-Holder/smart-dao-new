@@ -222,7 +222,7 @@ const App = () => {
             ghost
             onClick={getAllData}
           >
-            VIEW ALL DAO
+            {formatMessage({ id: 'viewAllDao' })}
           </Button>
         )}
       </div>

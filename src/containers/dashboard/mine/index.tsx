@@ -161,13 +161,19 @@ const App = () => {
       >
         <Row gutter={24} style={{ marginTop: 55 }}>
           <Col span={12}>
-            <div className="desc-header">Description</div>
+            <div className="desc-header">
+              {formatMessage({ id: 'description' })}
+            </div>
             <div className="desc-content">
               <Paragraph
                 ellipsis={{
                   rows: 4,
                   expandable: true,
-                  symbol: <div style={{ color: '#000' }}>View More</div>,
+                  symbol: (
+                    <div style={{ color: '#000' }}>
+                      {formatMessage({ id: 'viewMore' })}
+                    </div>
+                  ),
                 }}
               >
                 {currentDAO.description}
@@ -175,7 +181,12 @@ const App = () => {
             </div>
           </Col>
           <Col span={10} offset={2}>
-            <div className="member-header">{DAOInfo.membersTotal} Members</div>
+            <div className="member-header">
+              {DAOInfo.membersTotal}{' '}
+              {formatMessage({
+                id: DAOInfo.membersTotal === 1 ? 'member' : 'members',
+              })}
+            </div>
             <div className="member-content">
               {currentDAO?.memberObjs?.length > 0 && (
                 <Avatar.Group

@@ -201,7 +201,7 @@ const App = () => {
           >
             <Form.Item name="orderBy">
               <Select
-                style={{ width: 140 }}
+                style={{ width: 200 }}
                 placeholder="Sort"
                 options={[
                   { value: '', label: 'Default' },

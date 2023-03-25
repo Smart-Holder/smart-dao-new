@@ -21,11 +21,8 @@ const App = () => {
       <Row style={{ marginTop: 89 }} align="middle">
         <Col span={8} offset={2}>
           <div className="left">
-            <div className="h1">Welcome to SmartDAO World</div>
-            <div className="h2">
-              Build a platform to help web2 stars, sports and artists quickly
-              enter the web3 world
-            </div>
+            <div className="h1">{formatMessage({ id: 'home.intro.h1' })}</div>
+            <div className="h2">{formatMessage({ id: 'home.intro.h2' })}</div>
             {!address && (
               <Button
                 type="primary"

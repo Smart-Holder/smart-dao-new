@@ -80,7 +80,7 @@ const App = () => {
     if (balance > 0) {
       setIsModalOpen(true);
     } else {
-      message.warning('没有未分配的收入');
+      // message.warning('没有未分配的收入');
     }
   };
 

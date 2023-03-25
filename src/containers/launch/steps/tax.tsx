@@ -121,10 +121,11 @@ const App = ({ type }: { type?: string }) => {
 
         <Col span={17}>
           <div className="desc">
-            Asset issuance tax is The percentage of revenue received from the
+            {/* Asset issuance tax is The percentage of revenue received from the
             initial sale of an asset. Asset circulation tax The percentage of
             revenue earned from secondary sales of the asset. It can be modified
-            by dao governance.
+            by dao governance. */}
+            {formatMessage({ id: 'launch.tax.info' })}
           </div>
         </Col>
       </Row>
