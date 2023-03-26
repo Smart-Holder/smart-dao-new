@@ -15,6 +15,7 @@ import { formatAddress } from '@/utils';
 import { shelves } from '@/api/asset';
 import { LoadingOutlined } from '@ant-design/icons';
 import Modal from '@/components/modal';
+import Header from '@/containers/dashboard/financial/detail/header';
 
 const list = [{ name: 'OpenSea', image: '/images/opensea.png' }];
 
@@ -43,6 +44,7 @@ const App: NextPageWithLayout = () => {
       cardData.push({
         label: item.trait_type,
         value: item.value,
+        ratio: item.ratio || '',
       });
     }
   });
@@ -119,51 +121,8 @@ const App: NextPageWithLayout = () => {
         <Breadcrumb.Item>Detail</Breadcrumb.Item>
       </Breadcrumb>
 
-      <div style={{ padding: '30px 91px 0 82px' }}>
-        <DashboardHeader
-          avatar={storageData.imageOrigin}
-          name={`${storageData.name} #${storageData.id}`}
-          buttons={
-            currentMember.tokenId && owner ? (
-              <>
-                {/* <Button onClick={onShare}>分享</Button> */}
-                {storageData.selling === 0 && (
-                  <Button
-                    type="primary"
-                    className="smart-button"
-                    onClick={showModal}
-                  >
-                    {formatMessage({ id: 'financial.asset.listing' })}
-                  </Button>
-                )}
-              </>
-            ) : null
-          }
-        >
-          <div style={{ marginTop: 15 }} className="dao-info-item">
-            {formatMessage({ id: 'financial.asset.address' })}:&nbsp;&nbsp;
-            {formatAddress(storageData.token, 8)}
-            {/* {storageData.token} */}
-          </div>
-          <div style={{ marginTop: 15 }} className="dao-info-item">
-            {formatMessage({ id: 'financial.asset.tokenId' })}:&nbsp;&nbsp;
-            {formatAddress(storageData.tokenId, 8)}
-          </div>
-          <div style={{ marginTop: 15 }} className="dao-info-item">
-            {formatMessage({ id: 'financial.asset.chain' })}:&nbsp;&nbsp;
-            {blockchain?.value}
-          </div>
-          <div style={{ marginTop: 15 }} className="dao-info-item">
-            {formatMessage({ id: 'financial.asset.metadata' })}:&nbsp;&nbsp;
-            {formatAddress(storageData.uri, 12)}
-          </div>
-          <div style={{ marginTop: 15 }} className="dao-info-item">
-            {formatMessage({ id: 'financial.asset.royalties' })}:&nbsp;&nbsp;3%
-          </div>
-        </DashboardHeader>
-      </div>
-
-      <div style={{ margin: '0 80px 50px' }}>
+      <div style={{ margin: '30px 80px 80px' }}>
+        <Header />
         {/* <DetailHeader
           title={`${storageData.name} #${storageData.id}`}
           logo={storageData.imageOrigin}

@@ -1,4 +1,5 @@
 import { Col, Image, Row, Typography } from 'antd';
+import { useIntl } from 'react-intl';
 
 const { Text } = Typography;
 
@@ -6,15 +7,21 @@ export type CardDataProps = {
   image?: string;
   value: string | number;
   label: string;
+  ratio?: string;
   onClick?: () => void;
 };
 
 const Card = ({ data }: { data: CardDataProps[] }) => {
+  const { formatMessage } = useIntl();
+
   return (
     <div className="cards">
-      <Row gutter={[24, 24]}>
+      <div className="cards-title">
+        {formatMessage({ id: 'financial.asset.property' })}
+      </div>
+      <Row gutter={[24, 24]} style={{ marginTop: 40 }}>
         {data.map((item, index) => (
-          <Col span={6} key={index}>
+          <Col span={8} key={index}>
             <div className="item">
               <Text ellipsis={true}>
                 <span className="label">{item.label}</span>
@@ -30,6 +37,9 @@ const Card = ({ data }: { data: CardDataProps[] }) => {
                   <span className="value">{item.value}</span>
                 </Text>
               )}
+              <Text ellipsis={true}>
+                <span className="ratio">{item.ratio}</span>
+              </Text>
             </div>
           </Col>
         ))}
@@ -38,17 +48,25 @@ const Card = ({ data }: { data: CardDataProps[] }) => {
       <style jsx>
         {`
           .cards {
-            margin-top: 40px;
+            margin-top: 80px;
+          }
+
+          .cards-title {
+            height: 45px;
+            font-size: 32px;
+            font-family: SFUIDisplay-Semibold;
+            font-weight: 600;
+            color: #000000;
+            line-height: 45px;
           }
 
           .item {
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             box-sizing: border-box;
             width: 100%;
-            height: 145px;
-            padding: 38px 14px 36px 18px;
+            height: 160px;
+            padding: 30px 24px;
             background: #ffffff;
             box-shadow: -7px 7px 29px 0px rgba(30, 30, 30, 0.05);
           }
@@ -67,17 +85,30 @@ const Card = ({ data }: { data: CardDataProps[] }) => {
           }
 
           .value {
-            height: 36px;
-            font-size: 30px;
-            font-family: SFUIDisplay-Bold;
+            display: inline-block;
+            height: 26px;
+            margin-top: 16px;
+            font-size: 22px;
+            font-family: SFUIDisplay-Bold, SFUIDisplay;
             font-weight: bold;
             color: #000000;
-            line-height: 36px;
+            line-height: 26px;
           }
 
           .value-hover:hover {
             text-decoration: underline;
             cursor: pointer;
+          }
+
+          .ratio {
+            display: inline-block;
+            height: 19px;
+            margin-top: 18px;
+            font-size: 16px;
+            font-family: SFUIDisplay-Medium, SFUIDisplay;
+            font-weight: 500;
+            color: #000000;
+            line-height: 19px;
           }
         `}
       </style>

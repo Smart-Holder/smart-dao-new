@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Avatar, Button, message, Space } from 'antd';
+import { Avatar, Button, Image, message, Space } from 'antd';
 import { useIntl } from 'react-intl';
 import { Market } from '@/config/chains';
 import { fromToken } from '@/utils';
@@ -42,10 +42,17 @@ const App = () => {
       <div className="market-list">
         {list.map((item) => (
           <div className="market-item" key={item.name}>
-            <Space size={10}>
+            {/* <Space size={10}>
               <Avatar size={40} src={item.image} />
               <span>{item.name}</span>
-            </Space>
+            </Space> */}
+            <Image
+              src="/images/dashboard/asset/img_logo_exchange_opensea@2x.png"
+              width={160}
+              height={38}
+              preview={false}
+              alt=""
+            />
             <div className="market-item-center">
               {Math.max(
                 fromToken(storageData.minimumPrice),
@@ -54,7 +61,13 @@ const App = () => {
               ETH
             </div>
             <div className="market-item-bottom">
-              <Button type="primary" onClick={onRevoke} loading={loading}>
+              <Button
+                className="smart-button"
+                type="primary"
+                ghost
+                onClick={onRevoke}
+                loading={loading}
+              >
                 {formatMessage({ id: 'revoke' })}
               </Button>
             </div>
@@ -64,32 +77,40 @@ const App = () => {
       <style jsx>
         {`
           .market {
-            margin-top: 40px;
+            margin-top: 80px;
           }
           .market .title {
-            font-size: 22px;
-            color: #3c4369;
-            font-weight: bold;
+            height: 45px;
+            font-size: 32px;
+            font-family: SFUIDisplay-Semibold;
+            font-weight: 600;
+            color: #000000;
+            line-height: 45px;
           }
 
           .market-list {
             display: flex;
-            margin-top: 20px;
+            margin-top: 40px;
           }
 
           .market-item {
-            padding: 20px;
+            padding: 40px 54px 28px;
             text-align: center;
-            border: 1px solid #e5e7e8;
-            border-radius: 8px;
+            border: 2px solid #f5f5f5;
+            border-radius: 14px;
           }
 
           .market-item-center {
             margin-top: 20px;
+            font-size: 16px;
+            font-family: SFUIText-Semibold, SFUIText;
+            font-weight: 600;
+            color: #2c2c2c;
+            line-height: 21px;
           }
 
           .market-item-bottom {
-            margin-top: 20px;
+            margin-top: 24px;
           }
         `}
       </style>

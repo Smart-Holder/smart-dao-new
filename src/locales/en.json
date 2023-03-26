@@ -323,7 +323,7 @@
   "financial.asset.floorPrice": "Floor price",
   "financial.asset.royalties": "Royalties",
   "financial.asset.total": "Number of assets",
-  "financial.asset.owner": "owner",
+  "financial.asset.owner": "Owner",
   "financial.asset.pending.rate": "pending order rate",
   "financial.asset.tradingMarket": "Trading market",
   "financial.asset.search": "search",
