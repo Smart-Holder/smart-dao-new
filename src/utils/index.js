@@ -207,3 +207,7 @@ export const isRepeate2 = (obj1, obj2) => {
 
   return true;
 };
+
+export const isMac = () => {
+  return /macintosh|mac os x/i.test(navigator.userAgent);
+};

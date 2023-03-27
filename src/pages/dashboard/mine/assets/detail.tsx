@@ -98,8 +98,8 @@ const App: NextPageWithLayout = () => {
       setLoading(false);
       hideModal();
     } catch (error: any) {
-      console.error(error);
-      message.error(error?.message);
+      // console.error(error);
+      // message.error(error?.message);
       setLoading(false);
     }
   };

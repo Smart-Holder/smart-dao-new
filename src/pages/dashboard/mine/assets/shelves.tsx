@@ -206,8 +206,8 @@ const App: NextPageWithLayout = () => {
       // window.location.reload();
       setLoading(false);
     } catch (error: any) {
-      console.error(error);
-      message.error(error?.message);
+      // console.error(error);
+      // message.error(error?.message);
       setLoading(false);
     }
   };

@@ -71,8 +71,8 @@ const Info = () => {
           message.success('success!');
         }
       } catch (error: any) {
-        message.error(error?.message);
-        console.error(error);
+        // message.error(error?.message);
+        // console.error(error);
       }
     }
   };

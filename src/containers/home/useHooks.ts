@@ -27,7 +27,6 @@ export const useJoin = (
       message.success(formatMessage({ id: 'governance.proposal.success' }));
       // setJoin_(true);
     } catch (error) {
-      console.error(error);
       setLoading(false);
     }
   };

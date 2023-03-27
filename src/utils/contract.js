@@ -1,5 +1,6 @@
+import { createRoot } from 'react-dom/client';
 import { beforeUnload, stopClick } from '@/utils';
-import { message } from 'antd';
+import { message, Spin } from 'antd';
 import { waitBlockNumber } from '../api';
 import store from '@/store';
 
@@ -20,6 +21,32 @@ const waitBlockNumber_ = (receipt) => {
   );
 };
 
+const setLoading = () => {
+  var dom = document.createElement('div');
+  dom.setAttribute('id', 'globalLoading');
+  const root = createRoot(dom);
+  root.render(<Spin />);
+  document.body.appendChild(dom);
+  // clearTimeout(store.getters.loadingTimer);
+  // store.commit('SET_LOADING', true);
+  store.dispatch({ type: 'common/setLoading', payload: true });
+  window.addEventListener('beforeunload', beforeUnload);
+  window.addEventListener('click', stopClick, true);
+};
+
+const closeLoading = () => {
+  document.body.removeChild(document.getElementById('globalLoading'));
+  // store.commit(
+  //   'SET_LOADING_TIMER',
+  //   setTimeout(() => {
+  //     store.commit('SET_LOADING', false);
+  //   }, 100),
+  // );
+  store.dispatch({ type: 'common/setLoading', payload: false });
+  window.removeEventListener('beforeunload', beforeUnload);
+  window.removeEventListener('click', stopClick, true);
+};
+
 export async function contractSend(
   contract,
   from,
@@ -27,25 +54,8 @@ export async function contractSend(
   params = [],
   next = waitBlockNumber_,
 ) {
-  // clearTimeout(store.getters.loadingTimer);
-  // store.commit('SET_LOADING', true);
-  store.dispatch({ type: 'common/setLoading', payload: true });
-  window.addEventListener('beforeunload', beforeUnload);
-  window.addEventListener('click', stopClick, true);
-
-  function closeLoading() {
-    // store.commit(
-    //   'SET_LOADING_TIMER',
-    //   setTimeout(() => {
-    //     store.commit('SET_LOADING', false);
-    //   }, 100),
-    // );
-    store.dispatch({ type: 'common/setLoading', payload: false });
-    window.removeEventListener('beforeunload', beforeUnload);
-    window.removeEventListener('click', stopClick, true);
-  }
-
   try {
+    setLoading();
     await contract.methods[method](...params).call({ from }); //try call
   } catch (error) {
     let msg = error.message || `call contract method error, ${method}`;
@@ -78,9 +88,6 @@ export async function contractSend(
           });
       })
       .catch((error) => {
-        // Message.error({
-        //   message: error?.message || `send contract method error, ${method}`,
-        // });
         console.error(
           error?.message || `send contract method error, ${method}`,
         );

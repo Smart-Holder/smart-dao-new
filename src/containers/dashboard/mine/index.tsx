@@ -98,8 +98,8 @@ const App = () => {
       // window.location.reload();
     } catch (error: any) {
       setLoading(false);
-      console.error(error);
-      message.error(error?.message);
+      // console.error(error);
+      // message.error(error?.message);
     }
   };
 
@@ -150,10 +150,10 @@ const App = () => {
               type="primary"
               onClick={setJoin}
               loading={loading}
-              disabled={currentDAO.isJoin}
+              disabled={daoType === DAOType.Join}
             >
               {formatMessage({
-                id: currentDAO.isJoin ? 'home.joined' : 'home.join',
+                id: daoType === DAOType.Join ? 'home.joined' : 'home.join',
               })}
             </Button>
           </>

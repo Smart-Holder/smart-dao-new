@@ -29,8 +29,8 @@ const App = () => {
       // fetch data and set storageData
     } catch (error: any) {
       setLoading(false);
-      console.error(error);
-      message.error(error?.message);
+      // console.error(error);
+      // message.error(error?.message);
     }
   };
 

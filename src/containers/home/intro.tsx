@@ -51,7 +51,7 @@ const App = () => {
         {`
           .h1 {
             font-size: 80px;
-            font-family: SFUIDisplay-Bold;
+            font-family: var(--font-family-bold-lg);
             font-weight: bold;
             color: #000000;
             line-height: 81px;

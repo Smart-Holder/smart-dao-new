@@ -150,8 +150,8 @@ const IssueForm: FC<IssueFormProps> = () => {
       form.resetFields();
       setImage('');
     } catch (error: any) {
-      console.error(error);
-      message.error(error?.message);
+      // console.error(error);
+      // message.error(error?.message);
       setLoading(false);
     }
 
