@@ -9,6 +9,7 @@ type Params = {
 
 const App = ({ prev, next, nextLabel }: Params) => {
   const { formatMessage } = useIntl();
+  console.log('-========');
 
   return (
     <Row style={{ marginTop: 100 }}>

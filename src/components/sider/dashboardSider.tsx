@@ -1,3 +1,4 @@
+import React from 'react';
 import { Layout } from 'antd';
 
 import Menu from '@/components/sider/dashboardSiderMenu';
@@ -27,4 +28,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default React.memo(App);

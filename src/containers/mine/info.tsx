@@ -90,12 +90,6 @@ const Info = () => {
     }
   };
 
-  const beforeUpload = (file: RcFile) => {
-    const message = validateImage(file);
-
-    return !message;
-  };
-
   return (
     <div className="card" style={{ margin: '50px 0' }}>
       <div className="h1">{formatMessage({ id: 'my.information.title' })}</div>
@@ -131,35 +125,6 @@ const Info = () => {
 
         <Form.Item label="Upload Rectangle Picture" valuePropName="fileList">
           <Upload value={image} onChange={onImageChange} />
-          {/* <Space>
-            <Upload
-              action={process.env.NEXT_PUBLIC_QINIU_UPLOAD_URL}
-              data={{ token: getCookie('qiniuToken') }}
-              showUploadList={false}
-              listType="picture-card"
-              beforeUpload={beforeUpload}
-              onChange={onImageChange}
-            >
-              {image ? (
-                <Image
-                  style={{ borderRadius: 10, cursor: 'pointer' }}
-                  src={image}
-                  width={100}
-                  height={100}
-                  preview={false}
-                  alt="image"
-                />
-              ) : (
-                <div>
-                  <PlusOutlined />
-                </div>
-              )}
-            </Upload>
-
-            <span className="upload-desc">
-              {formatMessage({ id: 'my.information.upload' })}
-            </span>
-          </Space> */}
         </Form.Item>
 
         <Form.Item style={{ marginTop: 100 }}>

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { Image, Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
@@ -34,18 +34,21 @@ const Search: React.FC = () => {
   const [timer, setTimer] = useState() as any;
   // let timer: any;
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
+  const onChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setValue(e.target.value);
 
-    // debounceSearch();
+      // debounceSearch();
 
-    clearTimeout(timer);
-    setTimer(
-      setTimeout(() => {
-        dispatch(setSearchText(e.target.value));
-      }, 1000),
-    );
-  };
+      clearTimeout(timer);
+      setTimer(
+        setTimeout(() => {
+          dispatch(setSearchText(e.target.value));
+        }, 1000),
+      );
+    },
+    [dispatch, timer],
+  );
 
   // const setSearchState = () => {
   //   dispatch(setSearchText(v));
@@ -133,4 +136,4 @@ const Search: React.FC = () => {
   );
 };
 
-export default Search;
+export default React.memo(Search);

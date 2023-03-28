@@ -1,4 +1,3 @@
-import sdk from 'hcstore/sdk';
 import {
   Avatar,
   Space,
@@ -11,7 +10,7 @@ import {
 } from 'antd';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { rng } from 'somes/rng';
+// import { rng } from 'somes/rng';
 
 import { fromToken } from '@/utils';
 import { useIntl } from 'react-intl';

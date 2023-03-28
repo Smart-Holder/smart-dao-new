@@ -116,4 +116,4 @@ const Header = ({ type }: { type?: string }) => {
   );
 };
 
-export default Header;
+export default React.memo(Header);

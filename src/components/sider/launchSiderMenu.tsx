@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MailOutlined } from '@ant-design/icons';
+// import { MailOutlined } from '@ant-design/icons';
 import { Image, MenuProps } from 'antd';
 import { Menu } from 'antd';
 import { useRouter } from 'next/router';
@@ -77,4 +77,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default React.memo(App);

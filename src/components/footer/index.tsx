@@ -1,3 +1,4 @@
+import React from 'react';
 import { Col, Layout, Row, Space, Image } from 'antd';
 import { useIntl } from 'react-intl';
 
@@ -129,4 +130,4 @@ const App = ({ hasSider }: { hasSider?: boolean }) => {
   );
 };
 
-export default App;
+export default React.memo(App);
