@@ -10,7 +10,7 @@ import { CopyOutlined, LoadingOutlined } from '@ant-design/icons';
 import { shelves } from '@/api/asset';
 import EllipsisMiddle from '@/components/typography/ellipsisMiddle';
 
-const { Text, Paragraph } = Typography;
+const { Text } = Typography;
 
 const list = [{ name: 'OpenSea', image: '/images/opensea.png' }];
 
@@ -37,17 +37,19 @@ const App = () => {
 
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [imageSize, setImageSize] = useState(0);
+  const [width, setWidth] = useState('auto');
 
   const contractAddress = `${formatMessage({
     id: 'financial.asset.address',
   })}:  ${storageData.token}`;
 
   const onResize = () => {
-    const imageWidth = document.querySelector(
-      '.asset-detail-header-image',
-    ) as any;
-    setImageSize(imageWidth.offsetWidth);
+    const header = document.querySelector('.asset-detail-header') as any;
+    const left = document.querySelector('.asset-detail-header-left') as any;
+    const w = header.offsetWidth - left.offsetWidth - 83;
+    console.log('======', header.offsetWidth, left.offsetWidth);
+
+    setWidth(w ? w + 'px' : 'auto');
   };
 
   useEffect(() => {
@@ -64,8 +66,7 @@ const App = () => {
     };
   }, []);
 
-  const toAddress = (addr: string) => {
-    console.log(addr);
+  const toAddress = () => {
     // https://goerli.etherscan.io/address/.....
     // https://etherscan.io/address/....
   };
@@ -105,110 +106,79 @@ const App = () => {
 
   return (
     <div className="asset-detail-header">
-      <Row gutter={24}>
-        <Col span={9} className="asset-detail-header-image">
-          <Image
-            src={storageData.imageOrigin || currentDAO.image}
-            // shape="square"
-            // size={{ xs: 200, sm: 200, md: 200, lg: 300, xl: 442, xxl: 442 }}
-            // size={imageSize}
-            width="100%"
-            height={imageSize}
-            preview={false}
-            alt=""
-          />
-        </Col>
-        <Col span={12} offset={1}>
-          <div className="asset-detail-header-right">
-            <div className="asset-name">{storageData.name}</div>
-            <div className="asset-tags">
-              {tags.map((tag: string) => (
-                <Tag key={tag}>{tag}</Tag>
-              ))}
-              #{storageData.id}
+      <div className="asset-detail-header-left">
+        <Avatar
+          src={storageData.imageOrigin || currentDAO.image}
+          shape="square"
+          size={{ xs: 200, sm: 200, md: 200, lg: 300, xl: 442, xxl: 442 }}
+          // width={442}
+          // height={442}
+          // preview={false}
+          // alt=""
+        />
+      </div>
+      <div className="asset-detail-header-right">
+        <Text style={{ maxWidth: '100%' }} ellipsis={true}>
+          iVBORw0KGgoAAAANSUhEUgAAAMIAAADDCAYAAADQvc6UAAABRWlDQ1BJQ0MgUHJvZmlsZQAAKJFjYGASSSwoyGFhYGDIzSspCnJ3UoiIjFJgf8LAwSDCIMogwMCcmFxc4BgQ4ANUwgCjUcG3awyMIPqyLsis7PPOq3QdDFcvjV3jOD1boQVTPQrgSkktTgbSf4A4LbmgqISBgTEFyFYuLykAsTuAbJEioKOA7DkgdjqEvQHEToKwj4DVhAQ5A9k3gGyB5IxEoBmML4BsnSQk8XQkNtReEOBxcfXxUQg1Mjc0dyHgXNJBSWpFCYh2zi
+        </Text>
+        <div className="asset-name">{storageData.name}</div>
+        <div className="asset-tags">
+          {tags.map((tag: string) => (
+            <Tag key={tag}>{tag}</Tag>
+          ))}
+          #{storageData.id}
+        </div>
+
+        {ownerObj.owner && (
+          <div className="asset-owner">
+            <Avatar src={ownerObj.image} size={34} />
+            <div className="asset-owner-right">
+              <span className="asset-owner-label">
+                {formatMessage({ id: 'financial.asset.owner' })}
+              </span>
+              <span className="asset-owner-value">{ownerObj.owner}</span>
             </div>
-
-            {ownerObj.owner && (
-              <div className="asset-owner">
-                <Avatar src={ownerObj.image} size={34} />
-                <div className="asset-owner-right">
-                  <span className="asset-owner-label">
-                    {formatMessage({ id: 'financial.asset.owner' })}
-                  </span>
-                  <span className="asset-owner-value">{ownerObj.owner}</span>
-                </div>
-              </div>
-            )}
-
-            {/* <div style={{ marginTop: 44 }} className="dao-info-item">
+          </div>
+        )}
+        {/* <div style={{ marginTop: 44 }} className="dao-info-item">
               {formatMessage({ id: 'financial.asset.owner' })}:&nbsp;&nbsp;
               {formatAddress(storageData.owner, 8)}
             </div> */}
+        <div
+          style={{ marginTop: 44 }}
+          className="dao-info-item dao-info-item-address"
+        >
+          <EllipsisMiddle
+            className="dao-info-item-value"
+            suffixCount={5}
+            onClick={toAddress}
+          >
+            {contractAddress}
+          </EllipsisMiddle>
 
-            <Row style={{ marginTop: 44 }}>
-              <Col span={6}>
-                <span className="dao-info-item-label">
-                  {formatMessage({ id: 'financial.asset.address' })}:
-                </span>
-              </Col>
-              <Col span={18}>
-                <span className="dao-info-item-value dao-info-item-value-address">
-                  <EllipsisMiddle suffixCount={5} copyable onClick={toAddress}>
-                    {storageData.token}
-                  </EllipsisMiddle>
-                </span>
-              </Col>
-            </Row>
+          {/* {formatAddress(storageData.token, 8)} */}
 
-            <Row style={{ marginTop: 20 }}>
-              <Col span={6}>
-                <span className="dao-info-item-label">
-                  {formatMessage({ id: 'financial.asset.tokenId' })}:
-                </span>
-              </Col>
-              <Col span={18}>
-                {/* <span className="dao-info-item-value">
-                  {formatAddress(storageData.tokenId, 8)}
-                </span> */}
-                <span className="dao-info-item-value">
-                  <EllipsisMiddle suffixCount={5} copyable>
-                    {storageData.tokenId}
-                  </EllipsisMiddle>
-                </span>
-              </Col>
-            </Row>
-
-            <Row style={{ marginTop: 20 }}>
-              <Col span={6}>
-                <span className="dao-info-item-label">
-                  {formatMessage({ id: 'financial.asset.chain' })}:
-                </span>
-              </Col>
-              <Col span={18}>
-                <span className="dao-info-item-value">{blockchain?.value}</span>
-              </Col>
-            </Row>
-
-            <Row style={{ marginTop: 20 }}>
-              <Col span={6}>
-                <span className="dao-info-item-label">
-                  {formatMessage({ id: 'financial.asset.metadata' })}:
-                </span>
-              </Col>
-              <Col span={18}>
-                <span className="dao-info-item-value">
-                  <EllipsisMiddle suffixCount={5} copyable>
-                    {storageData.uri}
-                  </EllipsisMiddle>
-                </span>
-              </Col>
-            </Row>
-
-            {/* <div className="dao-info-item">
+          {/* <div className="copy">
+                <CopyOutlined onClick={copy} />
+              </div> */}
+        </div>
+        <div className="dao-info-item">
+          {formatMessage({ id: 'financial.asset.tokenId' })}:&nbsp;&nbsp;
+          {formatAddress(storageData.tokenId, 8)}
+        </div>
+        <div className="dao-info-item">
+          {formatMessage({ id: 'financial.asset.chain' })}:&nbsp;&nbsp;
+          {blockchain?.value}
+        </div>
+        <div className="dao-info-item">
+          {formatMessage({ id: 'financial.asset.metadata' })}:&nbsp;&nbsp;
+          {formatAddress(storageData.uri, 12)}
+        </div>
+        {/* <div className="dao-info-item">
               {formatMessage({ id: 'financial.asset.royalties' })}
               :&nbsp;&nbsp;3%
             </div> */}
-            {/* <div style={{ marginTop: 40 }}>
+        {/* <div style={{ marginTop: 40 }}>
               {currentMember.tokenId && owner ? (
                 <>
                   {storageData.selling === 0 && (
@@ -223,40 +193,6 @@ const App = () => {
                 </>
               ) : null}
             </div> */}
-          </div>
-        </Col>
-      </Row>
-      {/* <div className="asset-detail-header-left">
-        <Avatar
-          className="asset-detail-header-left22"
-          src={storageData.imageOrigin || currentDAO.image}
-          shape="square"
-          size={{ xs: 200, sm: 200, md: 200, lg: 300, xl: 442, xxl: 442 }}
-          // width={442}
-          // height={442}
-          // preview={false}
-          // alt=""
-        />
-      </div> */}
-
-      <div className="asset-desc">
-        <div className="asset-desc-title">
-          {formatMessage({ id: 'description' })}
-        </div>
-
-        <Paragraph
-          ellipsis={{
-            rows: 3,
-            expandable: true,
-            symbol: (
-              <div style={{ color: '#000' }}>
-                {formatMessage({ id: 'viewMore' })}
-              </div>
-            ),
-          }}
-        >
-          {storageData.description}
-        </Paragraph>
       </div>
 
       <Modal type="normal" open={isModalOpen} onCancel={hideModal}>
@@ -286,6 +222,15 @@ const App = () => {
 
       <style jsx>
         {`
+          .asset-detail-header {
+            display: flex;
+          }
+          .asset-detail-header-right {
+             {
+              /* flex: 1 1 auto; */
+            }
+            margin-left: 83px;
+          }
           .asset-name {
             height: 40px;
             font-size: 28px;
@@ -336,7 +281,6 @@ const App = () => {
           }
 
           .dao-info-item {
-            display: flex;
             height: 22px;
             margin-top: 20px;
             font-size: 16px;
@@ -346,19 +290,11 @@ const App = () => {
             line-height: 22px;
           }
 
-          .dao-info-item-label {
-            font-size: 16px;
-            font-family: SFUIText-Medium;
-            font-weight: 500;
-            color: #000000;
-            line-height: 22px;
+          .dao-info-item-address {
+            position: relative;
           }
+
           .dao-info-item-value {
-            font-size: 16px;
-            font-family: SFUIText-Medium;
-            font-weight: 500;
-            color: #000000;
-            line-height: 22px;
           }
 
           .dao-info-item-value :global(.ant-typography) {
@@ -369,31 +305,8 @@ const App = () => {
             line-height: 22px;
           }
 
-          .dao-info-item-value-address :global(.ant-typography:hover) {
+          .dao-info-item-value:hover {
             text-decoration: underline;
-            cursor: pointer;
-          }
-
-          .asset-desc {
-            margin-top: 40px;
-          }
-
-          .asset-desc-title {
-            height: 28px;
-            margin-bottom: 20px;
-            font-size: 20px;
-            font-family: SFUIText-Semibold;
-            font-weight: 600;
-            color: #000000;
-            line-height: 28px;
-          }
-
-          .asset-desc :global(.ant-typography) {
-            font-size: 14px;
-            font-family: SFUIText-Medium;
-            font-weight: 500;
-            color: #818181;
-            line-height: 28px;
           }
 
           .market-list {
@@ -416,6 +329,12 @@ const App = () => {
             font-weight: 600;
             color: #000000;
             line-height: 24px;
+          }
+
+          @media screen and (max-width: 1280px) {
+            .asset-detail-header-left {
+              width: 200px;
+            }
           }
         `}
       </style>

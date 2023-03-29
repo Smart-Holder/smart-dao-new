@@ -136,7 +136,13 @@ const App: NextPageWithLayout = () => {
             />
           )} */}
 
-        {storageData.properties && <Card data={cardData} />}
+        {storageData.properties && (
+          <Card
+            style={{ marginTop: 80 }}
+            title={formatMessage({ id: 'financial.asset.property' })}
+            data={cardData}
+          />
+        )}
       </div>
 
       <DetailTransactions

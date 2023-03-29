@@ -1,4 +1,5 @@
 import { Col, Image, Row, Typography } from 'antd';
+import { CSSProperties } from 'react';
 import { useIntl } from 'react-intl';
 
 const { Text } = Typography;
@@ -8,17 +9,24 @@ export type CardDataProps = {
   value: string | number;
   label: string;
   ratio?: string;
+
   onClick?: () => void;
 };
 
-const Card = ({ data }: { data: CardDataProps[] }) => {
+const Card = ({
+  data,
+  title,
+  style,
+}: {
+  data: CardDataProps[];
+  title?: string;
+  style?: CSSProperties;
+}) => {
   const { formatMessage } = useIntl();
 
   return (
-    <div className="cards">
-      <div className="cards-title">
-        {formatMessage({ id: 'financial.asset.property' })}
-      </div>
+    <div className="cards" style={style}>
+      {title && <div className="cards-title">{title}</div>}
       <Row gutter={[24, 24]} style={{ marginTop: 40 }}>
         {data.map((item, index) => (
           <Col span={8} key={index}>
@@ -37,9 +45,16 @@ const Card = ({ data }: { data: CardDataProps[] }) => {
                   <span className="value">{item.value}</span>
                 </Text>
               )}
-              <Text ellipsis={true}>
-                <span className="ratio">{item.ratio}</span>
-              </Text>
+              {item.ratio && (
+                <Text ellipsis={true}>
+                  <span className="ratio">
+                    {formatMessage(
+                      { id: 'financial.asset.own' },
+                      { value: item.ratio },
+                    )}
+                  </span>
+                </Text>
+              )}
             </div>
           </Col>
         ))}
@@ -48,7 +63,7 @@ const Card = ({ data }: { data: CardDataProps[] }) => {
       <style jsx>
         {`
           .cards {
-            margin-top: 80px;
+            margin-top: 30px;
           }
 
           .cards-title {

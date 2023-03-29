@@ -8,10 +8,12 @@ import {
   Button,
   InputNumber,
   message,
-  Modal,
+  Image,
+  Row,
+  Col,
 } from 'antd';
 import { RcFile, UploadChangeParam, UploadFile } from 'antd/es/upload';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import type { SelectProps } from 'antd';
 import { ETH_CHAINS_INFO } from '@/config/chains';
 import { request } from '@/api';
@@ -22,31 +24,41 @@ import { Permissions } from '@/config/enum';
 import { rng } from 'somes/rng';
 import { createVote } from '@/api/vote';
 
+import Modal from '@/components/modal';
+import AssetAttrModal, { AttrParams } from '@/components/modal/assetAttrModal';
 import Upload from '@/components/form/upload';
 import Select from '@/components/form/select';
+import { useRouter } from 'next/router';
 
 type IssueFormProps = {};
 
 const IssueForm: FC<IssueFormProps> = () => {
   const { formatMessage } = useIntl();
+  const router = useRouter();
   const { chainId, address, web3 } = useAppSelector((store) => store.wallet);
   const { currentDAO } = useAppSelector((store) => store.dao);
+  const { userInfo } = useAppSelector((store) => store.user);
 
   const [form] = Form.useForm();
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState('');
   const [imageMessage, setImageMessage] = useState('');
   const [chainData, setChainData] = useState({ name: '' }) as any;
+  const [attrs, setAttrs] = useState<AttrParams[]>([]);
 
   const [tags, setTags] = useState<SelectProps['options']>([]);
 
   const [initialValues, setInitialValues] = useState() as any;
 
+  const assetAttrModal: any = useRef(null);
+
   useEffect(() => {
     if (ETH_CHAINS_INFO[chainId]) {
       setChainData(ETH_CHAINS_INFO[chainId]);
       setInitialValues({
+        attributes: [],
         blockchain: ETH_CHAINS_INFO[chainId].name,
         supply: 1,
       });
@@ -103,6 +115,7 @@ const IssueForm: FC<IssueFormProps> = () => {
       image,
       description: values.description,
       attributes: [
+        { owner: userInfo.nickname, image: userInfo.image },
         { trait_type: 'supply', value: values.supply },
         { trait_type: 'blockchain', value: values.blockchain },
         { trait_type: 'symbol', value: chainData.symbol },
@@ -110,16 +123,17 @@ const IssueForm: FC<IssueFormProps> = () => {
         { trait_type: 'chainId', value: chainId },
         { trait_type: 'decimals', value: chainData.decimals },
         { trait_type: 'tags', value: values.tags.toString() },
+        ...values.attributes,
       ],
     };
 
-    if (values.label && values.value) {
-      params.attributes.push({
-        trait_type: values.label,
-        value: values.value,
-        ratio: values.ratio,
-      });
-    }
+    // if (values.label && values.value) {
+    //   params.attributes.push({
+    //     trait_type: values.label,
+    //     value: values.value,
+    //     ratio: values.ratio,
+    //   });
+    // }
 
     console.log('params', params);
     setLoading(true);
@@ -147,8 +161,10 @@ const IssueForm: FC<IssueFormProps> = () => {
       }
 
       setLoading(false);
-      form.resetFields();
-      setImage('');
+      // form.resetFields();
+      // setAttrs([]);
+      // setImage('');
+      router.push('/dashboard/financial/assets');
     } catch (error: any) {
       // console.error(error);
       // message.error(error?.message);
@@ -186,9 +202,23 @@ const IssueForm: FC<IssueFormProps> = () => {
     }
   };
 
-  const beforeUpload = (file: RcFile) => {
-    const message = validateImage(file);
-    return !message;
+  const showModal = () => {
+    assetAttrModal.current.show();
+  };
+
+  const removeAttr = (index: number) => {
+    const nextAttrs = [...attrs];
+    nextAttrs.splice(index, 1);
+
+    form.setFieldValue('attributes', nextAttrs);
+    setAttrs(nextAttrs);
+  };
+
+  const onAttrOk = (values: AttrParams) => {
+    const attrs = form.getFieldValue('attributes');
+    console.log('attrs', attrs);
+    form.setFieldValue('attributes', [...attrs, values]);
+    setAttrs([...attrs, values]);
   };
 
   if (!initialValues) {
@@ -259,7 +289,52 @@ const IssueForm: FC<IssueFormProps> = () => {
         >
           <Upload value={image} onChange={onImageChange} />
         </Form.Item>
-        <Space size={10} align="end">
+        <Form.Item
+          name="attributes"
+          label={formatMessage({ id: 'financial.asset.issue.attributes' })}
+        >
+          <Row gutter={[20, 20]} style={{ marginBottom: 20 }}>
+            {attrs.map((attr: AttrParams, index: number) => (
+              <Col span={8} key={index}>
+                <div className="attr-item">
+                  <div className="attr-item-label">{attr.trait_type}</div>
+                  <div className="attr-item-value">{attr.value}</div>
+                  <div className="attr-item-ratio">
+                    {attr.ratio}%{' '}
+                    {formatMessage({ id: 'financial.asset.issue.rate.extra' })}
+                  </div>
+                  <span
+                    className="attr-item-close"
+                    onClick={() => {
+                      removeAttr(index);
+                    }}
+                  ></span>
+                </div>
+              </Col>
+            ))}
+            <Col span={24}>
+              <Button
+                type="primary"
+                ghost
+                className="button-form"
+                onClick={showModal}
+              >
+                <div className="button-image-wrap">
+                  <Image
+                    src="/images/common/icon_form_add_default@2x.png"
+                    alt=""
+                    width={20}
+                    height={20}
+                    preview={false}
+                  />
+                  {formatMessage({ id: 'financial.asset.issue.add' })}
+                </div>
+              </Button>
+            </Col>
+          </Row>
+        </Form.Item>
+
+        {/* <Space size={10} align="end">
           <Form.Item
             name="label"
             rules={[{ type: 'string', max: 20 }]}
@@ -299,7 +374,7 @@ const IssueForm: FC<IssueFormProps> = () => {
               }
             />
           </Form.Item>
-        </Space>
+        </Space> */}
         <Form.Item
           name="supply"
           label={formatMessage({ id: 'financial.asset.issue.supply' })}
@@ -339,6 +414,8 @@ const IssueForm: FC<IssueFormProps> = () => {
         </Form.Item>
       </Form>
 
+      <AssetAttrModal ref={assetAttrModal} onOk={onAttrOk} />
+
       <style jsx>
         {`
           .tax {
@@ -355,6 +432,57 @@ const IssueForm: FC<IssueFormProps> = () => {
 
             background: #fafafa;
             border-radius: 4px;
+          }
+
+          .attr-item {
+            position: relative;
+            width: 100%;
+            height: 160px;
+            padding: 30px 24px;
+            background: #ffffff;
+            box-shadow: -7px 7px 29px 0px rgba(30, 30, 30, 0.05);
+          }
+
+          .attr-item-label {
+            height: 21px;
+            font-size: 18px;
+            font-family: SFUIDisplay-Semibold, SFUIDisplay;
+            font-weight: 600;
+            color: #000000;
+            line-height: 21px;
+          }
+
+          .attr-item-value {
+            height: 26px;
+            margin-top: 16px;
+            font-size: 22px;
+            font-family: SFUIDisplay-Bold, SFUIDisplay;
+            font-weight: bold;
+            color: #000000;
+            line-height: 26px;
+          }
+
+          .attr-item-ratio {
+            height: 19px;
+            margin-top: 18px;
+            font-size: 16px;
+            font-family: SFUIDisplay-Medium, SFUIDisplay;
+            font-weight: 500;
+            color: #000000;
+            line-height: 19px;
+          }
+
+          .attr-item-close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: url('/images/common/icon_form_close@2x.png') no-repeat
+              center;
+            background-size: 100%;
+            cursor: pointer;
           }
         `}
       </style>

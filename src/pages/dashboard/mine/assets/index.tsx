@@ -44,7 +44,10 @@ const App: NextPageWithLayout = () => {
   const [total, setTotal] = useState(0);
   const [data, setData] = useState<ItemType[]>([]);
   const [pageStart, setPageStart] = useState(0);
-  const [values, setValues] = useState({});
+  const [values, setValues] = useState({ orderBy: 'blockNumber desc' });
+  const [initialValues, setInitialValues] = useState({
+    orderBy: 'blockNumber desc',
+  });
 
   const getDataParams = useCallback(() => {
     return {
@@ -189,6 +192,7 @@ const App: NextPageWithLayout = () => {
           <Form
             name="filter"
             layout="inline"
+            initialValues={initialValues}
             onValuesChange={onValuesChange}
             autoComplete="off"
             labelAlign="left"

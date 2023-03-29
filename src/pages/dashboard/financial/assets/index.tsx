@@ -37,7 +37,10 @@ const App: NextPageWithLayout = () => {
     assetOrderAmountTotal: 0,
     assetTotal: 0,
   });
-  const [values, setValues] = useState({});
+  const [initialValues, setInitialValues] = useState({
+    orderBy: 'blockNumber desc',
+  });
+  const [values, setValues] = useState(initialValues);
 
   const pageSize = 20;
   const [page, setPage] = useState(1);
@@ -226,6 +229,7 @@ const App: NextPageWithLayout = () => {
             <Form
               name="filter"
               layout="inline"
+              initialValues={initialValues}
               onValuesChange={onValuesChange}
               autoComplete="off"
               labelAlign="left"

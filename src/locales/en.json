@@ -14,6 +14,8 @@
   "viewAllDao": "VIEW ALL DAO",
   "viewAllNfts": "VIEW ALL NFTs",
   "avatar": "Profile photo",
+  "add": "Add",
+  "cancel": "Cancel",
 
   "home.intro.h1": "Welcome to SmartDAO World",
   "home.intro.h2": "Build a platform to help web2 stars, sports and artists quickly enter the web3 world",
@@ -313,7 +315,7 @@
   "governance.votes.proposal.content": "content of the proposal",
   "governance.votes.auto": "contract automatic execution",
 
-  "financial.asset.address": "Contract address",
+  "financial.asset.address": "Address",
   "financial.asset.time.create": "Creation time",
   "financial.asset.copy": "Copy link",
   "financial.asset.publish": "Publish new assets",
@@ -363,12 +365,14 @@
   "financial.asset.ago.second": "{value} second ago",
   "financial.asset.loading": "slide load more",
   "financial.asset.issue.attributes": "Attributes",
+  "financial.asset.issue.add": "Add Attribute",
   "financial.asset.issue.label": "属性项",
   "financial.asset.issue.value": "属性值",
   "financial.asset.issue.rate": "特征比例",
   "financial.asset.issue.supply": "Supply",
   "financial.asset.issue.blockchain": "Blockchain",
   "financial.asset.issue.issue": "Issue",
+  "financial.asset.issue.rate.extra": "have this attribute",
 
   "financial.order.total": "Total number of orders",
   "financial.order.total.amount": "Total transaction value",

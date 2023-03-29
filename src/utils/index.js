@@ -211,3 +211,25 @@ export const isRepeate2 = (obj1, obj2) => {
 export const isMac = () => {
   return /macintosh|mac os x/i.test(navigator.userAgent);
 };
+
+export const copyToClipboard = (text) => {
+  if (!text) {
+    return;
+  }
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    console.log('navigator.clipboard');
+    navigator.clipboard.writeText(text);
+  } else {
+    console.log('document.execCommand');
+    const input = document.createElement('input');
+    document.body.appendChild(input);
+    input.setAttribute('value', text);
+    input.select();
+
+    if (document.execCommand('copy')) {
+      document.execCommand('copy');
+    }
+    document.body.removeChild(input);
+  }
+};

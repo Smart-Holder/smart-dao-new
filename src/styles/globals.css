@@ -945,3 +945,8 @@ a {
   background: #dedede;
   border-radius: 2px;
 }
+
+/* ------------------- Typography ---------------------- */
+.ant-typography .ant-typography-copy {
+  color: #000;
+}

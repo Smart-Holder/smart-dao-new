@@ -14,6 +14,8 @@
   "viewAllDao": "VIEW ALL DAO",
   "viewAllNfts": "VIEW ALL NFTs",
   "avator": "プロフィール写真",
+  "add": "Add",
+  "cancel": "Cancel",
 
   "home.intro.h1": "Welcome to SmartDAO World",
   "home.intro.h2": "Build a platform to help web2 stars, sports and artists quickly enter the web3 world",
@@ -363,12 +365,14 @@
   "financial.asset.ago.second": "{value}秒前",
   "financial.asset.loading": "読み込む",
   "financial.asset.issue.attributes": "Attributes",
+  "financial.asset.issue.add": "Add Attribute",
   "financial.asset.issue.label": "属性项",
   "financial.asset.issue.value": "属性值",
   "financial.asset.issue.rate": "特征比例",
   "financial.asset.issue.supply": "Supply",
   "financial.asset.issue.blockchain": "Blockchain",
   "financial.asset.issue.issue": "Issue",
+  "financial.asset.issue.rate.extra": "have this attribute",
 
   "financial.order.total": "総注文数",
   "financial.order.total.amount": "総取引額",
