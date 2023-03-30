@@ -10,6 +10,7 @@ import { connectType as type } from '@/config/enum';
 
 import store from '@/store';
 import { request } from '@/api';
+import { message } from 'antd';
 
 // 发行资产
 export function safeMint({ _tokenURI }: { _tokenURI: string }) {
@@ -92,38 +93,44 @@ export async function shelves({
   tokenId: string;
   amount: string;
 }) {
-  const { chainId } = store.getState().wallet;
+  try {
+    const { chainId } = store.getState().wallet;
 
-  console.log('shelves params:', token, tokenId, amount);
+    console.log('shelves params:', token, tokenId, amount);
 
-  const res = await request({
-    name: 'opensea',
-    method: 'getOrderParameters',
-    params: { chain: chainId, token, tokenId, amount },
-  });
-
-  console.log('getOrderParameters', res);
-
-  if (!res.isApprovedForAll) {
-    // 调用合约授权资产权限给opensea
-    // token, OPENSEA_CONDUIT_ADDRESS, true
-    await setApprovalForAll({
-      contractAddress: token,
-      operator: res.OPENSEA_CONDUIT_ADDRESS,
+    const res = await request({
+      name: 'opensea',
+      method: 'getOrderParameters',
+      params: { chain: chainId, token, tokenId, amount },
     });
+
+    console.log('getOrderParameters', res);
+
+    if (!res.isApprovedForAll) {
+      // 调用合约授权资产权限给opensea
+      // token, OPENSEA_CONDUIT_ADDRESS, true
+      await setApprovalForAll({
+        contractAddress: token,
+        operator: res.OPENSEA_CONDUIT_ADDRESS,
+      });
+    }
+
+    let { parameters, signature } = await signTypedData(res);
+
+    const data = await request({
+      name: 'opensea',
+      method: 'createOrder',
+      params: { chain: chainId, order: parameters, signature },
+    });
+
+    console.log('createOrder', data);
+
+    return data;
+  } catch (error: any) {
+    console.error(error);
+    message.error(error?.message);
+    throw error;
   }
-
-  let { parameters, signature } = await signTypedData(res);
-
-  const data = await request({
-    name: 'opensea',
-    method: 'createOrder',
-    params: { chain: chainId, order: parameters, signature },
-  });
-
-  console.log('createOrder', data);
-
-  return data;
 }
 
 /* 

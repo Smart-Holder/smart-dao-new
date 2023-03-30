@@ -44,9 +44,14 @@ export async function join({
     [0xdc6b0b72, 0x678ea396],
   ];
 
-  await contract.methods.create(...params).call({ from: votePool }); //try call
+  try {
+    await contract.methods.create(...params).call({ from: votePool }); //try call
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 
-  return await contractSend(contract, address, 'requestJoin', params);
+  return contractSend(contract, address, 'requestJoin', params);
 }
 
 export async function isPermission(
