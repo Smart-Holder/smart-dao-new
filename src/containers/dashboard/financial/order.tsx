@@ -17,6 +17,7 @@ import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
 import type { PaginationProps } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
 import { useIntl, FormattedMessage } from 'react-intl';
+import EllipsisMiddle from '@/components/typography/ellipsisMiddle';
 
 dayjs.extend(customParseFormat);
 
@@ -51,15 +52,20 @@ const columns = [
     dataIndex: 'fromAddres',
     key: 'fromAddres',
     render: (text: string) => {
+      // return (
+      //   <>
+      //     <span style={{ marginRight: 4 }}>{formatAddress(text)}</span>
+      //     <CopyOutlined
+      //       onClick={() => {
+      //         copy(text);
+      //       }}
+      //     />
+      //   </>
+      // );
       return (
-        <>
-          <span style={{ marginRight: 4 }}>{formatAddress(text)}</span>
-          <CopyOutlined
-            onClick={() => {
-              copy(text);
-            }}
-          />
-        </>
+        <EllipsisMiddle style={{ width: 100 }} suffixCount={4} copyable>
+          {text}
+        </EllipsisMiddle>
       );
     },
   },
@@ -68,15 +74,20 @@ const columns = [
     dataIndex: 'toAddress',
     key: 'toAddress',
     render: (text: string) => {
+      // return (
+      //   <>
+      //     <span style={{ marginRight: 4 }}>{formatAddress(text)}</span>
+      //     <CopyOutlined
+      //       onClick={() => {
+      //         copy(text);
+      //       }}
+      //     />
+      //   </>
+      // );
       return (
-        <>
-          <span style={{ marginRight: 4 }}>{formatAddress(text)}</span>
-          <CopyOutlined
-            onClick={() => {
-              copy(text);
-            }}
-          />
-        </>
+        <EllipsisMiddle style={{ width: 100 }} suffixCount={4} copyable>
+          {text}
+        </EllipsisMiddle>
       );
     },
   },

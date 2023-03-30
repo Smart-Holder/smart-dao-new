@@ -11,7 +11,6 @@ import { useAppSelector } from '@/store/hooks';
 import { useIntl } from 'react-intl';
 import Card, { CardDataProps } from '@/components/card';
 import DashboardHeader from '@/containers/dashboard/header';
-import { formatAddress } from '@/utils';
 import { shelves } from '@/api/asset';
 import { LoadingOutlined } from '@ant-design/icons';
 import Modal from '@/components/modal';

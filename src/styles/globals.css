@@ -555,6 +555,14 @@ a {
   line-height: 20px;
 }
 
+.ant-table .ant-table-tbody .ant-table-cell .ant-typography {
+  font-size: 15px;
+  font-family: SFUIText-Regular;
+  font-weight: 400;
+  color: #000000;
+  line-height: 20px;
+}
+
 .ant-table .ant-table-tbody tr:nth-child(2n + 1) {
   background-color: #fafafa;
 }

@@ -13,6 +13,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { formatAddress } from '@/utils';
 
 import { useIntl } from 'react-intl';
+import EllipsisMiddle from '@/components/typography/ellipsisMiddle';
 
 dayjs.extend(customParseFormat);
 
@@ -134,7 +135,12 @@ const VoteModal: FC<VoteModalProps> = (props) => {
           </Space>
 
           <div className="owner">
-            <div className="address">{formatAddress(data.origin)}</div>
+            <div className="address">
+              {/* {formatAddress(data.origin)} */}
+              <EllipsisMiddle style={{ width: 110 }} suffixCount={4} copyable>
+                {data.origin}
+              </EllipsisMiddle>
+            </div>
             <div className={`status ${data.status}`}>
               {statusMap[data.status]}
             </div>
@@ -150,7 +156,10 @@ const VoteModal: FC<VoteModalProps> = (props) => {
                     {formatMessage({ id: 'governance.votes.executor' })}:
                   </span>
                   <span className="value">
-                    {formatAddress(data.extra.executor)}
+                    {/* {formatAddress(data.extra.executor)} */}
+                    <EllipsisMiddle suffixCount={5} copyable>
+                      {data.extra.executor}
+                    </EllipsisMiddle>
                   </span>
                 </div>
               )}
@@ -159,7 +168,7 @@ const VoteModal: FC<VoteModalProps> = (props) => {
                   {formatMessage({ id: 'governance.votes.time.execution' })}:
                 </span>
                 <span className="value">
-                  {dayjs(data.executeTime).format('A HH:mm, MM/DD/YYYY')}
+                  {dayjs(data.executeTime * 1000).format('A HH:mm, MM/DD/YYYY')}
                 </span>
               </div>
             </div>
@@ -386,6 +395,14 @@ const VoteModal: FC<VoteModalProps> = (props) => {
             line-height: 19px;
           }
 
+          .address :global(.ant-typography) {
+            font-size: 16px;
+            font-family: SFUIText-Medium;
+            font-weight: 500;
+            color: #000000;
+            line-height: 19px;
+          }
+
           .item-result {
             margin-top: 16px;
           }
@@ -403,6 +420,14 @@ const VoteModal: FC<VoteModalProps> = (props) => {
 
           .item-result .value {
             height: 24px;
+            font-size: 14px;
+            font-family: SFUIText-Semibold;
+            font-weight: 600;
+            color: #818181;
+            line-height: 24px;
+          }
+
+          .item-result .value :global(.ant-typography) {
             font-size: 14px;
             font-family: SFUIText-Semibold;
             font-weight: 600;

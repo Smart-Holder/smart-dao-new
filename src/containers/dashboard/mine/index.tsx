@@ -17,7 +17,7 @@ import { useIntl } from 'react-intl';
 import { request } from '@/api';
 import { DAOType, Permissions } from '@/config/enum';
 import { join } from '@/api/member';
-import { getDAO, setDAOType } from '@/store/features/daoSlice';
+import { setDAOType } from '@/store/features/daoSlice';
 import { UserOutlined } from '@ant-design/icons';
 
 import NFTs from '@/containers/dashboard/mine/nfts';
@@ -35,21 +35,38 @@ const App = () => {
   const { chainId, address } = useAppSelector((store) => store.wallet);
   const { currentDAO, daoType } = useAppSelector((store) => store.dao);
   const [DAOInfo, setDAOInfo] = useState() as any;
+  const [likeDAO, setLikeDAO] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isLike, setIsLike] = useState(currentDAO?.isLike || false);
 
   useEffect(() => {
     const getData = async () => {
-      const res = await request({
-        name: 'dao',
-        method: 'getDAOSummarys',
-        params: {
-          chain: chainId,
-          host: currentDAO.host,
-        },
-      });
+      const [res, res2] = await Promise.all([
+        request({
+          name: 'dao',
+          method: 'getDAOSummarys',
+          params: {
+            chain: chainId,
+            host: currentDAO.host,
+          },
+        }),
+        request({
+          name: 'user',
+          method: 'getUserLikeDAOs',
+          params: { chain: chainId },
+        }),
+      ]);
 
       setDAOInfo(res);
+      setLikeDAO(res2);
+
+      if (res2) {
+        const like = res2.some((item: any) => item.host === currentDAO.host);
+
+        if (like) {
+          setIsLike(true);
+        }
+      }
     };
 
     if (currentDAO.host && chainId) {

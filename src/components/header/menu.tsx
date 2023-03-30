@@ -19,6 +19,7 @@ import { connectType as type } from '@/config/enum';
 import iconAdd from '/public/images/icon-add.png';
 
 import { useIntl } from 'react-intl';
+import EllipsisMiddle from '../typography/ellipsisMiddle';
 
 const Menu = () => {
   const { formatMessage } = useIntl();
@@ -153,7 +154,10 @@ const Menu = () => {
           </div>
 
           <div className="connect-menu-top-item" style={{ marginTop: 20 }}>
-            {formatAddress(address, 14)}
+            {/* {formatAddress(address, 14)} */}
+            <EllipsisMiddle style={{ width: 200 }} suffixCount={4} copyable>
+              {address}
+            </EllipsisMiddle>
           </div>
         </div>
       ),

@@ -1,3 +1,4 @@
+import EllipsisMiddle from '@/components/typography/ellipsisMiddle';
 import { formatAddress, fromToken } from '@/utils';
 import { UserOutlined } from '@ant-design/icons';
 import { Avatar, Image, Space, Typography } from 'antd';
@@ -33,7 +34,10 @@ const App = ({ data }: { data: any }) => {
       <div className="owner">
         <Space size={6}>
           <Avatar size={28} icon={<UserOutlined />} />
-          {formatAddress(data.owner)}
+          {/* {formatAddress(data.owner)} */}
+          <EllipsisMiddle style={{ width: 90 }} suffixCount={4} copyable>
+            {data.owner}
+          </EllipsisMiddle>
         </Space>
       </div>
 
@@ -91,6 +95,14 @@ const App = ({ data }: { data: any }) => {
 
           .owner {
             margin-top: 12px;
+            font-size: 12px;
+            font-family: SFUIText-Semibold;
+            font-weight: 600;
+            color: #6d6d6d;
+            line-height: 24px;
+          }
+
+          .owner :global(.ant-typography) {
             font-size: 12px;
             font-family: SFUIText-Semibold;
             font-weight: 600;

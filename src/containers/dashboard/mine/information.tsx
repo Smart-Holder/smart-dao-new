@@ -13,7 +13,7 @@ import { validateChinese } from '@/utils/validator';
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import type { CheckboxValueType } from 'antd/es/checkbox/Group';
-import { formatAddress, isRepeate } from '@/utils';
+import { isRepeate } from '@/utils';
 import { Permissions } from '@/config/enum';
 
 import TransferModal from '@/components/modal/transferModal';

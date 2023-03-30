@@ -5,6 +5,7 @@ import { useIntl, FormattedMessage } from 'react-intl';
 import Progress from '@/containers/dashboard/governance/progress';
 
 import { formatAddress } from '@/utils';
+import EllipsisMiddle from '@/components/typography/ellipsisMiddle';
 
 const { Countdown } = Statistic;
 const { Paragraph } = Typography;
@@ -114,7 +115,12 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
 
       <div className="item-footer">
         <div>
-          <div className="item-owner-address">{formatAddress(data.origin)}</div>
+          <div className="item-owner-address">
+            {/* {formatAddress(data.origin)} */}
+            <EllipsisMiddle style={{ width: 110 }} suffixCount={4} copyable>
+              {data.origin}
+            </EllipsisMiddle>
+          </div>
         </div>
 
         <Progress style={{ marginTop: 15 }} data={{ ...data, percent }} />
@@ -245,6 +251,14 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
 
           .item-owner-address {
             height: 19px;
+            font-size: 16px;
+            font-family: SFUIText-Medium;
+            font-weight: 500;
+            color: #000000;
+            line-height: 19px;
+          }
+
+          .item-owner-address :global(.ant-typography) {
             font-size: 16px;
             font-family: SFUIText-Medium;
             font-weight: 500;

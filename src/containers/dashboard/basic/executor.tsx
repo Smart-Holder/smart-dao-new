@@ -5,6 +5,7 @@ import { Form } from 'antd';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
 import { validateEthAddress } from '@/utils/validator';
+import { setCurrentDAO } from '@/store/features/daoSlice';
 
 import { request } from '@/api';
 import { isPermission, setExecutor } from '@/api/member';
@@ -108,6 +109,16 @@ const App = () => {
         } else {
           await setExecutor({ id: member.tokenId });
           message.success('Success');
+        }
+
+        const res = await request({
+          name: 'utils',
+          method: 'getDAO',
+          params: { chain: chainId, address: currentDAO.address },
+        });
+
+        if (res) {
+          dispatch(setCurrentDAO(res));
         }
 
         setIsEdit(false);

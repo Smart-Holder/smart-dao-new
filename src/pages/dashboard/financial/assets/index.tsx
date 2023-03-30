@@ -22,6 +22,7 @@ import { request } from '@/api';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
 import Card from '@/components/card';
+import EllipsisMiddle from '@/components/typography/ellipsisMiddle';
 
 dayjs.extend(customParseFormat);
 
@@ -183,7 +184,10 @@ const App: NextPageWithLayout = () => {
         >
           <div style={{ marginTop: 15 }} className="dao-info-item">
             {formatMessage({ id: 'address' })}:{' '}
-            {formatAddress(currentDAO.address)}
+            {/* {formatAddress(currentDAO.address)} */}
+            <EllipsisMiddle suffixCount={4} copyable>
+              {currentDAO.address}
+            </EllipsisMiddle>
           </div>
           <div className="dao-info-item">
             {formatMessage({ id: 'financial.asset.time.create' })}:{' '}
@@ -334,6 +338,14 @@ const App: NextPageWithLayout = () => {
           .dao-info-item {
             height: 25px;
             margin-top: 20px;
+            font-size: 18px;
+            font-family: SFUIText-Medium;
+            font-weight: 500;
+            color: #000000;
+            line-height: 25px;
+          }
+
+          .dao-info-item :global(.ant-typography) {
             font-size: 18px;
             font-family: SFUIText-Medium;
             font-weight: 500;

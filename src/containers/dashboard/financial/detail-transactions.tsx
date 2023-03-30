@@ -5,6 +5,7 @@ import { formatAddress } from '@/utils';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useIntl } from 'react-intl';
+import EllipsisMiddle from '@/components/typography/ellipsisMiddle';
 
 dayjs.extend(customParseFormat);
 
@@ -87,14 +88,36 @@ const DetailTransactions: FC<DetailTransactionsProps> = (props) => {
               title: formatMessage({ id: 'financial.asset.sender' }),
               dataIndex: 'fromAddres',
               key: 'fromAddres',
-              render: (str) => formatAddress(str),
+              render: (str) => {
+                // return formatAddress(str);
+                return (
+                  <EllipsisMiddle
+                    style={{ width: 100 }}
+                    suffixCount={4}
+                    copyable
+                  >
+                    {str}
+                  </EllipsisMiddle>
+                );
+              },
             },
 
             {
               title: formatMessage({ id: 'financial.asset.recipient' }),
               dataIndex: 'toAddress',
               key: 'toAddress',
-              render: (str) => formatAddress(str),
+              render: (str) => {
+                // return formatAddress(str);
+                return (
+                  <EllipsisMiddle
+                    style={{ width: 100 }}
+                    suffixCount={4}
+                    copyable
+                  >
+                    {str}
+                  </EllipsisMiddle>
+                );
+              },
             },
             {
               title: formatMessage({ id: 'financial.asset.date' }),
