@@ -23,13 +23,16 @@ import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
 import Card from '@/components/card';
 import EllipsisMiddle from '@/components/typography/ellipsisMiddle';
+import { DAOType } from '@/config/enum';
 
 dayjs.extend(customParseFormat);
 
 const App: NextPageWithLayout = () => {
   const { formatMessage } = useIntl();
   const router = useRouter();
-  const { currentDAO } = useAppSelector((store) => store.dao);
+  const { currentDAO, currentMember, daoType } = useAppSelector(
+    (store) => store.dao,
+  );
   const { chainId, address } = useAppSelector((store) => store.wallet);
   const { loading } = useAppSelector((store) => store.common);
 
@@ -47,6 +50,8 @@ const App: NextPageWithLayout = () => {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [data, setData] = useState([]) as any;
+
+  const isMember = daoType === DAOType.Join && currentMember.tokenId;
 
   useEffect(() => {
     if (ETH_CHAINS_INFO[chainId]) {
@@ -163,23 +168,25 @@ const App: NextPageWithLayout = () => {
         <DashboardHeader
           title={formatMessage({ id: 'sider.financial.asset' })}
           buttons={
-            <>
-              <Button
-                type="primary"
-                ghost
-                className="smart-button"
-                onClick={onCreate}
-              >
-                {formatMessage({ id: 'financial.asset.publish' })}
-              </Button>
-              <Button
-                type="primary"
-                className="smart-button"
-                onClick={onShelves}
-              >
-                {formatMessage({ id: 'financial.asset.listing' })}
-              </Button>
-            </>
+            isMember && (
+              <>
+                <Button
+                  type="primary"
+                  ghost
+                  className="smart-button"
+                  onClick={onCreate}
+                >
+                  {formatMessage({ id: 'financial.asset.publish' })}
+                </Button>
+                <Button
+                  type="primary"
+                  className="smart-button"
+                  onClick={onShelves}
+                >
+                  {formatMessage({ id: 'financial.asset.listing' })}
+                </Button>
+              </>
+            )
           }
         >
           <div style={{ marginTop: 15 }} className="dao-info-item">

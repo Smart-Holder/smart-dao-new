@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, useEffect } from 'react';
 
 import BasicLayout from './basic';
 import LaunchLayout from './launch';
@@ -6,6 +6,17 @@ import DashboardLayout from './dashboard';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
 import { useRouter } from 'next/router';
+import { getSessionStorage } from '@/utils';
+import { DAOType } from '@/config/enum';
+
+const visitablePage = [
+  '/dashboard/mine/home',
+  '/dashboard/governance/votes',
+  '/dashboard/financial/assets',
+  '/dashboard/financial/order',
+  '/dashboard/financial/income',
+  '/dashboard/member/nftp',
+];
 
 const App = ({
   children,
@@ -23,6 +34,30 @@ const App = ({
   const { currentDAO } = useAppSelector((store) => store.dao);
 
   const { isInit } = useAppSelector((store) => store.common);
+
+  useEffect(() => {
+    if (type === 'basic' || type === 'layout') {
+      return;
+    }
+
+    const dao = getSessionStorage('currentDAO');
+    let daoType = localStorage.getItem('daoType');
+
+    if (!dao || !dao.address) {
+      router.replace('/');
+      return;
+    }
+
+    if (daoType === DAOType.Visit || daoType === DAOType.Follow) {
+      const { pathname } = router;
+      const visitable = visitablePage.some((path) => pathname.includes(path));
+
+      if (!visitable) {
+        router.replace('/dashboard/mine/home');
+        return;
+      }
+    }
+  }, [router]);
 
   if (router.pathname !== '/' && !isInit) {
     return null;

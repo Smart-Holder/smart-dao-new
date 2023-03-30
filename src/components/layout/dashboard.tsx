@@ -68,6 +68,9 @@ export default function BasicLayout({
           dispatch(setUserMembers(members));
           dispatch(setCurrentMember(members[0]));
         }
+      } else {
+        dispatch(setUserMembers([]));
+        dispatch(setCurrentMember({}));
       }
 
       setInit(true);
