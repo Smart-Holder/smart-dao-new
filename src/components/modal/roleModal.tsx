@@ -1,6 +1,6 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
 import { useRouter } from 'next/router';
-import { Avatar } from 'antd';
+import { Avatar, Col, Row } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 
 import Modal from '@/components/modal';
@@ -44,36 +44,61 @@ const RoleModal = (props: any, ref: any) => {
     setIsModalOpen(false);
   };
 
-  console.log('isModalOpen', isModalOpen);
-
   return (
     <Modal type="normal" open={isModalOpen} onCancel={handleCancel}>
       <div className="content">
         <div className="h1">{formatMessage({ id: 'home.selectIdentity' })}</div>
         {/* <div className="h2">Create your own DAO</div> */}
 
-        <div className="roles">
-          {userMembers.map((item) => (
-            <div className="role-item" key={item.id}>
-              {item.image ? (
-                <Avatar
-                  size={88}
-                  src={item.image}
-                  style={{ cursor: 'pointer' }}
-                  data-id={item.id}
-                  onClick={() => {
-                    handleClick(item);
-                  }}
-                />
-              ) : (
-                <Avatar size={44} icon={<UserOutlined />} />
-              )}
-              <span className="role-item-name">
-                {item.name || formatAddress(item.host)}
-              </span>
-            </div>
-          ))}
-        </div>
+        {userMembers.length < 3 ? (
+          <div className="roles">
+            {userMembers.map((item) => (
+              <div className="role-item role-item-s" key={item.id}>
+                {item.image ? (
+                  <Avatar
+                    size={88}
+                    src={item.image}
+                    style={{ cursor: 'pointer' }}
+                    data-id={item.id}
+                    onClick={() => {
+                      handleClick(item);
+                    }}
+                  />
+                ) : (
+                  <Avatar size={44} icon={<UserOutlined />} />
+                )}
+                <span className="role-item-name">
+                  {item.name || formatAddress(item.host)}
+                </span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <Row gutter={[30, 30]} style={{ marginTop: 50 }}>
+            {userMembers.map((item) => (
+              <Col span={8} key={item.id}>
+                <div className="role-item">
+                  {item.image ? (
+                    <Avatar
+                      size={88}
+                      src={item.image}
+                      style={{ cursor: 'pointer' }}
+                      data-id={item.id}
+                      onClick={() => {
+                        handleClick(item);
+                      }}
+                    />
+                  ) : (
+                    <Avatar size={44} icon={<UserOutlined />} />
+                  )}
+                  <span className="role-item-name">
+                    {item.name || formatAddress(item.host)}
+                  </span>
+                </div>
+              </Col>
+            ))}
+          </Row>
+        )}
       </div>
 
       <style jsx>
@@ -92,7 +117,14 @@ const RoleModal = (props: any, ref: any) => {
           }
 
           .roles {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             margin-top: 50px;
+          }
+
+          .role-item-s {
+            margin: 0 30px;
           }
 
           .role-item {

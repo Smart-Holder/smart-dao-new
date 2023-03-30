@@ -29,6 +29,8 @@ import AssetAttrModal, { AttrParams } from '@/components/modal/assetAttrModal';
 import Upload from '@/components/form/upload';
 import Select from '@/components/form/select';
 import { useRouter } from 'next/router';
+import { validateETH } from '@/utils/validator';
+import { toToken } from '@/utils';
 
 type IssueFormProps = {};
 
@@ -115,6 +117,7 @@ const IssueForm: FC<IssueFormProps> = () => {
       image,
       description: values.description,
       attributes: [
+        { price: toToken(values.price, 18) },
         { owner: userInfo.nickname, image: userInfo.image },
         { trait_type: 'supply', value: values.supply },
         { trait_type: 'blockchain', value: values.blockchain },
@@ -375,6 +378,15 @@ const IssueForm: FC<IssueFormProps> = () => {
             />
           </Form.Item>
         </Space> */}
+        <Form.Item
+          name="price"
+          label={formatMessage({ id: 'financial.asset.price' })}
+          rules={[{ required: true }, { validator: validateETH }]}
+          wrapperCol={{ span: 7 }}
+        >
+          {/* <InputPrice min={0} suffix="ETH" /> */}
+          <Input min={0} suffix="ETH" placeholder="Enter the Ethereum price" />
+        </Form.Item>
         <Form.Item
           name="supply"
           label={formatMessage({ id: 'financial.asset.issue.supply' })}

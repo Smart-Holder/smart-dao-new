@@ -822,6 +822,14 @@ a {
   box-shadow: 0 0 0 2px rgba(211, 191, 255, 1) !important;
 }
 
+.form .ant-input-affix-wrapper-focused {
+  box-shadow: 0 0 0 2px rgba(211, 191, 255, 1);
+}
+
+.form .ant-input-affix-wrapper-status-error.ant-input-affix-wrapper-focused {
+  box-shadow: 0 0 0 2px #ff4d4f;
+}
+
 .form .ant-input-number {
   width: 100%;
   height: 50px;

@@ -21,6 +21,7 @@ import PermissionModal from '@/components/modal/permissionModal';
 import Upload from '@/components/form/upload';
 
 import { setMemberInfo } from '@/api/member';
+import EllipsisMiddle from '@/components/typography/ellipsisMiddle';
 
 const App = () => {
   const [form] = Form.useForm();
@@ -65,14 +66,18 @@ const App = () => {
       return;
     }
 
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    await setMemberInfo({ ...values, image });
+      await setMemberInfo({ ...values, image });
 
-    setLoading(false);
-    setIsEdit(false);
-    message.success('success');
-    window.location.reload();
+      setLoading(false);
+      setIsEdit(false);
+      message.success('success');
+      window.location.reload();
+    } catch (error) {
+      setLoading(false);
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -113,7 +118,11 @@ const App = () => {
           <span className="label">
             {formatMessage({ id: 'my.information.address' })}:
           </span>
-          <span className="value">{address}</span>
+          <span className="value">
+            <EllipsisMiddle suffixCount={4} copyable>
+              {address}
+            </EllipsisMiddle>
+          </span>
         </div>
         <div className="info-item">
           <span className="label">
@@ -124,7 +133,11 @@ const App = () => {
 
         <div className="info-item">
           <span className="label">NFTP:</span>
-          <span className="value">{currentMember.host}</span>
+          <span className="value">
+            <EllipsisMiddle suffixCount={4} copyable>
+              {currentMember.host}
+            </EllipsisMiddle>
+          </span>
         </div>
         <div className="info-item">
           <span className="label">ID:</span>
@@ -272,6 +285,14 @@ const App = () => {
 
           .info-item .value {
             height: 24px;
+            font-size: 16px;
+            font-family: SFUIText-Semibold;
+            font-weight: 600;
+            color: #818181;
+            line-height: 24px;
+          }
+
+          .info-item .value :global(.ant-typography) {
             font-size: 16px;
             font-family: SFUIText-Semibold;
             font-weight: 600;

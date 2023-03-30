@@ -166,7 +166,7 @@ export default function BasicLayout({
     return null;
   }
 
-  console.log('daoType', daoType);
+  // console.log('daoType', daoType);
 
   return (
     <>

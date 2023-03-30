@@ -239,25 +239,27 @@ const App = () => {
         />
       </div> */}
 
-      <div className="asset-desc">
-        <div className="asset-desc-title">
-          {formatMessage({ id: 'description' })}
-        </div>
+      {storageData.description && (
+        <div className="asset-desc">
+          <div className="asset-desc-title">
+            {formatMessage({ id: 'description' })}
+          </div>
 
-        <Paragraph
-          ellipsis={{
-            rows: 3,
-            expandable: true,
-            symbol: (
-              <div style={{ color: '#000' }}>
-                {formatMessage({ id: 'viewMore' })}
-              </div>
-            ),
-          }}
-        >
-          {storageData.description}
-        </Paragraph>
-      </div>
+          <Paragraph
+            ellipsis={{
+              rows: 3,
+              expandable: true,
+              symbol: (
+                <div style={{ color: '#000' }}>
+                  {formatMessage({ id: 'viewMore' })}
+                </div>
+              ),
+            }}
+          >
+            {storageData.description}
+          </Paragraph>
+        </div>
+      )}
 
       <Modal type="normal" open={isModalOpen} onCancel={hideModal}>
         <div className="title">

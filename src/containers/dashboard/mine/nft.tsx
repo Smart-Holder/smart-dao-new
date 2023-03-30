@@ -6,11 +6,13 @@ import { useRouter } from 'next/router';
 
 const { Paragraph, Text } = Typography;
 
-const testImage =
-  'https://smart-dao-res.stars-mine.com/FvCDcP23jHCCRbAJY_x3yK0c7vSx';
-
 const App = ({ data }: { data: any }) => {
   const router = useRouter();
+
+  const properties = data?.properties || [];
+
+  const priceObj = properties.find((item: any) => item.price) || {};
+  const ownerObj = properties.find((item: any) => item.owner);
 
   const handleClick = () => {
     localStorage.setItem('asset', JSON.stringify(data));
@@ -31,21 +33,31 @@ const App = ({ data }: { data: any }) => {
         </Paragraph>
       </div>
 
-      <div className="owner">
-        <Space size={6}>
-          <Avatar size={28} icon={<UserOutlined />} />
-          {/* {formatAddress(data.owner)} */}
-          <EllipsisMiddle style={{ width: 90 }} suffixCount={4} copyable>
-            {data.owner}
-          </EllipsisMiddle>
-        </Space>
-      </div>
+      {ownerObj ? (
+        <div className="owner">
+          <Space size={6}>
+            <Avatar size={28} src={ownerObj.image} />
+            {/* {formatAddress(data.owner)} */}
+            {ownerObj.owner}
+          </Space>
+        </div>
+      ) : (
+        <div className="owner">
+          <Space size={6}>
+            <Avatar size={28} icon={<UserOutlined />} />
+            {/* {formatAddress(data.owner)} */}
+            <EllipsisMiddle style={{ width: 90 }} suffixCount={4} copyable>
+              {data.owner}
+            </EllipsisMiddle>
+          </Space>
+        </div>
+      )}
 
       <div className="bottom">
         <div className="left">
           <span className="label">Current Bid</span>
           <span className="value">
-            {fromToken(Math.max(data.minimumPrice, data.sellPrice))} ETH
+            {fromToken(Math.max(data.minimumPrice, priceObj.price || 0))} ETH
           </span>
         </div>
         {/* <div className="right">
