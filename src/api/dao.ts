@@ -109,3 +109,23 @@ export function setMissionAndDesc({
     description,
   ]);
 }
+
+export const setImage = ({ image }: { image: string }) => {
+  const { web3, address } = store.getState().wallet;
+  const { currentDAO } = store.getState().dao;
+
+  const contract = getContract(web3, DAO.abi, currentDAO.host);
+
+  return contractSend(contract, address, 'setImage', [image]);
+};
+
+export const setExtend = (extend: { poster: string }) => {
+  const { web3, address } = store.getState().wallet;
+  const { currentDAO } = store.getState().dao;
+
+  const contract = getContract(web3, DAO.abi, currentDAO.host);
+
+  return contractSend(contract, address, 'setExtend', [
+    '0x' + buffer.from(JSON.stringify(extend)).toString('hex'),
+  ]);
+};

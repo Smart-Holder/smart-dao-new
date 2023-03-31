@@ -24,7 +24,7 @@ import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 import { getDAO, getDAOList, setCurrentDAO } from '@/store/features/daoSlice';
-import { setMissionAndDesc } from '@/api/dao';
+import { setMissionAndDesc, setImage, setExtend } from '@/api/dao';
 import { Permissions } from '@/config/enum';
 import { createVote } from '@/api/vote';
 import { request } from '@/api';
@@ -103,7 +103,7 @@ const FormGroup: React.FC = () => {
 
   const [logo, setLogo] = useState(currentDAO.image);
   const [poster, setPoster] = useState(
-    buffer.from(currentDAO?.extend?.data).toString(),
+    buffer.from(currentDAO?.extend?.data).toString() || currentDAO.image,
   );
 
   // const decoder = new TextDecoder('utf8');
@@ -218,31 +218,113 @@ const FormGroup: React.FC = () => {
   //   return Promise.resolve();
   // };
 
-  const handleChange: UploadProps['onChange'] = (
-    info: UploadChangeParam<UploadFile>,
-  ) => {
-    // if (info.file.status === 'uploading') {
-    //   setLoading(true);
-    //   return;
-    // }
+  const createLogoProposal = async ({ image }: { image: string }) => {
+    const params = {
+      name: formatMessage({ id: 'proposal.basic.basic' }),
+      description: JSON.stringify({
+        type: 'basic',
+        purpose: `Replace logo: ${image}`,
+      }),
+      extra: [
+        {
+          abi: 'dao',
+          target: currentDAO.address,
+          method: 'setImage',
+          params: [image],
+        },
+      ],
+    };
 
-    if (info.file.status === 'done') {
-      setLogo(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
-      setIsEdit(true);
+    try {
+      await createVote(params);
+      Modal.success({
+        title: formatMessage({ id: 'proposal.create.message' }),
+      });
+    } catch (error) {
+      console.error(error);
     }
   };
 
-  const handleChange2: UploadProps['onChange'] = (
+  const handleLogoChange: UploadProps['onChange'] = async (
     info: UploadChangeParam<UploadFile>,
   ) => {
-    // if (info.file.status === 'uploading') {
-    //   setLoading(true);
-    //   return;
-    // }
-
     if (info.file.status === 'done') {
-      setPoster(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
-      setIsEdit(true);
+      const newLogo =
+        process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key;
+
+      setLogo(newLogo);
+
+      try {
+        if (!(await isPermission(Permissions.Action_DAO_Settings))) {
+          createLogoProposal({ image: newLogo });
+          return;
+        }
+
+        await setImage({ image: newLogo });
+
+        message.success('Success');
+
+        dispatch(getDAOList({ chain: chainId, owner: address }));
+        dispatch(getDAO({ chain: chainId, address: currentDAO.address }));
+      } catch (error) {
+        setLogo(currentDAO.image);
+      }
+    }
+  };
+
+  const createPosterProposal = async (values: { poster: string }) => {
+    const params = {
+      name: formatMessage({ id: 'proposal.basic.basic' }),
+      description: JSON.stringify({
+        type: 'basic',
+        purpose: `Replace poster: ${values.poster}`,
+      }),
+      extra: [
+        {
+          abi: 'dao',
+          target: currentDAO.address,
+          method: 'setExtend',
+          params: ['0x' + buffer.from(JSON.stringify(values)).toString('hex')],
+        },
+      ],
+    };
+
+    try {
+      await createVote(params);
+      Modal.success({
+        title: formatMessage({ id: 'proposal.create.message' }),
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handlePosterChange: UploadProps['onChange'] = async (
+    info: UploadChangeParam<UploadFile>,
+  ) => {
+    if (info.file.status === 'done') {
+      const newPoster =
+        process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key;
+      setPoster(newPoster);
+
+      try {
+        if (!(await isPermission(Permissions.Action_DAO_Settings))) {
+          createPosterProposal({ poster: newPoster });
+          return;
+        }
+
+        await setExtend({ poster: newPoster });
+
+        message.success('Success');
+
+        dispatch(getDAOList({ chain: chainId, owner: address }));
+        dispatch(getDAO({ chain: chainId, address: currentDAO.address }));
+      } catch (error) {
+        console.error(error);
+        setPoster(
+          buffer.from(currentDAO?.extend?.data).toString() || currentDAO.image,
+        );
+      }
     }
   };
 
@@ -308,15 +390,14 @@ const FormGroup: React.FC = () => {
         </Form.Item>
 
         <Form.Item label="Logo" valuePropName="fileList">
-          <Upload value={logo} onChange={handleChange} disabled />
+          <Upload value={logo} onChange={handleLogoChange} />
         </Form.Item>
 
         <Form.Item label="Poster" valuePropName="fileList">
           <Upload
             type="rectangle"
-            value={poster || logo}
-            onChange={handleChange2}
-            disabled
+            value={poster}
+            onChange={handlePosterChange}
           />
         </Form.Item>
 
