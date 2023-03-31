@@ -57,6 +57,13 @@ const App = ({ data }: { data: any }) => {
         <div className="left">
           <span className="label">Current Bid</span>
           <span className="value">
+            <Image
+              src="/images/market/icon_nft_card_unit_eth_default@2x.png"
+              width={20}
+              height={20}
+              preview={false}
+              alt=""
+            />
             {fromToken(Math.max(data.minimumPrice, priceObj.price || 0))} ETH
           </span>
         </div>
@@ -143,11 +150,13 @@ const App = ({ data }: { data: any }) => {
           }
 
           .value {
+            display: flex;
+            align-items: center;
             font-size: 15px;
             font-family: SFUIText-Semibold;
             font-weight: 600;
             color: #232323;
-            line-height: 21px;
+            line-height: 20px;
           }
 
           @media screen and (max-width: 1280px) {

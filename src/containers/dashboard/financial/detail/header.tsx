@@ -9,6 +9,7 @@ import { CopyOutlined, LoadingOutlined } from '@ant-design/icons';
 
 import { shelves } from '@/api/asset';
 import EllipsisMiddle from '@/components/typography/ellipsisMiddle';
+import { ETH_CHAINS_INFO } from '@/config/chains';
 
 const { Text, Paragraph } = Typography;
 
@@ -39,9 +40,7 @@ const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageSize, setImageSize] = useState(0);
 
-  const contractAddress = `${formatMessage({
-    id: 'financial.asset.address',
-  })}:  ${storageData.token}`;
+  const chainData = ETH_CHAINS_INFO[chainId];
 
   const onResize = () => {
     const imageWidth = document.querySelector(
@@ -65,7 +64,7 @@ const App = () => {
   }, []);
 
   const toAddress = (addr: string) => {
-    console.log(addr);
+    window.open(`${chainData.lookAddr}${addr}`, '_blank');
     // https://goerli.etherscan.io/address/.....
     // https://etherscan.io/address/....
   };
