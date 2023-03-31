@@ -13,6 +13,7 @@ const visitablePage = [
   '/dashboard/mine/home',
   '/dashboard/governance/votes',
   '/dashboard/financial/assets',
+  '/dashboard/mine/assets/detail',
   '/dashboard/financial/order',
   '/dashboard/financial/income',
   '/dashboard/member/nftp',
