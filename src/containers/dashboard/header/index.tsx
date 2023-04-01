@@ -4,6 +4,7 @@ import { Avatar, Button, Col, Image, Row, Space } from 'antd';
 import buffer from 'somes/buffer';
 
 import Title from '@/containers/dashboard/header/title';
+import { formatToObj } from '@/utils/extend';
 
 type Data = {
   title?: string;
@@ -17,12 +18,8 @@ type Data = {
 const App = ({ title, avatar, name, buttons, children, padding }: Data) => {
   const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
 
-  // const extend = { poster: '' };
-  // const extend = currentDAO?.extend
-  //   ? JSON.parse(currentDAO.extend || '{}')
-  //   : {};
-  const poster = buffer.from(currentDAO?.extend?.data).toString();
-  console.log('extend', buffer.from(currentDAO.extend.data).toString());
+  const extend = formatToObj(currentDAO?.extend?.data);
+  console.log('extend', extend);
 
   return (
     <div>
@@ -32,8 +29,7 @@ const App = ({ title, avatar, name, buttons, children, padding }: Data) => {
         <div className="image-box">
           <Image
             className="poster"
-            // src={extend?.poster || currentDAO.image}
-            src={poster || currentDAO.image}
+            src={extend?.poster || currentDAO.image}
             width="100%"
             height={380}
             preview={false}

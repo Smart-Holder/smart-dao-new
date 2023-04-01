@@ -75,6 +75,7 @@ const App = () => {
       chain: chainId || defaultChain,
       name: searchText,
       limit: [pageStart, pageSize.current],
+      orderBy: 'time desc',
       // owner: address || '',
     });
 
@@ -95,6 +96,7 @@ const App = () => {
       chain: chainId || defaultChain,
       name: searchText,
       limit: [pageStart, 100],
+      orderBy: 'time desc',
       // owner: address || '',
     });
 
@@ -122,6 +124,7 @@ const App = () => {
       chain: chainId || defaultChain,
       name: searchText,
       limit: [0, 4],
+      orderBy: 'time desc',
       // owner: address || '',
     });
 

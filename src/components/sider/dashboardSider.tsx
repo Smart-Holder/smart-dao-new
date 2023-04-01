@@ -3,7 +3,7 @@ import { Layout } from 'antd';
 
 import Menu from '@/components/sider/dashboardSiderMenu';
 import InfoDAO from '@/components/sider/infoDAO';
-import InfoRole from '@/components/sider/infoRole';
+// import InfoRole from '@/components/sider/infoRole';
 
 const App = () => {
   return (
@@ -23,7 +23,7 @@ const App = () => {
     >
       <InfoDAO />
       <Menu />
-      <InfoRole />
+      {/* <InfoRole /> */}
     </Layout.Sider>
   );
 };

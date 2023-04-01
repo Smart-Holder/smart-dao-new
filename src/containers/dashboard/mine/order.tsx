@@ -90,7 +90,7 @@ const App = () => {
       params: {
         chain: chainId,
         host: currentDAO.host,
-        // tokenId: currentMember.tokenId,
+        tokenId: currentMember.tokenId,
         limit: [(page - 1) * pageSize, pageSize],
         name: searchText,
         toAddress: address,
@@ -163,7 +163,14 @@ const App = () => {
       getData(1);
       getTotal();
     }
-  }, [searchText, values, chainId, address, currentDAO.host]);
+  }, [
+    searchText,
+    values,
+    chainId,
+    address,
+    currentDAO.host,
+    currentMember.tokenId,
+  ]);
 
   return (
     <div style={{ padding: '30px 24px 50px' }}>

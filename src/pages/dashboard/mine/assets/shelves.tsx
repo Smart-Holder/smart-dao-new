@@ -47,7 +47,7 @@ const App: NextPageWithLayout = () => {
   const [disabled, setDisabled] = useState(true);
   const [market, setMarket] = useState('opensea');
   const [priceList, setPriceList] = useState({}) as any;
-  const [price, setPrice] = useState('');
+  const [price, setPrice] = useState(0);
   const [selectedRow, setSelectedRow] = useState({}) as any;
 
   const [amount, setAmount] = useState({ total: 0, amount: '0' });
@@ -156,18 +156,31 @@ const App: NextPageWithLayout = () => {
     getTotal();
   }, [searchText, values]);
 
-  useEffect(() => {
-    if (price && market) {
-      setDisabled(false);
-    } else {
-      setDisabled(true);
+  // useEffect(() => {
+  //   if (price && market) {
+  //     setDisabled(false);
+  //   } else {
+  //     setDisabled(true);
+  //   }
+  // }, [price, market]);
+
+  const getPrice = (item: any) => {
+    const priceObj =
+      item?.properties.find((property: any) => property.price) || {};
+
+    if (priceObj || item.minimumPrice) {
+      return fromToken(Math.max(priceObj.price || 0, item.minimumPrice));
     }
-  }, [price, market]);
+
+    return 0;
+  };
 
   const rowSelection = {
     onChange: (selectedRowKeys: any, selectedRows: any) => {
       setSelectedRow(selectedRows[0]);
-      setPrice(priceList[selectedRowKeys[0]]);
+      // setPrice(priceList[selectedRowKeys[0]]);
+      setPrice(getPrice(selectedRows[0]));
+      setDisabled(false);
     },
     getCheckboxProps: (record: any) => ({
       disabled: record.selling !== 0, // Column configuration not to be checked
@@ -180,7 +193,7 @@ const App: NextPageWithLayout = () => {
       setPriceList({ ...priceList, [rowKey]: value });
 
       if (rowKey === selectedRow.id) {
-        setPrice(value);
+        setPrice(Number(value));
       }
     }
   };
@@ -333,14 +346,17 @@ const App: NextPageWithLayout = () => {
               title: formatMessage({ id: 'my.asset.shelves.price' }),
               dataIndex: 'minimumPrice',
               key: 'minimumPrice',
-              render: (value, item) => (
-                <Input
-                  placeholder={`不低于${fromToken(value || 0)}`}
-                  // value={price}
-                  rowKey={item.id}
-                  onChange={onPriceChange}
-                />
-              ),
+              render: (value, item) => {
+                return getPrice(item) + ' ETH';
+              },
+              // render: (value, item) => (
+              //   <Input
+              //     placeholder={`不低于${fromToken(value || 0)}`}
+              //     // value={price}
+              //     rowKey={item.id}
+              //     onChange={onPriceChange}
+              //   />
+              // ),
             },
           ]}
           dataSource={[...data]}

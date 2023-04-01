@@ -24,7 +24,7 @@ import type { UploadChangeParam } from 'antd/es/upload';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 import { getDAO, getDAOList, setCurrentDAO } from '@/store/features/daoSlice';
-import { setMissionAndDesc, setImage, setExtend } from '@/api/dao';
+import { setInformation } from '@/api/dao';
 import { Permissions } from '@/config/enum';
 import { createVote } from '@/api/vote';
 import { request } from '@/api';
@@ -32,6 +32,7 @@ import { useIntl } from 'react-intl';
 import { isPermission } from '@/api/member';
 
 import Upload from '@/components/form/upload';
+import { formatToBytes, formatToObj } from '@/utils/extend';
 
 // const validateMessages = {
 //   required: '${label} is required!',
@@ -52,11 +53,8 @@ const FormGroup: React.FC = () => {
   const [initialValues, setInitialValues] = useState() as any;
   const [isEdit, setIsEdit] = useState(false);
 
-  // const extend = currentDAO?.extend
-  //   ? JSON.parse(currentDAO.extend || '{}')
-  //   : {};
-  // const poster = buffer.from(currentDAO?.extend?.data).toString();
-  // console.log('extend', buffer.from(currentDAO.extend.data).toString());
+  const [logo, setLogo] = useState(currentDAO.image);
+  const [poster, setPoster] = useState();
 
   useEffect(() => {
     const getDAO = async () => {
@@ -69,16 +67,27 @@ const FormGroup: React.FC = () => {
 
         if (res) {
           dispatch(setCurrentDAO(res));
+
+          const extend = formatToObj(res?.extend?.data);
+          setLogo(res.image);
+          setPoster(extend.poster || res.image);
+
           setInitialValues({
             name: res.name,
             mission: res.mission,
             description: res.description,
+            image: res.image,
+            poster: extend.poster || res.image,
           });
           form.setFieldsValue({
             name: res.name,
             mission: res.mission,
             description: res.description,
+            image: res.image,
+            poster: extend.poster || res.image,
           });
+
+          setIsEdit(false);
         }
       } catch (error) {}
     };
@@ -101,36 +110,79 @@ const FormGroup: React.FC = () => {
   //   initialValues.members || defaultMember,
   // );
 
-  const [logo, setLogo] = useState(currentDAO.image);
-  const [poster, setPoster] = useState(
-    buffer.from(currentDAO?.extend?.data).toString() || currentDAO.image,
-  );
-
   // const decoder = new TextDecoder('utf8');
   // console.log(decoder.decode(buffer.from(currentDAO?.extend?.data)));
 
   // const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const setInfo = async (values: any) => {
-    const params = {
-      web3,
-      address: address,
-      host: currentDAO.host,
-      ...values,
-    };
-    // console.log('form:', params);
+  const setBasicInformation = async (params: any) => {
+    try {
+      const res = await setInformation(params);
+      message.success('Success');
 
-    const res = await setMissionAndDesc(params);
-
-    message.success('Success');
-    console.log(res);
-
-    dispatch(getDAOList({ chain: chainId, owner: address }));
-    dispatch(getDAO({ chain: chainId, address: currentDAO.address }));
-    setIsEdit(false);
+      dispatch(getDAOList({ chain: chainId, owner: address }));
+      dispatch(getDAO({ chain: chainId, address: currentDAO.address }));
+      setIsEdit(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const createProposal = async (values: any) => {
+    const params = {
+      name: formatMessage({ id: 'proposal.basic.basic' }),
+      description: JSON.stringify({
+        type: 'basic',
+        purpose: `${values.mission ? 'Mission: ' + values.mission : ''} ${
+          values.description ? 'Itroduction: ' + values.description : ''
+        }`,
+      }),
+      extra: [
+        {
+          abi: 'dao',
+          target: currentDAO.address,
+          method: 'setBasicInformation',
+          params: [
+            {
+              mission: values.mission || '',
+              description: values.description || '',
+              image: values.image || '',
+              extend: formatToBytes(values.extend),
+            },
+          ],
+        },
+      ],
+    };
+
+    try {
+      await createVote(params);
+      Modal.success({
+        title: formatMessage({ id: 'proposal.create.message' }),
+      });
+      setIsEdit(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // const setInfo = async (values: any) => {
+  //   const params = {
+  //     web3,
+  //     address: address,
+  //     host: currentDAO.host,
+  //     ...values,
+  //   };
+  //   const res = await setMissionAndDesc(params);
+
+  //   message.success('Success');
+  //   console.log(res);
+
+  //   dispatch(getDAOList({ chain: chainId, owner: address }));
+  //   dispatch(getDAO({ chain: chainId, address: currentDAO.address }));
+  //   setIsEdit(false);
+  // };
+
+  const createMissionProposal = async (values: any) => {
     const params = {
       name: formatMessage({ id: 'proposal.basic.basic' }),
       description: JSON.stringify({
@@ -163,14 +215,30 @@ const FormGroup: React.FC = () => {
   };
 
   const onFinish = async (values: any) => {
-    // 没有权限，则创建提案
+    const params: any = {};
+
+    Object.entries(values).forEach(([key, value]) => {
+      if (value !== initialValues[key]) {
+        params[key] = value;
+      }
+    });
+
+    if (logo !== initialValues.image) {
+      params.image = logo;
+    }
+
+    if (poster !== initialValues.poster) {
+      params.extend = { poster };
+    }
+
     if (!(await isPermission(Permissions.Action_DAO_Settings))) {
-      // message.warning('没有权限');
-      createProposal(values);
+      // createMissionProposal(values);
+      createProposal(params);
       return;
     }
 
-    setInfo(values);
+    // setInfo(values);
+    setBasicInformation(params);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -253,22 +321,23 @@ const FormGroup: React.FC = () => {
         process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key;
 
       setLogo(newLogo);
+      setIsEdit(true);
 
-      try {
-        if (!(await isPermission(Permissions.Action_DAO_Settings))) {
-          createLogoProposal({ image: newLogo });
-          return;
-        }
+      // try {
+      //   if (!(await isPermission(Permissions.Action_DAO_Settings))) {
+      //     createLogoProposal({ image: newLogo });
+      //     return;
+      //   }
 
-        await setImage({ image: newLogo });
+      //   await setImage({ image: newLogo });
 
-        message.success('Success');
+      //   message.success('Success');
 
-        dispatch(getDAOList({ chain: chainId, owner: address }));
-        dispatch(getDAO({ chain: chainId, address: currentDAO.address }));
-      } catch (error) {
-        setLogo(currentDAO.image);
-      }
+      //   dispatch(getDAOList({ chain: chainId, owner: address }));
+      //   dispatch(getDAO({ chain: chainId, address: currentDAO.address }));
+      // } catch (error) {
+      //   setLogo(currentDAO.image);
+      // }
     }
   };
 
@@ -284,7 +353,7 @@ const FormGroup: React.FC = () => {
           abi: 'dao',
           target: currentDAO.address,
           method: 'setExtend',
-          params: ['0x' + buffer.from(JSON.stringify(values)).toString('hex')],
+          params: [formatToBytes(values)],
         },
       ],
     };
@@ -306,25 +375,26 @@ const FormGroup: React.FC = () => {
       const newPoster =
         process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key;
       setPoster(newPoster);
+      setIsEdit(true);
 
-      try {
-        if (!(await isPermission(Permissions.Action_DAO_Settings))) {
-          createPosterProposal({ poster: newPoster });
-          return;
-        }
+      // try {
+      //   if (!(await isPermission(Permissions.Action_DAO_Settings))) {
+      //     createPosterProposal({ poster: newPoster });
+      //     return;
+      //   }
 
-        await setExtend({ poster: newPoster });
+      //   await setExtend({ poster: newPoster });
 
-        message.success('Success');
+      //   message.success('Success');
 
-        dispatch(getDAOList({ chain: chainId, owner: address }));
-        dispatch(getDAO({ chain: chainId, address: currentDAO.address }));
-      } catch (error) {
-        console.error(error);
-        setPoster(
-          buffer.from(currentDAO?.extend?.data).toString() || currentDAO.image,
-        );
-      }
+      //   dispatch(getDAOList({ chain: chainId, owner: address }));
+      //   dispatch(getDAO({ chain: chainId, address: currentDAO.address }));
+      // } catch (error) {
+      //   console.error(error);
+      //   setPoster(
+      //     buffer.from(currentDAO?.extend?.data).toString() || currentDAO.image,
+      //   );
+      // }
     }
   };
 

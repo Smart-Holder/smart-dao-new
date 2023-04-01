@@ -13,10 +13,11 @@ import { request } from '@/api';
 import { useAppSelector } from '@/store/hooks';
 
 import { formatDayjsValues } from '@/utils';
-import { useIntl } from 'react-intl';
+import { useIntl, FormattedMessage } from 'react-intl';
 
 import type { PaginationProps } from 'antd';
 import Card from '@/components/card';
+import EllipsisMiddle from '@/components/typography/ellipsisMiddle';
 
 dayjs.extend(customParseFormat);
 
@@ -40,6 +41,18 @@ const App = () => {
       dataIndex: 'name',
       key: 'name',
       render: (text: string) => text || '-',
+    },
+    {
+      title: <FormattedMessage id="address" />,
+      dataIndex: 'owner',
+      key: 'owner',
+      render: (text: string) => {
+        return (
+          <EllipsisMiddle style={{ width: 100 }} suffixCount={4} copyable>
+            {text}
+          </EllipsisMiddle>
+        );
+      },
     },
     {
       title: formatMessage({ id: 'member.nftp.copies' }),

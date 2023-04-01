@@ -2,7 +2,7 @@ import { Layout } from 'antd';
 
 import Menu from '@/components/sider/launchSiderMenu';
 import InfoDAO from '@/components/sider/infoDAO';
-import InfoRole from '@/components/sider/infoRole';
+// import InfoRole from '@/components/sider/infoRole';
 
 const App = () => {
   return (
@@ -22,7 +22,7 @@ const App = () => {
     >
       <InfoDAO type="cache" />
       <Menu />
-      <InfoRole type="cache" />
+      {/* <InfoRole type="cache" /> */}
     </Layout.Sider>
   );
 };
