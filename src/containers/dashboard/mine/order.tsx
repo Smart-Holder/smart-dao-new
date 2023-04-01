@@ -93,7 +93,7 @@ const App = () => {
         tokenId: currentMember.tokenId,
         limit: [(page - 1) * pageSize, pageSize],
         name: searchText,
-        toAddress: address,
+        // toAddress: address,
         ...values,
       },
     });

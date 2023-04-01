@@ -156,6 +156,12 @@ const App: NextPageWithLayout = () => {
     getTotal();
   }, [searchText, values]);
 
+  const resetData = () => {
+    setPage(1);
+    getData(1);
+    getTotal();
+  };
+
   // useEffect(() => {
   //   if (price && market) {
   //     setDisabled(false);
@@ -218,6 +224,8 @@ const App: NextPageWithLayout = () => {
       message.success('success');
       // window.location.reload();
       setLoading(false);
+      resetData();
+      setDisabled(true);
     } catch (error: any) {
       // console.error(error);
       // message.error(error?.message);

@@ -127,7 +127,7 @@ const App: NextPageWithLayout = () => {
           logo={storageData.imageOrigin}
         /> */}
 
-        {storageData.selling !== 0 && <DetailMarket />}
+        {storageData.selling !== 0 && owner && <DetailMarket />}
 
         {/* {storageData.properties && (
             <DetailAttributes

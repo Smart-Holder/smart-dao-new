@@ -4,9 +4,11 @@ import { useIntl } from 'react-intl';
 import { Market } from '@/config/chains';
 import { fromToken } from '@/utils';
 import { revoke } from '@/api/asset';
+import { useRouter } from 'next/router';
 
 const App = () => {
   const { formatMessage } = useIntl();
+  const router = useRouter();
 
   const [loading, setLoading] = useState(false);
 
@@ -26,6 +28,7 @@ const App = () => {
       await revoke(storageData.token, storageData.tokenId);
       setLoading(false);
       message.success('Success');
+      router.replace('/dashboard/mine/assets');
       // fetch data and set storageData
     } catch (error: any) {
       setLoading(false);
