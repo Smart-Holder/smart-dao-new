@@ -98,7 +98,7 @@ const App: React.FC = () => {
       ...values,
       members,
       image: logo,
-      extend: { poster, test: 'test' },
+      extend: { poster },
 
       // defaultVoteTime: 0,
       // assetIssuanceTax: 6000,

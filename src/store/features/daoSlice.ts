@@ -121,6 +121,7 @@ export const DAOSlice = createSlice({
         state.DAOList = [];
         state.currentDAO = { name: '' };
         state.daoType = DAOType.Visit;
+        localStorage.setItem('daoType', DAOType.Visit);
       })
       .addCase(deployAssetSalesDAO.pending, (state) => {
         console.log('deployAssetSalesDAO pending!');
@@ -131,6 +132,7 @@ export const DAOSlice = createSlice({
         state.step = 0;
         state.currentDAO = payload;
         state.daoType = DAOType.Join;
+        localStorage.setItem('daoType', DAOType.Join);
         sessionStorage.setItem('currentDAO', JSON.stringify(payload));
         router.push('/dashboard/mine/home');
         // state.DAOList = payload;
