@@ -37,7 +37,7 @@ const App = ({
   const { isInit } = useAppSelector((store) => store.common);
 
   useEffect(() => {
-    if (type === 'basic' || type === 'layout') {
+    if (type === 'basic' || type === 'launch') {
       return;
     }
 
