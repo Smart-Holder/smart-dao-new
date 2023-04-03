@@ -1,18 +1,13 @@
 import EllipsisMiddle from '@/components/typography/ellipsisMiddle';
-import { useAppSelector } from '@/store/hooks';
 import { formatAddress, fromToken } from '@/utils';
 import { UserOutlined } from '@ant-design/icons';
 import { Avatar, Image, Space, Typography } from 'antd';
 import { useRouter } from 'next/router';
-import { useIntl } from 'react-intl';
 
 const { Paragraph, Text } = Typography;
 
 const App = ({ data }: { data: any }) => {
-  const { formatMessage } = useIntl();
   const router = useRouter();
-
-  const { currentDAO } = useAppSelector((store) => store.dao);
 
   const properties = data?.properties || [];
 
@@ -38,26 +33,30 @@ const App = ({ data }: { data: any }) => {
         </Paragraph>
       </div>
 
-      <div className="owner">
-        <Space size={6}>
-          <Avatar
-            style={{ borderColor: '#f5f5f5' }}
-            size={26}
-            src={currentDAO.image}
-            shape="square"
-          />
-          {/* {formatAddress(data.owner)} */}
-          {currentDAO.name}
-        </Space>
-      </div>
+      {ownerObj ? (
+        <div className="owner">
+          <Space size={6}>
+            <Avatar size={28} src={ownerObj.image} />
+            {/* {formatAddress(data.owner)} */}
+            {ownerObj.owner}
+          </Space>
+        </div>
+      ) : (
+        <div className="owner">
+          <Space size={6}>
+            <Avatar size={28} icon={<UserOutlined />} />
+            {/* {formatAddress(data.owner)} */}
+            <EllipsisMiddle style={{ width: 90 }} suffixCount={4} copyable>
+              {data.owner}
+            </EllipsisMiddle>
+          </Space>
+        </div>
+      )}
 
       <div className="bottom">
         <div className="left">
-          <span className="label">
-            {formatMessage({ id: 'financial.asset.price' })}
-          </span>
-
-          <span className="value" style={{ marginLeft: 12 }}>
+          <span className="label">Current Bid</span>
+          <span className="value">
             <Image
               src="/images/market/icon_nft_card_unit_eth_default@2x.png"
               width={20}
@@ -100,23 +99,17 @@ const App = ({ data }: { data: any }) => {
           }
 
           .name {
-            height: 19px;
-            margin-top: 20px;
+            height: 22px;
+            margin-top: 16px;
             font-size: 16px;
             font-family: SFUIText-Semibold;
             font-weight: 600;
-            color: #2c2c2c;
-            line-height: 19px;
+            color: #232323;
+            line-height: 22px;
           }
 
           .name :global(.paragraph) {
-            height: 19px;
             margin-bottom: 0;
-            font-size: 16px;
-            font-family: SFUIText-Semibold;
-            font-weight: 600;
-            color: #2c2c2c;
-            line-height: 19px;
           }
 
           .owner {
@@ -124,7 +117,7 @@ const App = ({ data }: { data: any }) => {
             font-size: 12px;
             font-family: SFUIText-Semibold;
             font-weight: 600;
-            color: #818181;
+            color: #6d6d6d;
             line-height: 24px;
           }
 
@@ -132,7 +125,7 @@ const App = ({ data }: { data: any }) => {
             font-size: 12px;
             font-family: SFUIText-Semibold;
             font-weight: 600;
-            color: #818181;
+            color: #6d6d6d;
             line-height: 24px;
           }
 
@@ -142,18 +135,14 @@ const App = ({ data }: { data: any }) => {
             margin-top: 10px;
           }
 
-          .left {
-            display: flex;
-            align-items: center;
-          }
-
+          .left,
           .right {
             display: flex;
             flex-direction: column;
           }
 
           .label {
-            font-size: 12px;
+            font-size: 10px;
             font-family: SFUIText-Semibold;
             font-weight: 600;
             color: #b1b1b1;
