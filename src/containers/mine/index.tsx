@@ -84,7 +84,7 @@ export default function Mine() {
             height: 34px;
             margin-top: 20px;
             font-size: 28px;
-            font-family: SFUIDisplay-Bold;
+            font-family: var(--font-family-700);
             font-weight: bold;
             color: #000000;
             line-height: 34px;
@@ -93,7 +93,7 @@ export default function Mine() {
           .tabs :global(.ant-tabs-tab) {
             height: 30px;
             font-size: 14px;
-            font-family: SFUIText-Semibold;
+            font-family: var(--font-family-600);
             font-weight: 600;
             color: #b1b1b1;
             line-height: 30px;

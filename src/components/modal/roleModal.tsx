@@ -110,7 +110,7 @@ const RoleModal = (props: any, ref: any) => {
           .h1 {
             height: 29px;
             font-size: 24px;
-            font-family: SFUIDisplay-Semibold;
+            font-family: var(--font-family-lg);
             font-weight: 600;
             color: #000000;
             line-height: 29px;
@@ -137,7 +137,7 @@ const RoleModal = (props: any, ref: any) => {
             height: 28px;
             margin-top: 32px;
             font-size: 20px;
-            font-family: SFUIDisplay-Semibold;
+            font-family: var(--font-family-600);
             font-weight: 600;
             color: #000000;
             line-height: 24px;

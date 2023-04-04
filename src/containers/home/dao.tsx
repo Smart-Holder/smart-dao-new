@@ -242,7 +242,7 @@ const App = () => {
           height: 102px;
 
           font-size: 34px;
-          font-family: SFUIDisplay-Bold;
+          font-family: var(--font-family-lg);
           font-weight: bold;
           color: #000000;
           line-height: 30px;
@@ -252,7 +252,7 @@ const App = () => {
           height: 40px;
           font-size: 32px;
           font-weight: bold;
-          font-family: SFUIDisplay-Semibold;
+          font-family: var(--font-family-lg);
           color: #000000;
           line-height: 32px;
         }

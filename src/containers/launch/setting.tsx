@@ -79,7 +79,7 @@ const App = () => {
           .title {
             height: 45px;
             font-size: 38px;
-            font-family: SFUIDisplay-Semibold;
+            font-family: var(--font-family-600);
             font-weight: 600;
             color: #000000;
             line-height: 45px;
@@ -108,7 +108,7 @@ const App = () => {
           }
           .wrap :global(.steps .ant-steps-item-description) {
             font-size: 14px;
-            font-family: SFUIText-Semibold;
+            font-family: var(--font-family-600);
             font-weight: 600;
             color: #000000;
             line-height: 20px;

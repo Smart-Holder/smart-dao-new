@@ -49,10 +49,12 @@ const App = (props: any) => {
   // init language
   useEffect(() => {
     if (!lang) {
-      let l = window?.navigator.language.substring(0, 2);
+      let l =
+        localStorage.getItem('lang') ||
+        window?.navigator.language.substring(0, 2);
       l = languageList.includes(l) ? l : 'en';
 
-      console.log('language init:', languageConfig.locale);
+      console.log('language init:', l);
       dispatch(setLang(l));
       setConfig(getLanguageConfig(l));
     }

@@ -25,7 +25,7 @@ const App: NextPageWithLayout = () => {
             height: 42px;
             margin-top: 31px;
             font-size: 24px;
-            font-family: SFUIDisplay-Semibold;
+            font-family: var(--font-family-600);
             font-weight: 400;
             color: #000000;
             line-height: 42px;

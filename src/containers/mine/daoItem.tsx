@@ -52,7 +52,7 @@ const Item = ({ data, daoType }: any) => {
             height: 48px;
             margin-top: 24px;
             font-size: 20px;
-            font-family: SFUIText-Regular;
+            font-family: var(--font-family-400);
             font-weight: 400;
             color: #232323;
             line-height: 24px;

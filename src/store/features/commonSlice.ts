@@ -26,6 +26,7 @@ export const CommonSlice = createSlice({
     },
     setLang: (state, { payload }) => {
       state.lang = payload;
+      localStorage.setItem('lang', payload);
     },
     setLoading: (state, { payload }) => {
       state.loading = payload;

@@ -103,7 +103,7 @@ const App = () => {
             height: 30px;
             margin: 70px 0 40px;
             font-size: 38px;
-            font-family: SFUIDisplay-Bold;
+            font-family: var(--font-family-700);
             font-weight: bold;
             color: #000000;
             line-height: 30px;
@@ -118,7 +118,7 @@ const App = () => {
             width: 260px;
             height: 46px;
             font-size: 18px;
-            font-family: SFUIText-Bold;
+            font-family: var(--font-family-700);
             font-weight: bold;
             color: #000000;
             line-height: 27px;

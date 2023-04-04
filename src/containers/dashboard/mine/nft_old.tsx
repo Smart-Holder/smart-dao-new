@@ -102,7 +102,7 @@ const App = ({ data }: { data: any }) => {
             height: 22px;
             margin-top: 16px;
             font-size: 16px;
-            font-family: SFUIText-Semibold;
+            font-family: var(--font-family-600);
             font-weight: 600;
             color: #232323;
             line-height: 22px;
@@ -115,7 +115,7 @@ const App = ({ data }: { data: any }) => {
           .owner {
             margin-top: 12px;
             font-size: 12px;
-            font-family: SFUIText-Semibold;
+            font-family: var(--font-family-600);
             font-weight: 600;
             color: #6d6d6d;
             line-height: 24px;
@@ -123,7 +123,7 @@ const App = ({ data }: { data: any }) => {
 
           .owner :global(.ant-typography) {
             font-size: 12px;
-            font-family: SFUIText-Semibold;
+            font-family: var(--font-family-600);
             font-weight: 600;
             color: #6d6d6d;
             line-height: 24px;
@@ -143,7 +143,7 @@ const App = ({ data }: { data: any }) => {
 
           .label {
             font-size: 10px;
-            font-family: SFUIText-Semibold;
+            font-family: var(--font-family-600);
             font-weight: 600;
             color: #b1b1b1;
             line-height: 24px;
@@ -153,7 +153,7 @@ const App = ({ data }: { data: any }) => {
             display: flex;
             align-items: center;
             font-size: 15px;
-            font-family: SFUIText-Semibold;
+            font-family: var(--font-family-600);
             font-weight: 600;
             color: #232323;
             line-height: 20px;

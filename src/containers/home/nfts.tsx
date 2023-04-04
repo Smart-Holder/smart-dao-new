@@ -95,9 +95,9 @@ const App = () => {
         })}
       </Row>
 
-      {data.length < total && (
+      {data.length >= total && (
         <div className="footer">
-          <Button className="button-all" onClick={getData}>
+          <Button className="button-view-all" onClick={getData}>
             {formatMessage({ id: 'viewAllNfts' })}
           </Button>
         </div>
@@ -109,7 +109,7 @@ const App = () => {
             height: 30px;
             margin: 70px 0 40px;
             font-size: 38px;
-            font-family: SFUIDisplay-Bold;
+            font-family: var(--font-family-lg);
             font-weight: bold;
             color: #000000;
             line-height: 30px;
@@ -118,19 +118,6 @@ const App = () => {
           .footer {
             padding-top: 40px;
             text-align: center;
-          }
-
-          .footer :global(.button-all) {
-            width: 260px;
-            height: 46px;
-            font-size: 18px;
-            font-family: SFUIText-Bold;
-            font-weight: bold;
-            color: #000000;
-            line-height: 27px;
-            background: #ffffff;
-            border-radius: 5px;
-            border: 1px solid #000000;
           }
         `}
       </style>

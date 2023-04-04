@@ -69,7 +69,7 @@ const Card = ({
           .cards-title {
             height: 45px;
             font-size: 32px;
-            font-family: SFUIDisplay-Semibold;
+            font-family: var(--font-family-lg);
             font-weight: 600;
             color: #000000;
             line-height: 45px;
@@ -93,7 +93,7 @@ const Card = ({
           .label {
             height: 21px;
             font-size: 18px;
-            font-family: SFUIText-Semibold;
+            font-family: var(--font-family-600);
             font-weight: 600;
             color: #000000;
             line-height: 21px;
@@ -104,7 +104,7 @@ const Card = ({
             height: 26px;
             margin-top: 16px;
             font-size: 22px;
-            font-family: SFUIDisplay-Bold, SFUIDisplay;
+            font-family: var(--font-family-700);
             font-weight: bold;
             color: #000000;
             line-height: 26px;
@@ -120,7 +120,7 @@ const Card = ({
             height: 19px;
             margin-top: 18px;
             font-size: 16px;
-            font-family: SFUIDisplay-Medium, SFUIDisplay;
+            font-family: var(--font-family-500);
             font-weight: 500;
             color: #000000;
             line-height: 19px;

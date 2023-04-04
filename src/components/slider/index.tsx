@@ -107,7 +107,7 @@ Params) => {
           .label {
             height: 22px;
             font-size: 16px;
-            font-family: SFUIText-Semibold;
+            font-family: var(--font-family-600);
             font-weight: 600;
             color: #818181;
             line-height: 22px;
@@ -124,7 +124,7 @@ Params) => {
             display: inline-block;
             width: 56px;
             font-size: 16px;
-            font-family: SFUIText-Semibold;
+            font-family: var(--font-family-600);
             font-weight: 600;
             color: #000000;
             line-height: 19px;

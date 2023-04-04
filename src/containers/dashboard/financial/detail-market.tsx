@@ -85,7 +85,7 @@ const App = () => {
           .market .title {
             height: 45px;
             font-size: 32px;
-            font-family: SFUIDisplay-Semibold;
+            font-family: var(--font-family-600);
             font-weight: 600;
             color: #000000;
             line-height: 45px;
@@ -106,7 +106,7 @@ const App = () => {
           .market-item-center {
             margin-top: 20px;
             font-size: 16px;
-            font-family: SFUIText-Semibold, SFUIText;
+            font-family: var(--font-family-600);
             font-weight: 600;
             color: #2c2c2c;
             line-height: 21px;

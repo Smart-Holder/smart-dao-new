@@ -7,7 +7,7 @@ const App = ({ title }: { title: string }) => {
           .h1 {
             height: 45px;
             font-size: 38px;
-            font-family: SFUIDisplay-Semibold;
+            font-family: var(--font-family-lg);
             font-weight: 600;
             color: #000000;
             line-height: 45px;

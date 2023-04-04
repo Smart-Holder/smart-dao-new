@@ -182,7 +182,7 @@ const App: NextPageWithLayout = () => {
             height: 25px;
             margin-top: 20px;
             font-size: 18px;
-            font-family: SFUIText-Medium;
+            font-family: var(--font-family-500);
             font-weight: 500;
             color: #000000;
             line-height: 25px;
@@ -204,7 +204,7 @@ const App: NextPageWithLayout = () => {
             height: 24px;
             margin-top: 32px;
             font-size: 20px;
-            font-family: SFUIText-Semibold;
+            font-family: var(--font-family-600);
             font-weight: 600;
             color: #000000;
             line-height: 24px;

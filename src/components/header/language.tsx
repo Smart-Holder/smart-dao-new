@@ -45,12 +45,6 @@ const Lang = () => {
 
   const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
     dispatch(setLang(key));
-    // localStorage.setItem('lang', key);
-
-    // document.documentElement.style.setProperty(
-    //   '--font-family-regular-lg',
-    //   'var(--font-family-SFUIText-Bold)',
-    // );
   };
 
   return (

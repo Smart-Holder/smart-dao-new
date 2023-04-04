@@ -533,7 +533,7 @@ const FormGroup: React.FC = () => {
             margin-top: 7px;
             margin-bottom: 44px;
             font-size: 12px;
-            font-family: SFUIText-Regular;
+            font-family: var(--font-family-400);
             font-weight: 400;
             color: #969ba0;
             line-height: 18px;
@@ -545,7 +545,7 @@ const FormGroup: React.FC = () => {
           .upload-desc {
             height: 21px;
             font-size: 14px;
-            font-family: SFUIText-Regular;
+            font-family: var(--font-family-400);
             font-weight: 400;
             color: #969ba0;
             line-height: 21px;
@@ -565,7 +565,7 @@ const FormGroup: React.FC = () => {
             margin-bottom: 4px;
             margin-right: 0;
             font-size: 16px;
-            font-family: SFUIText-Regular;
+            font-family: var(--font-family-400);
             font-weight: 400;
             color: #969ba0;
             line-height: 54px;
@@ -588,7 +588,7 @@ const FormGroup: React.FC = () => {
 
           .modal-content-text {
             font-size: 28px;
-            font-family: SFUIDisplay-Medium;
+            font-family: var(--font-family-500);
             font-weight: 500;
             color: #3c4369;
             line-height: 40px;

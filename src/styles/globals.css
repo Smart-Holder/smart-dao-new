@@ -1,4 +1,4 @@
-@font-face {
+/* @font-face {
   font-family: 'SFUIText-Regular';
   src: url('/font/SFUIText-Regular.woff2') format('woff2'),
     url('/font/SFUIText-Regular.woff') format('woff'),
@@ -53,7 +53,7 @@
   src: url('/font/sf-ui-display-bold.woff2');
   font-style: normal;
   font-weight: normal;
-}
+} */
 
 :root {
   --max-width: 1440px;
@@ -67,26 +67,24 @@
   --button-primary-color: #2f4cdd;
   --button-secondary-color: #546ff6;
 
-  /* mac 系统，英文，使用以下字体 */
-  --font-family-SFUIText-Regular: SFUIText-Regular;
-  --font-family-SFUIText-Medium: SFUIText-Medium;
-  --font-family-SFUIText-Semibold: SFUIText-Semibold;
-  --font-family-SFUIText-Bold: SFUIText-Bold;
-  --font-family-SFUIDisplay-Medium: SFUIDisplay-Medium;
-  --font-family-SFUIDisplay-Semibold: SFUIDisplay-Semibold;
-  --font-family-SFUIDisplay-Bold: SFUIDisplay-Bold;
-  /* mac 系统，日文，使用以下字体 */
-  /* windows 系统，英文，使用以下字体 */
-  /* windows 系统，日文，使用以下字体 */
+  --font-family-en-400: SF UI Text, Arial;
+  --font-family-en-500: SF UI Text Medium, Arial;
+  --font-family-en-600: SF UI Text Semibold, Arial;
+  --font-family-en-700: SF UI Text Bold, Arial;
+  --font-family-en-lg: Times New Roman;
 
-  /* 字体默认值, 字号20以上使用--font-family-xx-lg字体 */
-  --font-family-regular: var(--font-family-SFUIText-Regular);
-  --font-family-medium: var(--font-family-SFUIText-Medium);
-  --font-family-medium-lg: var(--font-family-SFUIDisplay-Medium);
-  --font-family-semibold: var(--font-family-SFUIText-Semibold);
-  --font-family-semibold-lg: var(--font-family-SFUIDisplay-Semibold);
-  --font-family-bold: var(--font-family-SFUIText-Bold);
-  --font-family-bold-lg: var(--font-family-SFUIDisplay-Bold);
+  --font-family-ja-400: Hiragino Sans w4, MS Gothic;
+  --font-family-ja-500: Hiragino Sans w5, MS Gothic;
+  --font-family-ja-600: Hiragino Sans w6, MS Gothic;
+  --font-family-ja-700: Hiragino Sans w7, MS Gothic;
+  --font-family-ja-lg: Hiragino Mincho ProN, MS Mincho;
+
+  /* 语言默认为英文，切换语言后动态变化 */
+  --font-family-400: var(--font-family-en-400);
+  --font-family-500: var(--font-family-en-500);
+  --font-family-600: var(--font-family-en-600);
+  --font-family-700: var(--font-family-en-700);
+  --font-family-lg: var(--font-family-en-lg);
 }
 
 * {
@@ -100,7 +98,7 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
   overflow-y: auto !important;
-  font-family: var(--font-family-regular), Arial;
+  font-family: var(--font-family-400);
   background: #fff;
 }
 
@@ -204,7 +202,7 @@ a {
 .card .h1 {
   height: 45px;
   font-size: 32px;
-  font-family: SFUIDisplay-Semibold;
+  font-family: var(--font-family-lg);
   font-weight: 600;
   color: #000000;
   line-height: 45px;
@@ -214,7 +212,7 @@ a {
   height: 22px;
   margin-top: 12px;
   font-size: 16px;
-  font-family: SFUIText-Semibold;
+  font-family: var(--font-family-600);
   font-weight: 600;
   color: #818181;
   line-height: 22px;
@@ -223,7 +221,7 @@ a {
 .setting-h1 {
   height: 45px;
   font-size: 32px;
-  font-family: SFUIDisplay-Semibold;
+  font-family: var(--font-family-600);
   font-weight: 600;
   color: #000000;
   line-height: 45px;
@@ -233,7 +231,7 @@ a {
   height: 22px;
   margin-top: 12px;
   font-size: 16px;
-  font-family: SFUIText-Semibold;
+  font-family: var(--font-family-600);
   font-weight: 600;
   color: #b1b1b1;
   line-height: 22px;
@@ -243,7 +241,7 @@ a {
 .ant-breadcrumb {
   padding: 24px 83px;
   font-size: 15px;
-  font-family: SFUIText-Semibold;
+  font-family: var(--font-family-600);
   font-weight: 600;
   color: #aeaeae;
   box-shadow: 0px 6px 16px -15px rgba(0, 0, 0, 0.3);
@@ -276,7 +274,7 @@ a {
 
 .ant-modal.modal .title {
   font-size: 24px;
-  font-family: SFUIDisplay-Semibold;
+  font-family: var(--font-family-700);
   font-weight: 600;
   color: #000000;
   line-height: 29px;
@@ -284,7 +282,7 @@ a {
 
 .ant-modal.modal .title2 {
   font-size: 22px;
-  font-family: SFUIDisplay-Semibold;
+  font-family: var(--font-family-700);
   font-weight: 600;
   color: #000000;
   line-height: 26px;
@@ -294,7 +292,7 @@ a {
   height: 21px;
   margin-top: 32px;
   font-size: 18px;
-  font-family: SFUIText-Medium;
+  font-family: var(--font-family-500);
   font-weight: 500;
   color: #818181;
   line-height: 21px;
@@ -309,7 +307,7 @@ a {
 /* .ant-modal.modal .title {
   height: 26px;
   font-size: 22px;
-  font-family: SFUIDisplay-Semibold;
+  font-family: var(--font-family-600);
   font-weight: 600;
   color: #2c2c2c;
   line-height: 26px;
@@ -355,7 +353,7 @@ a {
   width: 300px;
   margin: 32px auto 0;
   font-size: 18px;
-  font-family: SFUIText-Medium;
+  font-family: var(--font-family-500);
   font-weight: 500;
   color: #000000;
   line-height: 21px;
@@ -371,7 +369,7 @@ a {
   height: 50px;
 
   font-size: 18px;
-  font-family: SFUIText-Semibold;
+  font-family: var(--font-family-600);
   font-weight: 600;
   color: #ffffff;
   line-height: 24px;
@@ -397,7 +395,7 @@ a {
   margin-top: 39px;
 
   font-size: 16px;
-  font-family: SFUIText-Regular;
+  font-family: var(--font-family-400);
   font-weight: 400;
   line-height: 24px;
 
@@ -409,7 +407,7 @@ a {
 
 .smart-input .ant-input {
   font-size: 16px;
-  font-family: SFUIText-Regular;
+  font-family: var(--font-family-400);
   font-weight: 400;
   line-height: 24px;
 
@@ -459,7 +457,7 @@ a {
   justify-content: space-between;
   align-items: center;
   font-size: 14px;
-  font-family: SFUIDisplay-Medium;
+  font-family: var(--font-family-500);
   font-weight: 500;
   color: #2c2c2c;
   line-height: 20px;
@@ -474,7 +472,7 @@ a {
   /* padding: 11px 17px; */
   padding: 11px 0;
   font-size: 12px;
-  font-family: SFUIDisplay-Medium;
+  font-family: var(--font-family-500);
   font-weight: 500;
   text-align: center;
   color: #ffffff;
@@ -498,7 +496,7 @@ a {
   padding: 0 26px;
 
   font-size: 16px;
-  font-family: SFUIDisplay-Semibold;
+  font-family: var(--font-family-600);
   font-weight: 600;
   color: #2c2c2c;
   line-height: 19px;
@@ -538,7 +536,7 @@ a {
   height: 60px;
   padding-left: 0;
   font-size: 14px;
-  font-family: SFUIText-Medium;
+  font-family: var(--font-family-500);
   font-weight: 500;
   color: #2d2d2d;
   line-height: 20px;
@@ -549,7 +547,7 @@ a {
   height: 60px;
   padding-left: 0;
   font-size: 15px;
-  font-family: SFUIText-Regular;
+  font-family: var(--font-family-400);
   font-weight: 400;
   color: #000000;
   line-height: 20px;
@@ -557,7 +555,7 @@ a {
 
 .ant-table .ant-table-tbody .ant-table-cell .ant-typography {
   font-size: 15px;
-  font-family: SFUIText-Regular;
+  font-family: var(--font-family-400);
   font-weight: 400;
   color: #000000;
   line-height: 20px;
@@ -619,7 +617,7 @@ a {
   padding-left: 10px;
   margin-top: 20px;
   font-size: 11px;
-  font-family: SFUIText-Semibold;
+  font-family: var(--font-family-600);
   font-weight: 600;
   color: #a9a9a9;
   line-height: 21px;
@@ -632,7 +630,7 @@ a {
 .ant-menu .ant-menu-submenu-title .ant-menu-title-content {
   padding-left: 18px;
   font-size: 16px;
-  font-family: SFUIText-Medium;
+  font-family: var(--font-family-500);
   font-weight: 500;
   color: #000000;
   line-height: 22px;
@@ -646,7 +644,7 @@ a {
   margin-inline-start: 18px !important;
 
   font-size: 16px;
-  font-family: SFUIText-Medium;
+  font-family: var(--font-family-500);
   font-weight: 500;
   color: #000000;
   line-height: 22px;
@@ -665,7 +663,7 @@ a {
   margin-inline-start: 0 !important;
 
   font-size: 16px;
-  font-family: SFUIText-Regular;
+  font-family: var(--font-family-400);
   font-weight: 400;
   color: #000000;
   line-height: 22px;
@@ -712,7 +710,7 @@ a {
   min-width: 152px;
   height: 38px;
   font-size: 14px;
-  font-family: SFUIText-Medium;
+  font-family: var(--font-family-500);
   font-weight: 500;
   color: #fff;
   line-height: 22px;
@@ -724,7 +722,7 @@ a {
 .button-filter {
   height: 40px;
   font-size: 15px;
-  font-family: SFUIText-Semibold;
+  font-family: var(--font-family-600);
   font-weight: 600;
   color: #ffffff;
   line-height: 24px;
@@ -737,7 +735,7 @@ a {
   height: 50px;
 
   font-size: 18px;
-  font-family: SFUIText-Semibold;
+  font-family: var(--font-family-600);
   font-weight: 600;
   color: #ffffff;
   line-height: 24px;
@@ -749,7 +747,7 @@ a {
   min-width: 148px;
   height: 50px;
   font-size: 18px;
-  font-family: SFUIText-Semibold;
+  font-family: var(--font-family-600);
   font-weight: 600;
   color: #ffffff;
   line-height: 24px;
@@ -761,7 +759,7 @@ a {
   width: 260px;
   height: 46px;
   font-size: 18px;
-  font-family: SFUIDisplay-Bold;
+  font-family: var(--font-family-lg);
   font-weight: bold;
   color: #000000;
   line-height: 35px;
@@ -786,7 +784,7 @@ a {
 .form .ant-form-item-label > label {
   height: 24px;
   font-size: 16px;
-  font-family: SFUIText-Bold;
+  font-family: var(--font-family-700);
   font-weight: bold;
   color: #2d2d2d;
   line-height: 24px;
@@ -796,7 +794,7 @@ a {
 .form .ant-input {
   height: 50px;
   font-size: 15px;
-  font-family: SFUIText-Medium;
+  font-family: var(--font-family-500);
   font-weight: 500;
   color: #000000;
   line-height: 24px;
@@ -845,7 +843,7 @@ a {
 .form .ant-input-number .ant-input-number-input {
   height: 50px;
   font-size: 15px;
-  font-family: SFUIText-Medium;
+  font-family: var(--font-family-500);
   font-weight: 500;
   color: #000000;
   line-height: 24px;

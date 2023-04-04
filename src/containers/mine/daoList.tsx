@@ -158,7 +158,7 @@ export default function List() {
             height: 35px;
 
             font-size: 14px;
-            font-family: SFUIText-Bold;
+            font-family: var(--font-family-700);
             font-weight: bold;
             line-height: 17px;
 
