@@ -63,7 +63,7 @@ const App: NextPageWithLayout = () => {
           host: currentDAO.host,
           limit: [(page - 1) * pageSize, pageSize],
           state: 0,
-          // owner: address,
+          owner: address,
           ...values,
         },
       });
@@ -71,7 +71,7 @@ const App: NextPageWithLayout = () => {
       setTableLoading(false);
       setData(res);
     },
-    [chainId, currentDAO.host, values],
+    [chainId, currentDAO.host, values, address],
   );
 
   const getTotal = useCallback(async () => {
@@ -82,6 +82,7 @@ const App: NextPageWithLayout = () => {
         chain: chainId,
         host: currentDAO.host,
         state: 0,
+        owner: address,
         ...values,
       },
     });
@@ -369,7 +370,7 @@ const App: NextPageWithLayout = () => {
           ]}
           dataSource={[...data]}
         />
-        <div className="footer">
+        <div className="footer" style={{ marginTop: 20 }}>
           <Space style={{ display: 'flex' }} direction="vertical" align="end">
             <Select
               style={{ width: 200 }}

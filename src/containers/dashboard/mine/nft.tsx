@@ -1,34 +1,101 @@
 import EllipsisMiddle from '@/components/typography/ellipsisMiddle';
-import { useAppSelector } from '@/store/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { formatAddress, fromToken } from '@/utils';
 import { UserOutlined } from '@ant-design/icons';
 import { Avatar, Image, Space, Typography } from 'antd';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
 
+import InfoModal from '@/components/modal/infoModal';
+import WalletModal from '@/components/modal/walletModal';
+
+import useResize from '@/hooks/useResize';
+import { useRef } from 'react';
+import { DAOType } from '@/config/enum';
+
+import { setCurrentDAO, setDAOType } from '@/store/features/daoSlice';
+import { request } from '@/api';
+
 const { Paragraph, Text } = Typography;
 
-const App = ({ data }: { data: any }) => {
+type NFTProps = {
+  data: any;
+};
+
+const App = ({ data }: NFTProps) => {
   const { formatMessage } = useIntl();
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
-  const { currentDAO } = useAppSelector((store) => store.dao);
+  const { chainId, address } = useAppSelector((store) => store.wallet);
+  const { nickname } = useAppSelector((store) => store.user.userInfo);
+  const { isInit } = useAppSelector((store) => store.common);
+
+  const infoModal: any = useRef(null);
+  const walletModal: any = useRef(null);
+
+  // const { currentDAO } = useAppSelector((store) => store.dao);
+  const currentDAO = data?.dao;
+
+  const { width } = useResize({ target: '.nft-item-image' });
 
   const properties = data?.properties || [];
 
   const priceObj = properties.find((item: any) => item.price) || {};
   const ownerObj = properties.find((item: any) => item.owner);
 
-  const handleClick = () => {
+  const handleClick = async () => {
+    if (!isInit) {
+      walletModal.current.show();
+      return;
+    }
+
+    if (!nickname) {
+      infoModal.current.show();
+      return;
+    }
+
+    if (router.pathname === '/' && data.dao) {
+      const [joinedDAOs, likeDAOs] = await Promise.all([
+        request({
+          name: 'utils',
+          method: 'getDAOsFromOwner',
+          params: { chain: chainId, owner: address },
+        }),
+        request({
+          name: 'user',
+          method: 'getUserLikeDAOs',
+          params: { chain: chainId },
+        }),
+      ]);
+
+      const isMember = (joinedDAOs || []).some(
+        (item: any) => item.host === data.dao.host,
+      );
+      const isLike = (likeDAOs || []).some(
+        (item: any) => item.host === data.dao.host,
+      );
+
+      const type = isMember
+        ? DAOType.Join
+        : isLike
+        ? DAOType.Follow
+        : DAOType.Visit;
+      dispatch(setDAOType(type));
+      dispatch(setCurrentDAO(data.dao));
+    }
+
     localStorage.setItem('asset', JSON.stringify(data));
     router.push(`/dashboard/mine/assets/detail?id=${data.id}`);
   };
 
   return (
-    <div className="item" onClick={handleClick}>
+    <div className="nft-item" onClick={handleClick}>
       <Image
-        className="image"
+        className="image nft-item-image"
         src={data.imageOrigin}
+        width="100%"
+        height={width}
         preview={false}
         alt="image"
       />
@@ -38,18 +105,20 @@ const App = ({ data }: { data: any }) => {
         </Paragraph>
       </div>
 
-      <div className="owner">
-        <Space size={6}>
-          <Avatar
-            style={{ borderColor: '#f5f5f5' }}
-            size={26}
-            src={currentDAO.image}
-            shape="square"
-          />
-          {/* {formatAddress(data.owner)} */}
-          {currentDAO.name}
-        </Space>
-      </div>
+      {currentDAO.name && (
+        <div className="owner">
+          <Space size={6}>
+            <Avatar
+              style={{ borderColor: '#f5f5f5' }}
+              size={26}
+              src={currentDAO.image}
+              shape="square"
+            />
+            {/* {formatAddress(data.owner)} */}
+            {currentDAO.name}
+          </Space>
+        </div>
+      )}
 
       <div className="bottom">
         <div className="left">
@@ -74,9 +143,12 @@ const App = ({ data }: { data: any }) => {
         </div> */}
       </div>
 
+      <InfoModal ref={infoModal} />
+      <WalletModal ref={walletModal} />
+
       <style jsx>
         {`
-          .item {
+          .nft-item {
             box-sizing: border-box;
             width: 310px;
             width: 100%;
@@ -87,14 +159,7 @@ const App = ({ data }: { data: any }) => {
             cursor: pointer;
           }
 
-          .item :global(.ant-image) {
-            width: 100%;
-          }
-
-          .item :global(.image) {
-            width: 280px;
-            width: 100%;
-            height: 280px;
+          .nft-item :global(.image) {
             object-fit: cover;
             border-radius: 2px;
           }
@@ -171,11 +236,11 @@ const App = ({ data }: { data: any }) => {
           }
 
           @media screen and (max-width: 1280px) {
-            .item {
+            .nft-item {
               width: 230px;
             }
 
-            .item :global(.image) {
+            .nft-item :global(.image) {
               width: 200px;
               height: 200px;
             }

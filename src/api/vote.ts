@@ -7,6 +7,9 @@ import Asset from '@/config/abi/Asset.json';
 import { rng } from 'somes/rng';
 import store from '@/store';
 import somes from 'somes';
+import { message } from 'antd';
+
+import { getContractMessage } from '@/utils/errorCode';
 
 const abiList: any = {
   member: Member,
@@ -45,17 +48,24 @@ export async function createVote({
   const lifespan = await contract.methods.lifespan().call();
   const data = [] as string[];
 
-  for (let { abi, target, method, params } of extra) {
-    const C = abiList[abi];
-    const contract = getContract(web3, C.abi, target);
-    somes.assert(C, '#vote.createVote, no match abi');
-    await await contract.methods[method](...params).call({ from: address }); // try call
-    data.push(
-      web3.eth.abi.encodeFunctionCall(
-        C.abi.find((e: any) => e.name == method),
-        params,
-      ),
-    );
+  try {
+    for (let { abi, target, method, params } of extra) {
+      const C = abiList[abi];
+      const contract = getContract(web3, C.abi, target);
+      somes.assert(C, '#vote.createVote, no match abi');
+      await await contract.methods[method](...params).call({ from: address }); // try call
+      data.push(
+        web3.eth.abi.encodeFunctionCall(
+          C.abi.find((e: any) => e.name == method),
+          params,
+        ),
+      );
+    }
+  } catch (error) {
+    const msg = getContractMessage(error);
+    message.error(msg);
+    console.error(msg);
+    throw error;
   }
 
   const params = [

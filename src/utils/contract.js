@@ -3,6 +3,7 @@ import { beforeUnload, stopClick } from '@/utils';
 import { message, Spin } from 'antd';
 import { waitBlockNumber } from '../api';
 import store from '@/store';
+import { getContractMessage } from './errorCode';
 
 export function getContract(web3, abi, contractAddress) {
   return new web3.eth.Contract(abi, contractAddress);
@@ -58,18 +59,19 @@ export async function contractSend(
     setLoading();
     await contract.methods[method](...params).call({ from }); //try call
   } catch (error) {
-    let msg = error.message || `call contract method error, ${method}`;
-    let msg_0 = msg.split('\n')[0];
-    // execution reverted: #Department#OnlyDAO caller does not have permission
-    // if (msg.indexOf('#Department#OnlyDAO') != -1) {
-    //   msg_0 = `Caller does not have permission, only DAO call`;
-    // } else
-    if (msg.indexOf('not have permission') != -1) {
-      msg_0 = `Caller does not have permission`;
-    }
-    // Message.error({ message: msg_0 });
-    console.error(msg_0);
-    message.error(msg_0);
+    // let msg = error.message || `call contract method error, ${method}`;
+    // let msg_0 = msg.split('\n')[0];
+    // // execution reverted: #Department#OnlyDAO caller does not have permission
+    // // if (msg.indexOf('#Department#OnlyDAO') != -1) {
+    // //   msg_0 = `Caller does not have permission, only DAO call`;
+    // // } else
+    // if (msg.indexOf('not have permission') != -1) {
+    //   msg_0 = `Caller does not have permission`;
+    // }
+
+    const msg = getContractMessage(error, method);
+    console.error(msg);
+    message.error(msg);
     closeLoading();
     throw error;
   }
@@ -88,12 +90,15 @@ export async function contractSend(
           });
       })
       .catch((error) => {
-        console.error(
-          error?.message || `send contract method error, ${method}`,
-        );
-        message.error(
-          error?.message || `send contract method error, ${method}`,
-        );
+        // console.error(
+        //   error?.message || `send contract method error, ${method}`,
+        // );
+        // message.error(
+        //   error?.message || `send contract method error, ${method}`,
+        // );
+        const msg = getContractMessage(error, method);
+        console.error(msg);
+        message.error(msg);
         closeLoading();
         reject(error);
       });

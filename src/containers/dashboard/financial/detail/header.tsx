@@ -127,7 +127,7 @@ const App = () => {
               #{storageData.id}
             </div>
 
-            {ownerObj.owner && (
+            {owner && ownerObj.owner && (
               <div className="asset-owner">
                 <Avatar src={ownerObj.image} size={34} />
                 <div className="asset-owner-right">

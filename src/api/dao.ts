@@ -43,7 +43,8 @@ export const createDAO = async (params: any) => {
       image,
       extend: formatToBytes(extend),
     },
-    address,
+    // address,
+    '0x0000000000000000000000000000000000000000',
     {
       // InitMemberArgs
       name: memberBaseName,
@@ -110,14 +111,14 @@ export const setInformation = ({
   const { web3, address } = store.getState().wallet;
   const { currentDAO } = store.getState().dao;
 
-  const contract = getContract(web3, DAO.abi, currentDAO.host);
-
   console.log('params setBasicInformation:', {
     mission,
     description,
     image,
     extend: formatToBytes(extend),
   });
+
+  const contract = getContract(web3, DAO.abi, currentDAO.host);
 
   return contractSend(contract, address, 'setBasicInformation', [
     {

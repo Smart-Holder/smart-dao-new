@@ -53,12 +53,13 @@ const VoteModal: FC<VoteModalProps> = (props) => {
             chain: chainId,
             address: currentDAO.root,
             proposal_id: data?.proposal_id,
+            member_id: currentMember.tokenId,
           },
         }),
         // isPermission(Permissions.Action_VotePool_Vote),
       ]);
 
-      console.log('permission', data?.time, currentMember.time);
+      // console.log('permission', data?.time, currentMember.time);
       const permission = data?.time > currentMember.time;
 
       if (permission && res?.length === 0) {

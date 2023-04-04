@@ -290,7 +290,7 @@ const App = () => {
         }
 
         .footer {
-          padding: 40px 0 50px;
+          padding-top: 40px;
           text-align: center;
         }
       `}</style>

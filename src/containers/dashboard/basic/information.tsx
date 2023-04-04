@@ -147,7 +147,7 @@ const FormGroup: React.FC = () => {
               mission: values.mission || '',
               description: values.description || '',
               image: values.image || '',
-              extend: formatToBytes(values.extend),
+              extend: formatToBytes(values.extend) || '0x0000',
             },
           ],
         },
@@ -232,6 +232,7 @@ const FormGroup: React.FC = () => {
     }
 
     if (!(await isPermission(Permissions.Action_DAO_Settings))) {
+      console.log('no permission');
       // createMissionProposal(values);
       createProposal(params);
       return;
