@@ -13,7 +13,7 @@ const App: NextPageWithLayout = () => {
   const { formatMessage } = useIntl();
 
   return (
-    <div>
+    <div className="basic-content">
       <div className="h1">{formatMessage({ id: 'home.welcome' })}</div>
       <div className="h2">{formatMessage({ id: 'home.createOwnDAO' })}</div>
 

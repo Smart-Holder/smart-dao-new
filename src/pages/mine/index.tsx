@@ -5,7 +5,11 @@ import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
 
 const App: NextPageWithLayout = () => {
-  return <Mine />;
+  return (
+    <div className="basic-content">
+      <Mine />
+    </div>
+  );
 };
 
 App.getLayout = (page: ReactElement) => <Layout type="basic">{page}</Layout>;

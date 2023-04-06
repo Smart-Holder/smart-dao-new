@@ -13,6 +13,8 @@ import { useIntl } from 'react-intl';
 // 有搜索框的页面
 const searchList = [
   '/',
+  '/daos',
+  '/nfts',
   // '/dashboard/mine/assets',
   // '/dashboard/mine/order',
   // '/dashboard/mine/income',

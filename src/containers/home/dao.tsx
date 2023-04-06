@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import sdk from 'hcstore/sdk';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 
 import Item from './daoItem';
 
@@ -23,6 +24,7 @@ import InfoModal from '@/components/modal/infoModal';
 const App = () => {
   const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   // const chainId = Number(getCookie('chainId'));
   // const address = getCookie('address');
@@ -91,20 +93,21 @@ const App = () => {
       return;
     }
 
-    setLoading(true);
-    const res = await sdk.dao.methods.getAllDAOs({
-      chain: chainId || defaultChain,
-      name: searchText,
-      limit: [pageStart, 100],
-      orderBy: 'time desc',
-      // owner: address || '',
-    });
+    router.push('/daos');
 
-    const nextList = [...DAOList, ...res];
+    // setLoading(true);
+    // const res = await sdk.dao.methods.getAllDAOs({
+    //   chain: chainId || defaultChain,
+    //   name: searchText,
+    //   limit: [pageStart, 100],
+    //   orderBy: 'time desc',
+    // });
 
-    setPageStart(pageStart + pageSize.current);
-    setDAOList(nextList);
-    setLoading(false);
+    // const nextList = [...DAOList, ...res];
+
+    // setPageStart(pageStart + pageSize.current);
+    // setDAOList(nextList);
+    // setLoading(false);
   };
 
   const resetData = async () => {

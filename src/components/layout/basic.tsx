@@ -11,7 +11,13 @@ import Footer from '@/components/footer';
 
 const { Content } = Layout;
 
-const BasicLayout = ({ children }: { children: ReactElement }) => {
+const BasicLayout = ({
+  children,
+  footer = true,
+}: {
+  children: ReactElement;
+  footer?: boolean;
+}) => {
   // const router = useRouter();
 
   // const { isInit } = useAppSelector((store) => store.common);
@@ -30,10 +36,8 @@ const BasicLayout = ({ children }: { children: ReactElement }) => {
       </Head>
       <Layout>
         <Header type="fix" />
-        <Content className="basic">
-          <div className="basic-content">{children}</div>
-        </Content>
-        <Footer />
+        <Content className="basic">{children}</Content>
+        {footer && <Footer />}
       </Layout>
     </>
   );

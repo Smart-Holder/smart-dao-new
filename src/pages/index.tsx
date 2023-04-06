@@ -4,14 +4,14 @@ import type { NextPageWithLayout } from '@/pages/_app';
 
 import Intro from '@/containers/home/intro';
 import DAO from '@/containers/home/dao';
-import NFTS from '@/containers/home/nfts';
+import NFT from '@/containers/home/nft';
 
 const App: NextPageWithLayout = () => {
   return (
-    <div>
+    <div className="basic-content">
       <Intro />
       <DAO />
-      <NFTS />
+      <NFT />
     </div>
   );
 };

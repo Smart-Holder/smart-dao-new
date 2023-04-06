@@ -112,7 +112,7 @@ const App = ({
   // }, [address]);
 
   if (type === 'basic') {
-    return <BasicLayout>{children}</BasicLayout>;
+    return <BasicLayout footer={footer}>{children}</BasicLayout>;
   } else if (type === 'launch') {
     return <LaunchLayout>{children}</LaunchLayout>;
   }

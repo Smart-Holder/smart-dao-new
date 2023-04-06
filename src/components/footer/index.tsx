@@ -73,6 +73,9 @@ const App = ({ hasSider }: { hasSider?: boolean }) => {
       <style jsx>
         {`
           .footer-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             max-width: var(--max-width);
             height: var(--height-footer);
             padding: 63px 80px 5px;
@@ -80,6 +83,9 @@ const App = ({ hasSider }: { hasSider?: boolean }) => {
           }
 
           .footer-content-hasSider {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             box-sizing: border-box;
             height: var(--height-footer);
             margin-left: 298px;
@@ -112,7 +118,6 @@ const App = ({ hasSider }: { hasSider?: boolean }) => {
           }
 
           .bottom {
-            margin-top: 65px;
             font-size: 12px;
             font-weight: 400;
             color: #6f6f6f;

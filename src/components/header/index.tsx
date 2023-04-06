@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Layout, Row, Space, Image } from 'antd';
-import router from 'next/router';
+import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 
 const Search = dynamic(() => import('@/components/search'), { ssr: false });
@@ -10,6 +10,8 @@ const Language = dynamic(() => import('@/components/header/language'), {
 });
 
 const Header = ({ type }: { type?: string }) => {
+  const router = useRouter();
+
   const handleClick = () => {
     router.push('/');
   };

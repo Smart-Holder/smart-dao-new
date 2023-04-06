@@ -69,6 +69,11 @@ a {
   margin: 0 auto;
 }
 
+.basic-content.hasShadow {
+  max-width: var(--max-width + 10);
+  padding: 0 75px;
+}
+
 .ant-layout .ant-layout-content.dashboard {
   box-sizing: border-box;
   /* width: var(--width-content); */

@@ -25,6 +25,8 @@ const nextConfig = {
   exportPathMap: () => {
     return {
       '/': { page: '/' },
+      '/daos': { page: '/daos' },
+      '/nfts': { page: '/nfts' },
 
       '/launch': { page: '/launch' },
       '/launch/index': { page: '/launch' },

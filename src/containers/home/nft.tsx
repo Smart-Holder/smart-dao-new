@@ -2,12 +2,12 @@ import { Button, Col, Empty, Row } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 
 import { useEffect, useState } from 'react';
 
 import { useAppSelector } from '@/store/hooks';
 import { request } from '@/api';
-// import { useRouter } from 'next/router';
 
 import NFT from '@/containers/dashboard/mine/nft';
 
@@ -15,7 +15,7 @@ dayjs.extend(customParseFormat);
 
 const App = () => {
   const { formatMessage } = useIntl();
-  // const router = useRouter();
+  const router = useRouter();
   const { currentDAO } = useAppSelector((store) => store.dao);
   const { chainId, address } = useAppSelector((store) => store.wallet);
 
@@ -34,6 +34,7 @@ const App = () => {
         state: 0,
         selling_not: 0,
         limit: [pageStart, 100],
+        orderBy: 'blockNumber desc',
       },
     });
 
@@ -61,11 +62,12 @@ const App = () => {
         chain: chainId || defaultChain,
         state: 0,
         selling_not: 0,
-        limit: [0, 100],
+        limit: [0, 8],
+        orderBy: 'blockNumber desc',
       },
     });
 
-    setPageStart(100);
+    setPageStart(8);
     setData(res);
   };
 
@@ -75,9 +77,13 @@ const App = () => {
     resetData();
   }, [chainId]);
 
+  const getAllData = () => {
+    router.push('/nfts');
+  };
+
   return (
     <div style={{ paddingBottom: 50 }}>
-      <div className="header">NFTS</div>
+      <div className="header">NFTs</div>
 
       {data.length === 0 && <Empty />}
 
@@ -97,7 +103,7 @@ const App = () => {
 
       {data.length < total && (
         <div className="footer">
-          <Button className="button-view-all" onClick={getData}>
+          <Button className="button-view-all" onClick={getAllData}>
             {formatMessage({ id: 'viewAllNfts' })}
           </Button>
         </div>
