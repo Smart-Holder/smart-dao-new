@@ -85,7 +85,6 @@ const App = ({ type }: { type?: string }) => {
 
           .role .rolename {
             font-size: 16px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #000000;
             line-height: 22px;
@@ -95,7 +94,6 @@ const App = ({ type }: { type?: string }) => {
             width: 80px;
             margin-bottom: 0;
             font-size: 16px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #000000;
             line-height: 22px;

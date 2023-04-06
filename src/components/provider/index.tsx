@@ -11,29 +11,6 @@ const theme = {
   token: {
     colorPrimary: '#000',
   },
-  components: {
-    Button: {
-      // colorPrimary: '#2c2c2c',
-    },
-    // Input: {
-    //   controlHeight: 40,
-    //   borderRadius: 2,
-    //   colorBorder: '#000',
-    //   colorBgContainer: 'rgba(255,255,255,0.6)',
-    // },
-    // Select: {
-    //   controlHeight: 40,
-    //   borderRadius: 2,
-    //   colorBorder: '#000',
-    //   colorBgContainer: 'rgba(255,255,255,0.6)',
-    // },
-    // DatePicker: {
-    //   controlHeight: 40,
-    //   borderRadius: 2,
-    //   colorBorder: '#000',
-    //   colorBgContainer: 'rgba(255,255,255,0.6)',
-    // },
-  },
 };
 
 /**

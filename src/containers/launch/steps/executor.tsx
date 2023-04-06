@@ -175,7 +175,6 @@ const App = ({
             height: 22px;
             margin-top: 16px;
             font-size: 16px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #b1b1b1;
             line-height: 22px;

@@ -87,7 +87,6 @@ const App = () => {
           .item .h1 {
             height: 42px;
             font-size: 24px;
-            font-family: var(--font-family-700);
             font-weight: bold;
             color: #000000;
             line-height: 42px;
@@ -96,7 +95,6 @@ const App = () => {
           .item .desc {
             margin-top: 18px;
             font-size: 18px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #000000;
             line-height: 26px;

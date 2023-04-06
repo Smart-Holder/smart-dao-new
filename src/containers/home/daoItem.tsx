@@ -261,7 +261,6 @@ const DAOItem = (props: any) => {
             height: 32px;
 
             font-size: 16px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #ffffff;
             line-height: 18px;
@@ -276,7 +275,6 @@ const DAOItem = (props: any) => {
 
           .item :global(.name) {
             font-size: 32px;
-            font-family: var(--font-family-700);
             font-weight: bold;
             color: #ffffff;
             line-height: 39px;
@@ -298,7 +296,6 @@ const DAOItem = (props: any) => {
             width: 102px;
             height: 36px;
             font-size: 16px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #ffffff;
             line-height: 36px;
@@ -308,7 +305,6 @@ const DAOItem = (props: any) => {
             width: 190px;
             height: 46px;
             font-size: 17px;
-            font-family: var(--font-family-700);
             font-weight: bold;
             color: #ffffff;
             line-height: 26px;

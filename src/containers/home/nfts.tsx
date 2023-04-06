@@ -109,7 +109,7 @@ const App = () => {
             height: 30px;
             margin: 70px 0 40px;
             font-size: 38px;
-            font-family: var(--font-family-lg);
+            font-family: var(--font-family-secondary);
             font-weight: bold;
             color: #000000;
             line-height: 30px;

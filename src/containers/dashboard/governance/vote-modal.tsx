@@ -296,7 +296,6 @@ const VoteModal: FC<VoteModalProps> = (props) => {
           .h1 {
             height: 24px;
             font-size: 22px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #000000;
             line-height: 24px;
@@ -306,7 +305,6 @@ const VoteModal: FC<VoteModalProps> = (props) => {
             height: 32px;
             padding: 0 14px;
             font-size: 16px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #6271d2;
             line-height: 32px;
@@ -337,7 +335,6 @@ const VoteModal: FC<VoteModalProps> = (props) => {
             height: 32px;
             padding: 0 14px;
             font-size: 16px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #000000;
             line-height: 32px;
@@ -350,7 +347,6 @@ const VoteModal: FC<VoteModalProps> = (props) => {
             position: relative;
             height: 16px;
             font-size: 14px;
-            font-family: var(--font-family-700);
             font-weight: bold;
             color: #161616;
             line-height: 16px;
@@ -390,7 +386,6 @@ const VoteModal: FC<VoteModalProps> = (props) => {
           .address {
             height: 19px;
             font-size: 16px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #000000;
             line-height: 19px;
@@ -398,7 +393,6 @@ const VoteModal: FC<VoteModalProps> = (props) => {
 
           .address :global(.ant-typography) {
             font-size: 16px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #000000;
             line-height: 19px;
@@ -413,7 +407,6 @@ const VoteModal: FC<VoteModalProps> = (props) => {
             width: 126px;
             height: 24px;
             font-size: 14px;
-            font-family: var(--font-family-700);
             font-weight: bold;
             color: #000000;
             line-height: 24px;
@@ -422,7 +415,6 @@ const VoteModal: FC<VoteModalProps> = (props) => {
           .item-result .value {
             height: 24px;
             font-size: 14px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #818181;
             line-height: 24px;
@@ -430,7 +422,6 @@ const VoteModal: FC<VoteModalProps> = (props) => {
 
           .item-result .value :global(.ant-typography) {
             font-size: 14px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #818181;
             line-height: 24px;
@@ -444,7 +435,6 @@ const VoteModal: FC<VoteModalProps> = (props) => {
             height: 19px;
             margin-top: 32px;
             font-size: 16px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #000000;
             line-height: 19px;
@@ -453,7 +443,6 @@ const VoteModal: FC<VoteModalProps> = (props) => {
           .vote-detail-content {
             margin-top: 12px;
             font-size: 14px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #818181;
             line-height: 24px;

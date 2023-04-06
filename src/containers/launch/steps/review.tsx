@@ -123,7 +123,6 @@ const App = () => {
             width: 300px;
             margin: 32px auto 0;
             font-size: 18px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #000000;
             line-height: 21px;

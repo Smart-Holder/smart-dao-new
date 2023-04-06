@@ -277,7 +277,6 @@ const App = () => {
             width: 113px;
             height: 24px;
             font-size: 16px;
-            font-family: var(--font-family-700);
             font-weight: bold;
             color: #000000;
             line-height: 24px;
@@ -286,7 +285,6 @@ const App = () => {
           .info-item .value {
             height: 24px;
             font-size: 16px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #818181;
             line-height: 24px;
@@ -294,7 +292,6 @@ const App = () => {
 
           .info-item .value :global(.ant-typography) {
             font-size: 16px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #818181;
             line-height: 24px;
@@ -308,7 +305,6 @@ const App = () => {
           .card :global(.ant-checkbox-wrapper span:last-child) {
             padding-inline-start: 12px;
             font-size: 16px;
-            font-family: var(--font-family-400);
             font-weight: 400;
             color: #000000;
             line-height: 19px;

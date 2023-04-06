@@ -95,7 +95,6 @@ const App = ({ title, avatar, name, buttons, children, padding }: Data) => {
           .name {
             height: 50px;
             font-size: 28px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #000000;
             line-height: 40px;

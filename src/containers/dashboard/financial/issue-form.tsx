@@ -437,7 +437,6 @@ const IssueForm: FC<IssueFormProps> = () => {
             padding-left: 12px;
 
             font-size: 15px;
-            font-family: var(--font-family-400);
             font-weight: 400;
             color: #000000;
             line-height: 24px;
@@ -458,7 +457,6 @@ const IssueForm: FC<IssueFormProps> = () => {
           .attr-item-label {
             height: 21px;
             font-size: 18px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #000000;
             line-height: 21px;
@@ -468,7 +466,6 @@ const IssueForm: FC<IssueFormProps> = () => {
             height: 26px;
             margin-top: 16px;
             font-size: 22px;
-            font-family: var(--font-family-700);
             font-weight: bold;
             color: #000000;
             line-height: 26px;
@@ -478,7 +475,6 @@ const IssueForm: FC<IssueFormProps> = () => {
             height: 19px;
             margin-top: 18px;
             font-size: 16px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #000000;
             line-height: 19px;

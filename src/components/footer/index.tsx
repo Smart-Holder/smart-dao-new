@@ -90,7 +90,6 @@ const App = ({ hasSider }: { hasSider?: boolean }) => {
             width: 400px;
             margin-top: 17px;
             font-size: 16px;
-            font-family: var(--font-family-400);
             color: #ffffff;
             line-height: 28px;
           }
@@ -98,7 +97,6 @@ const App = ({ hasSider }: { hasSider?: boolean }) => {
           .desc2 {
             margin-top: 5px;
             font-size: 14px;
-            font-family: var(--font-family-400);
             font-weight: 400;
             color: #ffffff;
             line-height: 20px;
@@ -109,7 +107,6 @@ const App = ({ hasSider }: { hasSider?: boolean }) => {
             flex-direction: column;
             align-items: flex-end;
             font-size: 12px;
-            font-family: var(--font-family-400);
             color: #ffffff;
             line-height: 37px;
           }
@@ -117,7 +114,6 @@ const App = ({ hasSider }: { hasSider?: boolean }) => {
           .bottom {
             margin-top: 65px;
             font-size: 12px;
-            font-family: var(--font-family-400);
             font-weight: 400;
             color: #6f6f6f;
             line-height: 37px;

@@ -138,7 +138,6 @@ const App = ({ type }: { type?: string }) => {
             height: 66px;
             margin-top: 50px;
             font-size: 16px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #818181;
             line-height: 22px;

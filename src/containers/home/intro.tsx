@@ -51,7 +51,7 @@ const App = () => {
         {`
           .h1 {
             font-size: 80px;
-            font-family: var(--font-family-lg);
+            font-family: var(--font-family-secondary);
             font-weight: bold;
             color: #000000;
             line-height: 81px;
@@ -60,7 +60,6 @@ const App = () => {
           .h2 {
             margin-top: 25px;
             font-size: 28px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #323232;
             line-height: 40px;
@@ -72,7 +71,6 @@ const App = () => {
             margin-top: 44px;
 
             font-size: 20px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             line-height: 32px;
 

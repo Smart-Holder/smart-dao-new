@@ -375,7 +375,6 @@ const App: React.FC = () => {
           .form-title1 {
             height: 30px;
             font-size: 20px;
-            font-family: var(--font-family-400);
             font-weight: 400;
             color: #000000;
             line-height: 30px;
@@ -386,7 +385,6 @@ const App: React.FC = () => {
             margin-top: 7px;
             margin-bottom: 44px;
             font-size: 12px;
-            font-family: var(--font-family-400);
             font-weight: 400;
             color: #969ba0;
             line-height: 18px;
@@ -398,7 +396,6 @@ const App: React.FC = () => {
           .upload-desc {
             height: 21px;
             font-size: 14px;
-            font-family: var(--font-family-400);
             font-weight: 400;
             color: #969ba0;
             line-height: 21px;
@@ -418,7 +415,6 @@ const App: React.FC = () => {
             margin-bottom: 4px;
             margin-right: 0;
             font-size: 16px;
-            font-family: var(--font-family-400);
             font-weight: 400;
             color: #969ba0;
             line-height: 54px;
@@ -447,7 +443,6 @@ const App: React.FC = () => {
 
           .modal-content-text {
             font-size: 28px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #3c4369;
             line-height: 40px;

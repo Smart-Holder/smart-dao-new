@@ -135,7 +135,7 @@ const DetailTransactions: FC<DetailTransactionsProps> = (props) => {
             height: 45px;
             margin: 0 80px;
             font-size: 32px;
-            font-family: var(--font-family-lg);
+            font-family: var(--font-family-secondary);
             font-weight: 600;
             color: #000000;
             line-height: 45px;

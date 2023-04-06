@@ -148,7 +148,6 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
             height: 32px;
             padding: 0 14px;
             font-size: 16px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #6271d2;
             line-height: 32px;
@@ -179,7 +178,6 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
             height: 32px;
             padding: 0 14px;
             font-size: 16px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #000000;
             line-height: 32px;
@@ -192,7 +190,6 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
             position: relative;
             height: 16px;
             font-size: 14px;
-            font-family: var(--font-family-700);
             font-weight: bold;
             color: #161616;
             line-height: 16px;
@@ -229,7 +226,6 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
           .item-title {
             height: 24px;
             font-size: 20px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #000000;
             line-height: 24px;
@@ -239,7 +235,6 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
             height: 56px;
             margin-top: 2px;
             font-size: 16px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #818181;
             line-height: 28px;
@@ -252,7 +247,6 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
           .item-owner-address {
             height: 19px;
             font-size: 16px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #000000;
             line-height: 19px;
@@ -260,7 +254,6 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
 
           .item-owner-address :global(.ant-typography) {
             font-size: 16px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #000000;
             line-height: 19px;

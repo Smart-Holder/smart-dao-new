@@ -227,7 +227,6 @@ const App = () => {
             width: 395px;
             height: 50px;
             font-size: 36px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #000000;
             line-height: 50px;
@@ -235,7 +234,6 @@ const App = () => {
 
           .desc-header {
             font-size: 22px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #000000;
             line-height: 30px;
@@ -247,7 +245,6 @@ const App = () => {
 
           .desc-content :global(.ant-typography) {
             font-size: 14px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #818181;
             line-height: 28px;
@@ -255,7 +252,6 @@ const App = () => {
 
           .member-header {
             font-size: 22px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #000000;
             line-height: 30px;
@@ -283,7 +279,6 @@ const App = () => {
             justify-content: space-between;
             align-items: center;
             font-size: 20px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #000000;
             line-height: 28px;
@@ -291,7 +286,6 @@ const App = () => {
 
           .total-item .num {
             font-size: 32px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #000000;
             line-height: 45px;
@@ -318,7 +312,6 @@ const App = () => {
           .total-item-2 span {
             height: 29px;
             font-size: 21px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #282d32;
             line-height: 29px;
@@ -327,7 +320,6 @@ const App = () => {
           .total-item-2 .num {
             height: 59px;
             font-size: 42px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #282d32;
             line-height: 59px;

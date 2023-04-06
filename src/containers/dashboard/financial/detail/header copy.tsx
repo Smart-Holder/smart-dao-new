@@ -234,7 +234,6 @@ const App = () => {
           .asset-name {
             height: 40px;
             font-size: 28px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #000000;
             line-height: 40px;
@@ -245,7 +244,6 @@ const App = () => {
             align-items: center;
             margin-top: 14px;
             font-size: 18px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #000000;
             line-height: 25px;
@@ -265,7 +263,6 @@ const App = () => {
           .asset-owner-label {
             margin-left: 7px;
             font-size: 12px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #818181;
             line-height: 17px;
@@ -274,7 +271,6 @@ const App = () => {
           .asset-owner-value {
             margin-left: 7px;
             font-size: 16px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #000000;
             line-height: 19px;
@@ -284,7 +280,6 @@ const App = () => {
             height: 22px;
             margin-top: 20px;
             font-size: 16px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #000000;
             line-height: 22px;
@@ -299,7 +294,6 @@ const App = () => {
 
           .dao-info-item-value :global(.ant-typography) {
             font-size: 16px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #000000;
             line-height: 22px;
@@ -325,7 +319,6 @@ const App = () => {
             height: 24px;
             margin-top: 32px;
             font-size: 20px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #000000;
             line-height: 24px;

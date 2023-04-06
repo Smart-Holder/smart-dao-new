@@ -168,7 +168,6 @@ const App = ({ data }: NFTProps) => {
             height: 19px;
             margin-top: 20px;
             font-size: 16px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #2c2c2c;
             line-height: 19px;
@@ -178,7 +177,6 @@ const App = ({ data }: NFTProps) => {
             height: 19px;
             margin-bottom: 0;
             font-size: 16px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #2c2c2c;
             line-height: 19px;
@@ -187,7 +185,6 @@ const App = ({ data }: NFTProps) => {
           .owner {
             margin-top: 12px;
             font-size: 12px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #818181;
             line-height: 24px;
@@ -195,7 +192,6 @@ const App = ({ data }: NFTProps) => {
 
           .owner :global(.ant-typography) {
             font-size: 12px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #818181;
             line-height: 24px;
@@ -219,7 +215,6 @@ const App = ({ data }: NFTProps) => {
 
           .label {
             font-size: 12px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #b1b1b1;
             line-height: 24px;
@@ -229,7 +224,6 @@ const App = ({ data }: NFTProps) => {
             display: flex;
             align-items: center;
             font-size: 15px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #232323;
             line-height: 20px;

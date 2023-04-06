@@ -130,7 +130,6 @@ const ConnectModal = (props: any, ref: any) => {
           .wallet .title {
             height: 26px;
             font-size: 22px;
-            font-family: var(--font-family-600);
             font-weight: 600;
             color: #2c2c2c;
             line-height: 26px;
@@ -170,7 +169,6 @@ const ConnectModal = (props: any, ref: any) => {
             padding: 15px;
 
             font-size: 18px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             color: #3c4369;
             line-height: 25px;

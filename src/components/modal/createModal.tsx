@@ -75,7 +75,6 @@ const ConnectModal = (props: any, ref: any) => {
             flex-direction: column;
             margin-right: 10px;
             font-size: 28px;
-            font-family: var(--font-family-700);
             font-weight: bold;
             color: #ffffff;
             line-height: 34px;
@@ -85,7 +84,6 @@ const ConnectModal = (props: any, ref: any) => {
           .button-content-left span:last-child {
             height: 18px;
             font-size: 12px;
-            font-family: var(--font-family-500);
             font-weight: 500;
             line-height: 18px;
           }
