@@ -105,7 +105,7 @@ const App = ({ data }: NFTProps) => {
         </Paragraph>
       </div>
 
-      {currentDAO.name && (
+      {currentDAO?.name && (
         <div className="owner">
           <Space size={6}>
             <Avatar

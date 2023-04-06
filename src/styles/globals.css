@@ -67,17 +67,17 @@
   --button-primary-color: #2f4cdd;
   --button-secondary-color: #546ff6;
 
-  --font-family-en-400: SF UI Text, Arial;
-  --font-family-en-500: SF UI Text Medium, Arial;
-  --font-family-en-600: SF UI Text Semibold, Arial;
-  --font-family-en-700: SF UI Text Bold, Arial;
-  --font-family-en-lg: Times New Roman;
+  --font-family-en-400: 'SF UI Text', -apple-system, Arial;
+  --font-family-en-500: 'SF UI Text Medium', -apple-system, Arial;
+  --font-family-en-600: 'SF UI Text Semibold', -apple-system, Arial;
+  --font-family-en-700: 'SF UI Text Bold', -apple-system, Arial;
+  --font-family-en-lg: 'Times New Roman';
 
-  --font-family-ja-400: Hiragino Sans w4, MS Gothic;
-  --font-family-ja-500: Hiragino Sans w5, MS Gothic;
-  --font-family-ja-600: Hiragino Sans w6, MS Gothic;
-  --font-family-ja-700: Hiragino Sans w7, MS Gothic;
-  --font-family-ja-lg: Hiragino Mincho ProN, MS Mincho;
+  --font-family-ja-400: 'Hiragino Sans w4', 'MS Gothic';
+  --font-family-ja-500: 'Hiragino Sans w5', 'MS Gothic';
+  --font-family-ja-600: 'Hiragino Sans w6', 'MS Gothic';
+  --font-family-ja-700: 'Hiragino Sans w7', 'MS Gothic';
+  --font-family-ja-lg: 'Hiragino Mincho ProN', 'MS Mincho';
 
   /* 语言默认为英文，切换语言后动态变化 */
   --font-family-400: var(--font-family-en-400);
@@ -85,6 +85,9 @@
   --font-family-600: var(--font-family-en-600);
   --font-family-700: var(--font-family-en-700);
   --font-family-lg: var(--font-family-en-lg);
+
+  /* --font-family-primary: -apple-system, Arial, 'Hiragino Sans', 'MS Gothic', sans-serif; */
+  /* --font-family-secondary: 'Times New Roman', Arial, 'Hiragino Mincho ProN', 'MS Mincho', sans-serif; */
 }
 
 * {
@@ -98,7 +101,7 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
   overflow-y: auto !important;
-  font-family: var(--font-family-400);
+  font-family: var(--font-family-400), sans-serif;
   background: #fff;
 }
 

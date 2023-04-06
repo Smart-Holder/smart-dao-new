@@ -95,7 +95,7 @@ const App = () => {
         })}
       </Row>
 
-      {data.length >= total && (
+      {data.length < total && (
         <div className="footer">
           <Button className="button-view-all" onClick={getData}>
             {formatMessage({ id: 'viewAllNfts' })}
