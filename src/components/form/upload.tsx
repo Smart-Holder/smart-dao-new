@@ -1,15 +1,25 @@
+import { useEffect } from 'react';
 import { Image, Upload } from 'antd';
-import { useIntl } from 'react-intl';
-
 import type { RcFile } from 'antd/es/upload/interface';
+import { useIntl } from 'react-intl';
 
 import { getCookie } from '@/utils/cookie';
 import { validateImage } from '@/utils/image';
 
+import { request } from '@/api';
+
 const App = (props: any) => {
-  const { value, type, ...rest } = props;
+  const { value, type, onChange, ...rest } = props;
 
   const { formatMessage } = useIntl();
+
+  useEffect(() => {
+    request({
+      name: 'utils',
+      method: 'qiniuToken',
+      params: null,
+    });
+  }, []);
 
   const beforeUpload = (file: RcFile) => {
     const message = validateImage(file);
@@ -20,11 +30,12 @@ const App = (props: any) => {
   // const handleChange: UploadProps['onChange'] = (
   //   info: UploadChangeParam<UploadFile>,
   // ) => {
-  //   if (info.file.status === 'done') {
-  //     setImage(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+  //   if (info.file.status === 'error' && info.file.error.status === 401) {
+
+  //   } else if (info.file.status === 'done') {
+  //     onChange(info);
   //   }
 
-  //   onChange(info);
   // };
 
   return (
