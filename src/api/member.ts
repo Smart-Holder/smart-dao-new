@@ -6,6 +6,9 @@ import store from '@/store';
 import { createVote } from './vote';
 import { getMessage } from '../utils/language';
 
+import Modal from '@/components/modal';
+import { message } from 'antd';
+
 export function getMemberId() {
   const { web3, address } = store.getState().wallet;
   const { currentDAO, currentMember } = store.getState().dao;
@@ -176,6 +179,7 @@ export async function setPermissions(
   permissions: number[],
   PermissionMap: any,
 ) {
+  const { lang } = store.getState().common;
   const { web3, address } = store.getState().wallet;
   const { currentDAO } = store.getState().dao;
   const contract = getContract(web3, Member.abi, currentDAO.member);
@@ -187,6 +191,7 @@ export async function setPermissions(
       addActions,
       removeActions,
     ]);
+    message.success('Success');
   } else {
     const labels = permissions.map((v: number) => PermissionMap[v]);
 
@@ -205,5 +210,7 @@ export async function setPermissions(
         },
       ],
     });
+
+    Modal.success({ title: getMessage('proposal.create.message') });
   }
 }

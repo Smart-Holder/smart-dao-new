@@ -130,7 +130,16 @@ const App: React.FC = () => {
   };
 
   const addMember = () => {
-    const value = form.getFieldValue('member');
+    const { name, description, image, member } = form.getFieldsValue([
+      'name',
+      'description',
+      'image',
+      'member',
+    ]);
+
+    if (!member) {
+      return;
+    }
 
     form
       .validateFields(['member'])
@@ -139,11 +148,11 @@ const App: React.FC = () => {
           ...members,
           {
             id: hexRandomNumber(),
-            name: nickname,
+            name,
             description,
             image,
             votes: 1,
-            owner: value,
+            owner: member,
           },
         ];
 

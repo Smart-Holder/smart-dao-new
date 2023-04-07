@@ -38,8 +38,7 @@ const messagesList: { [index: string]: any } = {
 
 export function getMessage(tag: string) {
   const { lang } = store.getState().common;
-  const list = tag in messagesList ? messagesList[lang] : messagesList.en;
-  return (list[tag] || tag) as string;
+  return (messagesList[lang]?.[tag] || tag) as string;
 }
 
 const getLanguageConfig = (lang = 'en') => {

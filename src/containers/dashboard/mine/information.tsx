@@ -216,7 +216,8 @@ const App = () => {
 
       <Checkbox.Group
         className="checkbox-group"
-        defaultValue={permissions || []}
+        value={permissions || []}
+        // defaultValue={permissions || []}
         onChange={onCheckboxChange}
       >
         <Row style={{ width: '100%' }} gutter={[20, 48]}>

@@ -151,6 +151,10 @@ const App: React.FC = () => {
       'member',
     ]);
 
+    if (!member) {
+      return;
+    }
+
     form
       .validateFields(['member'])
       .then(() => {

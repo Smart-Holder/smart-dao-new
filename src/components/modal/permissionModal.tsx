@@ -5,6 +5,8 @@ import { Checkbox, Form } from 'antd';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
+import { setUserMembers, setCurrentMember } from '@/store/features/daoSlice';
+
 import Modal from '@/components/modal';
 
 import { Permissions } from '@/config/enum';
@@ -13,6 +15,7 @@ import { Permissions } from '@/config/enum';
 import { setPermissions } from '@/api/member';
 import { useIntl, FormattedMessage } from 'react-intl';
 import { isRepeateArray } from '@/utils';
+import { request } from '@/api';
 
 // const validateMessages = {
 //   required: '${label} is required!',
@@ -27,14 +30,13 @@ const App = (props: any, ref: any) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
+  const { chainId, address } = useAppSelector((store) => store.wallet);
   const { userInfo } = useAppSelector((store) => store.user);
-  const { currentMember } = useAppSelector((store) => store.dao);
+  const { currentMember, currentDAO } = useAppSelector((store) => store.dao);
 
   const [isEdit, setIsEdit] = useState(false);
   const [loading, setLoading] = useState(false);
   const [initialValues, setInitialValues] = useState({});
-
-  const { currentDAO } = useAppSelector((store) => store.dao);
 
   useImperativeHandle(ref, () => ({
     show: (permissions: number[]) => {
@@ -42,6 +44,19 @@ const App = (props: any, ref: any) => {
       setInitialValues({ permissions });
     },
   }));
+
+  const getMembers = async () => {
+    const members = await request({
+      name: 'utils',
+      method: 'getMembersFrom',
+      params: { chain: chainId, host: currentDAO.host, owner: address },
+    });
+
+    if (members && members.length > 0) {
+      dispatch(setUserMembers(members));
+      dispatch(setCurrentMember(members[0]));
+    }
+  };
 
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -85,11 +100,12 @@ const App = (props: any, ref: any) => {
       );
       setLoading(false);
       handleCancel();
-      // router.push('/dashboard/governance/votes');
 
-      Modal.success({
-        title: formatMessage({ id: 'proposal.create.message' }),
-      });
+      getMembers();
+
+      // Modal.success({
+      //   title: formatMessage({ id: 'proposal.create.message' }),
+      // });
     } catch (error) {
       setLoading(false);
       console.error(error);
