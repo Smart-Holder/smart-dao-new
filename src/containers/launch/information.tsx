@@ -8,14 +8,11 @@ import Modal from '@/components/modal';
 
 import { validateChinese, validateEthAddress } from '@/utils/validator';
 import { hexRandomNumber } from '@/utils';
-import { validateImage } from '@/utils/image';
 import { setMakeDAOStorage, getMakeDAOStorage } from '@/utils/launch';
 import { useAppSelector } from '@/store/hooks';
 
 import type { UploadChangeParam } from 'antd/es/upload';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-
-import iconSuccess from '/public/images/icon-success.png';
+import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 // const validateMessages = {
 //   required: '${label} is required!',
@@ -108,8 +105,6 @@ const App: React.FC = () => {
 
     setMakeDAOStorage('start', params);
     setIsModalOpen(true);
-
-    // dispatch(deployAssetSalesDAO(params));
   };
 
   const onFinishFailed = (errorInfo: any) => {

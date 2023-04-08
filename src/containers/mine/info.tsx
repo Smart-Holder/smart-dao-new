@@ -85,73 +85,60 @@ const Info = () => {
     info: UploadChangeParam<UploadFile>,
   ) => {
     if (info.file.status === 'done') {
+      console.log(
+        '----',
+        process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key,
+      );
       setImage(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
       setIsEdit(true);
     }
   };
 
   return (
-    <div className="card" style={{ margin: '50px 0' }}>
-      <div className="h1">{formatMessage({ id: 'my.information.title' })}</div>
-      {/* <div className="h2">Lorem ipsum dolor sit amet, consectetur</div> */}
-
-      <Form
-        style={{ marginTop: 40 }}
-        className="form"
-        name="info"
-        form={form}
-        wrapperCol={{ span: 17 }}
-        initialValues={initialValues}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        onValuesChange={onValuesChange}
-        autoComplete="off"
-        labelAlign="left"
-        layout="vertical"
-        requiredMark={false}
-        validateTrigger="onBlur"
+    <Form
+      style={{ marginTop: 40 }}
+      className="form"
+      name="info"
+      form={form}
+      wrapperCol={{ span: 17 }}
+      initialValues={initialValues}
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+      onValuesChange={onValuesChange}
+      autoComplete="off"
+      labelAlign="left"
+      layout="vertical"
+      requiredMark={false}
+      validateTrigger="onBlur"
+    >
+      <Form.Item
+        name="nickname"
+        label={formatMessage({ id: 'my.information.nickname' })}
+        rules={[
+          { required: true },
+          { type: 'string', min: 5, max: 12 },
+          { validator: validateChinese },
+        ]}
       >
-        <Form.Item
-          name="nickname"
-          label={formatMessage({ id: 'my.information.nickname' })}
-          rules={[
-            { required: true },
-            { type: 'string', min: 5, max: 12 },
-            { validator: validateChinese },
-          ]}
+        <Input />
+      </Form.Item>
+
+      <Form.Item label="Upload Rectangle Picture" valuePropName="fileList">
+        <Upload value={image} onChange={onImageChange} />
+      </Form.Item>
+
+      <Form.Item style={{ marginTop: 100 }}>
+        <Button
+          className="button-submit"
+          type="primary"
+          htmlType="submit"
+          loading={loading}
+          disabled={!isEdit}
         >
-          <Input />
-        </Form.Item>
-
-        <Form.Item label="Upload Rectangle Picture" valuePropName="fileList">
-          <Upload value={image} onChange={onImageChange} />
-        </Form.Item>
-
-        <Form.Item style={{ marginTop: 100 }}>
-          <Button
-            className="button-submit"
-            type="primary"
-            htmlType="submit"
-            loading={loading}
-            disabled={!isEdit}
-          >
-            {formatMessage({ id: 'save' })}
-          </Button>
-        </Form.Item>
-      </Form>
-
-      <style jsx>
-        {`
-          .info-wrap .upload-desc {
-            height: 21px;
-            font-size: 14px;
-            font-weight: 400;
-            color: #969ba0;
-            line-height: 21px;
-          }
-        `}
-      </style>
-    </div>
+          {formatMessage({ id: 'save' })}
+        </Button>
+      </Form.Item>
+    </Form>
   );
 };
 

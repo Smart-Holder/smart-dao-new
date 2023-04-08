@@ -1,38 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import {
-  Button,
-  Form,
-  Input,
-  Space,
-  Modal,
-  Image,
-  message,
-  Row,
-  Col,
-} from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import buffer from 'somes/buffer';
-
-import { validateChinese } from '@/utils/validator';
-import { getCookie } from '@/utils/cookie';
-import { isRepeate } from '@/utils';
-import { validateImage } from '@/utils/image';
-import { useAppSelector, useAppDispatch } from '@/store/hooks';
+import { Button, Form, Input } from 'antd';
+import { useIntl } from 'react-intl';
 
 import type { UploadChangeParam } from 'antd/es/upload';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-
-import { getDAO, getDAOList, setCurrentDAO } from '@/store/features/daoSlice';
-import { setInformation } from '@/api/dao';
-import { Permissions } from '@/config/enum';
-import { createVote } from '@/api/vote';
-import { request } from '@/api';
-import { useIntl } from 'react-intl';
-import { isPermission } from '@/api/member';
+import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 import Upload from '@/components/form/upload';
-import { formatToBytes, formatToObj } from '@/utils/extend';
+
+import { useAppSelector, useAppDispatch } from '@/store/hooks';
+import { getDAO, setCurrentDAO } from '@/store/features/daoSlice';
+
+import { isRepeate } from '@/utils';
+import { validateChinese } from '@/utils/validator';
+import { formatToObj } from '@/utils/extend';
+
+import { request } from '@/api';
+import { setInformation } from '@/api/dao';
 
 // const validateMessages = {
 //   required: '${label} is required!',
@@ -41,13 +24,13 @@ import { formatToBytes, formatToObj } from '@/utils/extend';
 //   },
 // };
 
-const FormGroup: React.FC = () => {
+const App: React.FC = () => {
   const [form] = Form.useForm();
   const { formatMessage } = useIntl();
   const dispatch = useAppDispatch();
-  const router = useRouter();
-  const { chainId, address, web3 } = useAppSelector((store) => store.wallet);
-  const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
+
+  const { chainId, address } = useAppSelector((store) => store.wallet);
+  const { currentDAO } = useAppSelector((store) => store.dao);
   const { loading } = useAppSelector((store) => store.common);
 
   const [initialValues, setInitialValues] = useState() as any;
@@ -79,6 +62,7 @@ const FormGroup: React.FC = () => {
             image: res.image,
             poster: extend.poster || res.image,
           });
+
           form.setFieldsValue({
             name: res.name,
             mission: res.mission,
@@ -94,121 +78,6 @@ const FormGroup: React.FC = () => {
 
     getDAO();
   }, [chainId, address]);
-
-  // const defaultMember = [
-  //   {
-  //     id: hexRandomNumber(),
-  //     owner: getCookie('address'),
-  //     votes: 1,
-  //     name: '',
-  //     description: '',
-  //     logo: '',
-  //   },
-  // ];
-
-  // const [members, setMembers] = useState(
-  //   initialValues.members || defaultMember,
-  // );
-
-  // const decoder = new TextDecoder('utf8');
-  // console.log(decoder.decode(buffer.from(currentDAO?.extend?.data)));
-
-  // const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const setBasicInformation = async (params: any) => {
-    try {
-      const res = await setInformation(params);
-      message.success('Success');
-
-      dispatch(getDAOList({ chain: chainId, owner: address }));
-      dispatch(getDAO({ chain: chainId, address: currentDAO.address }));
-      setIsEdit(false);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const createProposal = async (values: any) => {
-    const params = {
-      name: formatMessage({ id: 'proposal.basic.basic' }),
-      description: JSON.stringify({
-        type: 'basic',
-        purpose: `${values.mission ? 'Mission: ' + values.mission : ''} ${
-          values.description ? 'Itroduction: ' + values.description : ''
-        }`,
-      }),
-      extra: [
-        {
-          abi: 'dao',
-          target: currentDAO.address,
-          method: 'setBasicInformation',
-          params: [
-            {
-              mission: values.mission || '',
-              description: values.description || '',
-              image: values.image || '',
-              extend: formatToBytes(values.extend) || '0x0000',
-            },
-          ],
-        },
-      ],
-    };
-
-    try {
-      await createVote(params);
-      Modal.success({
-        title: formatMessage({ id: 'proposal.create.message' }),
-      });
-      setIsEdit(false);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  // const setInfo = async (values: any) => {
-  //   const params = {
-  //     web3,
-  //     address: address,
-  //     host: currentDAO.host,
-  //     ...values,
-  //   };
-  //   const res = await setMissionAndDesc(params);
-
-  //   message.success('Success');
-  //   console.log(res);
-
-  //   dispatch(getDAOList({ chain: chainId, owner: address }));
-  //   dispatch(getDAO({ chain: chainId, address: currentDAO.address }));
-  //   setIsEdit(false);
-  // };
-
-  const createMissionProposal = async (values: any) => {
-    const params = {
-      name: formatMessage({ id: 'proposal.basic.basic' }),
-      description: JSON.stringify({
-        type: 'basic',
-        purpose: `Vision & Mission: ${values.mission} Itroduction: ${values.description}`,
-      }),
-      extra: [
-        {
-          abi: 'dao',
-          target: currentDAO.address,
-          method: 'setMissionAndDesc',
-          params: [values.mission, values.description],
-        },
-      ],
-    };
-
-    try {
-      await createVote(params);
-      Modal.success({
-        title: formatMessage({ id: 'proposal.create.message' }),
-      });
-      setIsEdit(false);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const onValuesChange = (changedValues: any, values: any) => {
     setIsEdit(!isRepeate(initialValues, values));
@@ -231,87 +100,17 @@ const FormGroup: React.FC = () => {
       params.extend = { poster };
     }
 
-    if (!(await isPermission(Permissions.Action_DAO_Settings))) {
-      console.log('no permission');
-      // createMissionProposal(values);
-      createProposal(params);
-      return;
+    try {
+      await setInformation(params);
+      dispatch(getDAO({ chain: chainId, address: currentDAO.address }));
+      setIsEdit(false);
+    } catch (error) {
+      console.error(error);
     }
-
-    // setInfo(values);
-    setBasicInformation(params);
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('form Failed:', errorInfo);
-  };
-
-  // const removeMember = (value: string) => {
-  //   members.splice(
-  //     members.findIndex((item: any) => item.owner === value),
-  //     1,
-  //   );
-  //   setMembers([...members]);
-  // };
-
-  // const addMember = () => {
-  //   const value = form.getFieldValue('member');
-
-  //   form
-  //     .validateFields(['member'])
-  //     .then(() => {
-  //       const newMembers = [
-  //         ...members,
-  //         {
-  //           id: hexRandomNumber(),
-  //           owner: value,
-  //           votes: 1,
-  //           name: '',
-  //           description: '',
-  //           logo: '',
-  //         },
-  //       ];
-
-  //       setMembers(newMembers);
-  //       form.setFieldValue('member', '');
-  //     })
-  //     .catch((errorInfo) => {});
-  // };
-
-  // const validateRepeat = (rule: any, value: string) => {
-  //   if ((members || []).find((item: any) => item.owner === value)) {
-  //     // callback(new Error(this.$t("rules.repeat", { name: "address" })));
-  //     return Promise.reject(new Error('repeat'));
-  //   }
-
-  //   return Promise.resolve();
-  // };
-
-  const createLogoProposal = async ({ image }: { image: string }) => {
-    const params = {
-      name: formatMessage({ id: 'proposal.basic.basic' }),
-      description: JSON.stringify({
-        type: 'basic',
-        purpose: `Replace logo: ${image}`,
-      }),
-      extra: [
-        {
-          abi: 'dao',
-          target: currentDAO.address,
-          method: 'setImage',
-          params: [image],
-        },
-      ],
-    };
-
-    try {
-      await createVote(params);
-      Modal.success({
-        title: formatMessage({ id: 'proposal.create.message' }),
-      });
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   const handleLogoChange: UploadProps['onChange'] = async (
@@ -323,49 +122,6 @@ const FormGroup: React.FC = () => {
 
       setLogo(newLogo);
       setIsEdit(true);
-
-      // try {
-      //   if (!(await isPermission(Permissions.Action_DAO_Settings))) {
-      //     createLogoProposal({ image: newLogo });
-      //     return;
-      //   }
-
-      //   await setImage({ image: newLogo });
-
-      //   message.success('Success');
-
-      //   dispatch(getDAOList({ chain: chainId, owner: address }));
-      //   dispatch(getDAO({ chain: chainId, address: currentDAO.address }));
-      // } catch (error) {
-      //   setLogo(currentDAO.image);
-      // }
-    }
-  };
-
-  const createPosterProposal = async (values: { poster: string }) => {
-    const params = {
-      name: formatMessage({ id: 'proposal.basic.basic' }),
-      description: JSON.stringify({
-        type: 'basic',
-        purpose: `Replace poster: ${values.poster}`,
-      }),
-      extra: [
-        {
-          abi: 'dao',
-          target: currentDAO.address,
-          method: 'setExtend',
-          params: [formatToBytes(values)],
-        },
-      ],
-    };
-
-    try {
-      await createVote(params);
-      Modal.success({
-        title: formatMessage({ id: 'proposal.create.message' }),
-      });
-    } catch (error) {
-      console.error(error);
     }
   };
 
@@ -377,35 +133,8 @@ const FormGroup: React.FC = () => {
         process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key;
       setPoster(newPoster);
       setIsEdit(true);
-
-      // try {
-      //   if (!(await isPermission(Permissions.Action_DAO_Settings))) {
-      //     createPosterProposal({ poster: newPoster });
-      //     return;
-      //   }
-
-      //   await setExtend({ poster: newPoster });
-
-      //   message.success('Success');
-
-      //   dispatch(getDAOList({ chain: chainId, owner: address }));
-      //   dispatch(getDAO({ chain: chainId, address: currentDAO.address }));
-      // } catch (error) {
-      //   console.error(error);
-      //   setPoster(
-      //     buffer.from(currentDAO?.extend?.data).toString() || currentDAO.image,
-      //   );
-      // }
     }
   };
-
-  // const handleCancel = () => {
-  //   setIsModalOpen(false);
-  // };
-
-  // const next = () => {
-  //   router.push('/launch/setting');
-  // };
 
   if (!initialValues) {
     return null;
@@ -472,47 +201,6 @@ const FormGroup: React.FC = () => {
           />
         </Form.Item>
 
-        {/* 
-            <Form.Item
-              label="Name"
-              name="member"
-              labelCol={{ span: 3 }}
-              wrapperCol={{ span: 21 }}
-              rules={[
-                { validator: validateEthAddress },
-                { validator: validateRepeat },
-              ]}
-            >
-              <Space
-                className="input-member"
-                align="baseline"
-                direction="horizontal"
-              >
-                <Input />
-                <Button type="primary" onClick={addMember}>
-                  Add
-                </Button>
-              </Space>
-            </Form.Item>
-
-            <div className="tags">
-              {members.map((item: any) => (
-                <Tag
-                  closable
-                  onClose={(e) => {
-                    e.preventDefault();
-                    removeMember(item.owner);
-                  }}
-                  key={item.owner}
-                  data-value={item.owner}
-                  className="tag"
-                >
-                  {item.owner}
-                </Tag>
-              ))}
-            </div>
-          </div> */}
-
         <Form.Item style={{ marginTop: 100 }}>
           <Button
             className="button-submit"
@@ -525,81 +213,8 @@ const FormGroup: React.FC = () => {
           </Button>
         </Form.Item>
       </Form>
-
-      <style jsx>
-        {`
-          .form-title2 {
-            height: 18px;
-            margin-top: 7px;
-            margin-bottom: 44px;
-            font-size: 12px;
-            font-weight: 400;
-            color: #969ba0;
-            line-height: 18px;
-          }
-
-          .wrap :global(.input) {
-          }
-
-          .upload-desc {
-            height: 21px;
-            font-size: 14px;
-            font-weight: 400;
-            color: #969ba0;
-            line-height: 21px;
-          }
-
-          .tags {
-            height: 300px;
-            overflow-y: auto;
-          }
-
-          .wrap :global(.tag) {
-            display: flex;
-            justify-content: space-between;
-            height: 54px;
-            width: 100%;
-            padding: 0 14px;
-            margin-bottom: 4px;
-            margin-right: 0;
-            font-size: 16px;
-            font-weight: 400;
-            color: #969ba0;
-            line-height: 54px;
-            background: #f9faff;
-            border: none;
-          }
-
-          .wrap :global(.input-member) {
-            width: 100%;
-          }
-
-          .wrap :global(.input-member .ant-space-item:first-child) {
-            flex: 1;
-          }
-
-          .modal-content {
-            padding: 88px 0 77px;
-            text-align: center;
-          }
-
-          .modal-content-text {
-            font-size: 28px;
-            font-weight: 500;
-            color: #3c4369;
-            line-height: 40px;
-          }
-
-          .modal-content :global(.button-done) {
-            width: 169px;
-            height: 54px;
-            margin-top: 58px;
-            font-size: 18px;
-          }
-        `}
-      </style>
     </div>
   );
 };
 
-export default FormGroup;
+export default App;

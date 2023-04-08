@@ -5,7 +5,7 @@ import { Checkbox, Form } from 'antd';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
-import { setUserMembers, setCurrentMember } from '@/store/features/daoSlice';
+import { setCurrentMember } from '@/store/features/daoSlice';
 
 import Modal from '@/components/modal';
 
@@ -53,7 +53,6 @@ const App = (props: any, ref: any) => {
     });
 
     if (members && members.length > 0) {
-      dispatch(setUserMembers(members));
       dispatch(setCurrentMember(members[0]));
     }
   };
@@ -74,11 +73,15 @@ const App = (props: any, ref: any) => {
     const remove: any = [] as number[]; // 删除的权限
 
     values.permissions.forEach((v: any) => {
-      if (!currentMember.permissions.includes(v)) add.push(v);
+      if (!currentMember.permissions.includes(v)) {
+        add.push(v);
+      }
     });
 
     currentMember.permissions.forEach((v: any) => {
-      if (!values.permissions.includes(v)) remove.push(v);
+      if (!values.permissions.includes(v)) {
+        remove.push(v);
+      }
     });
 
     const PermissionMap: { [index: number]: string } = {

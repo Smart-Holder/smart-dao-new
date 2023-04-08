@@ -99,7 +99,7 @@ export async function createDAOVote({
   extra?: any;
 }) {
   const { web3, address } = store.getState().wallet;
-  const { currentDAO, currentMember } = store.getState().dao;
+  const { currentDAO } = store.getState().dao;
   console.log('currentDAO', currentDAO);
 
   const contract = getContract(web3, Vote.abi, currentDAO.root);
@@ -151,7 +151,6 @@ export function setVote({
   proposal_id: any;
   type: string | undefined;
 }) {
-  console.log('-----', vote, proposal_id, type);
   const { web3, address } = store.getState().wallet;
   const { currentDAO, currentMember } = store.getState().dao;
 
@@ -161,8 +160,6 @@ export function setVote({
     proposal_id,
     currentMember.tokenId,
     vote ? Number(currentMember.votes) : -1,
-    // type !== 'normal',
-    // false,
     true,
   ];
 

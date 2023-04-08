@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { disconnect } from './walletSlice';
 
 export interface CommonState {
@@ -8,9 +8,9 @@ export interface CommonState {
   loadingTimer: number | null;
   searchText: string;
 }
+
 const initialState: CommonState = {
   isInit: false,
-  // lang: localStorage.getItem('lang') || 'en',
   lang: '',
   loading: false,
   loadingTimer: null,

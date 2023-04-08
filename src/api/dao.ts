@@ -1,11 +1,21 @@
+import sdk from 'hcstore/sdk';
+
+import Modal from '@/components/modal';
+
+import store from '@/store';
+
+import { waitBlockNumber } from '@/api';
+import { createVote } from '@/api/vote';
+import { isPermission } from '@/api/member';
+
+import { formatToBytes } from '@/utils/extend';
 import { getContract, contractSend } from '@/utils/contract';
+import { getMessage } from '@/utils/language';
+
 import DAO from '@/config/abi/DAO.json';
 import DAOs from '@/config/abi/DAOs.json';
-import store from '@/store';
-import sdk from 'hcstore/sdk';
-import buffer from 'somes/buffer';
-import { waitBlockNumber } from '@/api';
-import { formatToBytes } from '@/utils/extend';
+import { Permissions } from '@/config/enum';
+import { message } from 'antd';
 
 export const createDAO = async (params: any) => {
   const { web3, address, chainId: chain } = store.getState().wallet;
@@ -97,7 +107,7 @@ export const createDAO = async (params: any) => {
   return sdk.utils.methods.getDAO({ chain, address: addr });
 };
 
-export const setInformation = ({
+export const setBasicInformation = ({
   mission = '',
   description = '',
   image = '',
@@ -130,20 +140,20 @@ export const setInformation = ({
   ]);
 };
 
-export function setMissionAndDesc({
+export const setMissionAndDesc = ({
   web3,
   address,
   host,
   mission,
   description,
-}: any) {
+}: any) => {
   const contract = getContract(web3, DAO.abi, host);
 
   return contractSend(contract, address, 'setMissionAndDesc', [
     mission,
     description,
   ]);
-}
+};
 
 export const setImage = ({ image }: { image: string }) => {
   const { web3, address } = store.getState().wallet;
@@ -161,4 +171,55 @@ export const setExtend = (extend: { poster: string }) => {
   const contract = getContract(web3, DAO.abi, currentDAO.host);
 
   return contractSend(contract, address, 'setExtend', [formatToBytes(extend)]);
+};
+
+export const setInformation = async ({
+  mission = '',
+  description = '',
+  image = '',
+  extend = '',
+}: {
+  mission?: string;
+  description?: string;
+  image?: string;
+  extend?: any;
+}) => {
+  const { currentDAO } = store.getState().dao;
+
+  if (await isPermission(Permissions.Action_DAO_Settings)) {
+    await setBasicInformation({ mission, description, image, extend });
+
+    message.success('Success');
+  } else {
+    console.log('no permission');
+
+    await createVote({
+      name: getMessage('proposal.basic.basic'),
+      description: JSON.stringify({
+        type: 'basic',
+        purpose: `${mission ? 'Mission: ' + mission : ''} ${
+          description ? 'Itroduction: ' + description : ''
+        }`,
+      }),
+      extra: [
+        {
+          abi: 'dao',
+          target: currentDAO.address,
+          method: 'setBasicInformation',
+          params: [
+            {
+              mission,
+              description,
+              image,
+              extend: formatToBytes(extend) || '0x0000',
+            },
+          ],
+        },
+      ],
+    });
+
+    Modal.success({
+      title: getMessage('proposal.create.message'),
+    });
+  }
 };

@@ -9,7 +9,7 @@ const { Paragraph } = Typography;
 
 const App = ({ type }: { type?: string }) => {
   const { chainId, address } = useAppSelector((store) => store.wallet);
-  const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
+  const { currentDAO } = useAppSelector((store) => store.dao);
 
   const [dao, setDAO] = useState(currentDAO) as any;
 

@@ -1,18 +1,13 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-// import { increment } from './counterSlice';
-import connector from '@/utils/connect';
-// import { connect as connectMetaMask } from "@/utils/metamask";
-import { connectType } from '@/config/enum';
-import { getCookie, setCookie, clearCookie } from '@/utils/cookie';
-import Web3 from 'web3';
-import { ETH_CHAINS_INFO } from '@/config/chains';
-import { initialize as initApi } from '@/api';
 import router from 'next/router';
-import { formatAddress } from '@/utils';
-import { Modal } from 'antd';
-// import dynamic from 'next/dynamic';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import Web3 from 'web3';
+// import { Modal } from 'antd';
 
-// const connector = dynamic(() => import('@/utils/connect'), { ssr: false });
+import { connectType } from '@/config/enum';
+import { ETH_CHAINS_INFO } from '@/config/chains';
+
+import connector from '@/utils/connect';
+import { setCookie, clearCookie } from '@/utils/cookie';
 
 export interface WalletState {
   web3: any;
@@ -21,42 +16,25 @@ export interface WalletState {
   isSupportChain: boolean;
   chainId: number;
   address: string;
-  addressFormat: string;
-  balance: number;
-  currentChainInfo: any;
 }
+
 const initialState: WalletState = {
   web3: null,
   provider: undefined,
-  connectType: Number(getCookie('connectType')),
-  // connectType: 1,
+  connectType: 0,
   isSupportChain: true,
   chainId: 0,
-  address: getCookie('address'),
-  addressFormat: formatAddress(getCookie('address')),
-  // address: '',
-  balance: 0,
-  currentChainInfo: {},
+  address: '',
 };
 
 export const connectWallet = createAsyncThunk(
   'wallet/connectAsync',
   async (connectType: number, { dispatch }) => {
     const res = await connector(connectType, dispatch);
-    // if (res) {
-    //   const { chainId, address } = res;
-    //   console.log('res', res);
-    //   initApi(address, chainId);
-    //   dispatch("setWallet", { address, chainId, connectType: type });
-    // }
     return { ...res, connectType };
-
-    // thunkApi.dispatch(walletSlice.actions.setConnectType(connectType));
-    // return res;
   },
 );
 
-// 创建一个 Slice
 export const walletSlice = createSlice({
   name: 'wallet',
   initialState,
@@ -74,24 +52,14 @@ export const walletSlice = createSlice({
     },
     setAddress: (state, { payload }) => {
       state.address = payload;
-      state.addressFormat = formatAddress(payload);
     },
     setChainId: (state, { payload }) => {
       state.chainId = payload;
       state.isSupportChain =
         !!payload && Object.keys(ETH_CHAINS_INFO).includes(payload.toString());
-
-      if (state.isSupportChain && payload) {
-        state.currentChainInfo = ETH_CHAINS_INFO[payload];
-      } else {
-        state.currentChainInfo = {};
-      }
     },
     setSupportChain: (state, { payload }) => {
       state.isSupportChain = payload;
-    },
-    setBalance: (state, { payload }) => {
-      state.balance = payload;
     },
     disconnect: (state) => {
       state.provider = undefined;
@@ -99,7 +67,6 @@ export const walletSlice = createSlice({
       state.address = '';
       state.chainId = 0;
       state.isSupportChain = true;
-      state.balance = 0;
       state.web3 = null;
       clearCookie('address');
       clearCookie('chainId');
@@ -114,7 +81,6 @@ export const walletSlice = createSlice({
       state.address = '';
       // state.chainId = 0;
       // state.isSupportChain = true;
-      state.balance = 0;
       state.web3 = null;
       clearCookie('address');
       // clearCookie('chainId');
@@ -131,8 +97,6 @@ export const walletSlice = createSlice({
       .addCase(connectWallet.fulfilled, (state, { payload }) => {
         console.log('connect fulfilled', payload);
         const { provider, chainId, address, connectType: type } = payload;
-
-        // initApi(address, chainId);
 
         const isSupport = Object.keys(ETH_CHAINS_INFO).includes(chainId);
 
@@ -154,32 +118,6 @@ export const walletSlice = createSlice({
         state.chainId = Number(chainId);
         state.isSupportChain = true;
         state.connectType = type;
-
-        // 钱包监听
-        // if (type === connectType.MetaMask) {
-        //   window?.ethereum.on('chainChanged', (res: any) => {
-        //     console.log('-----chain changed-----', res);
-
-        //     clearCookie('address');
-        //     clearCookie('chainId');
-        //     clearCookie('connectType');
-        //     localStorage.removeItem('step');
-        //     localStorage.removeItem('walletconnect');
-        //     sessionStorage.clear();
-        //     router.reload();
-        //   });
-
-        //   window?.ethereum.on('accountsChanged', (res: any) => {
-        //     console.log('-----accounts changed-----', res);
-        //     clearCookie('address');
-        //     clearCookie('chainId');
-        //     clearCookie('connectType');
-        //     localStorage.removeItem('step');
-        //     localStorage.removeItem('walletconnect');
-        //     sessionStorage.clear();
-        //     router.reload();
-        //   });
-        // }
       })
       .addCase(connectWallet.rejected, (state, err) => {
         console.log('connect rejected', err);
@@ -193,7 +131,6 @@ export const {
   setConnectType,
   setAddress,
   setChainId,
-  setBalance,
   disconnect,
   notSupportChain,
   setSupportChain,

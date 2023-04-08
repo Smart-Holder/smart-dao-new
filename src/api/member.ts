@@ -11,7 +11,7 @@ import { message } from 'antd';
 
 export function getMemberId() {
   const { web3, address } = store.getState().wallet;
-  const { currentDAO, currentMember } = store.getState().dao;
+  const { currentDAO } = store.getState().dao;
 
   console.log('currentDAO', currentDAO);
 

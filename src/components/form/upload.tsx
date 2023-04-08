@@ -9,7 +9,7 @@ import { validateImage } from '@/utils/image';
 import { request } from '@/api';
 
 const App = (props: any) => {
-  const { value, type, onChange, ...rest } = props;
+  const { value, type, ...rest } = props;
 
   const { formatMessage } = useIntl();
 

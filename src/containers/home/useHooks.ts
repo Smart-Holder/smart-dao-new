@@ -7,16 +7,14 @@ import { useIntl } from 'react-intl';
 export const useJoin = (
   votePool: string,
   member: string,
-  address: string,
-  isJoin: boolean,
-  isMember: boolean,
+  isMember: boolean | undefined,
 ) => {
   const { formatMessage } = useIntl();
-  const [join, setJoin_] = useState(isJoin || isMember);
+  const [join, setJoin_] = useState(isMember);
   const [loading, setLoading] = useState(false);
 
   const setJoin = async () => {
-    if (isJoin || isMember) {
+    if (isMember) {
       return;
     }
 

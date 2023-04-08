@@ -1,4 +1,9 @@
-import React, { useState, useImperativeHandle, forwardRef } from 'react';
+import React, {
+  useState,
+  useImperativeHandle,
+  forwardRef,
+  useEffect,
+} from 'react';
 import { useRouter } from 'next/router';
 import { Avatar, Col, Row } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
@@ -10,6 +15,8 @@ import { setCurrentMember } from '@/store/features/daoSlice';
 
 import { formatAddress } from '@/utils';
 import { useIntl } from 'react-intl';
+import { request } from '@/api';
+import { Member } from '@/config/define';
 
 // const validateMessages = {
 //   required: '${label} is required!',
@@ -24,10 +31,24 @@ const RoleModal = (props: any, ref: any) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const { userInfo } = useAppSelector((store) => store.user);
-  const { userMembers } = useAppSelector((store) => store.dao);
+  const { currentDAO } = useAppSelector((store) => store.dao);
+  const { chainId, address } = useAppSelector((store) => store.wallet);
 
-  const [image, setImage] = useState();
+  const [members, setMembers] = useState<Member[]>([]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const members = await request({
+        name: 'utils',
+        method: 'getMembersFrom',
+        params: { chain: chainId, host: currentDAO.host, owner: address },
+      });
+
+      setMembers(members || []);
+    };
+
+    getData();
+  }, [chainId, currentDAO.host, address]);
 
   useImperativeHandle(ref, () => ({
     show: () => {
@@ -48,11 +69,10 @@ const RoleModal = (props: any, ref: any) => {
     <Modal type="normal" open={isModalOpen} onCancel={handleCancel}>
       <div className="content">
         <div className="h1">{formatMessage({ id: 'home.selectIdentity' })}</div>
-        {/* <div className="h2">Create your own DAO</div> */}
 
-        {userMembers.length < 3 ? (
+        {members.length < 3 ? (
           <div className="roles">
-            {userMembers.map((item) => (
+            {members.map((item) => (
               <div className="role-item role-item-s" key={item.id}>
                 {item.image ? (
                   <Avatar
@@ -75,7 +95,7 @@ const RoleModal = (props: any, ref: any) => {
           </div>
         ) : (
           <Row gutter={[30, 30]} style={{ marginTop: 50 }}>
-            {userMembers.map((item) => (
+            {members.map((item) => (
               <Col span={8} key={item.id}>
                 <div className="role-item">
                   {item.image ? (

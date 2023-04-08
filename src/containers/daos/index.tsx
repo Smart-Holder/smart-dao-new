@@ -1,30 +1,28 @@
 import { useEffect, useRef, useState } from 'react';
-import sdk from 'hcstore/sdk';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { useIntl } from 'react-intl';
+import { Skeleton, Empty, Row, Col } from 'antd';
 
 import Item from '@/containers/home/daoItem';
 
-import { useAppSelector, useAppDispatch } from '@/store/hooks';
+import { useAppSelector } from '@/store/hooks';
 
-import { Skeleton, Empty, Row, Col } from 'antd';
+import { DAOExtend } from '@/config/define_ext';
+import { request } from '@/api';
 
 const App = () => {
-  const { formatMessage } = useIntl();
-  const dispatch = useAppDispatch();
-
-  const { searchText, isInit } = useAppSelector((store) => store.common);
+  const { searchText } = useAppSelector((store) => store.common);
   const { chainId, address, isSupportChain } = useAppSelector(
     (store) => store.wallet,
   );
 
   const pageSize = useRef(10);
-  const [width, setWidth] = useState('');
-  const [DAOList, setDAOList] = useState<any>([]);
   const [pageStart, setPageStart] = useState(0);
   const [total, setTotal] = useState(0);
+  const [data, setData] = useState<DAOExtend[]>([]);
   const [loading, setLoading] = useState(false);
   const [init, setInit] = useState(false);
+
+  const [myDAOList, setMyDAOList] = useState<DAOExtend[]>([]);
 
   const defaultChain = Number(process.env.NEXT_PUBLIC_DEFAULT_CHAIN);
 
@@ -34,17 +32,25 @@ const App = () => {
     }
 
     setLoading(true);
-    const res = await sdk.dao.methods.getAllDAOs({
-      chain: chainId || defaultChain,
-      name: searchText,
-      limit: [pageStart, pageSize.current],
-      orderBy: 'time desc',
+
+    const res = (await request({
+      method: 'getAllDAOs',
+      name: 'dao',
+      params: {
+        chain: chainId || defaultChain,
+        name: searchText,
+        limit: [pageStart, pageSize.current],
+        orderBy: 'time desc',
+      },
+    })) as DAOExtend[];
+
+    (res || []).forEach((item) => {
+      item.isMember =
+        item.isMember || myDAOList.some((el) => el.host === item.host);
     });
 
-    const nextList = [...DAOList, ...res];
-
     setPageStart(pageStart + pageSize.current);
-    setDAOList(nextList);
+    setData([...data, ...res]);
     setLoading(false);
   };
 
@@ -54,28 +60,49 @@ const App = () => {
     }
 
     setLoading(true);
-    const t = await sdk.dao.methods.getAllDAOsTotal({
-      chain: chainId || defaultChain,
-      name: searchText,
+
+    const t = await request({
+      method: 'getAllDAOsTotal',
+      name: 'dao',
+      params: { chain: chainId || defaultChain, name: searchText },
     });
 
     setTotal(t);
 
-    const list = await sdk.dao.methods.getAllDAOs({
-      chain: chainId || defaultChain,
-      name: searchText,
-      limit: [0, pageSize.current],
-      orderBy: 'time desc',
-    });
+    const list = (await request({
+      method: 'getAllDAOs',
+      name: 'dao',
+      params: {
+        chain: chainId || defaultChain,
+        name: searchText,
+        limit: [0, pageSize.current],
+        orderBy: 'time desc',
+      },
+    })) as DAOExtend[];
+
+    if (chainId && address) {
+      const myDAOList = (await request({
+        method: 'getDAOsFromOwner',
+        name: 'utils',
+        params: { chain: chainId, owner: address },
+      })) as DAOExtend[];
+
+      setMyDAOList(myDAOList || []);
+
+      (list || []).forEach((item) => {
+        item.isMember =
+          item.isMember || myDAOList.some((el) => el.host === item.host);
+      });
+    }
 
     setPageStart(pageSize.current);
-    setDAOList(list);
+    setData(list);
     setLoading(false);
     setInit(true);
   };
 
   useEffect(() => {
-    setDAOList([]);
+    setData([]);
     setTotal(0);
     resetData();
   }, [searchText, address, chainId]);
@@ -85,9 +112,9 @@ const App = () => {
       <div className="h1">DAOs</div>
 
       <InfiniteScroll
-        dataLength={DAOList.length}
+        dataLength={data.length}
         next={getData}
-        hasMore={DAOList.length < total}
+        hasMore={data.length < total}
         loader={
           <Skeleton style={{ marginTop: 20 }} paragraph={{ rows: 1 }} active />
         }
@@ -100,13 +127,13 @@ const App = () => {
       >
         <div style={{ overflow: 'hidden' }}>
           <Row gutter={[16, 16]}>
-            {DAOList.map((item: any) => (
+            {data.map((item: any) => (
               <Col xs={24} sm={24} lg={12} key={item.id}>
                 <Item data={item} />
               </Col>
             ))}
 
-            {DAOList.length === 0 && !loading && init && (
+            {data.length === 0 && !loading && init && (
               <div className="empty">
                 <Empty />
               </div>
@@ -114,12 +141,6 @@ const App = () => {
           </Row>
         </div>
       </InfiniteScroll>
-
-      {/* <Space size={[15, 59]} wrap>
-        {DAOList.map((item: any) => (
-          <Item data={item} key={item.id} />
-        ))}
-      </Space> */}
 
       <style jsx>
         {`

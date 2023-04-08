@@ -1,24 +1,31 @@
 import { useState } from 'react';
-import { Input, Button, Col, Row } from 'antd';
+import { Button } from 'antd';
 import { ExclamationOutlined } from '@ant-design/icons';
+import { useRouter } from 'next/router';
 
 import Tax from './tax';
 import Vote from './vote';
 import Executor from './executor';
-import Slider from '@/components/slider';
 import Footer from '@/containers/launch/steps/footer';
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { prevStep } from '@/store/features/daoSlice';
+import {
+  prevStep,
+  setCurrentDAO,
+  setDAOType,
+  setStep,
+} from '@/store/features/daoSlice';
 
-import { getMakeDAOStorage } from '@/utils/launch';
-import { deployAssetSalesDAO } from '@/store/features/daoSlice';
+import { clearMakeDAOStorage, getMakeDAOStorage } from '@/utils/launch';
 import { useIntl } from 'react-intl';
 
 import Modal from '@/components/modal';
+import { createDAO } from '@/api/dao';
+import { DAOType } from '@/config/enum';
 
 const App = () => {
   const { formatMessage } = useIntl();
+  const router = useRouter();
   const dispatch = useAppDispatch();
 
   const storageValues = getMakeDAOStorage() || {};
@@ -28,8 +35,9 @@ const App = () => {
   const [executorFinish, setExecutorFinish] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   // const [loading, setLoading] = useState(false);
-  const { web3 } = useAppSelector((store) => store.wallet);
+
   const { loading } = useAppSelector((store) => store.common);
+  const { chainId } = useAppSelector((store) => store.wallet);
 
   const prev = () => {
     dispatch(prevStep());
@@ -43,16 +51,6 @@ const App = () => {
     setIsModalOpen(true);
   };
 
-  const getParams = () => {
-    return {
-      web3,
-      ...start,
-      ...tax,
-      ...vote,
-      executor: executor.executor,
-    };
-  };
-
   const onExecutorFinish = (isFinish: boolean) => {
     setExecutorFinish(isFinish);
   };
@@ -61,10 +59,25 @@ const App = () => {
     setIsModalOpen(false);
   };
 
-  const handleSubmit = () => {
-    console.log('params', getParams());
-    dispatch(deployAssetSalesDAO(getParams()));
-    // setIsModalOpen(false);
+  const handleSubmit = async () => {
+    const params = {
+      ...start,
+      ...tax,
+      ...vote,
+      executor: executor.executor,
+    };
+
+    console.log('params', params);
+
+    // dispatch(deployAssetSalesDAO(getParams()));
+    const res = await createDAO(params);
+
+    clearMakeDAOStorage();
+    dispatch(setCurrentDAO(res));
+    dispatch(setStep(0));
+    dispatch(setDAOType(DAOType.Join));
+
+    router.push('/dashboard/mine/home');
   };
 
   return (

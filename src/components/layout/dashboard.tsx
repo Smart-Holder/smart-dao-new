@@ -14,7 +14,6 @@ import {
   setCurrentDAO,
   setCurrentMember,
   setDAOType,
-  setUserMembers,
 } from '@/store/features/daoSlice';
 import { useRouter } from 'next/router';
 import { request } from '@/api';
@@ -35,9 +34,7 @@ export default function BasicLayout({
   const { address, chainId, isSupportChain } = useAppSelector(
     (store) => store.wallet,
   );
-  const { currentDAO, currentMember, daoType } = useAppSelector(
-    (store) => store.dao,
-  );
+  const { currentDAO, daoType } = useAppSelector((store) => store.dao);
   const router = useRouter();
   const [init, setInit] = useState(false);
 
@@ -65,11 +62,9 @@ export default function BasicLayout({
         });
 
         if (members && members.length > 0) {
-          dispatch(setUserMembers(members));
           dispatch(setCurrentMember(members[0]));
         }
       } else {
-        dispatch(setUserMembers([]));
         dispatch(setCurrentMember({}));
       }
 
@@ -114,10 +109,8 @@ export default function BasicLayout({
       });
 
       if (members && members.length > 0) {
-        dispatch(setUserMembers(members));
         dispatch(setCurrentMember(members[0]));
       } else {
-        dispatch(setUserMembers([]));
         dispatch(setCurrentMember({ name: '' }));
       }
     };
@@ -141,10 +134,8 @@ export default function BasicLayout({
   //     });
 
   //     if (members && members.length > 0) {
-  //       dispatch(setUserMembers(members));
   //       dispatch(setCurrentMember(members[0]));
   //     } else {
-  //       dispatch(setUserMembers([]));
   //       dispatch(setCurrentMember({ name: '' }));
   //     }
   //   };
@@ -158,12 +149,6 @@ export default function BasicLayout({
   //   console.log('????');
   //   dispatch(setSearchText(''));
   // }, [router]);
-
-  // useEffect(() => {
-  //   if (currentMember) {
-
-  //   }
-  // }, [currentMember]);
 
   if (!init) {
     return null;

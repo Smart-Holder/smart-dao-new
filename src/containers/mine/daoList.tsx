@@ -1,45 +1,39 @@
 import { useEffect, useState } from 'react';
-import { Space, Button, Divider, Skeleton, Empty, Row, Col } from 'antd';
-import sdk from 'hcstore/sdk';
+import { Space, Button, Skeleton, Empty, Row, Col } from 'antd';
 import { useIntl } from 'react-intl';
 
-import { useAppSelector, useAppDispatch } from '@/store/hooks';
+import { useAppSelector } from '@/store/hooks';
 
 import Item from '@/containers/home/daoItem';
 import ItemCache from '@/containers/mine/daoItemCache';
 
-// import { getCookie } from '@/utils/cookie';
 import { getMakeDAOStorage } from '@/utils/launch';
 import { request } from '@/api';
 import { DAOType } from '@/config/enum';
-import { setDAOList } from '@/store/features/daoSlice';
+import { DAOExtend } from '@/config/define_ext';
 
 type Active = 'create' | DAOType.Join | DAOType.Follow;
 
-export default function List() {
+const App = () => {
   const { formatMessage } = useIntl();
-  const dispatch = useAppDispatch();
-
-  // const chainId = Number(getCookie('chainId'));
-  // const address = getCookie('address');
 
   const { address, chainId } = useAppSelector((store) => store.wallet);
 
-  // const { isInit } = useAppSelector((store) => store.common);
-  const [active, setActive] = useState<Active>('create'); // create, join, follow
-
-  const [createDAOs, setCreateDAOs] = useState([]);
-  const [followDAOs, setFollowDAOs] = useState([]);
-  const [joinDAOs, setJoinDAOs] = useState([]);
-
-  const [list, setList] = useState(null) as any;
+  const [active, setActive] = useState<Active>('create');
   const [loading, setLoading] = useState(false);
+
+  const [createDAOs, setCreateDAOs] = useState<DAOExtend[]>([]);
+  const [followDAOs, setFollowDAOs] = useState<DAOExtend[]>([]);
+  const [joinDAOs, setJoinDAOs] = useState<DAOExtend[]>([]);
+
+  const [list, setList] = useState<DAOExtend[]>([]);
 
   const cacheDAO = getMakeDAOStorage('start');
 
   useEffect(() => {
-    const getDAOList = async () => {
+    const getData = async () => {
       setLoading(true);
+
       const [res1, res2, res3] = await Promise.all([
         request({
           name: 'dao',
@@ -62,8 +56,6 @@ export default function List() {
       setJoinDAOs(res2);
       setFollowDAOs(res3);
 
-      dispatch(setDAOList(res2));
-
       setList(
         active === 'create' ? res1 : active === DAOType.Join ? res2 : res3,
       );
@@ -72,23 +64,38 @@ export default function List() {
     };
 
     if (address && chainId) {
-      getDAOList();
+      getData();
     }
   }, [address, chainId]);
 
   const handleClick1 = () => {
+    setLoading(true);
     setActive('create');
-    setList(createDAOs);
+
+    setTimeout(() => {
+      setList(createDAOs);
+      setLoading(false);
+    }, 300);
   };
 
   const handleClick2 = () => {
+    setLoading(true);
     setActive(DAOType.Join);
-    setList(joinDAOs);
+
+    setTimeout(() => {
+      setList(joinDAOs);
+      setLoading(false);
+    }, 300);
   };
 
   const handleClick3 = () => {
+    setLoading(true);
     setActive(DAOType.Follow);
-    setList(followDAOs);
+
+    setTimeout(() => {
+      setList(followDAOs);
+      setLoading(false);
+    }, 300);
   };
 
   return (
@@ -120,13 +127,13 @@ export default function List() {
       <div className="dao-list">
         {loading && <Skeleton active />}
 
-        {!loading && list && list.length === 0 && <Empty />}
+        {!loading && list.length === 0 && <Empty />}
 
-        {!loading && list && list.length > 0 && (
+        {!loading && list.length > 0 && (
           <Row gutter={[16, 16]}>
             {(active === 'create' || active === DAOType.Join) && cacheDAO && (
               <Col xs={24} sm={24} lg={12}>
-                <ItemCache data={cacheDAO} daoType={DAOType.Cache} />
+                <ItemCache data={cacheDAO} daoType={DAOType.Cache} readOnly />
               </Col>
             )}
             {list.map((item: any) => (
@@ -146,12 +153,6 @@ export default function List() {
         {`
           .dao-list-wrap {
             margin-top: 9px;
-          }
-
-          .dao-list-wrap :global(.divider) {
-            height: 22px;
-            border-width: 2px;
-            border-color: #000;
           }
 
           .dao-list-wrap :global(.button-tab) {
@@ -176,4 +177,6 @@ export default function List() {
       </style>
     </div>
   );
-}
+};
+
+export default App;

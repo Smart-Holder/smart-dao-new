@@ -2,8 +2,6 @@ import { Skeleton, Col, Empty, Row } from 'antd';
 import dayjs from 'dayjs';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { useIntl } from 'react-intl';
-import { useRouter } from 'next/router';
 
 import { useEffect, useRef, useState } from 'react';
 
@@ -15,11 +13,8 @@ import NFT from '@/containers/dashboard/mine/nft';
 dayjs.extend(customParseFormat);
 
 const App = () => {
-  const { formatMessage } = useIntl();
-  const router = useRouter();
   const { loading, searchText } = useAppSelector((store) => store.common);
-  const { currentDAO } = useAppSelector((store) => store.dao);
-  const { chainId, address } = useAppSelector((store) => store.wallet);
+  const { chainId } = useAppSelector((store) => store.wallet);
 
   const pageSize = useRef(20);
   const [pageStart, setPageStart] = useState(0);

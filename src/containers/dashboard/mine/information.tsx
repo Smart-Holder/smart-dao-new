@@ -1,17 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Button, Input, Space, Image, Row, Col, message } from 'antd';
+import { Button, Input, Row, Col, message } from 'antd';
 import { Checkbox, Form } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
 import { useIntl } from 'react-intl';
 
 import { useAppSelector } from '@/store/hooks';
 
-import { getCookie } from '@/utils/cookie';
-import { validateImage } from '@/utils/image';
 import { validateChinese } from '@/utils/validator';
 
 import type { UploadChangeParam } from 'antd/es/upload';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
 import type { CheckboxValueType } from 'antd/es/checkbox/Group';
 import { isRepeate } from '@/utils';
 import { Permissions } from '@/config/enum';
@@ -186,7 +183,7 @@ const App = () => {
           <Upload value={image} onChange={onImageChange} />
         </Form.Item>
 
-        <Form.Item style={{ marginTop: 50 }}>
+        <Form.Item style={{ marginTop: 50 }} wrapperCol={{ span: 24 }}>
           <Button
             className="button-submit"
             type="primary"
