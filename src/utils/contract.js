@@ -69,9 +69,7 @@ export async function contractSend(
     //   msg_0 = `Caller does not have permission`;
     // }
 
-    const msg = getContractMessage(error, method);
-    console.error(msg);
-    message.error(msg);
+    getContractMessage(error, method);
     closeLoading();
     throw error;
   }
@@ -96,9 +94,7 @@ export async function contractSend(
         // message.error(
         //   error?.message || `send contract method error, ${method}`,
         // );
-        const msg = getContractMessage(error, method);
-        console.error(msg);
-        message.error(msg);
+        getContractMessage(error, method);
         closeLoading();
         reject(error);
       });

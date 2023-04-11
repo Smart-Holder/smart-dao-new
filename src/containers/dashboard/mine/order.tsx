@@ -69,14 +69,14 @@ const App = () => {
   const { loading, searchText } = useAppSelector((store) => store.common);
 
   const pageSize = 10;
-  const [values, setValues] = useState({});
+  const [values, setValues] = useState({ toAddress: address, fromAddres: '' });
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [data, setData] = useState([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [amount, setAmount] = useState({ total: 0, amount: '0' });
+  const [amount, setAmount] = useState({ total: 0, amount: 0 });
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -90,7 +90,6 @@ const App = () => {
       params: {
         chain: chainId,
         host: currentDAO.host,
-        tokenId: currentMember.tokenId,
         limit: [(page - 1) * pageSize, pageSize],
         name: searchText,
         // toAddress: address,
@@ -123,6 +122,21 @@ const App = () => {
     let [[key, value]]: any = Object.entries(changedValues);
     const nextValues: any = { ...values };
 
+    if (key === 'type') {
+      delete nextValues.toAddress;
+      delete nextValues.fromAddres;
+
+      if (value === 'buyer') {
+        nextValues.toAddress = address;
+      } else if (value === 'seller') {
+        nextValues.fromAddres = address;
+      }
+
+      setValues(nextValues);
+      console.log('values', nextValues);
+      return;
+    }
+
     if (!value) {
       delete nextValues[key];
     } else {
@@ -142,15 +156,34 @@ const App = () => {
 
   useEffect(() => {
     const getAmount = async () => {
-      const res = await request({
-        name: 'utils',
-        method: 'getOrderTotalAmount',
-        params: { chain: chainId, host: currentDAO.host },
-      });
+      const [res1, res2] = await Promise.all([
+        request({
+          name: 'utils',
+          method: 'getOrderTotalAmount',
+          params: {
+            chain: chainId,
+            fromAddres: address,
+            host: currentDAO.host,
+          },
+        }),
+        request({
+          name: 'utils',
+          method: 'getOrderTotalAmount',
+          params: {
+            chain: chainId,
+            toAddress: address,
+            host: currentDAO.host,
+          },
+        }),
+      ]);
 
-      console.log('amount', res);
-      if (res) {
-        setAmount(res);
+      console.log('amount', res1, res2);
+
+      if (res1 || res2) {
+        setAmount({
+          total: Number(res1?.total || 0) + Number(res2?.total || 0),
+          amount: fromToken(res1?.amount || 0) + fromToken(res2?.amount || 0),
+        });
       }
     };
 
@@ -189,7 +222,8 @@ const App = () => {
               label: formatMessage({
                 id: 'my.order.amount',
               }),
-              value: fromToken(amount.amount || 0) + ' ETH',
+              // value: fromToken(amount.amount || 0) + ' ETH',
+              value: amount.amount + ' ETH',
             },
           ]}
         />
@@ -201,6 +235,7 @@ const App = () => {
             name="filter"
             layout="inline"
             onValuesChange={onValuesChange}
+            initialValues={{ type: 'buyer' }}
             autoComplete="off"
             labelAlign="left"
             requiredMark={false}
@@ -223,6 +258,22 @@ const App = () => {
                     label: formatMessage({
                       id: 'my.order.sort.amount',
                     }),
+                  },
+                ]}
+              />
+            </Form.Item>
+            <Form.Item name="type">
+              <Select
+                style={{ width: 200 }}
+                placeholder="Buyer"
+                options={[
+                  {
+                    value: 'buyer',
+                    label: 'Buyer',
+                  },
+                  {
+                    value: 'seller',
+                    label: 'Seller',
                   },
                 ]}
               />

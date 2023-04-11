@@ -138,7 +138,7 @@ const VoteModal: FC<VoteModalProps> = (props) => {
           <div className="owner">
             <div className="address">
               {/* {formatAddress(data.origin)} */}
-              <EllipsisMiddle style={{ width: 110 }} suffixCount={4} copyable>
+              <EllipsisMiddle prefixCount={6} suffixCount={6} copyable>
                 {data.origin}
               </EllipsisMiddle>
             </div>
@@ -158,7 +158,7 @@ const VoteModal: FC<VoteModalProps> = (props) => {
                   </span>
                   <span className="value">
                     {/* {formatAddress(data.extra.executor)} */}
-                    <EllipsisMiddle suffixCount={5} copyable>
+                    <EllipsisMiddle prefixCount={6} suffixCount={6} copyable>
                       {data.extra.executor}
                     </EllipsisMiddle>
                   </span>

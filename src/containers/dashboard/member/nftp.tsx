@@ -48,7 +48,7 @@ const App = () => {
       key: 'owner',
       render: (text: string) => {
         return (
-          <EllipsisMiddle style={{ width: 100 }} suffixCount={4} copyable>
+          <EllipsisMiddle prefixCount={6} suffixCount={6} copyable>
             {text}
           </EllipsisMiddle>
         );

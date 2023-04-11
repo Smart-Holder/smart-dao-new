@@ -5,18 +5,32 @@ import { CopyOutlined } from '@ant-design/icons';
 const { Text } = Typography;
 
 const EllipsisMiddle: React.FC<{
+  prefixCount?: number;
   suffixCount: number;
   children: string;
   className?: string;
   copyable?: boolean;
   style?: CSSProperties;
   onClick?: (text: string) => void;
-}> = ({ suffixCount, children, style, className = '', copyable, onClick }) => {
+}> = ({
+  prefixCount = 0,
+  suffixCount,
+  children,
+  style,
+  className = '',
+  copyable,
+  onClick,
+}) => {
   if (!children) {
     return null;
   }
 
-  const start = children.slice(0, children.length - suffixCount).trim();
+  let start = children.slice(0, children.length - suffixCount).trim();
+
+  if (prefixCount) {
+    start = children.slice(0, prefixCount) + '...';
+  }
+
   const suffix = children.slice(-suffixCount).trim();
 
   const onTextClick = () => {

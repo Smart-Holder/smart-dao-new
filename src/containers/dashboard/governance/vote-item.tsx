@@ -117,7 +117,7 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
         <div>
           <div className="item-owner-address">
             {/* {formatAddress(data.origin)} */}
-            <EllipsisMiddle style={{ width: 110 }} suffixCount={4} copyable>
+            <EllipsisMiddle prefixCount={6} suffixCount={6} copyable>
               {data.origin}
             </EllipsisMiddle>
           </div>
