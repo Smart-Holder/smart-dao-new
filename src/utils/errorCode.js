@@ -1,3 +1,5 @@
+import { message } from 'antd';
+
 export const errorCode = {
   100307: 'Name already exists, please try again',
   100311: 'Upload error',
@@ -64,15 +66,35 @@ export const errorCode = {
 
 export const getContractMessage = (error, method) => {
   console.error('error', error);
-  const defaultMessage = `call contract method error, ${method}`;
+
+  // 用户取消操作
+  if (error?.code === 4001) {
+    return '';
+  }
+
+  // const defaultMessage = `call contract method error, ${method}`;
+  const defaultMessage = `Call contract method error`;
 
   try {
-    const errorObj = JSON.parse(error.message.split('\n').slice(1).join(''));
-    const data = errorObj?.originalError?.data;
-    const code = data?.slice(0, 10);
-    return errorCode[code] || defaultMessage;
+    let msg = '';
+
+    if (error?.message.includes('{')) {
+      const errorObj = JSON.parse(error.message.split('\n').slice(1).join(''));
+      const data = errorObj?.originalError?.data;
+      const code = data?.slice(0, 10);
+      msg = code ? errorCode[code] : defaultMessage;
+    } else {
+      msg = error?.message || defaultMessage;
+    }
+
+    msg = msg.slice(0, 1).toUpperCase() + msg.slice(1);
+
+    console.error(msg);
+    message.error(msg);
+    return msg;
   } catch (error) {
     console.error(error);
+    message.error(defaultMessage);
     return defaultMessage;
   }
 };

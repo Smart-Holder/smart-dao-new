@@ -125,7 +125,7 @@ export const setBasicInformation = ({
     mission,
     description,
     image,
-    extend: formatToBytes(extend),
+    extend: extend ? formatToBytes(extend) : '0x0000',
   });
 
   const contract = getContract(web3, DAO.abi, currentDAO.host);
@@ -135,7 +135,7 @@ export const setBasicInformation = ({
       mission,
       description,
       image,
-      extend: formatToBytes(extend),
+      extend: extend ? formatToBytes(extend) : '0x0000',
     },
   ]);
 };

@@ -62,9 +62,7 @@ export async function createVote({
       );
     }
   } catch (error) {
-    const msg = getContractMessage(error);
-    message.error(msg);
-    console.error(msg);
+    getContractMessage(error);
     throw error;
   }
 
