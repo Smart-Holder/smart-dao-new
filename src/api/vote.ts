@@ -53,7 +53,7 @@ export async function createVote({
       const C = abiList[abi];
       const contract = getContract(web3, C.abi, target);
       somes.assert(C, '#vote.createVote, no match abi');
-      await await contract.methods[method](...params).call({ from: address }); // try call
+      await contract.methods[method](...params).call({ from: currentDAO.root }); // try call
       data.push(
         web3.eth.abi.encodeFunctionCall(
           C.abi.find((e: any) => e.name == method),
