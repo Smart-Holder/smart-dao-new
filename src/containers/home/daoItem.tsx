@@ -14,6 +14,7 @@ import { UserOutlined } from '@ant-design/icons';
 
 import { DAOType } from '@/config/enum';
 import { DAOExtend } from '@/config/define_ext';
+import { formatToObj } from '@/utils/extend';
 
 const { Paragraph } = Typography;
 
@@ -56,6 +57,8 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
   if (members.length === 0) {
     members = new Array(data.members || 1).fill('');
   }
+
+  const extend = formatToObj(data?.extend?.data);
 
   const handleClick = (e: MouseEvent) => {
     if (!isInit) {
@@ -228,7 +231,7 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
 
             background: url('/images/home/img_home_card_dao_gradient@2x.png')
                 no-repeat center,
-              url(${data.image || fallback}) no-repeat center;
+              url(${extend?.poster || data.image || fallback}) no-repeat center;
             background-size: cover;
             border-radius: 16px;
 

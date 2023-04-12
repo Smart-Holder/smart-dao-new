@@ -1,5 +1,5 @@
 import { ExclamationOutlined } from '@ant-design/icons';
-import { Button, Image, Modal, ModalProps } from 'antd';
+import { Button, Image, Modal, ModalProps, ModalFuncProps } from 'antd';
 
 type Props = {
   type?: 'normal' | 'form';
@@ -28,7 +28,7 @@ const App = ({ type, className, children, ...rest }: Props) => {
   );
 };
 
-App.success = ({ title, ...rest }: ModalProps) => {
+App.success = ({ title, ...rest }: ModalFuncProps) => {
   Modal.success({
     className: 'modal',
     width: 560,
@@ -57,7 +57,7 @@ App.success = ({ title, ...rest }: ModalProps) => {
     ...rest,
   });
 };
-App.warning = ({ title, ...rest }: ModalProps) => {
+App.warning = ({ title, ...rest }: ModalFuncProps) => {
   Modal.warning({
     className: 'modal',
     width: 560,

@@ -8,6 +8,8 @@ import { rng } from 'somes/rng';
 import store from '@/store';
 import somes from 'somes';
 import { message } from 'antd';
+import Modal from '@/components/modal';
+import { getMessage } from '@/utils/language';
 
 import { getContractMessage } from '@/utils/errorCode';
 
@@ -42,48 +44,68 @@ export async function createVote({
     params: any[];
   }[];
 }) {
-  const { web3, address } = store.getState().wallet;
-  const { currentDAO, currentMember } = store.getState().dao;
-  const contract = getContract(web3, Vote.abi, currentDAO.root);
-  const lifespan = await contract.methods.lifespan().call();
-  const data = [] as string[];
+  return new Promise((resolve, reject) => {
+    Modal.warning({
+      title: getMessage('proposal.message.noPermission'),
+      onOk: async (close) => {
+        close();
 
-  try {
-    for (let { abi, target, method, params } of extra) {
-      const C = abiList[abi];
-      const contract = getContract(web3, C.abi, target);
-      somes.assert(C, '#vote.createVote, no match abi');
-      await contract.methods[method](...params).call({ from: currentDAO.root }); // try call
-      data.push(
-        web3.eth.abi.encodeFunctionCall(
-          C.abi.find((e: any) => e.name == method),
-          params,
-        ),
-      );
-    }
-  } catch (error) {
-    getContractMessage(error);
-    throw error;
-  }
+        const { web3, address } = store.getState().wallet;
+        const { currentDAO, currentMember } = store.getState().dao;
+        const contract = getContract(web3, Vote.abi, currentDAO.root);
+        const lifespan = await contract.methods.lifespan().call();
+        const data = [] as string[];
 
-  const params = [
-    '0x' + rng(32).toString('hex'),
-    extra.map((e) => e.target),
-    Math.max(currentDAO.defaultVoteTime || 0, lifespan), //604800,
-    5001,
-    0,
-    0,
-    name,
-    description,
-    currentMember.tokenId || 0,
-    data,
-  ];
+        try {
+          for (let { abi, target, method, params } of extra) {
+            const C = abiList[abi];
+            const contract = getContract(web3, C.abi, target);
+            somes.assert(C, '#vote.createVote, no match abi');
+            await contract.methods[method](...params).call({
+              from: currentDAO.root,
+            }); // try call
+            data.push(
+              web3.eth.abi.encodeFunctionCall(
+                C.abi.find((e: any) => e.name == method),
+                params,
+              ),
+            );
+          }
+        } catch (error) {
+          getContractMessage(error);
+          throw error;
+        }
 
-  console.log('-----description------', JSON.parse(description));
-  console.log('------extra-----', extra);
-  console.log('-----params------', params);
+        const params = [
+          '0x' + rng(32).toString('hex'),
+          extra.map((e) => e.target),
+          Math.max(currentDAO.defaultVoteTime || 0, lifespan), //604800,
+          5001,
+          0,
+          0,
+          name,
+          description,
+          currentMember.tokenId || 0,
+          data,
+        ];
 
-  return contractSend(contract, address, 'create2', params);
+        console.log('-----description------', JSON.parse(description));
+        console.log('------extra-----', extra);
+        console.log('-----params------', params);
+
+        try {
+          const res = await contractSend(contract, address, 'create2', params);
+
+          resolve(res);
+        } catch (error) {
+          reject(error);
+        }
+      },
+      onCancel: () => {
+        reject('cancel');
+      },
+    });
+  });
 }
 
 // 首页加入DAO，创建提案

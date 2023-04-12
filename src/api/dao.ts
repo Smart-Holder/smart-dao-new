@@ -53,8 +53,8 @@ export const createDAO = async (params: any) => {
       image,
       extend: formatToBytes(extend),
     },
-    // address,
-    '0x0000000000000000000000000000000000000000',
+    address,
+    // '0x0000000000000000000000000000000000000000',
     {
       // InitMemberArgs
       name: memberBaseName,

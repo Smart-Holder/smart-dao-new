@@ -233,3 +233,7 @@ export const copyToClipboard = (text) => {
     document.body.removeChild(input);
   }
 };
+
+export const vw = (pixels = 0) => {
+  return pixels === 0 ? '0' : ((pixels / 375) * 100).toFixed(5) + 'vw';
+};

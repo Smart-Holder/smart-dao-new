@@ -437,6 +437,7 @@
   "member.nftp.submit": "Add and generate proposals",
   "member.nftp.date": "Date of accession",
 
+  "proposal.message.noPermission": "是否需要创建投票提案?",
   "proposal.create.message": "需要投票后才可以生效",
   "proposal.basic.rights": "NFTP rights",
   "proposal.basic.addNFTP": "Add NFTP",
