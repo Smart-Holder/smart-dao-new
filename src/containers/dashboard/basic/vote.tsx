@@ -74,7 +74,7 @@ const App = () => {
             style={{ marginTop: 40 }}
             value={value}
             label={formatMessage({ id: 'basic.vote.period' })}
-            unit="hr"
+            unit="h"
             min={min}
             max={720}
             readOnly

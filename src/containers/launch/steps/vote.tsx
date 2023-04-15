@@ -95,7 +95,7 @@ const App = ({ type }: { type?: string }) => {
             <Slider
               label={formatMessage({ id: 'launch.vote.period' })}
               value={hours}
-              unit="hr"
+              unit="h"
               min={min}
               max={720}
               onChange={onChange3}
@@ -137,7 +137,7 @@ const App = ({ type }: { type?: string }) => {
           <Slider
             label={formatMessage({ id: 'launch.vote.period' })}
             value={hours}
-            unit="hr"
+            unit="h"
             min={min}
             max={720}
             onChange={onChange3}

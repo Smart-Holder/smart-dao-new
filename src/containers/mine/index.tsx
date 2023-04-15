@@ -1,6 +1,5 @@
-import { useState } from 'react';
-import { Divider, Space, Button, Avatar, Tabs } from 'antd';
-import { useIntl, FormattedMessage } from 'react-intl';
+import { Avatar, Tabs } from 'antd';
+import { FormattedMessage } from 'react-intl';
 
 import DAO from '@/containers/mine/daoList';
 import Info from '@/containers/mine/info';
@@ -22,20 +21,7 @@ const items: TabsProps['items'] = [
 ];
 
 export default function Mine() {
-  const { formatMessage } = useIntl();
-
   const { userInfo } = useAppSelector((store) => store.user);
-
-  const [active, setActive] = useState(1);
-  const [current, setCurrent] = useState('mail');
-
-  const handleDAOClick = () => {
-    setActive(1);
-  };
-
-  const handleInfoClick = () => {
-    setActive(2);
-  };
 
   return (
     <div className="wrap">

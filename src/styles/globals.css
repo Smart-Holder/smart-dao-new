@@ -69,6 +69,10 @@ a {
   margin: 0 auto;
 }
 
+.basic-content-padding-0 {
+  padding: 0;
+}
+
 .basic-content.hasShadow {
   max-width: var(--max-width + 10);
   padding: 0 75px;
@@ -152,7 +156,6 @@ a {
 }
 
 .setting-h1 {
-  height: 45px;
   font-size: 32px;
   font-weight: 600;
   color: #000000;
@@ -160,7 +163,6 @@ a {
 }
 
 .setting-h2 {
-  height: 22px;
   margin-top: 12px;
   font-size: 16px;
   font-weight: 600;

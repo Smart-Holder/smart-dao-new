@@ -52,6 +52,12 @@ const App = () => {
         }),
       ]);
 
+      (res3 || []).forEach((item: DAOExtend) => {
+        item.isMember =
+          item.isMember ||
+          (res2 || []).some((el: DAOExtend) => el.host === item.host);
+      });
+
       setCreateDAOs(res1);
       setJoinDAOs(res2);
       setFollowDAOs(res3);
@@ -136,11 +142,13 @@ const App = () => {
                 <ItemCache data={cacheDAO} daoType={DAOType.Cache} readOnly />
               </Col>
             )}
-            {list.map((item: any) => (
+            {list.map((item: DAOExtend) => (
               <Col xs={24} sm={24} lg={12} key={item.id}>
                 <Item
                   data={item}
-                  daoType={active === 'create' ? DAOType.Join : active}
+                  daoType={
+                    active === 'create' || item.isMember ? DAOType.Join : active
+                  }
                   readOnly
                 />
               </Col>

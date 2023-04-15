@@ -6,7 +6,7 @@ import type { NextPageWithLayout } from '@/pages/_app';
 
 const App: NextPageWithLayout = () => {
   return (
-    <div className="basic-content">
+    <div className="basic-content basic-content-padding-0">
       <Mine />
     </div>
   );
