@@ -186,6 +186,7 @@ const App = () => {
             justify-content: space-between;
             align-items: center;
             height: 102px;
+            margin-top: 99px;
 
             font-size: 34px;
             font-family: var(--font-family-secondary);

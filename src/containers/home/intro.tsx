@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { useAppSelector } from '@/store/hooks';
-import { Button, Col, Row, Image } from 'antd';
+import { Button, Col, Row, Image, Carousel } from 'antd';
 import { useIntl } from 'react-intl';
 
 import WalletModal from '@/components/modal/walletModal';
@@ -35,13 +35,43 @@ const App = () => {
           </div>
         </Col>
         <Col span={12}>
-          <Image
+          {/* <Image
             src="/images/home/img_home_banner@2x.png"
             width="100%"
             height="auto"
             preview={false}
             alt="banner"
-          />
+          /> */}
+          <Carousel effect="fade" autoplay>
+            <Image
+              src="/images/home/banner/img_home_banner_1@2x.png"
+              width="100%"
+              height="auto"
+              preview={false}
+              alt="banner"
+            />
+            <Image
+              src="/images/home/banner/img_home_banner_2@2x.png"
+              width="100%"
+              height="auto"
+              preview={false}
+              alt="banner"
+            />
+            <Image
+              src="/images/home/banner/img_home_banner_3@2x.png"
+              width="100%"
+              height="auto"
+              preview={false}
+              alt="banner"
+            />
+            <Image
+              src="/images/home/banner/img_home_banner_4@2x.png"
+              width="100%"
+              height="auto"
+              preview={false}
+              alt="banner"
+            />
+          </Carousel>
         </Col>
       </Row>
 
@@ -76,6 +106,19 @@ const App = () => {
 
             background: #2c2c2c;
             border-radius: 5px;
+          }
+
+          @media screen and (max-width: 1360px) {
+            .h1 {
+              font-size: 58px;
+              line-height: 60px;
+            }
+          }
+          @media screen and (max-width: 1080px) {
+            .h1 {
+              font-size: 40px;
+              line-height: 50px;
+            }
           }
         `}
       </style>
