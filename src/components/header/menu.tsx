@@ -1,6 +1,5 @@
 import React, { useState, MouseEvent, useEffect, useRef } from 'react';
-import { Dropdown, Image, Avatar, Button } from 'antd';
-import { DownOutlined, UserOutlined } from '@ant-design/icons';
+import { Dropdown, Image, Avatar } from 'antd';
 import type { MenuProps } from 'antd';
 import { useRouter } from 'next/router';
 
@@ -16,10 +15,8 @@ import { formatAddress } from '@/utils';
 import { ETH_CHAINS_INFO } from '@/config/chains';
 import { connectType as type } from '@/config/enum';
 
-import iconAdd from '/public/images/icon-add.png';
-
 import { useIntl } from 'react-intl';
-import EllipsisMiddle from '../typography/ellipsisMiddle';
+import Ellipsis from '@/components/typography/ellipsis';
 
 const Menu = () => {
   const { formatMessage } = useIntl();
@@ -155,9 +152,12 @@ const Menu = () => {
 
           <div className="connect-menu-top-item" style={{ marginTop: 20 }}>
             {/* {formatAddress(address, 14)} */}
-            <EllipsisMiddle style={{ width: 200 }} suffixCount={4} copyable>
+            {/* <EllipsisMiddle style={{ width: 200 }} suffixCount={4} copyable>
               {address}
-            </EllipsisMiddle>
+            </EllipsisMiddle> */}
+            <Ellipsis copyable={{ text: address }}>
+              {formatAddress(address, 14)}
+            </Ellipsis>
           </div>
         </div>
       ),

@@ -12,9 +12,6 @@ import DashboardHeader from '@/containers/dashboard/header';
 
 import type { NextPageWithLayout } from '@/pages/_app';
 
-// import FinancialHeader from '@/containers/dashboard/financial/financial-header';
-// import Counts from '@/containers/dashboard/mine/counts';
-// import FinancialItem from '@/containers/dashboard/financial/financial-item';
 import { useAppSelector } from '@/store/hooks';
 import { ETH_CHAINS_INFO } from '@/config/chains';
 import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
@@ -22,7 +19,7 @@ import { request } from '@/api';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
 import Card from '@/components/card';
-import EllipsisMiddle from '@/components/typography/ellipsisMiddle';
+import Ellipsis from '@/components/typography/ellipsis';
 import { DAOType } from '@/config/enum';
 
 dayjs.extend(customParseFormat);
@@ -192,9 +189,7 @@ const App: NextPageWithLayout = () => {
           <div style={{ marginTop: 15 }} className="dao-info-item">
             {formatMessage({ id: 'address' })}:{' '}
             {/* {formatAddress(currentDAO.address)} */}
-            <EllipsisMiddle suffixCount={4} copyable>
-              {currentDAO.address}
-            </EllipsisMiddle>
+            <Ellipsis copyable>{currentDAO.address}</Ellipsis>
           </div>
           <div className="dao-info-item">
             {formatMessage({ id: 'financial.asset.time.create' })}:{' '}

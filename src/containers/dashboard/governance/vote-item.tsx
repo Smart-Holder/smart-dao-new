@@ -5,7 +5,7 @@ import { useIntl, FormattedMessage } from 'react-intl';
 import Progress from '@/containers/dashboard/governance/progress';
 
 import { formatAddress } from '@/utils';
-import EllipsisMiddle from '@/components/typography/ellipsisMiddle';
+import Ellipsis from '@/components/typography/ellipsis';
 
 const { Countdown } = Statistic;
 const { Paragraph } = Typography;
@@ -117,9 +117,12 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
         <div>
           <div className="item-owner-address">
             {/* {formatAddress(data.origin)} */}
-            <EllipsisMiddle prefixCount={6} suffixCount={6} copyable>
+            {/* <EllipsisMiddle prefixCount={6} suffixCount={6} copyable>
               {data.origin}
-            </EllipsisMiddle>
+            </EllipsisMiddle> */}
+            <Ellipsis copyable={{ text: data.origin }}>
+              {formatAddress(data.origin, 6, 6)}
+            </Ellipsis>
           </div>
         </div>
 

@@ -48,12 +48,8 @@ const App = ({ type }: { type?: string }) => {
           ) : (
             <Avatar size={34} icon={<UserOutlined />} />
           )}
-          <span className="rolename">
-            {data.name ? (
-              <Paragraph ellipsis={{ rows: 1 }}>{data.name}</Paragraph>
-            ) : (
-              formatAddress(data.address)
-            )}
+          <span className="rolename ellipsis">
+            {data.name || formatAddress(data.address)}
           </span>
           <Image
             src="/images/arrow/icon_nav_side_switch_default@2x.png"
@@ -84,6 +80,7 @@ const App = ({ type }: { type?: string }) => {
           }
 
           .role .rolename {
+            width: 80px;
             font-size: 16px;
             font-weight: 500;
             color: #000000;

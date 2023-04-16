@@ -12,12 +12,12 @@ import { request } from '@/api';
 
 import { useAppSelector } from '@/store/hooks';
 
-import { formatDayjsValues } from '@/utils';
+import { formatAddress, formatDayjsValues } from '@/utils';
 import { useIntl, FormattedMessage } from 'react-intl';
 
 import type { PaginationProps } from 'antd';
 import Card from '@/components/card';
-import EllipsisMiddle from '@/components/typography/ellipsisMiddle';
+import Ellipsis from '@/components/typography/ellipsis';
 
 dayjs.extend(customParseFormat);
 
@@ -48,9 +48,9 @@ const App = () => {
       key: 'owner',
       render: (text: string) => {
         return (
-          <EllipsisMiddle prefixCount={6} suffixCount={6} copyable>
-            {text}
-          </EllipsisMiddle>
+          <Ellipsis copyable={{ text: text }}>
+            {formatAddress(text, 6, 6)}
+          </Ellipsis>
         );
       },
     },

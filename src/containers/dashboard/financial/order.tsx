@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Table, Form, message, Image, Input } from 'antd';
+import { Table, Form, message, Image, Input, Typography } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
@@ -17,7 +17,7 @@ import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
 import type { PaginationProps } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
 import { useIntl, FormattedMessage } from 'react-intl';
-import EllipsisMiddle from '@/components/typography/ellipsisMiddle';
+import Ellipsis from '@/components/typography/ellipsis';
 
 dayjs.extend(customParseFormat);
 
@@ -63,9 +63,13 @@ const columns = [
       //   </>
       // );
       return (
-        <EllipsisMiddle prefixCount={6} suffixCount={6} copyable>
-          {text}
-        </EllipsisMiddle>
+        // <EllipsisMiddle prefixCount={6} suffixCount={6} copyable>
+        //   {text}
+        // </EllipsisMiddle>
+
+        <Ellipsis copyable={{ text: text }}>
+          {formatAddress(text, 6, 6)}
+        </Ellipsis>
       );
     },
   },
@@ -85,9 +89,12 @@ const columns = [
       //   </>
       // );
       return (
-        <EllipsisMiddle prefixCount={6} suffixCount={6} copyable>
-          {text}
-        </EllipsisMiddle>
+        // <EllipsisMiddle prefixCount={6} suffixCount={6} copyable>
+        //   {text}
+        // </EllipsisMiddle>
+        <Ellipsis copyable={{ text: text }}>
+          {formatAddress(text, 6, 6)}
+        </Ellipsis>
       );
     },
   },

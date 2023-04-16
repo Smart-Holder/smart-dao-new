@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import styles from './detail-transactions.module.css';
-import { Table } from 'antd';
+import { Table, Typography } from 'antd';
 import { formatAddress } from '@/utils';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useIntl } from 'react-intl';
-import EllipsisMiddle from '@/components/typography/ellipsisMiddle';
+import Ellipsis from '@/components/typography/ellipsis';
 
 dayjs.extend(customParseFormat);
 
@@ -91,9 +91,12 @@ const DetailTransactions: FC<DetailTransactionsProps> = (props) => {
               render: (str) => {
                 // return formatAddress(str);
                 return (
-                  <EllipsisMiddle prefixCount={6} suffixCount={6} copyable>
-                    {str}
-                  </EllipsisMiddle>
+                  // <EllipsisMiddle prefixCount={6} suffixCount={6} copyable>
+                  //   {str}
+                  // </EllipsisMiddle>
+                  <Ellipsis copyable={{ text: str }}>
+                    {formatAddress(str, 6, 6)}
+                  </Ellipsis>
                 );
               },
             },
@@ -105,9 +108,12 @@ const DetailTransactions: FC<DetailTransactionsProps> = (props) => {
               render: (str) => {
                 // return formatAddress(str);
                 return (
-                  <EllipsisMiddle prefixCount={6} suffixCount={6} copyable>
-                    {str}
-                  </EllipsisMiddle>
+                  // <EllipsisMiddle prefixCount={6} suffixCount={6} copyable>
+                  //   {str}
+                  // </EllipsisMiddle>
+                  <Ellipsis copyable={{ text: str }}>
+                    {formatAddress(str, 6, 6)}
+                  </Ellipsis>
                 );
               },
             },

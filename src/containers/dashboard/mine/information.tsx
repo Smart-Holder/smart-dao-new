@@ -18,7 +18,7 @@ import PermissionModal from '@/components/modal/permissionModal';
 import Upload from '@/components/form/upload';
 
 import { setMemberInfo } from '@/api/member';
-import EllipsisMiddle from '@/components/typography/ellipsisMiddle';
+import Ellipsis from '@/components/typography/ellipsis';
 
 const App = () => {
   const [form] = Form.useForm();
@@ -116,9 +116,7 @@ const App = () => {
             {formatMessage({ id: 'my.information.address' })}:
           </span>
           <span className="value">
-            <EllipsisMiddle suffixCount={4} copyable>
-              {address}
-            </EllipsisMiddle>
+            <Ellipsis copyable>{address}</Ellipsis>
           </span>
         </div>
         <div className="info-item">
@@ -131,9 +129,7 @@ const App = () => {
         <div className="info-item">
           <span className="label">NFTP:</span>
           <span className="value">
-            <EllipsisMiddle suffixCount={4} copyable>
-              {currentMember.host}
-            </EllipsisMiddle>
+            <Ellipsis copyable>{currentMember.host}</Ellipsis>
           </span>
         </div>
         <div className="info-item">
@@ -267,6 +263,8 @@ const App = () => {
       <style jsx>
         {`
           .info-item {
+            display: flex;
+            align-items: center;
             margin: 40px 0;
           }
 

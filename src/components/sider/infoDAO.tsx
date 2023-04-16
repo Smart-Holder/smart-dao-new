@@ -5,6 +5,9 @@ import { UserOutlined } from '@ant-design/icons';
 import { useAppSelector } from '@/store/hooks';
 import { getMakeDAOStorage } from '@/utils/launch';
 
+import Ellipsis from '@/components/typography/ellipsis';
+import { formatAddress } from '@/utils';
+
 const { Paragraph } = Typography;
 
 const App = ({ type }: { type?: string }) => {
@@ -29,12 +32,8 @@ const App = ({ type }: { type?: string }) => {
           <Avatar size={44} icon={<UserOutlined />} />
         )}
 
-        <span className="dao-name">
-          {dao.name ? (
-            <Paragraph ellipsis={{ rows: 1 }}>{dao.name}</Paragraph>
-          ) : (
-            dao.address
-          )}
+        <span className="dao-name ellipsis">
+          {dao.name || formatAddress(dao.address)}
         </span>
       </Space>
 
@@ -46,10 +45,11 @@ const App = ({ type }: { type?: string }) => {
           }
 
           .dao-name {
-            font-size: 20px;
-            font-weight: 400;
-            color: #393939;
-            line-height: 28px;
+            width: 130px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #000000;
+            line-height: 22px;
           }
 
           .dao-name :global(.ant-typography) {

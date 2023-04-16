@@ -1,7 +1,5 @@
-import EllipsisMiddle from '@/components/typography/ellipsisMiddle';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { formatAddress, fromToken } from '@/utils';
-import { UserOutlined } from '@ant-design/icons';
 import { Avatar, Image, Space, Typography } from 'antd';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';

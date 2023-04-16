@@ -13,7 +13,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { formatAddress } from '@/utils';
 
 import { useIntl } from 'react-intl';
-import EllipsisMiddle from '@/components/typography/ellipsisMiddle';
+import Ellipsis from '@/components/typography/ellipsis';
 
 dayjs.extend(customParseFormat);
 
@@ -138,9 +138,9 @@ const VoteModal: FC<VoteModalProps> = (props) => {
           <div className="owner">
             <div className="address">
               {/* {formatAddress(data.origin)} */}
-              <EllipsisMiddle prefixCount={6} suffixCount={6} copyable>
-                {data.origin}
-              </EllipsisMiddle>
+              <Ellipsis copyable={{ text: data.origin }}>
+                {formatAddress(data.origin, 6, 6)}
+              </Ellipsis>
             </div>
             <div className={`status ${data.status}`}>
               {statusMap[data.status]}
@@ -158,9 +158,9 @@ const VoteModal: FC<VoteModalProps> = (props) => {
                   </span>
                   <span className="value">
                     {/* {formatAddress(data.extra.executor)} */}
-                    <EllipsisMiddle prefixCount={6} suffixCount={6} copyable>
-                      {data.extra.executor}
-                    </EllipsisMiddle>
+                    <Ellipsis copyable={{ text: data.extra.executor }}>
+                      {formatAddress(data.extra.executor, 6, 6)}
+                    </Ellipsis>
                   </span>
                 </div>
               )}

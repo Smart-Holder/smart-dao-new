@@ -36,6 +36,14 @@ a {
   text-decoration: none;
 }
 
+.ellipsis {
+  display: inline-block;
+  /* width: 100%; */
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 /* ------------ layout ------------ */
 .ant-layout {
   background: #fff;
@@ -868,6 +876,10 @@ a {
 }
 
 /* ------------------- Typography ---------------------- */
+.ant-typography.smart-ellipsis {
+  margin-bottom: 0 !important;
+}
+
 .ant-typography .ant-typography-copy {
   color: #000;
 }

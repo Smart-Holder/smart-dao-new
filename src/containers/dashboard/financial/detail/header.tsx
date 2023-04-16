@@ -8,7 +8,7 @@ import Modal from '@/components/modal';
 import { CopyOutlined, LoadingOutlined } from '@ant-design/icons';
 
 import { shelves } from '@/api/asset';
-import EllipsisMiddle from '@/components/typography/ellipsisMiddle';
+import Ellipsis from '@/components/typography/ellipsis';
 import { ETH_CHAINS_INFO } from '@/config/chains';
 
 const { Text, Paragraph } = Typography;
@@ -46,7 +46,7 @@ const App = () => {
     const imageWidth = document.querySelector(
       '.asset-detail-header-image',
     ) as any;
-    setImageSize(imageWidth.offsetWidth);
+    setImageSize(imageWidth?.offsetWidth || 0);
   };
 
   useEffect(() => {
@@ -63,10 +63,8 @@ const App = () => {
     };
   }, []);
 
-  const toAddress = (addr: string) => {
-    window.open(`${chainData.lookAddr}${addr}`, '_blank');
-    // https://goerli.etherscan.io/address/.....
-    // https://etherscan.io/address/....
+  const toAddress = () => {
+    window.open(`${chainData.lookAddr}${storageData.token}`, '_blank');
   };
 
   const showModal = () => {
@@ -105,12 +103,14 @@ const App = () => {
   return (
     <div className="asset-detail-header">
       <Row gutter={24}>
-        <Col span={9} className="asset-detail-header-image">
+        <Col span={9}>
           <Image
+            className="asset-detail-header-image"
             src={storageData.imageOrigin || currentDAO.image}
             // shape="square"
             // size={{ xs: 200, sm: 200, md: 200, lg: 300, xl: 442, xxl: 442 }}
             // size={imageSize}
+            style={{ maxWidth: 442 }}
             width="100%"
             height={imageSize}
             preview={false}
@@ -152,9 +152,13 @@ const App = () => {
               </Col>
               <Col span={18}>
                 <span className="dao-info-item-value dao-info-item-value-address">
-                  <EllipsisMiddle suffixCount={5} copyable onClick={toAddress}>
+                  {/* <EllipsisMiddle suffixCount={5} copyable onClick={toAddress}>
                     {storageData.token}
-                  </EllipsisMiddle>
+                  </EllipsisMiddle> */}
+                  {/* {formatAddress(storageData.token, 6, 6)} */}
+                  <Ellipsis copyable onClick={toAddress}>
+                    {storageData.token}
+                  </Ellipsis>
                 </span>
               </Col>
             </Row>
@@ -170,9 +174,10 @@ const App = () => {
                   {formatAddress(storageData.tokenId, 8)}
                 </span> */}
                 <span className="dao-info-item-value">
-                  <EllipsisMiddle suffixCount={5} copyable>
+                  {/* <EllipsisMiddle suffixCount={5} copyable>
                     {storageData.tokenId}
-                  </EllipsisMiddle>
+                  </EllipsisMiddle> */}
+                  <Ellipsis copyable>{storageData.tokenId}</Ellipsis>
                 </span>
               </Col>
             </Row>
@@ -196,9 +201,10 @@ const App = () => {
               </Col>
               <Col span={18}>
                 <span className="dao-info-item-value">
-                  <EllipsisMiddle suffixCount={5} copyable>
+                  {/* <EllipsisMiddle suffixCount={5} copyable>
                     {storageData.uri}
-                  </EllipsisMiddle>
+                  </EllipsisMiddle> */}
+                  <Ellipsis copyable>{storageData.uri}</Ellipsis>
                 </span>
               </Col>
             </Row>
@@ -245,15 +251,15 @@ const App = () => {
           </div>
 
           <Paragraph
-            ellipsis={{
-              rows: 3,
-              expandable: true,
-              symbol: (
-                <div style={{ color: '#000' }}>
-                  {formatMessage({ id: 'viewMore' })}
-                </div>
-              ),
-            }}
+          // ellipsis={{
+          //   rows: 3,
+          //   expandable: true,
+          //   symbol: (
+          //     <div style={{ color: '#000' }}>
+          //       {formatMessage({ id: 'viewMore' })}
+          //     </div>
+          //   ),
+          // }}
           >
             {storageData.description}
           </Paragraph>

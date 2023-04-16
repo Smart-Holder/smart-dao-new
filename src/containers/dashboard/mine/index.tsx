@@ -181,15 +181,15 @@ const App = () => {
             </div>
             <div className="desc-content">
               <Paragraph
-                ellipsis={{
-                  rows: 4,
-                  expandable: true,
-                  symbol: (
-                    <div style={{ color: '#000' }}>
-                      {formatMessage({ id: 'viewMore' })}
-                    </div>
-                  ),
-                }}
+              // ellipsis={{
+              //   rows: 4,
+              //   expandable: true,
+              //   symbol: (
+              //     <div style={{ color: '#000' }}>
+              //       {formatMessage({ id: 'viewMore' })}
+              //     </div>
+              //   ),
+              // }}
               >
                 {currentDAO.description}
               </Paragraph>
