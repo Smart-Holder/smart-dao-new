@@ -82,7 +82,7 @@ const App = () => {
 
   return (
     <div style={{ paddingBottom: 50 }}>
-      <div className="header">NFTs</div>
+      <div className="header">Discover NTFS</div>
 
       <List
         grid={{ gutter: 20, column: 4 }}

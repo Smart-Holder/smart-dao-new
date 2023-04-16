@@ -279,31 +279,32 @@ const App: React.FC = () => {
         </div>
         <div className="h2">{formatMessage({ id: 'start.members.desc' })}</div>
 
-        <Form.Item
-          name="member"
-          style={{ marginTop: 40 }}
-          label={formatMessage({ id: 'name' })}
-          rules={[
-            { validator: validateEthAddress },
-            { validator: validateRepeat },
-          ]}
-          wrapperCol={{ span: 24 }}
-        >
-          <Row gutter={27}>
-            <Col span={17}>
+        <Row gutter={27} align="bottom">
+          <Col span={17}>
+            <Form.Item
+              name="member"
+              style={{ marginTop: 40, flex: 1 }}
+              label={formatMessage({ id: 'name' })}
+              rules={[
+                { validator: validateEthAddress },
+                { validator: validateRepeat },
+              ]}
+              wrapperCol={{ span: 24 }}
+            >
               <Input />
-            </Col>
-            <Col span={7}>
-              <Button
-                className="button-form"
-                type="primary"
-                onClick={addMember}
-              >
-                {formatMessage({ id: 'start.add' })}
-              </Button>
-            </Col>
-          </Row>
-        </Form.Item>
+            </Form.Item>
+          </Col>
+          <Col span={7}>
+            <Button
+              className="button-form"
+              style={{ marginBottom: 32 }}
+              type="primary"
+              onClick={addMember}
+            >
+              {formatMessage({ id: 'start.add' })}
+            </Button>
+          </Col>
+        </Row>
 
         <Row gutter={[20, 20]}>
           <Col span={15}>

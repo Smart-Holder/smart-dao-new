@@ -40,7 +40,7 @@ const App = () => {
   return (
     <div className="market">
       <div className="title">
-        {formatMessage({ id: 'financial.asset.listing' })}
+        {formatMessage({ id: 'financial.asset.listed' })}
       </div>
       <div className="market-list">
         {list.map((item) => (

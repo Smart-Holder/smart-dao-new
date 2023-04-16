@@ -320,6 +320,7 @@
   "financial.asset.copy": "リンクをコピーする",
   "financial.asset.publish": "新しい資産を発行する",
   "financial.asset.listing": "取引マーケット公開",
+  "financial.asset.listed": "取引マーケット公開",
   "financial.asset.edit": "編集",
   "financial.asset.total.trading": "総取引量",
   "financial.asset.floorPrice": "フロア価格",
