@@ -10,6 +10,9 @@ import { useAppSelector } from '@/store/hooks';
 import { request } from '@/api';
 import { AssetExt } from '@/config/define_ext';
 
+import InfoModal from '@/components/modal/infoModal';
+import WalletModal from '@/components/modal/walletModal';
+
 import NFT from '@/containers/dashboard/mine/nft';
 
 dayjs.extend(customParseFormat);
@@ -19,6 +22,11 @@ const App = () => {
   const router = useRouter();
 
   const { chainId } = useAppSelector((store) => store.wallet);
+  const { isInit } = useAppSelector((store) => store.common);
+  const { nickname } = useAppSelector((store) => store.user.userInfo);
+
+  const infoModal: any = useRef(null);
+  const walletModal: any = useRef(null);
 
   const pageSize = useRef(8);
   const [loading, setLoading] = useState(false);
@@ -77,6 +85,16 @@ const App = () => {
   };
 
   const getAll = () => {
+    if (!isInit) {
+      walletModal.current.show();
+      return;
+    }
+
+    if (!nickname) {
+      infoModal.current.show();
+      return;
+    }
+
     router.push('/nfts');
   };
 
@@ -99,6 +117,9 @@ const App = () => {
           </Button>
         </div>
       )}
+
+      <InfoModal ref={infoModal} />
+      <WalletModal ref={walletModal} />
 
       <style jsx>
         {`

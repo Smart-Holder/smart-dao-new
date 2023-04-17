@@ -88,57 +88,59 @@ const App = ({ data }: NFTProps) => {
   };
 
   return (
-    <div className="nft-item" onClick={handleClick}>
-      <Image
-        className="image nft-item-image"
-        src={data.imageOrigin}
-        width="100%"
-        height={width}
-        preview={false}
-        alt="image"
-      />
-      <div className="name">
-        <Paragraph ellipsis className="paragraph">
-          {data.name}
-        </Paragraph>
-      </div>
-
-      {currentDAO?.name && (
-        <div className="owner">
-          <Space size={6}>
-            <Avatar
-              style={{ borderColor: '#f5f5f5' }}
-              size={26}
-              src={currentDAO.image}
-              shape="square"
-            />
-            {/* {formatAddress(data.owner)} */}
-            {currentDAO.name}
-          </Space>
+    <div className="nft-item">
+      <div onClick={handleClick}>
+        <Image
+          className="image nft-item-image"
+          src={data.imageOrigin}
+          width="100%"
+          height={width}
+          preview={false}
+          alt="image"
+        />
+        <div className="name">
+          <Paragraph ellipsis className="paragraph">
+            {data.name}
+          </Paragraph>
         </div>
-      )}
 
-      <div className="bottom">
-        <div className="left">
-          <span className="label">
-            {formatMessage({ id: 'financial.asset.price' })}
-          </span>
+        {currentDAO?.name && (
+          <div className="owner">
+            <Space size={6}>
+              <Avatar
+                style={{ borderColor: '#f5f5f5' }}
+                size={26}
+                src={currentDAO.image}
+                shape="square"
+              />
+              {/* {formatAddress(data.owner)} */}
+              {currentDAO.name}
+            </Space>
+          </div>
+        )}
 
-          <span className="value" style={{ marginLeft: 12 }}>
-            <Image
-              src="/images/market/icon_nft_card_unit_eth_default@2x.png"
-              width={20}
-              height={20}
-              preview={false}
-              alt=""
-            />
-            {fromToken(Math.max(data.minimumPrice, priceObj.price || 0))} ETH
-          </span>
-        </div>
-        {/* <div className="right">
+        <div className="bottom">
+          <div className="left">
+            <span className="label">
+              {formatMessage({ id: 'financial.asset.price' })}
+            </span>
+
+            <span className="value" style={{ marginLeft: 12 }}>
+              <Image
+                src="/images/market/icon_nft_card_unit_eth_default@2x.png"
+                width={20}
+                height={20}
+                preview={false}
+                alt=""
+              />
+              {fromToken(Math.max(data.minimumPrice, priceObj.price || 0))} ETH
+            </span>
+          </div>
+          {/* <div className="right">
           <span className="label">Ends in</span>
           <span className="value">11 : 03 : 35 </span>
         </div> */}
+        </div>
       </div>
 
       <InfoModal ref={infoModal} />

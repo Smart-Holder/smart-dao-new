@@ -112,6 +112,16 @@ const App = () => {
       return;
     }
 
+    if (!isInit) {
+      walletModal.current.show();
+      return;
+    }
+
+    if (!nickname) {
+      infoModal.current.show();
+      return;
+    }
+
     router.push('/daos');
   };
 
