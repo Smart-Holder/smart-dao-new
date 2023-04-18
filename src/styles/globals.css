@@ -883,3 +883,8 @@ a {
 .ant-typography .ant-typography-copy {
   color: #000;
 }
+
+/* ------------------- Carousel ---------------------- */
+.ant-carousel .slick-slide {
+  transition-duration: 1s !important;
+}

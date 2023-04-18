@@ -138,7 +138,7 @@ const App = () => {
               preview={false}
               alt="add"
             />
-            DAO
+            {/* DAO */}
           </div>
         </Button>
       </div>
@@ -207,7 +207,7 @@ const App = () => {
 
           .top :global(.button-add) {
             height: 40px;
-            padding-right: 0;
+            padding-right: 15px;
             font-size: 32px;
             font-weight: bold;
             font-family: var(--font-family-secondary);
