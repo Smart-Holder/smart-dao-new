@@ -87,7 +87,7 @@ const IssueForm: FC<IssueFormProps> = () => {
             _tokenURI,
             web3.eth.abi.encodeParameters(
               ['address', 'uint256'],
-              [address, '10000000000000000' /*min price 0.01 eth*/],
+              [address, toToken(values.price, 18) /*min price 0.01 eth*/],
             ),
           ],
         },
@@ -159,7 +159,7 @@ const IssueForm: FC<IssueFormProps> = () => {
           title: formatMessage({ id: 'proposal.create.message' }),
         });
       } else {
-        await safeMint({ _tokenURI });
+        await safeMint({ _tokenURI, price: Number(values.price) });
         message.success('Success');
       }
 

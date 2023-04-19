@@ -11,9 +11,16 @@ import { connectType as type } from '@/config/enum';
 import store from '@/store';
 import { request } from '@/api';
 import { message } from 'antd';
+import { toToken } from '@/utils';
 
 // 发行资产
-export function safeMint({ _tokenURI }: { _tokenURI: string }) {
+export function safeMint({
+  _tokenURI,
+  price,
+}: {
+  _tokenURI: string;
+  price: number;
+}) {
   const { web3, address } = store.getState().wallet;
   const { currentDAO } = store.getState().dao;
 
@@ -26,7 +33,8 @@ export function safeMint({ _tokenURI }: { _tokenURI: string }) {
     // abi.encodeParameters(["address"], [address]),
     web3.eth.abi.encodeParameters(
       ['address', 'uint256'],
-      [address, '10000000000000000' /*min price 0.01 eth*/],
+      // [address, '10000000000000000' /*min price 0.01 eth*/],
+      [address, toToken(price, 18) /*min price 0.01 eth*/],
     ),
   ]);
 }

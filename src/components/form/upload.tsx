@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Image, Upload } from 'antd';
 import type { RcFile } from 'antd/es/upload/interface';
 import { useIntl } from 'react-intl';
@@ -13,11 +13,15 @@ const App = (props: any) => {
 
   const { formatMessage } = useIntl();
 
+  const [token, setToken] = useState();
+
   useEffect(() => {
     request({
       name: 'utils',
       method: 'qiniuToken',
       params: null,
+    }).then((res) => {
+      setToken(res);
     });
   }, []);
 
@@ -43,7 +47,8 @@ const App = (props: any) => {
       <Upload
         className={type === 'rectangle' ? 'upload-rectangle' : ''}
         action={process.env.NEXT_PUBLIC_QINIU_UPLOAD_URL}
-        data={{ token: getCookie('qiniuToken') }}
+        // data={{ token: getCookie('qiniuToken') }}
+        data={{ token }}
         showUploadList={false}
         beforeUpload={beforeUpload}
         // listType="picture-card"
