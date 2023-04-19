@@ -1,6 +1,15 @@
 import { useAppSelector } from '@/store/hooks';
 import { copyToClipboard, debounce, formatAddress } from '@/utils';
-import { Avatar, Typography, Col, Image, message, Row, Tag } from 'antd';
+import {
+  Avatar,
+  Typography,
+  Col,
+  Image,
+  message,
+  Row,
+  Tag,
+  Button,
+} from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -10,6 +19,7 @@ import { CopyOutlined, LoadingOutlined } from '@ant-design/icons';
 import { shelves } from '@/api/asset';
 import Ellipsis from '@/components/typography/ellipsis';
 import { ETH_CHAINS_INFO } from '@/config/chains';
+import BigNumber from 'bignumber.js';
 
 const { Text, Paragraph } = Typography;
 
@@ -98,6 +108,20 @@ const App = () => {
 
   const copy = () => {
     copyToClipboard(storageData.token);
+  };
+
+  const buy = () => {
+    window.open(
+      `${chainData.opensea}/${storageData.token}/${new BigNumber(
+        storageData.tokenId,
+      )
+        .toFormat()
+        .replaceAll(',', '')}`,
+      '_blank',
+    );
+
+    // https://testnets.opensea.io/zh-CN/assets/goerli/0x1e867336dc6d79052ae65385d629f2e3391000ae/4560955291428245978451205010522475634670296989920826467698835367063246014811
+    // https://opensea.io/zh-CN/assets/ethereum/0x5af0d9827e0c53e4799bb226655a1de152a425a5/969
   };
 
   return (
@@ -208,6 +232,14 @@ const App = () => {
                 </span>
               </Col>
             </Row>
+
+            {address && storageData.selling !== 0 && (
+              <Row style={{ marginTop: 40 }}>
+                <Button type="primary" className="smart-button" onClick={buy}>
+                  Buy
+                </Button>
+              </Row>
+            )}
 
             {/* <div className="dao-info-item">
               {formatMessage({ id: 'financial.asset.royalties' })}

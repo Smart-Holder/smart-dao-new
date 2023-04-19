@@ -27,6 +27,7 @@ export const ETH_CHAINS_INFO: any = {
     type: 'MAINNET',
     label: 'ETH_MAIN',
     decimals: 18,
+    opensea: 'https://opensea.io/assets/ethereum',
   },
   // 4: {
   //   rpc: ETH_TESTNET,
@@ -51,6 +52,7 @@ export const ETH_CHAINS_INFO: any = {
     type: 'TESTNET',
     label: 'ETH_TEST',
     decimals: 18,
+    opensea: 'https://testnets.opensea.io/assets/goerli',
   },
   // 56: {
   //   rpc: BNB_MAINNET,

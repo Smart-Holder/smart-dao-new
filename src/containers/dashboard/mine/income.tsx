@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { Table, Button, Form, message } from 'antd';
+import { Table, Button, Form, message, Image } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
@@ -34,19 +34,33 @@ const columns = [
     title: <FormattedMessage id="my.income.asset" />,
     dataIndex: ['asset', 'id'],
     key: 'asset.id',
-    render: (text: string) => '#' + text,
+    render: (text: string) => (text ? '#' + text : '-'),
   },
   // { title: '市场', dataIndex: 'votes', key: 'votes' },
   {
     title: <FormattedMessage id="my.income.type" />,
-    dataIndex: 'votes',
-    key: 'votes',
+    dataIndex: 'saleType',
+    key: 'saleType',
+    render: (text: string) => text || '-',
   },
   {
     title: <FormattedMessage id="my.income.amount" />,
-    dataIndex: 'price',
-    key: 'price',
-    render: (text: string) => fromToken(text),
+    dataIndex: 'balance',
+    key: 'balance',
+    render: (text: string) => {
+      return (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Image
+            src="/images/market/icon_nft_card_unit_eth_default@2x.png"
+            width={20}
+            height={20}
+            preview={false}
+            alt=""
+          />
+          <span>{fromToken(text)}</span>
+        </div>
+      );
+    },
   },
   {
     title: <FormattedMessage id="my.income.date" />,
