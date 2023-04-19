@@ -13,15 +13,15 @@ const langList: MenuProps['items'] = [
   { label: '日本語', key: 'ja' },
 ];
 
-const icons: { [index: string]: string } = {
-  en: '/images/header/icon_navi_top_language_defult@2x.png',
-  ja: '/images/header/icon_navi_top_language_defult@2x.png',
-};
+// const icons: { [index: string]: string } = {
+//   en: '/images/header/icon_navi_top_language_defult@2x.png',
+//   ja: '/images/header/icon_navi_top_language_defult@2x.png',
+// };
 
-const hoverIcons: { [index: string]: string } = {
-  en: '/images/header/icon_navi_top_language_hover@2x.png',
-  ja: '/images/header/icon_navi_top_language_hover@2x.png',
-};
+// const hoverIcons: { [index: string]: string } = {
+//   en: '/images/header/icon_navi_top_language_hover@2x.png',
+//   ja: '/images/header/icon_navi_top_language_hover@2x.png',
+// };
 
 const Lang = () => {
   const { lang } = useAppSelector((store) => store.common);
@@ -50,8 +50,12 @@ const Lang = () => {
   return (
     <div className="wrap">
       <Dropdown
-        menu={{ items: langList, onClick: handleMenuClick }}
-        trigger={['click']}
+        menu={{
+          items: langList,
+          onClick: handleMenuClick,
+          selectedKeys: [lang],
+        }}
+        // trigger={['click']}
         overlayClassName="language-menu"
       >
         <div className="language-trigger">
@@ -86,15 +90,16 @@ const Lang = () => {
           .language-icon {
             display: inline-block;
             width: 26px;
-            height: 20px;
+            height: 26px;
             vertical-align: middle;
-            background: url(${icons[lang]}) no-repeat center;
+            background: url('/images/header/icon_navi_top_language_defult@2x.png')
+              no-repeat center;
             background-size: cover;
             cursor: pointer;
           }
 
           .language-icon:hover {
-            background-image: url(${hoverIcons[lang]});
+            background-image: url('/images/header/icon_navi_top_language_hover@2x.png');
           }
         `}
       </style>

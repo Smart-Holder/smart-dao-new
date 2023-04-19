@@ -360,6 +360,11 @@ a {
   background: #fff;
   box-shadow: -6px 5px 20px 9px rgba(30, 30, 30, 0.05);
 }
+.language-menu
+  .ant-dropdown-menu
+  .ant-dropdown-menu-item.ant-dropdown-menu-item-selected {
+  background-color: #f5f5f5;
+}
 .connect-menu .ant-dropdown-menu {
   width: 270px;
   /* height: 435px; */

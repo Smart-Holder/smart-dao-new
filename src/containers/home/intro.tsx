@@ -80,11 +80,11 @@ const App = () => {
       <style jsx>
         {`
           .h1 {
-            font-size: 80px;
+            font-size: 78px;
             font-family: var(--font-family-secondary);
             font-weight: bold;
             color: #000000;
-            line-height: 81px;
+            line-height: 78px;
           }
 
           .h2 {
