@@ -408,7 +408,7 @@ const IssueForm: FC<IssueFormProps> = () => {
         </Form.Item>
         <Form.Item
           name="listingPrice"
-          label="上架金额"
+          label={formatMessage({ id: 'my.asset.shelves.listingPrice' })}
           rules={[
             { required: true },
             { validator: validateETH },

@@ -39,7 +39,7 @@ const App = ({ data }: NFTProps) => {
 
   const properties = data?.properties || [];
 
-  const priceObj = properties.find((item: any) => item.price) || {};
+  const priceObj = properties.find((item: any) => item.listingPrice) || {};
   const ownerObj = properties.find((item: any) => item.owner);
 
   const handleClick = async () => {
@@ -133,7 +133,10 @@ const App = ({ data }: NFTProps) => {
                 preview={false}
                 alt=""
               />
-              {fromToken(Math.max(data.minimumPrice, priceObj.price || 0))} ETH
+              {fromToken(
+                Math.max(data.minimumPrice, priceObj.listingPrice || 0),
+              )}{' '}
+              ETH
             </span>
           </div>
           {/* <div className="right">

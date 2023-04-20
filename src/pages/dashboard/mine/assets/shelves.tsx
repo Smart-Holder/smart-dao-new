@@ -173,6 +173,17 @@ const App: NextPageWithLayout = () => {
 
   const getPrice = (item: any) => {
     const priceObj =
+      item?.properties.find((property: any) => property.price) || {};
+
+    if (priceObj || item.minimumPrice) {
+      return fromToken(Math.max(priceObj.price || 0, item.minimumPrice));
+    }
+
+    return 0;
+  };
+
+  const getListingPrice = (item: any) => {
+    const priceObj =
       item?.properties.find((property: any) => property.listingPrice) || {};
 
     if (priceObj || item.minimumPrice) {
@@ -186,7 +197,7 @@ const App: NextPageWithLayout = () => {
     onChange: (selectedRowKeys: any, selectedRows: any) => {
       setSelectedRow(selectedRows[0]);
       // setPrice(priceList[selectedRowKeys[0]]);
-      setPrice(getPrice(selectedRows[0]));
+      setPrice(getListingPrice(selectedRows[0]));
       setDisabled(false);
     },
     getCheckboxProps: (record: any) => ({
@@ -358,14 +369,14 @@ const App: NextPageWithLayout = () => {
               render: (value, item) => {
                 return getPrice(item) + ' ETH';
               },
-              // render: (value, item) => (
-              //   <Input
-              //     placeholder={`不低于${fromToken(value || 0)}`}
-              //     // value={price}
-              //     rowKey={item.id}
-              //     onChange={onPriceChange}
-              //   />
-              // ),
+            },
+            {
+              title: formatMessage({ id: 'my.asset.shelves.listingPrice' }),
+              dataIndex: 'listingPrice',
+              key: 'listingPrice',
+              render: (value, item) => {
+                return getListingPrice(item) + ' ETH';
+              },
             },
           ]}
           dataSource={[...data]}

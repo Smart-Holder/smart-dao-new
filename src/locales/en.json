@@ -195,6 +195,7 @@
   "my.asset.shelves.label": "Label",
   "my.asset.shelves.name": "Name/ID",
   "my.asset.shelves.price": "Price",
+  "my.asset.shelves.listingPrice": "上架金额",
 
   "my.order.total": "Total number of orders",
   "my.order.total.amount": "Total transaction value",
