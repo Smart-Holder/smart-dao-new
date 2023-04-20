@@ -64,6 +64,7 @@ const App: NextPageWithLayout = () => {
           chain: chainId,
           host: currentDAO.host,
           tokenId: storageData.tokenId,
+          fromAddres_not: '0x0000000000000000000000000000000000000000',
         },
       });
 

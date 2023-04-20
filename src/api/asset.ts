@@ -136,7 +136,12 @@ export async function shelves({
     return data;
   } catch (error: any) {
     console.error(error);
-    message.error(error?.message);
+
+    // 4001 用户取消操作
+    if (error?.code !== 4001) {
+      message.error(error?.message);
+    }
+
     throw error;
   }
 }

@@ -300,9 +300,9 @@ const App = () => {
             </Form.Item>
           </Form>
 
-          <Button className="button-filter" type="primary" onClick={showModal}>
+          {/* <Button className="button-filter" type="primary" onClick={showModal}>
             {formatMessage({ id: 'financial.income.allocation' })}
-          </Button>
+          </Button> */}
         </div>
         <Table
           columns={columns}

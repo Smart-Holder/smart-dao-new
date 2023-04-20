@@ -70,19 +70,25 @@ const App: React.FC = () => {
   const onFinish = (values: any) => {
     if (!logo) {
       setImageMessage1('Image is required');
-      document.querySelector('.logo-has-error')?.scrollIntoView({
-        block: 'center',
-        behavior: 'smooth',
-      });
+
+      setTimeout(() => {
+        document.querySelector('.logo-has-error')?.scrollIntoView({
+          block: 'center',
+          behavior: 'smooth',
+        });
+      }, 100);
       return;
     }
 
     if (!poster) {
       setImageMessage2('Image is required');
-      document.querySelector('.poster-has-error')?.scrollIntoView({
-        block: 'center',
-        behavior: 'smooth',
-      });
+
+      setTimeout(() => {
+        document.querySelector('.poster-has-error')?.scrollIntoView({
+          block: 'center',
+          behavior: 'smooth',
+        });
+      }, 100);
       return;
     }
 
@@ -110,10 +116,12 @@ const App: React.FC = () => {
   const onFinishFailed = (errorInfo: any) => {
     console.log('form Failed:', errorInfo);
 
-    document.querySelector('.ant-form-item-has-error')?.scrollIntoView({
-      block: 'center',
-      behavior: 'smooth',
-    });
+    setTimeout(() => {
+      document.querySelector('.ant-form-item-has-error')?.scrollIntoView({
+        block: 'center',
+        behavior: 'smooth',
+      });
+    }, 100);
   };
 
   const removeMember = (value: string) => {

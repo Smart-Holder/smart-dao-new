@@ -16,10 +16,12 @@ import { useAppSelector } from '@/store/hooks';
 import { formatDayjsValues, fromToken } from '@/utils';
 
 import type { PaginationProps } from 'antd';
-import { getBalance } from '@/api/asset';
+import { getBalance, release } from '@/api/asset';
 import { createVote } from '@/api/vote';
 import { useIntl, FormattedMessage } from 'react-intl';
 import Card from '@/components/card';
+import { isPermission } from '@/api/member';
+import { Permissions } from '@/config/enum';
 
 dayjs.extend(customParseFormat);
 
@@ -90,22 +92,30 @@ const App = () => {
 
   const nftpModal: any = useRef(null);
 
-  const showModal = () => {
-    if (balance > 0) {
-      setIsModalOpen(true);
-    } else {
-      // message.warning('没有未分配的收入');
-    }
-  };
-
   const getBalanceData = async () => {
     const res = await getBalance();
-    console.log('balance', res);
+    // console.log('balance', res);
     setBalance(res || 0);
   };
 
   useEffect(() => {
     getBalanceData();
+  }, []);
+
+  const getAmount = async () => {
+    const res = await request({
+      name: 'utils',
+      method: 'getLedgerTotalAmount',
+      params: { chain: chainId, host: currentDAO.host },
+    });
+
+    if (res) {
+      setAmount(res);
+    }
+  };
+
+  useEffect(() => {
+    getAmount();
   }, []);
 
   const getData = async (page = 1) => {
@@ -162,8 +172,7 @@ const App = () => {
     getData(p);
   };
 
-  // 收入分配
-  const onDone = async () => {
+  const onCreateVote = async () => {
     const params = {
       name: formatMessage({ id: 'proposal.financial' }),
       description: JSON.stringify({
@@ -204,22 +213,30 @@ const App = () => {
     // }
   };
 
-  useEffect(() => {
-    const getAmount = async () => {
-      const res = await request({
-        name: 'utils',
-        method: 'getLedgerTotalAmount',
-        params: { chain: chainId, host: currentDAO.host },
-      });
+  // 收入分配
+  const allocation = async () => {
+    if (balance <= 0) {
+      return;
+    }
 
-      console.log('amount', res);
-      if (res) {
-        setAmount(res);
+    if (await isPermission(Permissions.Action_Ledger_Release)) {
+      try {
+        await release({ amount: balance, description: 'description' });
+        setIsModalOpen(false);
+        message.success('success');
+        getBalanceData();
+        getAmount();
+        setPage(1);
+        getData(1);
+        getTotal();
+      } catch (error) {
+        console.error(error);
       }
-    };
+      return;
+    }
 
-    getAmount();
-  }, []);
+    onCreateVote();
+  };
 
   useEffect(() => {
     if (currentDAO.host) {
@@ -306,7 +323,7 @@ const App = () => {
             <Button
               className="button-filter"
               type="primary"
-              onClick={showModal}
+              onClick={allocation}
             >
               {formatMessage({ id: 'financial.income.allocation' })}
             </Button>
@@ -337,7 +354,7 @@ const App = () => {
           style={{ marginTop: 50 }}
           className="button-submit"
           type="primary"
-          onClick={onDone}
+          onClick={onCreateVote}
           loading={loading}
         >
           {formatMessage({ id: 'financial.income.submit' })}

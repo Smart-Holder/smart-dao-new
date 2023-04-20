@@ -131,6 +131,7 @@ const App = () => {
         host: currentDAO.host,
         limit: [(page - 1) * pageSize, pageSize],
         name: searchText,
+        fromAddres_not: '0x0000000000000000000000000000000000000000',
         ...values,
       },
     });

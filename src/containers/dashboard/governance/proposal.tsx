@@ -74,6 +74,13 @@ const App = () => {
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('form Failed:', errorInfo);
+
+    setTimeout(() => {
+      document.querySelector('.ant-form-item-has-error')?.scrollIntoView({
+        block: 'center',
+        behavior: 'smooth',
+      });
+    }, 100);
   };
 
   const onExecutorChange = () => {};

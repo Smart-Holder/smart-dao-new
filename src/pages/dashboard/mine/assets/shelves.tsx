@@ -173,10 +173,10 @@ const App: NextPageWithLayout = () => {
 
   const getPrice = (item: any) => {
     const priceObj =
-      item?.properties.find((property: any) => property.price) || {};
+      item?.properties.find((property: any) => property.listingPrice) || {};
 
     if (priceObj || item.minimumPrice) {
-      return fromToken(Math.max(priceObj.price || 0, item.minimumPrice));
+      return fromToken(Math.max(priceObj.listingPrice || 0, item.minimumPrice));
     }
 
     return 0;

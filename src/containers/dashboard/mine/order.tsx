@@ -69,7 +69,7 @@ const App = () => {
   const { loading, searchText } = useAppSelector((store) => store.common);
 
   const pageSize = 10;
-  const [values, setValues] = useState({ toAddress: address, fromAddres: '' });
+  const [values, setValues] = useState({ toAddress: '', fromAddres: address });
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [data, setData] = useState([]);
@@ -92,6 +92,7 @@ const App = () => {
         host: currentDAO.host,
         limit: [(page - 1) * pageSize, pageSize],
         name: searchText,
+        fromAddres_not: '0x0000000000000000000000000000000000000000',
         // toAddress: address,
         ...values,
       },
@@ -235,7 +236,7 @@ const App = () => {
             name="filter"
             layout="inline"
             onValuesChange={onValuesChange}
-            initialValues={{ type: 'buyer' }}
+            initialValues={{ type: 'seller' }}
             autoComplete="off"
             labelAlign="left"
             requiredMark={false}

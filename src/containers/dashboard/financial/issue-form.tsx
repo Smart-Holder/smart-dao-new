@@ -117,7 +117,9 @@ const IssueForm: FC<IssueFormProps> = () => {
       image,
       description: values.description,
       attributes: [
-        { price: toToken(values.price, 18) },
+        { price: toToken(values.price, 18) }, // 底价
+        { listingPrice: toToken(values.listingPrice, 18) }, // 上架金额
+
         { owner: userInfo.nickname, image: userInfo.image },
         { trait_type: 'supply', value: values.supply },
         { trait_type: 'blockchain', value: values.blockchain },
@@ -194,6 +196,13 @@ const IssueForm: FC<IssueFormProps> = () => {
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('validate Failed:', errorInfo);
+
+    setTimeout(() => {
+      document.querySelector('.ant-form-item-has-error')?.scrollIntoView({
+        block: 'center',
+        behavior: 'smooth',
+      });
+    }, 100);
   };
 
   const onImageChange: UploadProps['onChange'] = (
@@ -222,6 +231,16 @@ const IssueForm: FC<IssueFormProps> = () => {
     console.log('attrs', attrs);
     form.setFieldValue('attributes', [...attrs, values]);
     setAttrs([...attrs, values]);
+  };
+
+  const validateMinETH = (rule: any, value: any) => {
+    const price = form.getFieldValue('price');
+
+    if (value && price && value < price) {
+      return Promise.reject(new Error(`The minimum is ${price}`));
+    }
+
+    return Promise.resolve();
   };
 
   if (!initialValues) {
@@ -385,6 +404,18 @@ const IssueForm: FC<IssueFormProps> = () => {
           wrapperCol={{ span: 7 }}
         >
           {/* <InputPrice min={0} suffix="ETH" /> */}
+          <Input min={0} suffix="ETH" placeholder="Enter the Ethereum price" />
+        </Form.Item>
+        <Form.Item
+          name="listingPrice"
+          label="上架金额"
+          rules={[
+            { required: true },
+            { validator: validateETH },
+            { validator: validateMinETH },
+          ]}
+          wrapperCol={{ span: 7 }}
+        >
           <Input min={0} suffix="ETH" placeholder="Enter the Ethereum price" />
         </Form.Item>
         <Form.Item
