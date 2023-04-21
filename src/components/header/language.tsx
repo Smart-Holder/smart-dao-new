@@ -92,7 +92,7 @@ const Lang = () => {
             width: 26px;
             height: 26px;
             vertical-align: middle;
-            background: url('/images/header/icon_navi_top_language_defult@2x.png')
+            background: url('/images/header/icon_navi_top_language_default@2x.png')
               no-repeat center;
             background-size: cover;
             cursor: pointer;
