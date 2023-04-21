@@ -274,7 +274,7 @@ const App = () => {
                 ]}
               />
             </Form.Item>
-            <Form.Item name="type">
+            {/* <Form.Item name="type">
               <Select
                 style={{ width: 140 }}
                 placeholder={formatMessage({ id: 'my.income.type' })}
@@ -294,7 +294,7 @@ const App = () => {
                   },
                 ]}
               />
-            </Form.Item>
+            </Form.Item> */}
             <Form.Item name="time">
               <RangePicker format="YYYY-MM-DD" />
             </Form.Item>

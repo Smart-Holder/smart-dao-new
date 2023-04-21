@@ -187,12 +187,16 @@ const App: NextPageWithLayout = () => {
           }
         >
           <div style={{ marginTop: 15 }} className="dao-info-item">
-            {formatMessage({ id: 'address' })}:{' '}
+            <span className="dao-info-item-label">
+              {formatMessage({ id: 'address' })}:
+            </span>
             {/* {formatAddress(currentDAO.address)} */}
             <Ellipsis copyable>{currentDAO.address}</Ellipsis>
           </div>
           <div className="dao-info-item">
-            {formatMessage({ id: 'financial.asset.time.create' })}:{' '}
+            <span className="dao-info-item-label">
+              {formatMessage({ id: 'financial.asset.time.create' })}:
+            </span>
             {dayjs(currentDAO.time).format('YYYY-MM-DD')}
           </div>
           <div className="dao-info-item">{chainData.name}</div>
@@ -338,12 +342,18 @@ const App: NextPageWithLayout = () => {
       <style jsx>
         {`
           .dao-info-item {
+            display: flex;
+            align-items: center;
             height: 25px;
             margin-top: 20px;
             font-size: 18px;
             font-weight: 500;
             color: #000000;
             line-height: 25px;
+          }
+
+          .dao-info-item-label {
+            margin-right: 10px;
           }
 
           .dao-info-item :global(.ant-typography) {
