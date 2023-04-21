@@ -325,6 +325,10 @@ const App = () => {
 
       <style jsx>
         {`
+          .asset-detail-header :global(.asset-detail-header-image) {
+            object-fit: cover;
+          }
+
           .asset-name {
             height: 40px;
             font-size: 28px;
