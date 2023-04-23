@@ -6,6 +6,7 @@ import { useIntl } from 'react-intl';
 
 import InfoModal from '@/components/modal/infoModal';
 import WalletModal from '@/components/modal/walletModal';
+import Price from '@/components/price';
 
 import useResize from '@/hooks/useResize';
 import { useRef } from 'react';
@@ -36,11 +37,6 @@ const App = ({ data }: NFTProps) => {
   const currentDAO = data?.dao;
 
   const { width } = useResize({ target: '.nft-item-image' });
-
-  const properties = data?.properties || [];
-
-  const priceObj = properties.find((item: any) => item.listingPrice) || {};
-  const ownerObj = properties.find((item: any) => item.owner);
 
   const handleClick = async () => {
     if (!isInit) {
@@ -126,17 +122,7 @@ const App = ({ data }: NFTProps) => {
             </span>
 
             <span className="value" style={{ marginLeft: 12 }}>
-              <Image
-                src="/images/market/icon_nft_card_unit_eth_default@2x.png"
-                width={20}
-                height={20}
-                preview={false}
-                alt=""
-              />
-              {fromToken(
-                Math.max(data.minimumPrice, priceObj.listingPrice || 0),
-              )}{' '}
-              ETH
+              <Price data={data} />
             </span>
           </div>
           {/* <div className="right">

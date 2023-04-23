@@ -6,29 +6,23 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useIntl } from 'react-intl';
 import Ellipsis from '@/components/typography/ellipsis';
+import Price from '@/components/price';
+import { AssetOrderExt } from '@/config/define_ext';
 
 dayjs.extend(customParseFormat);
 
 type DetailTransactionsProps = {
-  data: DetailTransactionItem[];
+  data: AssetOrderExt[];
   currentPage?: number;
   pageSize: number;
   total: number;
   onPageChange?: () => void;
 };
 
-export type DetailTransactionItem = {
-  market: string;
-  event: string;
-  price: number;
-  from: string;
-  to: string;
-  date: number;
-};
-
 const DetailTransactions: FC<DetailTransactionsProps> = (props) => {
   const { formatMessage } = useIntl();
   const { data, currentPage = 1, pageSize, total, onPageChange } = props;
+
   return (
     <>
       <div className="table-title">
@@ -62,27 +56,19 @@ const DetailTransactions: FC<DetailTransactionsProps> = (props) => {
           rowKey="id"
           columns={[
             // { title: '市场', dataIndex: 'market', key: 'market' },
-            {
-              title: formatMessage({ id: 'financial.asset.event' }),
-              dataIndex: 'event',
-              key: 'event',
-              render: (str) => str || '--',
-            },
+            // {
+            //   title: formatMessage({ id: 'financial.asset.event' }),
+            //   dataIndex: 'event',
+            //   key: 'event',
+            //   render: (str) => str || '--',
+            // },
             {
               title: formatMessage({ id: 'financial.asset.price' }),
               dataIndex: 'value',
               key: 'value',
-              render: (value) => (
-                <div className={styles['price']}>
-                  {/* <Image
-                    src="https://storage.nfte.ai/icon/currency/eth.svg"
-                    alt="eth"
-                    width={15}
-                    height={15}
-                  /> */}
-                  {value / 1e18}
-                </div>
-              ),
+              render: (value, item: AssetOrderExt) => {
+                return <Price data={item?.asset} />;
+              },
             },
             {
               title: formatMessage({ id: 'financial.asset.sender' }),

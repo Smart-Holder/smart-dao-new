@@ -3,18 +3,13 @@ import Layout from '@/components/layout';
 import { ReactElement, useEffect, useState } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
 import DetailMarket from '@/containers/dashboard/financial/detail-market';
-import DetailTransactions, {
-  DetailTransactionItem,
-} from '@/containers/dashboard/financial/detail-transactions';
+import DetailTransactions from '@/containers/dashboard/financial/detail-transactions';
 import { request } from '@/api';
 import { useAppSelector } from '@/store/hooks';
 import { useIntl } from 'react-intl';
 import Card, { CardDataProps } from '@/components/card';
-import DashboardHeader from '@/containers/dashboard/header';
-import { shelves } from '@/api/asset';
-import { LoadingOutlined } from '@ant-design/icons';
-import Modal from '@/components/modal';
 import Header from '@/containers/dashboard/financial/detail/header';
+import { AssetOrderExt } from '@/config/define_ext';
 
 const list = [{ name: 'OpenSea', image: '/images/opensea.png' }];
 
@@ -50,10 +45,7 @@ const App: NextPageWithLayout = () => {
 
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [data, setData] = useState<DetailTransactionItem[]>([]);
-
-  const [loading, setLoading] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [data, setData] = useState<AssetOrderExt[]>([]);
 
   useEffect(() => {
     const getData = async () => {
@@ -81,35 +73,6 @@ const App: NextPageWithLayout = () => {
   const onPageChange: PaginationProps['onChange'] = (p) => {
     setPage(p);
     // getData(p);
-  };
-
-  const onShelves = async (name: string) => {
-    const params = {
-      token: storageData.token,
-      tokenId: storageData.tokenId,
-      amount: storageData.minimumPrice,
-    };
-
-    try {
-      setLoading(true);
-      await shelves(params);
-      message.success('success');
-      // window.location.reload();
-      setLoading(false);
-      hideModal();
-    } catch (error: any) {
-      // console.error(error);
-      // message.error(error?.message);
-      setLoading(false);
-    }
-  };
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const hideModal = () => {
-    setIsModalOpen(false);
   };
 
   return (
@@ -151,31 +114,6 @@ const App: NextPageWithLayout = () => {
         pageSize={pageSize}
         data={data}
       />
-
-      <Modal type="normal" open={isModalOpen} onCancel={hideModal}>
-        <div className="title">
-          {formatMessage({ id: 'financial.asset.tradingMarket' })}
-        </div>
-        <div className="market-list">
-          {list.map((item, i) => (
-            <div
-              key={i}
-              className="market-list-item"
-              onClick={() => {
-                onShelves(item.name);
-              }}
-            >
-              {!loading ? (
-                <Avatar src={item.image} size={88} alt="" />
-              ) : (
-                // <LoadingOutlined style={{ fontSize: 88 }} />
-                <Avatar size={88} icon={<LoadingOutlined />} />
-              )}
-              <div className="market-list-item-name">{item.name}</div>
-            </div>
-          ))}
-        </div>
-      </Modal>
 
       <style jsx>
         {`

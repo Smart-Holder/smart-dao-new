@@ -14,6 +14,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 import Layout from '@/components/layout';
 import Select from '@/components/form/filter/select';
+import Price from '@/components/price';
 import { ReactElement, useCallback, useEffect, useState } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
 
@@ -367,7 +368,8 @@ const App: NextPageWithLayout = () => {
               dataIndex: 'minimumPrice',
               key: 'minimumPrice',
               render: (value, item) => {
-                return getPrice(item) + ' ETH';
+                // return getPrice(item) + ' ETH';
+                return <Price value={getPrice(item)} />;
               },
             },
             {
@@ -375,7 +377,8 @@ const App: NextPageWithLayout = () => {
               dataIndex: 'listingPrice',
               key: 'listingPrice',
               render: (value, item) => {
-                return getListingPrice(item) + ' ETH';
+                // return getListingPrice(item) + ' ETH';
+                return <Price value={getListingPrice(item)} />;
               },
             },
           ]}

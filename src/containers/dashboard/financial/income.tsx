@@ -8,12 +8,13 @@ import NftpModal from '@/components/modal/nftpModal';
 import Select from '@/components/form/filter/select';
 import RangePicker from '@/components/form/filter/rangePicker';
 import DashboardHeader from '@/containers/dashboard/header';
+import Ellipsis from '@/components/typography/ellipsis';
 
 import { request } from '@/api';
 
 import { useAppSelector } from '@/store/hooks';
 
-import { formatDayjsValues, fromToken } from '@/utils';
+import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
 
 import type { PaginationProps } from 'antd';
 import { getBalance, release } from '@/api/asset';
@@ -22,8 +23,11 @@ import { useIntl, FormattedMessage } from 'react-intl';
 import Card from '@/components/card';
 import { isPermission } from '@/api/member';
 import { Permissions } from '@/config/enum';
+import { LedgerType } from '@/config/enum';
 
 dayjs.extend(customParseFormat);
+
+const types = Object.keys(LedgerType);
 
 const columns = [
   {
@@ -41,9 +45,9 @@ const columns = [
   // { title: '市场', dataIndex: 'votes', key: 'votes' },
   {
     title: <FormattedMessage id="financial.income.type" />,
-    dataIndex: 'saleType',
-    key: 'saleType',
-    render: (text: string) => text || '-',
+    dataIndex: 'type',
+    key: 'type',
+    render: (text: string) => types[Number(text)] || '-',
   },
   {
     title: <FormattedMessage id="financial.income.amount" />,
@@ -61,6 +65,18 @@ const columns = [
           />
           <span>{fromToken(text)}</span>
         </div>
+      );
+    },
+  },
+  {
+    title: 'Target',
+    dataIndex: 'target',
+    key: 'target',
+    render: (text: string) => {
+      return (
+        <Ellipsis copyable={{ text: text }}>
+          {formatAddress(text, 6, 6)}
+        </Ellipsis>
       );
     },
   },

@@ -6,6 +6,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import Select from '@/components/form/filter/select';
 import RangePicker from '@/components/form/filter/rangePicker';
 import Title from '@/containers/dashboard/header/title';
+import Price from '@/components/price';
 
 import { request } from '@/api';
 
@@ -52,7 +53,7 @@ const columns = [
     title: <FormattedMessage id="my.order.amount" />,
     dataIndex: 'value',
     key: 'value',
-    render: (text: string) => fromToken(text),
+    render: (text: string) => <Price value={fromToken(text)} />,
   },
   {
     title: <FormattedMessage id="my.order.date" />,

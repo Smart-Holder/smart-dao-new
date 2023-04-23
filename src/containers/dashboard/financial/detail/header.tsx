@@ -1,22 +1,9 @@
 import { useAppSelector } from '@/store/hooks';
-import { copyToClipboard, debounce, formatAddress } from '@/utils';
-import {
-  Avatar,
-  Typography,
-  Col,
-  Image,
-  message,
-  Row,
-  Tag,
-  Button,
-} from 'antd';
+import { debounce, formatAddress } from '@/utils';
+import { Avatar, Typography, Col, Image, Row, Tag, Button } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
-import Modal from '@/components/modal';
-import { CopyOutlined, LoadingOutlined } from '@ant-design/icons';
-
-import { shelves } from '@/api/asset';
 import Ellipsis from '@/components/typography/ellipsis';
 import { ETH_CHAINS_INFO } from '@/config/chains';
 import BigNumber from 'bignumber.js';
@@ -46,8 +33,6 @@ const App = () => {
 
   const ownerObj = extra.find((item: any) => item.owner) || {};
 
-  const [loading, setLoading] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageSize, setImageSize] = useState(0);
 
   const chainData = ETH_CHAINS_INFO[chainId];
@@ -75,39 +60,6 @@ const App = () => {
 
   const toAddress = () => {
     window.open(`${chainData.lookAddr}${storageData.token}`, '_blank');
-  };
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const hideModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const onShelves = async (name: string) => {
-    const params = {
-      token: storageData.token,
-      tokenId: storageData.tokenId,
-      amount: storageData.minimumPrice,
-    };
-
-    try {
-      setLoading(true);
-      await shelves(params);
-      message.success('success');
-      // window.location.reload();
-      setLoading(false);
-      hideModal();
-    } catch (error: any) {
-      // console.error(error);
-      // message.error(error?.message);
-      setLoading(false);
-    }
-  };
-
-  const copy = () => {
-    copyToClipboard(storageData.token);
   };
 
   const buy = () => {
@@ -297,31 +249,6 @@ const App = () => {
           </Paragraph>
         </div>
       )}
-
-      <Modal type="normal" open={isModalOpen} onCancel={hideModal}>
-        <div className="title">
-          {formatMessage({ id: 'financial.asset.tradingMarket' })}
-        </div>
-        <div className="market-list">
-          {list.map((item, i) => (
-            <div
-              key={i}
-              className="market-list-item"
-              onClick={() => {
-                onShelves(item.name);
-              }}
-            >
-              {!loading ? (
-                <Avatar src={item.image} size={88} alt="" />
-              ) : (
-                // <LoadingOutlined style={{ fontSize: 88 }} />
-                <Avatar size={88} icon={<LoadingOutlined />} />
-              )}
-              <div className="market-list-item-name">{item.name}</div>
-            </div>
-          ))}
-        </div>
-      </Modal>
 
       <style jsx>
         {`

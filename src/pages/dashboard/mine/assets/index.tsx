@@ -277,19 +277,6 @@ const App: NextPageWithLayout = () => {
             return (
               <Col span={8} key={i}>
                 <NFT data={item} />
-                {/* <FinancialItem
-                    title={`${item.name} #${item.id}`}
-                    logo={item.mediaOrigin}
-                    price={
-                      item.properties.find((i: any) => i.trait_type === 'price')
-                        ?.value || ''
-                    }
-                    priceIcon={<PriceIcon />}
-                    onClick={() => {
-                      localStorage.setItem('asset', JSON.stringify(item));
-                      router.push(`assets/detail?id=${item.id}`);
-                    }}
-                  /> */}
               </Col>
             );
           })}

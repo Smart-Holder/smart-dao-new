@@ -8,20 +8,24 @@ import Modal from '@/components/modal';
 import RangePicker from '@/components/form/filter/rangePicker';
 // import NftpModal from '@/components/modal/nftpModal';
 import Title from '@/containers/dashboard/header/title';
+import Ellipsis from '@/components/typography/ellipsis';
 
 import { request } from '@/api';
 
 import { useAppSelector } from '@/store/hooks';
 
-import { formatDayjsValues, fromToken } from '@/utils';
+import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
 
 import type { PaginationProps } from 'antd';
 import { getBalance } from '@/api/asset';
 import { createVote } from '@/api/vote';
 import { useIntl, FormattedMessage } from 'react-intl';
 import Card from '@/components/card';
+import { LedgerType } from '@/config/enum';
 
 dayjs.extend(customParseFormat);
+
+const types = Object.keys(LedgerType);
 
 const columns = [
   {
@@ -39,9 +43,9 @@ const columns = [
   // { title: '市场', dataIndex: 'votes', key: 'votes' },
   {
     title: <FormattedMessage id="my.income.type" />,
-    dataIndex: 'saleType',
-    key: 'saleType',
-    render: (text: string) => text || '-',
+    dataIndex: 'type',
+    key: 'type',
+    render: (text: string) => types[Number(text)] || '-',
   },
   {
     title: <FormattedMessage id="my.income.amount" />,
@@ -59,6 +63,18 @@ const columns = [
           />
           <span>{fromToken(text)}</span>
         </div>
+      );
+    },
+  },
+  {
+    title: 'Target',
+    dataIndex: 'target',
+    key: 'target',
+    render: (text: string) => {
+      return (
+        <Ellipsis copyable={{ text: text }}>
+          {formatAddress(text, 6, 6)}
+        </Ellipsis>
       );
     },
   },
