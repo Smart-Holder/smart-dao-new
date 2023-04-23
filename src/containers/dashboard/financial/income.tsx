@@ -9,6 +9,7 @@ import Select from '@/components/form/filter/select';
 import RangePicker from '@/components/form/filter/rangePicker';
 import DashboardHeader from '@/containers/dashboard/header';
 import Ellipsis from '@/components/typography/ellipsis';
+import Price from '@/components/price';
 
 import { request } from '@/api';
 
@@ -53,20 +54,7 @@ const columns = [
     title: <FormattedMessage id="financial.income.amount" />,
     dataIndex: 'balance',
     key: 'balance',
-    render: (text: string) => {
-      return (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <Image
-            src="/images/market/icon_nft_card_unit_eth_default@2x.png"
-            width={20}
-            height={20}
-            preview={false}
-            alt=""
-          />
-          <span>{fromToken(text)}</span>
-        </div>
-      );
-    },
+    render: (text: string) => <Price value={fromToken(text)} />,
   },
   {
     title: 'Target',
