@@ -38,17 +38,17 @@ const App = () => {
         request({
           name: 'dao',
           method: 'getDAOsFromCreatedBy',
-          params: { chain: chainId, owner: address },
+          params: { chain: chainId, owner: address, memberObjs: 100 },
         }),
         request({
           name: 'utils',
           method: 'getDAOsFromOwner',
-          params: { chain: chainId, owner: address },
+          params: { chain: chainId, owner: address, memberObjs: 100 },
         }),
         request({
           name: 'user',
           method: 'getUserLikeDAOs',
-          params: { chain: chainId },
+          params: { chain: chainId, memberObjs: 100 },
         }),
       ]);
 

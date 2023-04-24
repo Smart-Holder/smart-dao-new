@@ -41,6 +41,7 @@ const App = () => {
         name: searchText,
         limit: [pageStart, pageSize.current],
         orderBy: 'time desc',
+        memberObjs: 100,
       },
     })) as DAOExtend[];
 
@@ -77,6 +78,7 @@ const App = () => {
         name: searchText,
         limit: [0, pageSize.current],
         orderBy: 'time desc',
+        memberObjs: 100,
       },
     })) as DAOExtend[];
 

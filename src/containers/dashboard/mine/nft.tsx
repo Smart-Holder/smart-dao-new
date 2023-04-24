@@ -122,7 +122,11 @@ const App = ({ data }: NFTProps) => {
             </span>
 
             <span className="value" style={{ marginLeft: 12 }}>
-              <Price data={data} />
+              {data.sellPrice && data.sellPrice > 0 ? (
+                <Price value={fromToken(data.sellPrice)} />
+              ) : (
+                <Price data={data} />
+              )}
             </span>
           </div>
           {/* <div className="right">

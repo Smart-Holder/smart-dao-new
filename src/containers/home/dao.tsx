@@ -72,6 +72,7 @@ const App = () => {
         name: searchText,
         limit: [0, pageSize.current],
         orderBy: 'time desc',
+        memberObjs: 100,
         // owner: address || '',
       },
     })) as DAOExtend[];

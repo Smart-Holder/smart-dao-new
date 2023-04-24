@@ -263,28 +263,31 @@ const VoteModal: FC<VoteModalProps> = (props) => {
             </div>
           )}
 
-          {currentMember.tokenId && !isVote && (
-            <div className="footer">
-              <Button
-                className="button-submit"
-                type="primary"
-                ghost
-                onClick={onOk}
-                loading={loading1}
-              >
-                {formatMessage({ id: 'governance.votes.support' })}
-              </Button>
-              <Button
-                style={{ marginLeft: 20 }}
-                className="button-submit"
-                type="primary"
-                onClick={onCancel}
-                loading={loading2}
-              >
-                {formatMessage({ id: 'governance.votes.against' })}
-              </Button>
-            </div>
-          )}
+          {currentMember.tokenId &&
+            !isVote &&
+            !data.isClose &&
+            !data.isExecuted && (
+              <div className="footer">
+                <Button
+                  className="button-submit"
+                  type="primary"
+                  ghost
+                  onClick={onOk}
+                  loading={loading1}
+                >
+                  {formatMessage({ id: 'governance.votes.support' })}
+                </Button>
+                <Button
+                  style={{ marginLeft: 20 }}
+                  className="button-submit"
+                  type="primary"
+                  onClick={onCancel}
+                  loading={loading2}
+                >
+                  {formatMessage({ id: 'governance.votes.against' })}
+                </Button>
+              </div>
+            )}
         </div>
       )}
       <style jsx>

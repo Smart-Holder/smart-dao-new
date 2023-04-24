@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import styles from './detail-transactions.module.css';
 import { Table, Typography } from 'antd';
-import { formatAddress } from '@/utils';
+import { formatAddress, fromToken } from '@/utils';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useIntl } from 'react-intl';
@@ -67,7 +67,7 @@ const DetailTransactions: FC<DetailTransactionsProps> = (props) => {
               dataIndex: 'value',
               key: 'value',
               render: (value, item: AssetOrderExt) => {
-                return <Price data={item?.asset} />;
+                return <Price value={fromToken(value)} />;
               },
             },
             {
