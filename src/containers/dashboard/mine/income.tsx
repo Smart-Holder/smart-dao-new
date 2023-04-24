@@ -238,10 +238,10 @@ const App = () => {
             },
             // { num: fromToken(amount.amount) + ' ETH', title: '累计发行税收入' },
             // { num: fromToken(amount.amount) + ' ETH', title: '累计交易税收入' },
-            {
-              label: formatMessage({ id: 'my.income.total.balance' }),
-              value: fromToken(balance || 0) + ' ETH',
-            },
+            // {
+            //   label: formatMessage({ id: 'my.income.total.balance' }),
+            //   value: fromToken(balance || 0) + ' ETH',
+            // },
           ]}
         />
       </div>
