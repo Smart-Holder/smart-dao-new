@@ -87,7 +87,8 @@ export const createDAO = async (params: any) => {
       seller_fee_basis_points_first: assetIssuanceTax * 100, // 30%
       seller_fee_basis_points_second: assetCirculationTax * 100, // 10%
       fee_recipient: '0x0000000000000000000000000000000000000000', // auto set
-      contractURIPrefix: baseURI,
+      base_contract_uri: baseURI,
+      base_uri: '',
     },
   ];
 
