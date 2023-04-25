@@ -50,7 +50,7 @@ const App = () => {
 
     setTotal(t);
 
-    const res = await request({
+    let res = await request({
       name: 'utils',
       method: 'getAssetFrom',
       params: {
@@ -62,6 +62,7 @@ const App = () => {
       },
     });
 
+    res = (res || []).filter((item: AssetExt) => item?.dao !== undefined);
     setLoading(false);
     setData(res);
   };
