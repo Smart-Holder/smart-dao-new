@@ -44,10 +44,15 @@ const Menu = () => {
       walletModal.current.show();
       return;
     }
+
+    if (!nickname) {
+      infoModal.current.show();
+      return;
+    }
   };
 
   const handleOpenChange = (flag: boolean) => {
-    if (!getCookie('address')) {
+    if (!getCookie('address') || !nickname) {
       setDropdownOpen(false);
       return;
     }
@@ -99,11 +104,11 @@ const Menu = () => {
   //   });
   // }, []);
 
-  useEffect(() => {
-    if (isInit && !nickname) {
-      infoModal.current.show();
-    }
-  }, [isInit]);
+  // useEffect(() => {
+  //   if (isInit && !nickname) {
+  //     infoModal.current.show();
+  //   }
+  // }, [isInit]);
 
   // useEffect(() => {
   //   if (address && !nickname) {
