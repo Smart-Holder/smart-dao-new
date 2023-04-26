@@ -139,6 +139,7 @@ const App = () => {
         limit: [(page - 1) * pageSize, pageSize],
         name: searchText,
         fromAddres_not: '0x0000000000000000000000000000000000000000',
+        toAddress_not: '0x0000000000000000000000000000000000000000',
         // toAddress: address,
         ...values,
       },
@@ -158,6 +159,8 @@ const App = () => {
         chain: chainId,
         host: currentDAO.host,
         name: searchText,
+        fromAddres_not: '0x0000000000000000000000000000000000000000',
+        toAddress_not: '0x0000000000000000000000000000000000000000',
         ...filterValues,
       },
     });
@@ -235,7 +238,7 @@ const App = () => {
     };
 
     getAmount();
-  }, []);
+  }, [address, chainId, currentDAO.host]);
 
   useEffect(() => {
     if (currentDAO.host) {

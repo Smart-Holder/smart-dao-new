@@ -211,7 +211,7 @@ const App = () => {
     };
 
     getAmount();
-  }, []);
+  }, [chainId, currentDAO.host]);
 
   useEffect(() => {
     if (currentDAO.host) {
