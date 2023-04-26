@@ -63,6 +63,51 @@ const columns = [
   },
 ];
 
+const getColumns = (type = 'Seller') => {
+  return [
+    {
+      title: <FormattedMessage id="my.order.id" />,
+      dataIndex: 'id',
+      key: 'id',
+    },
+    // {
+    //   title: '标签',
+    //   dataIndex: 'tags',
+    //   key: 'tags',
+    //   render: (text: string, { asset: { properties } }: any) => {
+    //     const arr = properties.find((item: any) => item.trait_type === 'tags');
+    //     return arr?.value || '';
+    //   },
+    // },
+    {
+      title: <FormattedMessage id="my.order.asset" />,
+      // dataIndex: ['asset', 'name'],
+      dataIndex: 'asset_id',
+      key: 'asset_id',
+      render: (text: string) => '#' + text,
+    },
+    // { title: '市场', dataIndex: 'votes', key: 'votes' },
+    {
+      title: <FormattedMessage id="my.order.type" />,
+      dataIndex: 'votes',
+      key: 'votes',
+      render: (text: string) => type,
+    },
+    {
+      title: <FormattedMessage id="my.order.amount" />,
+      dataIndex: 'value',
+      key: 'value',
+      render: (text: string) => <Price value={fromToken(text)} />,
+    },
+    {
+      title: <FormattedMessage id="my.order.date" />,
+      dataIndex: 'time',
+      key: 'time',
+      render: (text: string) => dayjs(text).format('MM/DD/YYYY'),
+    },
+  ];
+};
+
 const App = () => {
   const { formatMessage } = useIntl();
   const { chainId, address } = useAppSelector((store) => store.wallet);
@@ -301,7 +346,7 @@ const App = () => {
         </Button> */}
         </div>
         <Table
-          columns={columns}
+          columns={getColumns(values.fromAddres ? 'Seller' : 'Buyer')}
           dataSource={data}
           rowKey="id"
           pagination={{
