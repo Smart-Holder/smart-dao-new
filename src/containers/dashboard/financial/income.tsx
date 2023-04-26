@@ -29,6 +29,7 @@ import { LedgerType } from '@/config/enum';
 dayjs.extend(customParseFormat);
 
 const types = Object.keys(LedgerType);
+const typeOptions = types.map((key, index) => ({ value: index, label: key }));
 
 const columns = [
   {
@@ -37,12 +38,14 @@ const columns = [
     key: 'id',
   },
   // { title: '标签', dataIndex: 'votes', key: 'votes' },
-  {
-    title: <FormattedMessage id="financial.income.asset" />,
-    dataIndex: ['asset', 'id'],
-    key: 'asset.id',
-    render: (text: string) => (text ? '#' + text : '-'),
-  },
+  // {
+  //   title: <FormattedMessage id="financial.income.asset" />,
+  //   // dataIndex: ['asset', 'id'],
+  //   // key: 'asset.id',
+  //   dataIndex: 'asset_id',
+  //   key: 'asset_id',
+  //   render: (text: string) => (text ? '#' + text : '-'),
+  // },
   // { title: '市场', dataIndex: 'votes', key: 'votes' },
   {
     title: <FormattedMessage id="financial.income.type" />,
@@ -122,6 +125,25 @@ const App = () => {
     getAmount();
   }, []);
 
+  // const getData = async (page = 1) => {
+  //   const res = await request({
+  //     name: 'ledger',
+  //     method: 'getLedgerAssetIncomeFrom',
+  //     params: {
+  //       chain: chainId,
+  //       host: currentDAO.host,
+  //       // fromAddress_not: '0x0000000000000000000000000000000000000000',
+  //       // toAddress_not: '0x0000000000000000000000000000000000000000',
+  //       // tokenId: currentMember.tokenId,
+  //       limit: [(page - 1) * pageSize, pageSize],
+  //       name: searchText,
+  //       ...values,
+  //     },
+  //   });
+
+  //   setData(res);
+  // };
+
   const getData = async (page = 1) => {
     const res = await request({
       name: 'utils',
@@ -138,6 +160,26 @@ const App = () => {
 
     setData(res);
   };
+
+  // const getTotal = async () => {
+  //   const filterValues: any = { ...values };
+  //   delete filterValues.time;
+
+  //   const res = await request({
+  //     name: 'ledger',
+  //     method: 'getLedgerAssetIncomeTotalFrom',
+  //     params: {
+  //       chain: chainId,
+  //       host: currentDAO.host,
+  //       fromAddress_not: '0x0000000000000000000000000000000000000000',
+  //       toAddress_not: '0x0000000000000000000000000000000000000000',
+  //       name: searchText,
+  //       ...filterValues,
+  //     },
+  //   });
+
+  //   setTotal(res);
+  // };
 
   const getTotal = async () => {
     const filterValues: any = { ...values };
@@ -312,11 +354,12 @@ const App = () => {
               <Select
                 style={{ width: 140 }}
                 placeholder={formatMessage({ id: 'financial.income.type' })}
-                options={[
-                  { value: '', label: 'Default' },
-                  { value: '1', label: '发行税收入' },
-                  { value: '2', label: '交易税收入' },
-                ]}
+                // options={[
+                //   { value: '', label: 'Default' },
+                //   { value: '1', label: '发行税收入' },
+                //   { value: '2', label: '交易税收入' },
+                // ]}
+                options={typeOptions}
               />
             </Form.Item>
             <Form.Item name="time">

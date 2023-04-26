@@ -102,16 +102,13 @@ const App = ({ data }: NFTProps) => {
 
         {currentDAO?.name && (
           <div className="owner">
-            <Space size={6}>
-              <Avatar
-                style={{ borderColor: '#f5f5f5' }}
-                size={26}
-                src={currentDAO.image}
-                shape="square"
-              />
-              {/* {formatAddress(data.owner)} */}
-              {currentDAO.name}
-            </Space>
+            <Avatar
+              style={{ borderColor: '#f5f5f5', marginRight: 6, flexShrink: 0 }}
+              size={26}
+              src={currentDAO.image}
+              shape="square"
+            />
+            <Paragraph ellipsis>{currentDAO.name}</Paragraph>
           </div>
         )}
 
@@ -176,6 +173,8 @@ const App = ({ data }: NFTProps) => {
           }
 
           .owner {
+            display: flex;
+            align-items: center;
             margin-top: 12px;
             font-size: 12px;
             font-weight: 600;
@@ -184,6 +183,7 @@ const App = ({ data }: NFTProps) => {
           }
 
           .owner :global(.ant-typography) {
+            margin-bottom: 0;
             font-size: 12px;
             font-weight: 600;
             color: #818181;

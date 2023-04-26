@@ -195,7 +195,7 @@
   "my.asset.shelves.label": "ラベル",
   "my.asset.shelves.name": "名称/ID",
   "my.asset.shelves.price": "価格",
-  "my.asset.shelves.listingPrice": "上架金额",
+  "my.asset.shelves.listingPrice": "Listing price",
 
   "my.order.total": "オーダー数",
   "my.order.total.amount": "総取引額",
@@ -439,7 +439,7 @@
   "member.nftp.submit": "NFTPを追加し提案する",
   "member.nftp.date": "追加日付",
 
-  "proposal.message.noPermission": "是否需要创建投票提案?",
+  "proposal.message.noPermission": "Do you want to create a vote?",
   "proposal.create.message": "需要投票后才可以生效",
   "proposal.basic.rights": "NFTP権利",
   "proposal.basic.rights.addNFTP": "NFTPを追加する",

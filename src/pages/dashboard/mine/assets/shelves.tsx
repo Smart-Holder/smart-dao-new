@@ -225,7 +225,7 @@ const App: NextPageWithLayout = () => {
     const params = {
       token: selectedRow.token,
       tokenId: selectedRow.tokenId,
-      amount: toToken(price, 18),
+      unitPrice: toToken(price, 18),
       market,
     };
 

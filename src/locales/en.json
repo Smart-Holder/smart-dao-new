@@ -195,7 +195,7 @@
   "my.asset.shelves.label": "Label",
   "my.asset.shelves.name": "Name/ID",
   "my.asset.shelves.price": "Price",
-  "my.asset.shelves.listingPrice": "上架金额",
+  "my.asset.shelves.listingPrice": "Listing price",
 
   "my.order.total": "Total number of orders",
   "my.order.total.amount": "Total transaction value",
@@ -439,7 +439,7 @@
   "member.nftp.submit": "Add and generate proposals",
   "member.nftp.date": "Date of accession",
 
-  "proposal.message.noPermission": "是否需要创建投票提案?",
+  "proposal.message.noPermission": "Do you want to create a vote?",
   "proposal.create.message": "需要投票后才可以生效",
   "proposal.basic.rights": "NFTP rights",
   "proposal.basic.addNFTP": "Add NFTP",

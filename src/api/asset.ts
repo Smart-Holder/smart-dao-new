@@ -12,6 +12,7 @@ import store from '@/store';
 import { request } from '@/api';
 import { message } from 'antd';
 import { toToken } from '@/utils';
+import { AssetType } from '@/config/define';
 
 // 发行资产
 export function safeMint({
@@ -95,21 +96,35 @@ export async function signTypedData(res: any) {
 export async function shelves({
   token,
   tokenId,
-  amount,
+  unitPrice,
+  // owner,
+  count = 1,
+  type = AssetType.ERC1155,
 }: {
   token: string;
   tokenId: string;
-  amount: string;
+  unitPrice: string;
+  // owner: string;
+  count?: number;
+  type?: AssetType;
 }) {
   try {
-    const { chainId } = store.getState().wallet;
+    const { chainId, address } = store.getState().wallet;
 
-    console.log('shelves params:', token, tokenId, amount);
+    console.log('shelves params:', token, tokenId, unitPrice);
 
     const res = await request({
       name: 'opensea',
       method: 'getOrderParameters',
-      params: { chain: chainId, token, tokenId, amount },
+      params: {
+        chain: chainId,
+        token,
+        tokenId,
+        unitPrice,
+        owner: address,
+        count,
+        type,
+      },
     });
 
     console.log('getOrderParameters', res);

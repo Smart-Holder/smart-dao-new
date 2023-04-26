@@ -35,12 +35,12 @@ const columns = [
     key: 'id',
   },
   // { title: '标签', dataIndex: 'votes', key: 'votes' },
-  {
-    title: <FormattedMessage id="my.income.asset" />,
-    dataIndex: ['asset', 'id'],
-    key: 'asset.id',
-    render: (text: string) => (text ? '#' + text : '-'),
-  },
+  // {
+  //   title: <FormattedMessage id="my.income.asset" />,
+  //   dataIndex: ['asset', 'id'],
+  //   key: 'asset.id',
+  //   render: (text: string) => (text ? '#' + text : '-'),
+  // },
   // { title: '市场', dataIndex: 'votes', key: 'votes' },
   {
     title: <FormattedMessage id="my.income.type" />,
