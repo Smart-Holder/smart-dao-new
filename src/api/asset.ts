@@ -11,7 +11,7 @@ import { connectType as type } from '@/config/enum';
 import store from '@/store';
 import { request } from '@/api';
 import { message } from 'antd';
-import { toToken } from '@/utils';
+import { getEvenNumber, toToken } from '@/utils';
 import { AssetType } from '@/config/define';
 
 // 发行资产
@@ -29,7 +29,8 @@ export function safeMint({
 
   return contractSend(contract, address, 'safeMint', [
     currentDAO.first,
-    '0x' + rng(32).toString('hex'),
+    // '0x' + rng(32).toString('hex'),
+    getEvenNumber(),
     _tokenURI,
     // abi.encodeParameters(["address"], [address]),
     web3.eth.abi.encodeParameters(

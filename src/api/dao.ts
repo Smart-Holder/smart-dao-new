@@ -201,6 +201,16 @@ export const setInformation = async ({
         purpose: `${mission ? 'Mission: ' + mission : ''} ${
           description ? 'Itroduction: ' + description : ''
         }`,
+        extra: [
+          { label: getMessage('start.mission'), value: mission, type: 'text' },
+          {
+            label: getMessage('start.introduce'),
+            value: description,
+            type: 'text',
+          },
+          { label: 'Logo', value: image, type: 'image' },
+          { label: 'Poster', value: extend.poster, type: 'image' },
+        ],
       }),
       extra: [
         {

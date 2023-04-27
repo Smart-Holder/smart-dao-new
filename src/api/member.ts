@@ -200,6 +200,13 @@ export async function setPermissions(
       description: JSON.stringify({
         type: 'basic',
         purpose: `${getMessage('proposal.basic.rights')}: ${labels.valueOf()}`,
+        extra: [
+          {
+            label: getMessage('proposal.basic.rights'),
+            value: permissions,
+            type: 'checkbox',
+          },
+        ],
       }),
       extra: [
         {

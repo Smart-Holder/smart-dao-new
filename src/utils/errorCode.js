@@ -45,6 +45,7 @@ export const errorCode = {
   '0x54ac7492': 'asset non exists',
   '0xf31df50e': 'You need to unlock the asset first',
   '0x21c67f49': 'Lock cannot be empty in asset shell',
+  '0x21c67f49': 'Lock previous owner cannot be empty in asset shell',
   '0x252f4a32': 'not votes power enough in member',
   '0x7f5c5df9': 'member non exists',
   '0xe0150952': 'member already exists',
@@ -60,8 +61,14 @@ export const errorCode = {
   '0x22dd3c54': 'Voting Membership Mismatch',
   '0x29a56ece': 'Cannot vote repeatedly',
   '0xaccf9793': 'vote insufficient votes',
-  '0x1182db35': '',
+  '0x1182db35': 'voting in progress',
   '0xc8c93ba3': 'Proposal was not passed',
+  '0x29749743': 'method not implemented',
+  '0x9b4cee83': 'Exceeding the maximum supply limit',
+  '0x5a708f03': 'token id must be an even number',
+  '0x292c3a85': 'No permission to mint NFTs',
+  '0x8791d6ee': 'token id already exists',
+  '0xf76273e9': 'amount minimum limit',
 };
 
 export const getContractMessage = (error, method) => {

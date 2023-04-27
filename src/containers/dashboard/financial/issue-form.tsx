@@ -30,7 +30,8 @@ import Upload from '@/components/form/upload';
 import Select from '@/components/form/select';
 import { useRouter } from 'next/router';
 import { validateETH } from '@/utils/validator';
-import { toToken } from '@/utils';
+import { getEvenNumber, toToken } from '@/utils';
+import { getMessage } from '@/utils/language';
 
 type IssueFormProps = {};
 
@@ -75,6 +76,53 @@ const IssueForm: FC<IssueFormProps> = () => {
         purpose: `${formatMessage({
           id: 'proposal.financial.asset.publish',
         })}: ${values.name}`,
+        extra: [
+          {
+            label: getMessage('name'),
+            value: values.name,
+            type: 'text',
+          },
+          {
+            label: getMessage('financial.asset.tagname'),
+            value: values.tags,
+            type: 'array',
+          },
+          {
+            label: getMessage('description'),
+            value: values.description,
+            type: 'text',
+          },
+          {
+            label: 'Image',
+            value: image,
+            type: 'image',
+          },
+          {
+            label: getMessage('financial.asset.issue.attributes'),
+            value: values.attributes,
+            type: 'array',
+          },
+          {
+            label: getMessage('financial.asset.price'),
+            value: values.price,
+            type: 'text',
+          },
+          {
+            label: getMessage('my.asset.shelves.listingPrice'),
+            value: values.listingPrice,
+            type: 'text',
+          },
+          {
+            label: getMessage('financial.asset.issue.supply'),
+            value: values.supply,
+            type: 'text',
+          },
+          {
+            label: getMessage('financial.asset.issue.blockchain'),
+            value: values.blockchain,
+            type: 'text',
+          },
+        ],
       }),
       extra: [
         {
@@ -83,7 +131,8 @@ const IssueForm: FC<IssueFormProps> = () => {
           method: 'safeMint',
           params: [
             currentDAO.first,
-            '0x' + rng(32).toString('hex'),
+            // '0x' + rng(32).toString('hex'),
+            getEvenNumber(),
             _tokenURI,
             web3.eth.abi.encodeParameters(
               ['address', 'uint256'],
@@ -155,7 +204,7 @@ const IssueForm: FC<IssueFormProps> = () => {
         return;
       }
 
-      if (!(await isPermission(Permissions.Action_Asset_SafeMint))) {
+      if (await isPermission(Permissions.Action_Asset_SafeMint)) {
         await createProposal(params, _tokenURI);
         Modal.success({
           title: formatMessage({ id: 'proposal.create.message' }),

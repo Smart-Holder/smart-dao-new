@@ -237,3 +237,15 @@ export const copyToClipboard = (text) => {
 export const vw = (pixels = 0) => {
   return pixels === 0 ? '0' : ((pixels / 375) * 100).toFixed(5) + 'vw';
 };
+
+const even = ['0', '2', '4', '6', '8', 'a', 'c', 'e'];
+
+export const getEvenNumber = () => {
+  let n = rng(32).toString('hex');
+
+  if (even.includes(n.slice(-1))) {
+    return '0x' + n;
+  }
+
+  return getEvenNumber();
+};

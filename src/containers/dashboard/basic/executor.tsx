@@ -13,6 +13,7 @@ import { createVote } from '@/api/vote';
 import { useIntl } from 'react-intl';
 import { isRepeate } from '@/utils';
 import { Permissions } from '@/config/enum';
+import { getMessage } from '@/utils/language';
 
 // const options = [
 //   { label: 'Apple', value: 'Apple' },
@@ -89,10 +90,17 @@ const App = () => {
       const params = {
         name: formatMessage({ id: 'proposal.basic.executor' }),
         description: JSON.stringify({
-          type: 'member',
+          type: 'basic',
           purpose: `${formatMessage({
             id: 'proposal.basic.executor',
           })}: ${values.address}`,
+          extra: [
+            {
+              label: getMessage('proposal.basic.executor'),
+              value: values.address,
+              type: 'text',
+            },
+          ],
         }),
         extra,
       };

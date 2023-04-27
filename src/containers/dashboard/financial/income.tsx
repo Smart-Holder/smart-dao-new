@@ -25,6 +25,7 @@ import Card from '@/components/card';
 import { isPermission } from '@/api/member';
 import { Permissions } from '@/config/enum';
 import { LedgerType } from '@/config/enum';
+import { getMessage } from '@/utils/language';
 
 dayjs.extend(customParseFormat);
 
@@ -226,6 +227,13 @@ const App = () => {
         purpose: `${formatMessage({
           id: 'proposal.financial.balance',
         })}: ${fromToken(balance || 0)} ETH`,
+        extra: [
+          {
+            label: getMessage('proposal.financial.balance'),
+            value: `${fromToken(balance || 0)} ETH`,
+            type: 'text',
+          },
+        ],
       }),
       extra: [
         {

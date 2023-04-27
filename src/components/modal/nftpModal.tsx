@@ -11,6 +11,7 @@ import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import store from '../../store';
 import Modal from '@/components/modal';
+import { getMessage } from '@/utils/language';
 
 // const validateMessages = {
 //   required: '${label} is required!',
@@ -70,6 +71,23 @@ const App = (props: any, ref: any) => {
         purpose: `${formatMessage({
           id: 'proposal.basic.addNFTP',
         })}: ${address}`,
+        extra: [
+          {
+            label: getMessage('address'),
+            value: address,
+            type: 'text',
+          },
+          {
+            label: getMessage('member.nftp.copies'),
+            value: votes,
+            type: 'text',
+          },
+          {
+            label: getMessage('my.information.rights'),
+            value: permissions,
+            type: 'checkbox',
+          },
+        ],
       }),
       extra,
     };
