@@ -204,7 +204,7 @@ const IssueForm: FC<IssueFormProps> = () => {
         return;
       }
 
-      if (await isPermission(Permissions.Action_Asset_SafeMint)) {
+      if (!(await isPermission(Permissions.Action_Asset_SafeMint))) {
         await createProposal(params, _tokenURI);
         Modal.success({
           title: formatMessage({ id: 'proposal.create.message' }),
