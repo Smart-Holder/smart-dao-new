@@ -146,7 +146,7 @@ const App: React.FC = () => {
   };
 
   const addMember = () => {
-    const { name, description, image, member } = form.getFieldsValue([
+    const { name, description, image = "", member } = form.getFieldsValue([
       'name',
       'description',
       'image',
