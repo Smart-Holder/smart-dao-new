@@ -440,7 +440,7 @@
   "member.nftp.date": "Date of accession",
 
   "proposal.message.noPermission": "Do you want to create a vote?",
-  "proposal.create.message": "需要投票后才可以生效",
+  "proposal.create.message": "Only after voting can it take effect",
   "proposal.basic.rights": "NFTP rights",
   "proposal.basic.addNFTP": "Add NFTP",
   "proposal.basic.executor": "Replacement of executors",
