@@ -119,7 +119,7 @@ const App = () => {
       params: {
         chain: chainId,
         host: currentDAO.host,
-        target: address,
+        ref: address,
         // tokenId: currentMember.tokenId,
         limit: [(page - 1) * pageSize, pageSize],
         name: searchText,
@@ -140,7 +140,7 @@ const App = () => {
       params: {
         chain: chainId,
         host: currentDAO.host,
-        target: address,
+        ref: address,
         name: searchText,
         ...filterValues,
       },
@@ -206,7 +206,7 @@ const App = () => {
       const res = await request({
         name: 'utils',
         method: 'getLedgerTotalAmount',
-        params: { chain: chainId, host: currentDAO.host, target: address },
+        params: { chain: chainId, host: currentDAO.host, ref: address },
       });
 
       console.log('amount', res);
