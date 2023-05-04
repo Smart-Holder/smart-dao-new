@@ -97,32 +97,11 @@ export function isCanAddNFTP(owner?: string) {
 }
 
 // 加入 DAO
-export async function addNFTP({
-  address,
-  votes,
-  permissions,
-}: {
-  address: string;
-  votes: number;
-  permissions: number[];
-}) {
+export async function addNFTP(params: any) {
   const { web3, address: owner } = store.getState().wallet;
   const { currentDAO } = store.getState().dao;
-  const { nickname, image, description } = store.getState().user.userInfo;
 
   const contract = getContract(web3, Member.abi, currentDAO.member);
-
-  const params = [
-    address,
-    {
-      id: '0x' + rng(32).toString('hex'),
-      name: nickname,
-      description,
-      image,
-      votes,
-    },
-    permissions,
-  ];
 
   await contractSend(contract, owner, 'create', params);
 
