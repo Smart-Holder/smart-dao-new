@@ -5,8 +5,9 @@ import { useRouter } from 'next/router';
 import Item from './daoItem';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
+import { useAllDaos, daosType } from '@/api/graph/dao';
 
-import { Button, Row, Col, Image, List } from 'antd';
+import { Button, Image, List } from 'antd';
 import WalletModal from '@/components/modal/walletModal';
 import CreateModal from '@/components/modal/createModal';
 import InfoModal from '@/components/modal/infoModal';
@@ -24,9 +25,12 @@ const App = () => {
     (store) => store.wallet,
   );
 
+  const { loading: allDaoDataLoading, error, data: allDaoData } = useAllDaos();
+
   const pageSize = useRef(4);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<DAOExtend[]>([]);
+  // const [data, setData] = useState<DAOExtend[]>([]);
+  const [data, setData] = useState<daosType[]>([]);
   // const [myDAOList, setMyDAOList] = useState<DAOExtend[]>([]);
   const [total, setTotal] = useState(0);
 
@@ -64,35 +68,41 @@ const App = () => {
 
     setTotal(t);
 
-    const list = (await request({
-      method: 'getAllDAOs',
-      name: 'dao',
-      params: {
-        chain: chainId || defaultChain,
-        name: searchText,
-        limit: [0, pageSize.current],
-        orderBy: 'time desc',
-        memberObjs: 100,
-        // owner: address || '',
-      },
-    })) as DAOExtend[];
+    // const list = (await request({
+    //   method: 'getAllDAOs',
+    //   name: 'dao',
+    //   params: {
+    //     chain: chainId || defaultChain,
+    //     name: searchText,
+    //     limit: [0, pageSize.current],
+    //     orderBy: 'time desc',
+    //     memberObjs: 100,
+    //     // owner: address || '',
+    //   },
+    // })) as DAOExtend[];
 
     if (chainId && address) {
-      const myDAOList = (await request({
-        method: 'getDAOsFromOwner',
-        name: 'utils',
-        params: { chain: chainId, owner: address },
-      })) as DAOExtend[];
+      // const myDAOList = (await request({
+      //   method: 'getDAOsFromOwner',
+      //   name: 'utils',
+      //   params: { chain: chainId, owner: address },
+      // })) as DAOExtend[];
 
       // setMyDAOList(res || []);
 
-      (list || []).forEach((item) => {
-        item.isMember =
-          item.isMember || myDAOList.some((el) => el.host === item.host);
+      // (list || []).forEach((item) => {
+      //   item.isMember =
+      //     item.isMember || myDAOList.some((el) => el.host === item.host);
+      //   console.log(item, '666');
+      // });
+
+      (allDaoData?.daos || []).forEach((item) => {
+        item.isMember = item.accounts.some((el) => el.id === address);
       });
     }
 
-    setData(list || []);
+    // setData(list || []);
+    setData(allDaoData?.daos || []);
     setLoading(false);
   };
 
@@ -100,9 +110,9 @@ const App = () => {
     setData([]);
     setTotal(0);
     getData();
-  }, [searchText, address, chainId]);
+  }, [searchText, address, chainId, allDaoData]);
 
-  const renderItem = (item: DAOExtend) => (
+  const renderItem = (item: daosType) => (
     <List.Item style={{ padding: 0 }}>
       <Item data={item} />
     </List.Item>

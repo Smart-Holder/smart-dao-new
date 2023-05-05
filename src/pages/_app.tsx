@@ -5,9 +5,11 @@ import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
 
+
 import ConfigProvider from '@/components/provider';
 import WalletProvider from '@/components/provider/wallet';
 import APIProvider from '@/components/provider/api';
+import ApolloClientApp from "@/components/provider/apolloclient"
 
 import store from '@/store';
 
@@ -26,7 +28,11 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     <Provider store={store}>
       <ConfigProvider>
         <WalletProvider>
-          <APIProvider>{getLayout(<Component {...pageProps} />)}</APIProvider>
+          <APIProvider>
+            <ApolloClientApp>
+              {getLayout(<Component {...pageProps} />)}
+            </ApolloClientApp>
+          </APIProvider>
         </WalletProvider>
       </ConfigProvider>
     </Provider>

@@ -15,11 +15,12 @@ import { UserOutlined } from '@ant-design/icons';
 import { DAOType } from '@/config/enum';
 import { DAOExtend } from '@/config/define_ext';
 import { formatToObj } from '@/utils/extend';
+import { daosType } from '@/api/graph/dao';
 
 const { Paragraph } = Typography;
 
 type DAOItemProps = {
-  data: DAOExtend;
+  data: daosType;
   readOnly?: boolean;
   daoType?: DAOType;
 };
@@ -37,12 +38,12 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
   const { isInit } = useAppSelector((store) => store.common);
 
   const { join, setJoin, loading } = useJoin(
-    data.root,
-    data.member,
+    data.votePool.id,
+    data.memberInfo.id,
     data?.isMember,
   );
   const { follow, setFollow } = useFollow(
-    data.id,
+    Number(data.id),
     chainId,
     data.isLike || false,
   );
@@ -52,13 +53,19 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
   const infoModal: any = useRef(null);
   const walletModal: any = useRef(null);
 
-  let members = data.memberObjs || [];
+  // let members = data.memberObjs || [];
 
+  // if (members.length === 0) {
+  //   members = new Array(data.members || 1).fill('');
+  // }
+
+  let members = data.memberInfo.members || [];
   if (members.length === 0) {
-    members = new Array(data.members || 1).fill('');
+    members = new Array(Number(data.memberInfo.count) || 1).fill('');
   }
-
-  const extend = formatToObj(data?.extend?.data);
+  // const extend = formatToObj(data?.extend?.data);
+  const buffer = Buffer.from(data?.extend.slice(2), 'hex');
+  const extend = JSON.parse(buffer.toString('utf8'));
 
   const handleClick = (e: MouseEvent) => {
     if (!isInit) {
@@ -197,7 +204,8 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
             <span className="total">
               {formatMessage(
                 { id: 'home.total.member' },
-                { value: data.members || 1 },
+                { value: data.memberInfo.count || 1 },
+                // { value: data.members || 1 },
               )}
             </span>
 
