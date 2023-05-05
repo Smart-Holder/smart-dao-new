@@ -57,7 +57,7 @@ const App = () => {
     if (!isSupportChain) {
       return;
     }
-
+    let allList: daosType[] = [];
     setLoading(true);
 
     const t = await request({
@@ -95,14 +95,15 @@ const App = () => {
       //     item.isMember || myDAOList.some((el) => el.host === item.host);
       //   console.log(item, '666');
       // });
-
       (allDaoData?.daos || []).forEach((item) => {
-        item.isMember = item.accounts.some((el) => el.id === address);
+        let items = { ...item };
+        items.isMember = item.accounts.some((el) => el.id === address);
+        allList.push(items);
       });
     }
 
     // setData(list || []);
-    setData(allDaoData?.daos || []);
+    setData(allList || []);
     setLoading(false);
   };
 
