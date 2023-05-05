@@ -31,6 +31,9 @@ import { gql, useQuery } from '@apollo/client';
 type Daos = {
   id: string;
 };
+type statisticProps = {
+  totalDAOs: string;
+};
 
 type membersType = {
   id: string;
@@ -62,6 +65,7 @@ export interface daosType extends Daos {
 
 type ResponseDataType = {
   daos: daosType[];
+  statistic: statisticProps;
 };
 
 const GET_ALL_DAOS_ACTION = gql`
@@ -88,6 +92,9 @@ const GET_ALL_DAOS_ACTION = gql`
       votePool {
         id
       }
+    }
+    statistic(id: "0x0000000000000000000000000000000000000000") {
+      totalDAOs
     }
   }
 `;

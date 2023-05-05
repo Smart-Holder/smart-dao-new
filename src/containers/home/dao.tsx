@@ -60,13 +60,13 @@ const App = () => {
     let allList: daosType[] = [];
     setLoading(true);
 
-    const t = await request({
-      method: 'getAllDAOsTotal',
-      name: 'dao',
-      params: { chain: chainId || defaultChain, name: searchText },
-    });
-
-    setTotal(t);
+    // const t = await request({
+    //   method: 'getAllDAOsTotal',
+    //   name: 'dao',
+    //   params: { chain: chainId || defaultChain, name: searchText },
+    // });
+    // setTotal(t);
+    setTotal(Number(allDaoData?.statistic.totalDAOs || 0));
 
     // const list = (await request({
     //   method: 'getAllDAOs',
@@ -81,29 +81,29 @@ const App = () => {
     //   },
     // })) as DAOExtend[];
 
-    if (chainId && address) {
-      // const myDAOList = (await request({
-      //   method: 'getDAOsFromOwner',
-      //   name: 'utils',
-      //   params: { chain: chainId, owner: address },
-      // })) as DAOExtend[];
+    // if (chainId && address) {
+    // const myDAOList = (await request({
+    //   method: 'getDAOsFromOwner',
+    //   name: 'utils',
+    //   params: { chain: chainId, owner: address },
+    // })) as DAOExtend[];
 
-      // setMyDAOList(res || []);
+    // setMyDAOList(res || []);
 
-      // (list || []).forEach((item) => {
-      //   item.isMember =
-      //     item.isMember || myDAOList.some((el) => el.host === item.host);
-      //   console.log(item, '666');
-      // });
-      (allDaoData?.daos || []).forEach((item) => {
-        let items = { ...item };
-        items.isMember = item.accounts.some((el) => el.id === address);
-        allList.push(items);
-      });
-    }
-
+    // (list || []).forEach((item) => {
+    //   item.isMember =
+    //     item.isMember || myDAOList.some((el) => el.host === item.host);
+    // });
+    // }
     // setData(list || []);
+
+    (allDaoData?.daos || []).forEach((item) => {
+      let items = { ...item };
+      items.isMember = item.accounts.some((el) => el.id === address);
+      allList.push(items);
+    });
     setData(allList || []);
+
     setLoading(false);
   };
 
