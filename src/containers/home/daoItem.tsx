@@ -14,7 +14,7 @@ import { UserOutlined } from '@ant-design/icons';
 
 import { DAOType } from '@/config/enum';
 import { DAOExtend } from '@/config/define_ext';
-import { formatToObj } from '@/utils/extend';
+import { formatToObj, formatToBbjExtend } from '@/utils/extend';
 import { daosType } from '@/api/graph/dao';
 
 const { Paragraph } = Typography;
@@ -64,8 +64,7 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
     members = new Array(Number(data.memberInfo.count) || 1).fill('');
   }
   // const extend = formatToObj(data?.extend?.data);
-  const buffer = Buffer.from(data?.extend.slice(2), 'hex');
-  const extend = JSON.parse(buffer.toString('utf8'));
+  const extend = formatToBbjExtend(data?.extend);
 
   const handleClick = (e: MouseEvent) => {
     if (!isInit) {
@@ -81,6 +80,7 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
     const type =
       daoType ||
       (join ? DAOType.Join : follow ? DAOType.Follow : DAOType.Visit);
+    console.log(type, 'type');
     dispatch(setDAOType(type));
     dispatch(setCurrentDAO(data));
     router.push('/dashboard/mine/home');

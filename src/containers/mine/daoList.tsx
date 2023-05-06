@@ -11,6 +11,7 @@ import { getMakeDAOStorage } from '@/utils/launch';
 import { request } from '@/api';
 import { DAOType } from '@/config/enum';
 import { DAOExtend } from '@/config/define_ext';
+import { daosType } from '@/api/graph/dao';
 
 type Active = 'create' | DAOType.Join | DAOType.Follow;
 
@@ -22,11 +23,11 @@ const App = () => {
   const [active, setActive] = useState<Active>('create');
   const [loading, setLoading] = useState(false);
 
-  const [createDAOs, setCreateDAOs] = useState<DAOExtend[]>([]);
-  const [followDAOs, setFollowDAOs] = useState<DAOExtend[]>([]);
-  const [joinDAOs, setJoinDAOs] = useState<DAOExtend[]>([]);
+  const [createDAOs, setCreateDAOs] = useState<daosType[]>([]);
+  const [followDAOs, setFollowDAOs] = useState<daosType[]>([]);
+  const [joinDAOs, setJoinDAOs] = useState<daosType[]>([]);
 
-  const [list, setList] = useState<DAOExtend[]>([]);
+  const [list, setList] = useState<daosType[]>([]);
 
   const cacheDAO = getMakeDAOStorage('start');
 
@@ -52,10 +53,10 @@ const App = () => {
         }),
       ]);
 
-      (res3 || []).forEach((item: DAOExtend) => {
+      (res3 || []).forEach((item: daosType) => {
         item.isMember =
           item.isMember ||
-          (res2 || []).some((el: DAOExtend) => el.host === item.host);
+          (res2 || []).some((el: daosType) => el.id === item.id);
       });
 
       setCreateDAOs(res1);
@@ -142,7 +143,7 @@ const App = () => {
                 <ItemCache data={cacheDAO} daoType={DAOType.Cache} readOnly />
               </Col>
             )}
-            {list.map((item: DAOExtend) => (
+            {list.map((item: daosType) => (
               <Col xs={24} sm={24} lg={12} key={item.id}>
                 <Item
                   data={item}

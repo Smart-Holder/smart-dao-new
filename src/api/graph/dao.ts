@@ -57,6 +57,7 @@ export interface daosType extends Daos {
   accounts: Daos[];
   isMember?: boolean;
   name: string;
+  description: string;
   extend: string;
   image: string;
   votePool: votePoolProps;
@@ -75,6 +76,7 @@ const GET_ALL_DAOS_ACTION = gql`
       blockNumber
       extend
       name
+      description
       image
       memberInfo {
         count

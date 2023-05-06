@@ -36,8 +36,6 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [isLike, setIsLike] = useState(currentDAO?.isLike || false);
 
-  console.log('DAOInfo', DAOInfo);
-
   useEffect(() => {
     const getData = async () => {
       const [res, res2] = await Promise.all([
@@ -46,7 +44,7 @@ const App = () => {
           method: 'getDAOSummarys',
           params: {
             chain: chainId,
-            host: currentDAO.host,
+            host: currentDAO.id,
           },
         }),
         request({
@@ -60,7 +58,7 @@ const App = () => {
       setLikeDAO(res2);
 
       if (res2) {
-        const like = res2.some((item: any) => item.host === currentDAO.host);
+        const like = res2.some((item: any) => item.host === currentDAO.id);
 
         if (like) {
           setIsLike(true);
@@ -68,10 +66,10 @@ const App = () => {
       }
     };
 
-    if (currentDAO.host && chainId) {
+    if (currentDAO.id && chainId) {
       getData();
     }
-  }, [currentDAO.host, chainId]);
+  }, [currentDAO.id, chainId]);
 
   const setJoin = async () => {
     try {
@@ -203,7 +201,7 @@ const App = () => {
               })}
             </div>
             <div className="member-content">
-              {currentDAO?.memberObjs?.length > 0 && (
+              {currentDAO?.memberInfo?.count > 0 && (
                 <Avatar.Group
                   maxCount={6}
                   size={52}
@@ -213,25 +211,27 @@ const App = () => {
                     cursor: 'pointer',
                   }}
                 >
-                  {currentDAO.memberObjs.map((item: any, index: number) => {
-                    if (item.image) {
+                  {currentDAO.memberInfo?.members.map(
+                    (item: any, index: number) => {
+                      if (item.image) {
+                        return (
+                          <Avatar
+                            style={{ backgroundColor: '#000', borderWidth: 3 }}
+                            src={item.image}
+                            key={index}
+                          />
+                        );
+                      }
+
                       return (
                         <Avatar
                           style={{ backgroundColor: '#000', borderWidth: 3 }}
-                          src={item.image}
+                          icon={<UserOutlined />}
                           key={index}
                         />
                       );
-                    }
-
-                    return (
-                      <Avatar
-                        style={{ backgroundColor: '#000', borderWidth: 3 }}
-                        icon={<UserOutlined />}
-                        key={index}
-                      />
-                    );
-                  })}
+                    },
+                  )}
                 </Avatar.Group>
               )}
             </div>

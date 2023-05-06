@@ -33,7 +33,7 @@ const App = ({ type }: { type?: string }) => {
         )}
 
         <span className="dao-name ellipsis">
-          {dao.name || formatAddress(dao.address)}
+          {dao.name || formatAddress(dao.id)}
         </span>
       </Space>
 

@@ -41,7 +41,7 @@ const App = ({
     const dao = getSessionStorage('currentDAO');
     let daoType = localStorage.getItem('daoType');
 
-    if (!dao || !dao.address) {
+    if (!dao || !dao.id) {
       router.replace('/');
       return;
     }

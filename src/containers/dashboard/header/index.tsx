@@ -4,7 +4,7 @@ import { Avatar, Button, Col, Image, Row, Space } from 'antd';
 import buffer from 'somes/buffer';
 
 import Title from '@/containers/dashboard/header/title';
-import { formatToObj } from '@/utils/extend';
+import { formatToObj, formatToBbjExtend } from '@/utils/extend';
 
 type Data = {
   title?: string;
@@ -18,9 +18,8 @@ type Data = {
 const App = ({ title, avatar, name, buttons, children, padding }: Data) => {
   const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
 
-  const extend = formatToObj(currentDAO?.extend?.data);
-  console.log('extend', extend);
-
+  // const extend = formatToObj(currentDAO?.extend?.data);
+  const extend = formatToBbjExtend(currentDAO?.extend);
   return (
     <div>
       {title && <Title title={title} />}

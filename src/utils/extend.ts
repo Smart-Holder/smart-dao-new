@@ -31,3 +31,16 @@ export const formatToBytes = (data: object) => {
 
   return '0x' + buffer.from(JSON.stringify(data)).toString('hex');
 };
+
+export const formatToBbjExtend = (data: any) => {
+  if (!data) {
+    return {};
+  }
+
+  try {
+    const buffer = Buffer.from(data.slice(2), 'hex');
+    return JSON.parse(buffer.toString('utf8'));
+  } catch (error) {
+    return {};
+  }
+};

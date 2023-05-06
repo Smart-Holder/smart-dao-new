@@ -42,8 +42,7 @@ export default function BasicLayout({
     const initData = async () => {
       const dao = getSessionStorage('currentDAO');
       let type = localStorage.getItem('daoType');
-
-      if (!dao || !dao.address) {
+      if (!dao || !dao.id) {
         router.push('/');
         return;
       }
@@ -58,7 +57,7 @@ export default function BasicLayout({
         const members = await request({
           name: 'utils',
           method: 'getMembersFrom',
-          params: { chain: chainId, host: dao.host, owner: address },
+          params: { chain: chainId, host: dao.id, owner: address },
         });
 
         if (members && members.length > 0) {
@@ -79,7 +78,7 @@ export default function BasicLayout({
     if (!init) {
       return;
     }
-
+    console.log(666);
     const getDAOAndMember = async () => {
       const daos = await request({
         name: 'utils',
@@ -92,7 +91,7 @@ export default function BasicLayout({
         return;
       }
 
-      const dao = daos.find((item: any) => item.host === currentDAO.host);
+      const dao = daos.find((item: any) => item.host === currentDAO.id);
 
       if (!dao) {
         router.push('/');
