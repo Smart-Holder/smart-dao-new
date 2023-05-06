@@ -151,9 +151,13 @@ const items: MenuProps['items'] = [
           preview={false}
         />,
         [
+          // getItem(
+          //   <FormattedMessage id="sider.governance.proposal" />,
+          //   '/dashboard/governance/proposal',
+          // ),
           getItem(
-            <FormattedMessage id="sider.governance.proposal" />,
-            '/dashboard/governance/proposal',
+            <FormattedMessage id="sider.member.nftp" />,
+            '/dashboard/member/nftp',
           ),
           getItem(
             <FormattedMessage id="sider.governance.votes" />,
@@ -187,24 +191,24 @@ const items: MenuProps['items'] = [
           ),
         ],
       ),
-      getItem(
-        <FormattedMessage id="sider.member" />,
-        '/dashboard/member',
-        <Image
-          style={{ display: 'block' }}
-          src="/images/sider/icon_nav_side_member_default@2x.png"
-          width={20}
-          height={20}
-          alt="icon"
-          preview={false}
-        />,
-        [
-          getItem(
-            <FormattedMessage id="sider.member.nftp" />,
-            '/dashboard/member/nftp',
-          ),
-        ],
-      ),
+      // getItem(
+      //   <FormattedMessage id="sider.member" />,
+      //   '/dashboard/member',
+      //   <Image
+      //     style={{ display: 'block' }}
+      //     src="/images/sider/icon_nav_side_member_default@2x.png"
+      //     width={20}
+      //     height={20}
+      //     alt="icon"
+      //     preview={false}
+      //   />,
+      //   [
+      //     getItem(
+      //       <FormattedMessage id="sider.member.nftp" />,
+      //       '/dashboard/member/nftp',
+      //     ),
+      //   ],
+      // ),
     ],
     'group',
   ),

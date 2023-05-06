@@ -1,7 +1,8 @@
-import { Col, Form, Image, Input, Row, Skeleton } from 'antd';
+import { Button, Col, Form, Image, Input, Row, Skeleton } from 'antd';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { useRouter } from 'next/router';
 
 import Select from '@/components/form/filter/select';
 import Layout from '@/components/layout';
@@ -25,6 +26,7 @@ import { useAppSelector } from '@/store/hooks';
 dayjs.extend(customParseFormat);
 
 const App: NextPageWithLayout = () => {
+  const router = useRouter();
   const { formatMessage } = useIntl();
   const { chainId, address } = useAppSelector((store) => store.wallet);
   const { currentDAO } = useAppSelector((store) => store.dao);
@@ -175,10 +177,29 @@ const App: NextPageWithLayout = () => {
     setOpenModal(false);
   };
 
+  const handleGovernanceProposal = () => {
+    router.push('/dashboard/governance/proposal');
+  };
+
   return (
     <div className="dashboard-content-scroll" id="scrollTarget">
-      <div style={{ margin: '30px 80px 0' }}>
+      <div
+        style={{
+          margin: '30px 80px 0',
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
+      >
         <Title title={formatMessage({ id: 'sider.governance.votes' })} />
+        <Button
+          type="primary"
+          className="button-filter"
+          onClick={handleGovernanceProposal}
+        >
+          {formatMessage({
+            id: 'sider.governance.proposal',
+          })}
+        </Button>
       </div>
 
       <div className="content-min-height" style={{ margin: '40px 80px 50px' }}>
