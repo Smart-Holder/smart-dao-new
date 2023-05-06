@@ -39,7 +39,7 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
 
   const { join, setJoin, loading } = useJoin(
     data.votePool.id,
-    data.memberInfo.id,
+    data.memberPool.id,
     data?.isMember,
   );
   const { follow, setFollow } = useFollow(
@@ -59,9 +59,9 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
   //   members = new Array(data.members || 1).fill('');
   // }
 
-  let members = data.memberInfo.members || [];
+  let members = data.memberPool.members || [];
   if (members.length === 0) {
-    members = new Array(Number(data.memberInfo.count) || 1).fill('');
+    members = new Array(Number(data.memberPool.count) || 1).fill('');
   }
   // const extend = formatToObj(data?.extend?.data);
   const extend = formatToBbjExtend(data?.extend);
@@ -204,7 +204,7 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
             <span className="total">
               {formatMessage(
                 { id: 'home.total.member' },
-                { value: data.memberInfo.count || 1 },
+                { value: data.memberPool.count || 1 },
                 // { value: data.members || 1 },
               )}
             </span>

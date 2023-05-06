@@ -46,14 +46,14 @@ type votePoolProps = {
   id: string;
 };
 
-type memberInfoType = {
+type memberPoolType = {
   count: string;
   id: string;
   members: membersType[];
 };
 export interface daosType extends Daos {
   blockNumber: string;
-  memberInfo: memberInfoType;
+  memberPool: memberPoolType;
   accounts: Daos[];
   isMember?: boolean;
   name: string;
@@ -78,7 +78,7 @@ const GET_ALL_DAOS_ACTION = gql`
       name
       description
       image
-      memberInfo {
+      memberPool {
         count
         id
         members(orderBy: tokenId, orderDirection: asc) {
