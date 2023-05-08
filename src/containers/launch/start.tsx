@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Button, Form, Input, Tag, Image, Row, Col } from 'antd';
+import { Button, Form, Input, Tag, Image, Row, Col, Avatar } from 'antd';
 import { useIntl } from 'react-intl';
 
 import Upload from '@/components/form/upload';
 import Modal from '@/components/modal';
+import MemberModal from '@/components/modal/memberModal';
+import { Member } from '@/config/enum';
 
 import { validateChinese, validateEthAddress } from '@/utils/validator';
 import { hexRandomNumber } from '@/utils';
@@ -32,7 +34,7 @@ const App: React.FC = () => {
   );
 
   // const [cacheDAO, setCacheDAO] = useState({}) as any;
-  const [members, setMembers] = useState([
+  const [members, setMembers] = useState<Member[]>([
     {
       id: hexRandomNumber(),
       name: nickname,
@@ -47,6 +49,8 @@ const App: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imageMessage1, setImageMessage1] = useState('');
   const [imageMessage2, setImageMessage2] = useState('');
+
+  const memberModal: any = useRef(null);
 
   const [form] = Form.useForm();
 
@@ -145,37 +149,25 @@ const App: React.FC = () => {
     setMembers([...members]);
   };
 
-  const addMember = () => {
-    const { name, description, image = "", member } = form.getFieldsValue([
-      'name',
-      'description',
-      'image',
-      'member',
-    ]);
+  const showMemberModal = () => {
+    memberModal.current.show();
+  };
 
-    if (!member) {
-      return;
+  const setMember = (values: Member, index: number) => {
+    console.log('setMember', index, values);
+    memberModal.current.show(values, index);
+  };
+
+  const addMember = async (values: Member, index: number) => {
+    const newMembers = [...members];
+
+    if (index === -1) {
+      newMembers.push(values);
+    } else {
+      newMembers.splice(index, 1, values);
     }
 
-    form
-      .validateFields(['member'])
-      .then(() => {
-        const newMembers = [
-          ...members,
-          {
-            id: hexRandomNumber(),
-            name,
-            description,
-            image,
-            votes: 1,
-            owner: member,
-          },
-        ];
-
-        setMembers(newMembers);
-        form.setFieldValue('member', '');
-      })
-      .catch((errorInfo) => {});
+    setMembers(newMembers);
   };
 
   const validateRepeat = (rule: any, value: string) => {
@@ -302,51 +294,59 @@ const App: React.FC = () => {
         </div>
         <div className="h2">{formatMessage({ id: 'start.members.desc' })}</div>
 
-        <Row gutter={27} align="bottom">
-          <Col span={17}>
-            <Form.Item
-              name="member"
-              style={{ marginTop: 40, flex: 1 }}
-              label={formatMessage({ id: 'name' })}
-              rules={[
-                { validator: validateEthAddress },
-                { validator: validateRepeat },
-              ]}
-              wrapperCol={{ span: 24 }}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={7}>
-            <Button
-              className="button-form"
-              style={{ marginBottom: 32 }}
-              type="primary"
-              onClick={addMember}
-            >
-              {formatMessage({ id: 'start.add' })}
-            </Button>
-          </Col>
-        </Row>
+        <Form.Item style={{ marginTop: 40 }}>
+          <Button
+            className="button-form"
+            style={{ marginBottom: 20 }}
+            type="primary"
+            onClick={showMemberModal}
+          >
+            {formatMessage({ id: 'start.add' })}
+          </Button>
+        </Form.Item>
 
         <Row gutter={[20, 20]}>
-          <Col span={15}>
+          {/* <Col span={15}>
             <Tag key={address} className="tag">
-              {address}
+              <div className="tag-content">
+                {image ? (
+                  <Avatar src={image} size={42} />
+                ) : (
+                  <Avatar
+                    size={42}
+                    src="/images/header/img_circle_no_avatar@2x.png"
+                  />
+                )}
+                <span>{address}</span>
+              </div>
             </Tag>
-          </Col>
-          {members.slice(1).map((item: any) => (
+          </Col> */}
+          {/* {members.slice(1).map((item: any) => ( */}
+          {members.map((item: any, index: number) => (
             <Col span={15} key={item.owner}>
               <Tag
-                closable
+                closable={index !== 0}
                 onClose={(e) => {
                   e.preventDefault();
                   removeMember(item.owner);
                 }}
                 data-value={item.owner}
                 className="tag"
+                onClick={() => {
+                  setMember(item, index);
+                }}
               >
-                {item.owner}
+                <div className="tag-content">
+                  {item.image ? (
+                    <Avatar src={item.image} size={42} />
+                  ) : (
+                    <Avatar
+                      size={42}
+                      src="/images/header/img_circle_no_avatar@2x.png"
+                    />
+                  )}
+                  <span>{item.owner}</span>
+                </div>
               </Tag>
             </Col>
           ))}
@@ -379,6 +379,8 @@ const App: React.FC = () => {
         </div>
       </Modal>
 
+      <MemberModal ref={memberModal} onSave={addMember} members={members} />
+
       <style jsx>
         {`
           .card :global(.tag) {
@@ -395,6 +397,17 @@ const App: React.FC = () => {
             line-height: 54px;
             background: #fafafa;
             border: none;
+            cursor: pointer;
+          }
+
+          .tag-content {
+            display: flex;
+            align-items: center;
+          }
+
+          .tag-content :global(.ant-avatar) {
+            flex-shrink: 0;
+            margin-right: 20px;
           }
 
           .modal-content-text {

@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 import store from '../../store';
 import Modal from '@/components/modal';
 import { getMessage } from '@/utils/language';
+import { request } from '@/api';
 
 // const validateMessages = {
 //   required: '${label} is required!',
@@ -45,26 +46,27 @@ const App = (props: any, ref: any) => {
     const { address, votes, permissions } = values;
     const { currentDAO } = store.getState().dao;
 
-    const extra = [
+    setLoading(true);
+
+    const memberDetail = await request({
+      name: 'user',
+      method: 'getUserFrom',
+      params: { address },
+    });
+
+    const memberParams = [
+      address,
       {
-        abi: 'member',
-        target: currentDAO.member,
-        method: 'create',
-        params: [
-          address,
-          {
-            id: '0x' + rng(32).toString('hex'),
-            name: nickname,
-            description,
-            image,
-            votes: votes || 1,
-          },
-          permissions,
-        ],
+        id: '0x' + rng(32).toString('hex'),
+        name: memberDetail?.nickname || nickname,
+        description: memberDetail?.description || description,
+        image: memberDetail?.image || image,
+        votes: Number(votes) || 1,
       },
+      permissions,
     ];
 
-    const params = {
+    const voteParams = {
       name: formatMessage({ id: 'proposal.basic.addNFTP' }),
       description: JSON.stringify({
         type: 'member',
@@ -89,16 +91,22 @@ const App = (props: any, ref: any) => {
           },
         ],
       }),
-      extra,
+      extra: [
+        {
+          abi: 'member',
+          target: currentDAO.member,
+          method: 'create',
+          params: memberParams,
+        },
+      ],
     };
 
     try {
-      setLoading(true);
       if (await isCanAddNFTP()) {
-        await addNFTP({ ...values, votes: Number(values.votes) });
+        await addNFTP(memberParams);
         router.reload();
       } else {
-        await createVote(params);
+        await createVote(voteParams);
         Modal.success({
           title: formatMessage({ id: 'proposal.create.message' }),
         });
@@ -214,7 +222,7 @@ const App = (props: any, ref: any) => {
             htmlType="submit"
             loading={loading}
           >
-            {formatMessage({ id: 'member.nftp.submit' })}
+            {formatMessage({ id: 'add' })}
           </Button>
         </Form.Item>
       </Form>

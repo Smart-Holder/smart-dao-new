@@ -47,3 +47,12 @@ export enum DAOType {
   Cache = 'cache', // 自己创建，还未提交的DAO，保存在 localStorage
   Join = 'join', // 已加入或自己创建
 }
+
+export type Member = {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  votes: number;
+  owner: string;
+};
