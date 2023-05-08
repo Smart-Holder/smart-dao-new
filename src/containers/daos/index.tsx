@@ -63,7 +63,7 @@ const App = () => {
     getLayoutData({
       variables: {
         name_contains: searchText,
-        first: pageSize,
+        first: pageSize.current,
         skip: pageStart,
       },
     });
@@ -120,7 +120,7 @@ const App = () => {
     getLayoutData({
       variables: {
         name_contains: searchText,
-        first: pageSize,
+        first: pageSize.current,
         skip: pageStart,
       },
     });

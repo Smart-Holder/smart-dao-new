@@ -111,6 +111,85 @@ const GET_ALL_DAOS_ACTION = gql`
   }
 `;
 
+interface Options {
+  first?: number;
+  skip?: number;
+  orderDirection?: 'desc' | 'asc';
+  orderBy?: string;
+  where?: Dict;
+  subs?: Dict<Options>;
+}
+
+export function stringify(opts?: Options, defaults?: Options) {
+  let opts_ = { ...defaults, opts };
+  let str = ``;
+  for (let [k, v] of Object.entries(opts_)) {
+    if (v !== null && v !== undefined) {
+      if ('where' == k || typeof v == 'object') {
+        str += `,${k}: { ${stringify(v as any)} }`;
+      } else {
+        str += `,${k}: ${v}`;
+      }
+    }
+  }
+  return str;
+}
+
+const GET_ALL_DAOS_ACTION_DEMO = (opts: Options) => gql`
+  query GetAllDaos {
+    daos(${stringify(opts, {
+      orderDirection: 'desc',
+      first: 4,
+      orderBy: 'blockNumber',
+    })}) {
+      id
+      blockNumber
+      extend
+      name
+      description
+      image
+      memberPool {
+        count
+        id
+        members(${stringify(opts.subs?.members, {
+          orderBy: 'tokenId',
+          orderDirection: 'asc',
+        })}) {
+          id
+          image
+          name
+          tokenId
+        }
+      }
+      accounts {
+        id
+      }
+      votePool {
+        id
+      }
+    }
+    statistic(id: "0x0000000000000000000000000000000000000000") {
+      totalDAOs
+    }
+  }
+`;
+
+export const useAllDaos_demo = ({
+  first,
+  skip,
+  image,
+  id,
+}: {
+  first?: number;
+  skip?: number;
+  image?: string;
+  id?: number;
+}) => {
+  return useQuery<ResponseDataType>(
+    GET_ALL_DAOS_ACTION_DEMO({ first, skip, where: { image, id } }),
+  );
+};
+
 const useAllDaos = ({ name_contains = '', first = 4 }: queryRecord) => {
   return useQuery<ResponseDataType>(GET_ALL_DAOS_ACTION, {
     variables: {
@@ -119,7 +198,6 @@ const useAllDaos = ({ name_contains = '', first = 4 }: queryRecord) => {
     },
   });
 };
-
 const useLayoutDaos = () => {
   return useLazyQuery<ResponseDataType>(GET_ALL_DAOS_ACTION);
 };
