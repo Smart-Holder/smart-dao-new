@@ -1,4 +1,4 @@
-import { gql, useQuery } from '@apollo/client';
+import { gql, useQuery, useLazyQuery } from '@apollo/client';
 
 // interface QueryDaosType {
 //   fn: string;
@@ -68,10 +68,20 @@ type ResponseDataType = {
   daos: daosType[];
   statistic: statisticProps;
 };
+type queryRecord = {
+  name_contains?: String;
+  first?: number;
+};
 
 const GET_ALL_DAOS_ACTION = gql`
-  query GetAllDaos {
-    daos(orderDirection: desc, first: 4, orderBy: blockNumber) {
+  query GetAllDaos($name_contains: String, $first: Int, $skip: Int) {
+    daos(
+      orderDirection: desc
+      first: $first
+      orderBy: blockNumber
+      where: { name_contains: $name_contains }
+      skip: $skip
+    ) {
       id
       blockNumber
       extend
@@ -102,18 +112,18 @@ const GET_ALL_DAOS_ACTION = gql`
 `;
 
 interface Options {
-  first?: number,
-  skip?: number,
-  orderDirection?: 'desc'| 'asc',
-  orderBy?: string,
-  where?: Dict,
-  subs?: Dict<Options>,
+  first?: number;
+  skip?: number;
+  orderDirection?: 'desc' | 'asc';
+  orderBy?: string;
+  where?: Dict;
+  subs?: Dict<Options>;
 }
 
 export function stringify(opts?: Options, defaults?: Options) {
-  let opts_ = {...defaults, opts};
+  let opts_ = { ...defaults, opts };
   let str = ``;
-  for (let [k,v] of Object.entries(opts_)) {
+  for (let [k, v] of Object.entries(opts_)) {
     if (v !== null && v !== undefined) {
       if ('where' == k || typeof v == 'object') {
         str += `,${k}: { ${stringify(v as any)} }`;
@@ -125,9 +135,13 @@ export function stringify(opts?: Options, defaults?: Options) {
   return str;
 }
 
-const GET_ALL_DAOS_ACTION_DEMO = (opts: Options)=>gql`
+const GET_ALL_DAOS_ACTION_DEMO = (opts: Options) => gql`
   query GetAllDaos {
-    daos(${stringify(opts, {orderDirection: 'desc', first: 4, orderBy: 'blockNumber'})}) {
+    daos(${stringify(opts, {
+      orderDirection: 'desc',
+      first: 4,
+      orderBy: 'blockNumber',
+    })}) {
       id
       blockNumber
       extend
@@ -137,7 +151,10 @@ const GET_ALL_DAOS_ACTION_DEMO = (opts: Options)=>gql`
       memberPool {
         count
         id
-        members(${stringify(opts.subs?.members, {orderBy: 'tokenId', orderDirection: 'asc'} )}) {
+        members(${stringify(opts.subs?.members, {
+          orderBy: 'tokenId',
+          orderDirection: 'asc',
+        })}) {
           id
           image
           name
@@ -157,17 +174,32 @@ const GET_ALL_DAOS_ACTION_DEMO = (opts: Options)=>gql`
   }
 `;
 
-export const useAllDaos_demo = ({first,skip,image,id}: {
-  first?: number,
-  skip?: number,
-  image?: string,
-  id?: number
+export const useAllDaos_demo = ({
+  first,
+  skip,
+  image,
+  id,
+}: {
+  first?: number;
+  skip?: number;
+  image?: string;
+  id?: number;
 }) => {
-  return useQuery<ResponseDataType>(GET_ALL_DAOS_ACTION_DEMO({ first, skip, where:{image,id} }));
+  return useQuery<ResponseDataType>(
+    GET_ALL_DAOS_ACTION_DEMO({ first, skip, where: { image, id } }),
+  );
 };
 
-const useAllDaos = () => {
-  return useQuery<ResponseDataType>(GET_ALL_DAOS_ACTION);
+const useAllDaos = ({ name_contains = '', first = 4 }: queryRecord) => {
+  return useQuery<ResponseDataType>(GET_ALL_DAOS_ACTION, {
+    variables: {
+      name_contains,
+      first,
+    },
+  });
+};
+const useLayoutDaos = () => {
+  return useLazyQuery<ResponseDataType>(GET_ALL_DAOS_ACTION);
 };
 
-export { useAllDaos };
+export { useAllDaos, useLayoutDaos };
