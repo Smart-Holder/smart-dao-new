@@ -16,10 +16,11 @@ const App = () => {
     (store) => store.wallet,
   );
 
-  const pageSize = useRef(4);
+  const pageSize = useRef(5);
   // const [pageStart, setPageStart] = useState(0);
   const [pageStart, setPageStart] = useState(0);
   const [total, setTotal] = useState(0);
+  const [currentTotal, setCurrentTotal] = useState(0);
   // const [data, setData] = useState<DAOExtend[]>([]);
   const [data, setData] = useState<daosType[]>([]);
   const [loading, setLoading] = useState(false);
@@ -29,18 +30,13 @@ const App = () => {
 
   const defaultChain = Number(process.env.NEXT_PUBLIC_DEFAULT_CHAIN);
 
-  const [
-    getLayoutData,
-    { loading: layoutLoading, error: layoutError, data: layoutData },
-  ] = useLayoutDaos();
+  const [getLayoutData] = useLayoutDaos();
 
   const getData = async () => {
     if (!isSupportChain) {
       return;
     }
-
-    setLoading(layoutLoading);
-
+    // setLoading(true);
     // const res = (await request({
     //   method: 'getAllDAOs',
     //   name: 'dao',
@@ -60,17 +56,23 @@ const App = () => {
     // setPageStart(pageStart + pageSize.current);
     // setData([...data, ...res]);
 
-    getLayoutData({
+    const {
+      loading,
+      error,
+      data: dataDaos,
+    } = await getLayoutData({
       variables: {
         name_contains: searchText,
         first: pageSize.current,
-        skip: pageStart,
+        skip: pageStart + pageSize.current,
       },
     });
-
+    setTotal(Number(dataDaos?.statistic?.totalDAOs || 0));
+    setCurrentTotal(Number(dataDaos?.daos.length));
     setPageStart(pageStart + pageSize.current);
-    setData([...data, ...(layoutData?.daos || [])]);
-    // setLoading(false);
+    setData([...data, ...(dataDaos?.daos || [])]);
+    setLoading(loading);
+    setInit(false);
   };
 
   const resetData = async () => {
@@ -78,15 +80,12 @@ const App = () => {
       return;
     }
     let allList: daosType[] = [];
-    setLoading(true);
 
-    const t = await request({
-      method: 'getAllDAOsTotal',
-      name: 'dao',
-      params: { chain: chainId || defaultChain, name: searchText },
-    });
-
-    setTotal(t);
+    // const t = await request({
+    //   method: 'getAllDAOsTotal',
+    //   name: 'dao',
+    //   params: { chain: chainId || defaultChain, name: searchText },
+    // });
 
     // const list = (await request({
     //   method: 'getAllDAOs',
@@ -116,34 +115,40 @@ const App = () => {
     // }
     // setPageStart(pageSize.current);
     // setData(list);
-
-    getLayoutData({
+    const {
+      loading,
+      error,
+      data: dataDaos,
+    } = await getLayoutData({
       variables: {
         name_contains: searchText,
         first: pageSize.current,
-        skip: pageStart,
+        skip: 0,
       },
     });
+    setLoading(loading);
 
-    (layoutData?.daos || []).forEach((item) => {
+    (dataDaos?.daos || []).forEach((item) => {
       let items = { ...item };
       items.isMember = item.accounts.some((el) => el.id === address);
       allList.push(items);
     });
-
-    setPageStart(pageStart + pageSize.current);
-    setData([...data, ...(layoutData?.daos || [])]);
-
-    setLoading(false);
+    setTotal(Number(dataDaos?.statistic?.totalDAOs || 0));
+    setCurrentTotal(Number(dataDaos?.daos.length));
+    setPageStart(0);
+    setData([...allList]);
+    // setLoading(false);
     setInit(true);
   };
 
   useEffect(() => {
     setData([]);
     setTotal(0);
+    setCurrentTotal(0);
     resetData();
   }, [searchText, address, chainId]);
 
+  console.log(data.length < total, data.length, total, '999', loading);
   return (
     <div>
       <div className="h1">DAOs</div>
@@ -151,7 +156,8 @@ const App = () => {
       <InfiniteScroll
         dataLength={data.length}
         next={getData}
-        hasMore={data.length < total}
+        // hasMore={data.length < total}
+        hasMore={currentTotal >= pageSize.current}
         loader={
           <Skeleton style={{ marginTop: 20 }} paragraph={{ rows: 1 }} active />
         }
