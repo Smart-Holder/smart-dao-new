@@ -116,7 +116,9 @@ const App = () => {
     // });
     // setData(allList || []);
 
-    getLayoutData({ variables: { name_contains: '', first: 4, skip: 0 } });
+    getLayoutData({
+      variables: { name_contains: searchText, first: 4, skip: 0 },
+    });
 
     (layoutData?.daos || []).forEach((item) => {
       let items = { ...item };
