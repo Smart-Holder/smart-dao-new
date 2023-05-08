@@ -38,8 +38,8 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
   const { isInit } = useAppSelector((store) => store.common);
 
   const { join, setJoin, loading } = useJoin(
-    data.votePool.id,
-    data.memberPool.id,
+    data?.votePool.id,
+    data?.memberPool.id,
     data?.isMember,
   );
   const { follow, setFollow } = useFollow(
