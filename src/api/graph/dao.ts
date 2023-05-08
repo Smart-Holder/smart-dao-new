@@ -1,4 +1,4 @@
-import { gql, useQuery } from '@apollo/client';
+import { gql, useQuery, useLazyQuery } from '@apollo/client';
 
 // interface QueryDaosType {
 //   fn: string;
@@ -68,10 +68,20 @@ type ResponseDataType = {
   daos: daosType[];
   statistic: statisticProps;
 };
+type queryRecord = {
+  name_contains?: String;
+  first?: number;
+};
 
 const GET_ALL_DAOS_ACTION = gql`
-  query GetAllDaos {
-    daos(orderDirection: desc, first: 4, orderBy: blockNumber) {
+  query GetAllDaos($name_contains: String, $first: Int, $skip: Int) {
+    daos(
+      orderDirection: desc
+      first: $first
+      orderBy: blockNumber
+      where: { name_contains: $name_contains }
+      skip: $skip
+    ) {
       id
       blockNumber
       extend
@@ -101,8 +111,17 @@ const GET_ALL_DAOS_ACTION = gql`
   }
 `;
 
-const useAllDaos = () => {
-  return useQuery<ResponseDataType>(GET_ALL_DAOS_ACTION);
+const useAllDaos = ({ name_contains = '', first = 4 }: queryRecord) => {
+  return useQuery<ResponseDataType>(GET_ALL_DAOS_ACTION, {
+    variables: {
+      name_contains,
+      first,
+    },
+  });
 };
 
-export { useAllDaos };
+const useLayoutDaos = () => {
+  return useLazyQuery<ResponseDataType>(GET_ALL_DAOS_ACTION);
+};
+
+export { useAllDaos, useLayoutDaos };

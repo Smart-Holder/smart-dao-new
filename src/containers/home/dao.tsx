@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import Item from './daoItem';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
-import { useAllDaos, daosType } from '@/api/graph/dao';
+import { useAllDaos, daosType, useLayoutDaos } from '@/api/graph/dao';
 
 import { Button, Image, List } from 'antd';
 import WalletModal from '@/components/modal/walletModal';
@@ -25,7 +25,19 @@ const App = () => {
     (store) => store.wallet,
   );
 
-  const { loading: allDaoDataLoading, error, data: allDaoData } = useAllDaos();
+  // const {
+  //   loading: allDaoDataLoading,
+  //   error,
+  //   data: allDaoData,
+  // } = useAllDaos({
+  //   name_contains: '',
+  //   first: 4,
+  // });
+
+  const [
+    getLayoutData,
+    { loading: layoutLoading, error: layoutError, data: layoutData },
+  ] = useLayoutDaos();
 
   const pageSize = useRef(4);
   const [loading, setLoading] = useState(false);
@@ -58,7 +70,7 @@ const App = () => {
       return;
     }
     let allList: daosType[] = [];
-    setLoading(true);
+    setLoading(layoutLoading);
 
     // const t = await request({
     //   method: 'getAllDAOsTotal',
@@ -66,7 +78,7 @@ const App = () => {
     //   params: { chain: chainId || defaultChain, name: searchText },
     // });
     // setTotal(t);
-    setTotal(Number(allDaoData?.statistic.totalDAOs || 0));
+    setTotal(Number(layoutData?.statistic.totalDAOs || 0));
 
     // const list = (await request({
     //   method: 'getAllDAOs',
@@ -97,21 +109,31 @@ const App = () => {
     // }
     // setData(list || []);
 
-    (allDaoData?.daos || []).forEach((item) => {
+    // (allDaoData?.daos || []).forEach((item) => {
+    //   let items = { ...item };
+    //   items.isMember = item.accounts.some((el) => el.id === address);
+    //   allList.push(items);
+    // });
+    // setData(allList || []);
+
+    getLayoutData({ variables: { name_contains: '', first: 4, skip: 0 } });
+
+    (layoutData?.daos || []).forEach((item) => {
       let items = { ...item };
       items.isMember = item.accounts.some((el) => el.id === address);
       allList.push(items);
     });
+
     setData(allList || []);
 
-    setLoading(false);
+    // setLoading(false);
   };
 
   useEffect(() => {
     setData([]);
     setTotal(0);
     getData();
-  }, [searchText, address, chainId, allDaoData]);
+  }, [searchText, address, chainId, layoutData]);
 
   const renderItem = (item: daosType) => (
     <List.Item style={{ padding: 0 }}>
