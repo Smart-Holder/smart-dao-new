@@ -45,6 +45,10 @@ type membersType = {
 type votePoolProps = {
   id: string;
 };
+export type assetPoolProps = {
+  id: String;
+  type: 'Frist' | 'Second';
+};
 
 type memberPoolType = {
   count: string;
@@ -62,6 +66,7 @@ export interface daosType extends Daos {
   image: string;
   votePool: votePoolProps;
   isLike?: boolean;
+  assetPool?: assetPoolProps;
 }
 
 type ResponseDataType = {
@@ -102,6 +107,10 @@ const GET_ALL_DAOS_ACTION = gql`
         id
       }
       votePool {
+        id
+      }
+      assetPool {
+        type
         id
       }
     }

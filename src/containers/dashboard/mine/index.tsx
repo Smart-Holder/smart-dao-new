@@ -19,6 +19,8 @@ import { DAOType, Permissions } from '@/config/enum';
 import { join } from '@/api/member';
 import { setDAOType } from '@/store/features/daoSlice';
 import { UserOutlined } from '@ant-design/icons';
+import { useDaosAsset } from '@/api/graph/asset';
+import { assetPoolProps } from '@/api/graph/dao';
 
 import NFTs from '@/containers/dashboard/mine/nfts';
 import DashboardHeader from '@/containers/dashboard/header';
@@ -35,6 +37,19 @@ const App = () => {
   const [likeDAO, setLikeDAO] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isLike, setIsLike] = useState(currentDAO?.isLike || false);
+  const {
+    loading: assetLoading,
+    error,
+    data: assetData,
+  } = useDaosAsset({
+    vote_id: currentDAO.votePool.id,
+    first: currentDAO.assetPool.find(
+      (item: assetPoolProps) => item.type === 'Frist',
+    ).id,
+    second: currentDAO.assetPool.find(
+      (item: assetPoolProps) => item.type === 'Second',
+    ).id,
+  });
 
   useEffect(() => {
     const getData = async () => {
@@ -253,7 +268,8 @@ const App = () => {
                   preview={false}
                 />
               </div>
-              <span className="num">{DAOInfo.voteProposalTotal}</span>
+              {/* <span className="num">{DAOInfo.voteProposalTotal}</span> */}
+              <span className="num">{assetData?.votePool?.count}</span>
             </div>
           </Col>
           <Col span={8}>
@@ -293,7 +309,10 @@ const App = () => {
             <div className="total-item-2">
               <div className="total-item-right">
                 <span className="num">
-                  {fromToken(DAOInfo.assetAmountTotal)} ETH
+                  {/* {fromToken(DAOInfo.assetAmountTotal)} ETH */}
+                  {fromToken(assetData?.first.amountTotal) +
+                    fromToken(assetData?.second.amountTotal)}
+                  ETH
                 </span>
                 <span>
                   {formatMessage({ id: 'my.summary.total.assetAmount' })}
@@ -311,7 +330,8 @@ const App = () => {
           <Col span={12}>
             <div className="total-item-2">
               <div className="total-item-right">
-                <span className="num">{DAOInfo.assetTotal}</span>
+                {/* <span className="num">{DAOInfo.assetTotal}</span> */}
+                <span className="num">{assetData?.second.count}</span>
                 <span>{formatMessage({ id: 'my.summary.total.asset' })}</span>
               </div>
               <Image
