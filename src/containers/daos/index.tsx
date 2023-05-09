@@ -16,7 +16,7 @@ const App = () => {
     (store) => store.wallet,
   );
 
-  const pageSize = useRef(5);
+  const pageSize = useRef(4);
   // const [pageStart, setPageStart] = useState(0);
   const [pageStart, setPageStart] = useState(0);
   const [total, setTotal] = useState(0);
