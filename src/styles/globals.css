@@ -258,6 +258,11 @@ a {
   right: 32px;
 }
 
+.ant-modal.modal.modal-vote .ant-modal-content {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .ant-modal.modal.modal-vote .ant-modal-close {
   top: 64px;
   right: 64px;

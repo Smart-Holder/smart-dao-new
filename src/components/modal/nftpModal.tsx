@@ -3,7 +3,7 @@ import { Button, Input, Row, Col } from 'antd';
 import { Checkbox, Form } from 'antd';
 import { rng } from 'somes/rng';
 import { useAppSelector } from '@/store/hooks';
-import { Permissions } from '@/config/enum';
+import { Permissions, proposalType } from '@/config/enum';
 import { validateEthAddress } from '@/utils/validator';
 import { addNFTP, isCanAddNFTP } from '@/api/member';
 import { createVote } from '@/api/vote';
@@ -67,29 +67,11 @@ const App = (props: any, ref: any) => {
     ];
 
     const voteParams = {
-      name: formatMessage({ id: 'proposal.basic.addNFTP' }),
+      name: formatMessage({ id: 'proposal.member.addNFTP' }),
       description: JSON.stringify({
         type: 'member',
-        purpose: `${formatMessage({
-          id: 'proposal.basic.addNFTP',
-        })}: ${address}`,
-        extra: [
-          {
-            label: getMessage('address'),
-            value: address,
-            type: 'text',
-          },
-          {
-            label: getMessage('member.nftp.copies'),
-            value: votes,
-            type: 'text',
-          },
-          {
-            label: getMessage('my.information.rights'),
-            value: permissions,
-            type: 'checkbox',
-          },
-        ],
+        proposalType: proposalType.Member_Create,
+        values,
       }),
       extra: [
         {

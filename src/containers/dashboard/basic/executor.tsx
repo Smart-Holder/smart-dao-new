@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Input, message, Modal } from 'antd';
+import { Button, Input, message } from 'antd';
 import { Form } from 'antd';
+
+import Modal from '@/components/modal';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 
@@ -12,7 +14,7 @@ import { isPermission, setExecutor } from '@/api/member';
 import { createVote } from '@/api/vote';
 import { useIntl } from 'react-intl';
 import { isRepeate } from '@/utils';
-import { Permissions } from '@/config/enum';
+import { Permissions, proposalType } from '@/config/enum';
 import { getMessage } from '@/utils/language';
 
 // const options = [
@@ -91,16 +93,11 @@ const App = () => {
         name: formatMessage({ id: 'proposal.basic.executor' }),
         description: JSON.stringify({
           type: 'basic',
-          purpose: `${formatMessage({
-            id: 'proposal.basic.executor',
-          })}: ${values.address}`,
-          extra: [
-            {
-              label: getMessage('proposal.basic.executor'),
-              value: values.address,
-              type: 'text',
-            },
-          ],
+          proposalType: proposalType.Basic_Executor,
+          values: {
+            ...values,
+            former: initialValues.address,
+          },
         }),
         extra,
       };

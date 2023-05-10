@@ -86,21 +86,11 @@ const App = () => {
   const [total, setTotal] = useState(0);
   const [data, setData] = useState([]);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   const [amount, setAmount] = useState({ total: 0, amount: '0' });
 
   const [balance, setBalance] = useState(0);
 
   // const nftpModal: any = useRef(null);
-
-  const showModal = () => {
-    if (balance > 0) {
-      setIsModalOpen(true);
-    } else {
-      // message.warning('没有未分配的收入');
-    }
-  };
 
   const getBalanceData = async () => {
     const res = await getBalance();
@@ -168,39 +158,6 @@ const App = () => {
     getData(p);
   };
 
-  // 收入分配
-  const onDone = async () => {
-    const params = {
-      name: formatMessage({ id: 'proposal.financial' }),
-      description: JSON.stringify({
-        type: 'finance',
-        purpose: `${formatMessage({
-          id: 'proposal.financial.balance',
-        })}: ${fromToken(balance || 0)} ETH`,
-      }),
-      extra: [
-        {
-          abi: 'ledger',
-          target: currentDAO.ledger,
-          method: 'release',
-          params: [balance, 'description'],
-        },
-      ],
-    };
-
-    try {
-      await createVote(params);
-      Modal.success({
-        title: formatMessage({ id: 'proposal.create.message' }),
-      });
-      // window.location.reload();
-      hideModal();
-      getBalanceData();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
     const getAmount = async () => {
       const res = await request({
@@ -223,10 +180,6 @@ const App = () => {
     getData(1);
     getTotal();
   }, [searchText, values, balance, chainId, address]);
-
-  const hideModal = () => {
-    setIsModalOpen(false);
-  };
 
   return (
     <div style={{ padding: '30px 24px 50px' }}>
@@ -326,21 +279,6 @@ const App = () => {
       </div>
 
       {/* <NftpModal ref={nftpModal} /> */}
-
-      <Modal type="normal" open={isModalOpen} onCancel={hideModal}>
-        <div className="title">
-          {formatMessage({ id: 'financial.income.auto' })}
-        </div>
-        <Button
-          style={{ marginTop: 50 }}
-          className="button-submit"
-          type="primary"
-          onClick={onDone}
-          loading={loading}
-        >
-          {formatMessage({ id: 'financial.income.submit' })}
-        </Button>
-      </Modal>
     </div>
   );
 };

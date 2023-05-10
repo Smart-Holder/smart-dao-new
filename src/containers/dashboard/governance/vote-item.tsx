@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
 
 import Progress from '@/containers/dashboard/governance/progress';
+import Desc from '@/containers/dashboard/governance/vote-item-desc';
 
 import { formatAddress } from '@/utils';
 import Ellipsis from '@/components/typography/ellipsis';
@@ -108,9 +109,10 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
 
       <div className="item-content">
         <div className="item-title">{data.name}</div>
-        <Paragraph ellipsis={{ rows: 2 }}>
+        <Desc data={extra} />
+        {/* <Paragraph ellipsis={{ rows: 2 }}>
           <div className="item-desc">{purpose}</div>
-        </Paragraph>
+        </Paragraph> */}
       </div>
 
       <div className="item-footer">

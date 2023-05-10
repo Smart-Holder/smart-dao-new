@@ -14,7 +14,7 @@ import { getMessage } from '@/utils/language';
 
 import DAO from '@/config/abi/DAO.json';
 import DAOs from '@/config/abi/DAOs.json';
-import { Permissions } from '@/config/enum';
+import { Permissions, proposalType } from '@/config/enum';
 import { message } from 'antd';
 
 export const createDAO = async (params: any) => {
@@ -198,19 +198,8 @@ export const setInformation = async ({
       name: getMessage('proposal.basic.basic'),
       description: JSON.stringify({
         type: 'basic',
-        purpose: `${mission ? 'Mission: ' + mission : ''} ${
-          description ? 'Itroduction: ' + description : ''
-        }`,
-        extra: [
-          { label: getMessage('start.mission'), value: mission, type: 'text' },
-          {
-            label: getMessage('start.introduce'),
-            value: description,
-            type: 'text',
-          },
-          { label: 'Logo', value: image, type: 'image' },
-          { label: 'Poster', value: extend.poster, type: 'image' },
-        ],
+        proposalType: proposalType.Basic_Information,
+        values: { mission, description, image, extend },
       }),
       extra: [
         {

@@ -23,7 +23,7 @@ import { createVote } from '@/api/vote';
 import { useIntl, FormattedMessage } from 'react-intl';
 import Card from '@/components/card';
 import { isPermission } from '@/api/member';
-import { Permissions } from '@/config/enum';
+import { Permissions, proposalType } from '@/config/enum';
 import { LedgerType } from '@/config/enum';
 import { getMessage } from '@/utils/language';
 
@@ -221,19 +221,11 @@ const App = () => {
 
   const onCreateVote = async () => {
     const params = {
-      name: formatMessage({ id: 'proposal.financial' }),
+      name: formatMessage({ id: 'proposal.financial.balance' }),
       description: JSON.stringify({
         type: 'finance',
-        purpose: `${formatMessage({
-          id: 'proposal.financial.balance',
-        })}: ${fromToken(balance || 0)} ETH`,
-        extra: [
-          {
-            label: getMessage('proposal.financial.balance'),
-            value: `${fromToken(balance || 0)} ETH`,
-            type: 'text',
-          },
-        ],
+        proposalType: proposalType.Income_Allocate,
+        values: { balance },
       }),
       extra: [
         {

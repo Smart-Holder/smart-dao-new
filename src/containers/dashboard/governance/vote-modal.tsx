@@ -15,6 +15,8 @@ import { formatAddress } from '@/utils';
 import { useIntl } from 'react-intl';
 import Ellipsis from '@/components/typography/ellipsis';
 
+import Detail from '@/containers/dashboard/governance/vote-modal-detail';
+
 dayjs.extend(customParseFormat);
 
 const { Countdown } = Statistic;
@@ -123,185 +125,140 @@ const VoteModal: FC<VoteModalProps> = (props) => {
       }}
     >
       {loading && (
-        <div className="content">{loading && <Skeleton active />}</div>
+        <div className="loading">{loading && <Skeleton active />}</div>
       )}
+
       {!loading && data && (
-        <div className="content">
+        <div>
           <div className="h1">{data.name}</div>
-          <Space size={20} style={{ marginTop: 30 }}>
-            <div className={`type ${data.extra.type || 'normal'}`}>
-              {typesMap[data.extra.type || 'normal']}
-            </div>
-            <span className="id">#{data.id}</span>
-          </Space>
 
-          <div className="owner">
-            <div className="address">
-              {/* {formatAddress(data.origin)} */}
-              <Ellipsis copyable={{ text: data.origin }}>
-                {formatAddress(data.origin, 6, 6)}
-              </Ellipsis>
-            </div>
-            <div className={`status ${data.status}`}>
-              {statusMap[data.status]}
-            </div>
-          </div>
+          <div className="content">
+            <Space size={20}>
+              <div className={`type ${data.extra.type || 'normal'}`}>
+                {typesMap[data.extra.type || 'normal']}
+              </div>
+              <span className="id">#{data.id}</span>
+            </Space>
 
-          <Progress style={{ marginTop: 36 }} data={data} showDetail />
+            <div className="owner">
+              <div className="address">
+                {/* {formatAddress(data.origin)} */}
+                <Ellipsis copyable={{ text: data.origin }}>
+                  {formatAddress(data.origin, 6, 6)}
+                </Ellipsis>
+              </div>
+              <div className={`status ${data.status}`}>
+                {statusMap[data.status]}
+              </div>
+            </div>
 
-          {data.status === 'executed' && (
-            <div style={{ marginTop: 25 }}>
-              {data.extra.executor && (
+            <Progress style={{ marginTop: 36 }} data={data} showDetail />
+
+            {data.status === 'executed' && (
+              <div style={{ marginTop: 25 }}>
+                {data.extra.executor && (
+                  <div className="item-result">
+                    <span className="label">
+                      {formatMessage({ id: 'governance.votes.executor' })}:
+                    </span>
+                    <span className="value">
+                      {/* {formatAddress(data.extra.executor)} */}
+                      <Ellipsis copyable={{ text: data.extra.executor }}>
+                        {formatAddress(data.extra.executor, 6, 6)}
+                      </Ellipsis>
+                    </span>
+                  </div>
+                )}
                 <div className="item-result">
                   <span className="label">
-                    {formatMessage({ id: 'governance.votes.executor' })}:
+                    {formatMessage({ id: 'governance.votes.time.execution' })}:
                   </span>
                   <span className="value">
-                    {/* {formatAddress(data.extra.executor)} */}
-                    <Ellipsis copyable={{ text: data.extra.executor }}>
-                      {formatAddress(data.extra.executor, 6, 6)}
-                    </Ellipsis>
+                    {dayjs(data.executeTime * 1000).format(
+                      'A HH:mm, MM/DD/YYYY',
+                    )}
                   </span>
                 </div>
-              )}
-              <div className="item-result">
-                <span className="label">
-                  {formatMessage({ id: 'governance.votes.time.execution' })}:
-                </span>
-                <span className="value">
-                  {dayjs(data.executeTime * 1000).format('A HH:mm, MM/DD/YYYY')}
-                </span>
-              </div>
-            </div>
-          )}
-
-          {/* {data?.isClose && (
-            <div className={styles['time']}>
-              {formatMessage({ id: 'governance.votes.endtime' })}:
-              <span className={styles['time-value']}>
-                {dayjs(data.modify).format('A HH:mm, MM/DD/YYYY')}
-              </span>
-              <span className={styles['time-value']}>
-                ({formatMessage({ id: 'governance.votes.ended' })})
-              </span>
-            </div>
-          )} */}
-          {/* {!data?.isClose && (
-            <div className={styles['time']}>
-              {formatMessage({ id: 'governance.votes.fromEnd' })}:
-              <span className={styles['time-value']}>
-                <Countdown
-                  className={styles.countdown}
-                  value={data.expiry * 1000}
-                />
-              </span>
-            </div>
-          )} */}
-          {/* {data.status === 'executed' ? (
-              <div className={styles['exec-time']}>
-                <div className={styles['time']}>
-                  结束时间:
-                  <span className={styles['time-value']}>{data.endTime}</span>
-                  {Date.now() > data.endTime && (
-                    <span className={styles['time-value']}>
-                      （投票已经结束）
-                    </span>
-                  )}
-                </div>
-                <div className={styles['time']}>
-                  执行时间:
-                  <span className={styles['time-value']}>{data.execTime}</span>
-                  <span className={styles['exec-user']}>执行人：</span>
-                  <span
-                    className={`${styles['time-value']} ${styles['exec-addr']}`}
-                  >
-                    {data.execUser?.address}
-                  </span>
-                </div>
-              </div>
-            ) : (
-              <div className={styles['time']}>
-                {Date.now() > data.endTime ? (
-                  '投票已经结束'
-                ) : (
-                  <>
-                    距结束:
-                    <span className={styles['time-value']}>
-                      <Countdown
-                        className={styles.countdown}
-                        value={data.endTime}
-                      />
-                    </span>
-                  </>
-                )}
-              </div>
-            )} */}
-          {data?.extra?.purpose && (
-            <div className="vote-detail">
-              <div className="vote-detail-title">
-                {formatMessage({ id: 'governance.proposal.purpose' })}
-              </div>
-              <div className="vote-detail-content">{data.extra.purpose}</div>
-            </div>
-          )}
-
-          {data?.extra?.content && (
-            <div className="vote-detail">
-              <div className="vote-detail-title">
-                {formatMessage({ id: 'governance.proposal.content' })}
-              </div>
-              <div className="vote-detail-content">{data.extra.content}</div>
-            </div>
-          )}
-
-          {data?.extra?.result && (
-            <div className="vote-detail">
-              <div className="vote-detail-title">
-                {formatMessage({ id: 'governance.proposal.result' })}
-              </div>
-              <div className="vote-detail-content">{data.extra.result}</div>
-            </div>
-          )}
-
-          {currentMember.tokenId &&
-            !isVote &&
-            !data.isClose &&
-            !data.isExecuted && (
-              <div className="footer">
-                <Button
-                  className="button-submit"
-                  type="primary"
-                  ghost
-                  onClick={onOk}
-                  loading={loading1}
-                >
-                  {formatMessage({ id: 'governance.votes.support' })}
-                </Button>
-                <Button
-                  style={{ marginLeft: 20 }}
-                  className="button-submit"
-                  type="primary"
-                  onClick={onCancel}
-                  loading={loading2}
-                >
-                  {formatMessage({ id: 'governance.votes.against' })}
-                </Button>
               </div>
             )}
+
+            {/* 自动化提案详情 */}
+            <Detail data={data?.extra} />
+
+            {type === 'normal' && data?.extra?.purpose && (
+              <div className="vote-detail">
+                <div className="vote-detail-title">
+                  {formatMessage({ id: 'governance.proposal.purpose' })}
+                </div>
+                <div className="vote-detail-content">{data.extra.purpose}</div>
+              </div>
+            )}
+
+            {type === 'normal' && data?.extra?.content && (
+              <div className="vote-detail">
+                <div className="vote-detail-title">
+                  {formatMessage({ id: 'governance.proposal.content' })}
+                </div>
+                <div className="vote-detail-content">{data.extra.content}</div>
+              </div>
+            )}
+
+            {type === 'normal' && data?.extra?.result && (
+              <div className="vote-detail">
+                <div className="vote-detail-title">
+                  {formatMessage({ id: 'governance.proposal.result' })}
+                </div>
+                <div className="vote-detail-content">{data.extra.result}</div>
+              </div>
+            )}
+
+            {currentMember.tokenId &&
+              !isVote &&
+              !data.isClose &&
+              !data.isExecuted && (
+                <div className="footer">
+                  <Button
+                    className="button-submit"
+                    type="primary"
+                    ghost
+                    onClick={onOk}
+                    loading={loading1}
+                  >
+                    {formatMessage({ id: 'governance.votes.support' })}
+                  </Button>
+                  <Button
+                    style={{ marginLeft: 20 }}
+                    className="button-submit"
+                    type="primary"
+                    onClick={onCancel}
+                    loading={loading2}
+                  >
+                    {formatMessage({ id: 'governance.votes.against' })}
+                  </Button>
+                </div>
+              )}
+          </div>
         </div>
       )}
       <style jsx>
         {`
-          .content {
-            padding: 32px;
+          .loading {
+            padding: 64px;
           }
 
           .h1 {
             height: 24px;
+            margin: 32px 64px;
             font-size: 22px;
             font-weight: 600;
             color: #000000;
             line-height: 24px;
+          }
+
+          .content {
+            overflow-y: auto;
+            max-height: calc(100vh - 320px);
+            padding: 0 64px 32px;
           }
 
           .type {

@@ -20,7 +20,7 @@ import { request } from '@/api';
 import { safeMint } from '@/api/asset';
 import { useIntl } from 'react-intl';
 import { isPermission } from '@/api/member';
-import { Permissions } from '@/config/enum';
+import { Permissions, proposalType } from '@/config/enum';
 import { rng } from 'somes/rng';
 import { createVote } from '@/api/vote';
 
@@ -72,57 +72,14 @@ const IssueForm: FC<IssueFormProps> = () => {
     const params = {
       name: formatMessage({ id: 'proposal.financial.asset.publish' }),
       description: JSON.stringify({
-        type: 'basic',
-        purpose: `${formatMessage({
-          id: 'proposal.financial.asset.publish',
-        })}: ${values.name}`,
-        extra: [
-          {
-            label: getMessage('name'),
-            value: values.name,
-            type: 'text',
-          },
-          {
-            label: getMessage('financial.asset.tagname'),
-            value: values.tags,
-            type: 'array',
-          },
-          {
-            label: getMessage('description'),
-            value: values.description,
-            type: 'text',
-          },
-          {
-            label: 'Image',
-            value: image,
-            type: 'image',
-          },
-          {
-            label: getMessage('financial.asset.issue.attributes'),
-            value: values.attributes,
-            type: 'array',
-          },
-          {
-            label: getMessage('financial.asset.price'),
-            value: values.price,
-            type: 'text',
-          },
-          {
-            label: getMessage('my.asset.shelves.listingPrice'),
-            value: values.listingPrice,
-            type: 'text',
-          },
-          {
-            label: getMessage('financial.asset.issue.supply'),
-            value: values.supply,
-            type: 'text',
-          },
-          {
-            label: getMessage('financial.asset.issue.blockchain'),
-            value: values.blockchain,
-            type: 'text',
-          },
-        ],
+        type: 'finance',
+        proposalType: proposalType.Asset_Publish,
+        values: {
+          ...values,
+          image,
+          assetIssuanceTax: currentDAO.assetIssuanceTax,
+          assetCirculationTax: currentDAO.assetCirculationTax,
+        },
       }),
       extra: [
         {
@@ -205,7 +162,7 @@ const IssueForm: FC<IssueFormProps> = () => {
       }
 
       if (!(await isPermission(Permissions.Action_Asset_SafeMint))) {
-        await createProposal(params, _tokenURI);
+        await createProposal(values, _tokenURI);
         Modal.success({
           title: formatMessage({ id: 'proposal.create.message' }),
         });
