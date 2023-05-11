@@ -1,28 +1,29 @@
 import { gql, useQuery, useLazyQuery } from '@apollo/client';
 
 type assetPoolProps = {
-  id: String;
-  count: String;
+  id: string;
+  total: string;
   type: 'Frist' | 'Second';
-  amountTotal: String;
-  minimumPriceTotal: String;
+  orderTotal: string;
+  amountTotal: string;
+  minimumPriceTotal: string;
 };
 
 type ResponseDataType = {
   votePool: {
-    count: String;
+    count: string;
   };
   first: assetPoolProps;
   second: assetPoolProps;
 };
 type queryRecord = {
-  vote_id?: String;
-  first?: String;
-  second?: String;
+  vote_id?: string;
+  first?: string;
+  second?: string;
 };
 
-const GET_ALL_DAOS_ACTION = gql`
-  query GetVotes($vote_id: String, $first: String, $second: String) {
+const GET_DAOS_ASSET_ACTION = gql`
+  query GetAssets($vote_id: String, $first: String, $second: String) {
     votePool(id: $vote_id) {
       count
     }
@@ -36,7 +37,8 @@ const GET_ALL_DAOS_ACTION = gql`
 
   fragment comparisonFields on AssetPool {
     type
-    count
+    total
+    orderTotal
     amountTotal
     minimumPriceTotal
   }
@@ -47,7 +49,7 @@ const useDaosAsset = ({
   first = '',
   second = '',
 }: queryRecord) => {
-  return useQuery<ResponseDataType>(GET_ALL_DAOS_ACTION, {
+  return useQuery<ResponseDataType>(GET_DAOS_ASSET_ACTION, {
     variables: {
       vote_id,
       first,
@@ -56,8 +58,8 @@ const useDaosAsset = ({
   });
 };
 
-const useLayoutDaos = () => {
-  return useLazyQuery<ResponseDataType>(GET_ALL_DAOS_ACTION);
-};
+// const useLayoutDaos = () => {
+//   return useLazyQuery<ResponseDataType>(GET_DAOS_ASSET_ACTION);
+// };
 
-export { useDaosAsset, useLayoutDaos };
+export { useDaosAsset };

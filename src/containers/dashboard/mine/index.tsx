@@ -10,6 +10,7 @@ import {
 } from 'antd';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
+
 // import { rng } from 'somes/rng';
 
 import { fromToken } from '@/utils';
@@ -311,7 +312,8 @@ const App = () => {
                 <span className="num">
                   {/* {fromToken(DAOInfo.assetAmountTotal)} ETH */}
                   {fromToken(assetData?.first.amountTotal) +
-                    fromToken(assetData?.second.amountTotal)}
+                    fromToken(assetData?.second.amountTotal) +
+                    ' '}
                   ETH
                 </span>
                 <span>
@@ -331,7 +333,10 @@ const App = () => {
             <div className="total-item-2">
               <div className="total-item-right">
                 {/* <span className="num">{DAOInfo.assetTotal}</span> */}
-                <span className="num">{assetData?.second.count}</span>
+                <span className="num">
+                  {Number(assetData?.second.total) +
+                    Number(assetData?.first.total)}
+                </span>
                 <span>{formatMessage({ id: 'my.summary.total.asset' })}</span>
               </div>
               <Image
@@ -346,7 +351,11 @@ const App = () => {
           <Col span={12}>
             <div className="total-item-2">
               <div className="total-item-right">
-                <span className="num">{DAOInfo.assetOrderTotal}</span>
+                {/* <span className="num">{DAOInfo.assetOrderTotal}</span> */}
+                <span className="num">
+                  {Number(assetData?.second.orderTotal) +
+                    Number(assetData?.first.orderTotal)}
+                </span>
                 <span>{formatMessage({ id: 'my.summary.total.order' })}</span>
               </div>
               <Image

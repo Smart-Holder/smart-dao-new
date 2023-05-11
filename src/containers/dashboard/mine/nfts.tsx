@@ -7,10 +7,10 @@ import { useEffect, useState } from 'react';
 
 import { useAppSelector } from '@/store/hooks';
 import { request } from '@/api';
+import { useDaosNfts, AssetsResponseType } from '@/api/graph/nfts';
 // import { useRouter } from 'next/router';
 
 import NFT from '@/containers/dashboard/mine/nft';
-
 dayjs.extend(customParseFormat);
 
 const App = () => {
@@ -21,7 +21,15 @@ const App = () => {
 
   const [pageStart, setPageStart] = useState(0);
   const [total, setTotal] = useState(0);
-  const [data, setData] = useState([]) as any;
+  const [data, setData] = useState<AssetsResponseType[]>([]);
+
+  // 设置默认页数请求7个NFT则有更多NFT 否则没有
+  const { items: AssetNftDatas } = useDaosNfts({
+    host: currentDAO.id,
+    first: 7,
+    skip: pageStart,
+    chainId,
+  });
 
   const getData = async () => {
     const res = await request({
@@ -29,7 +37,7 @@ const App = () => {
       method: 'getAssetFrom',
       params: {
         chain: chainId,
-        host: currentDAO.host,
+        host: currentDAO.host || currentDAO.id,
         state: 0,
         limit: [pageStart, 100],
       },
@@ -45,35 +53,29 @@ const App = () => {
       method: 'getAssetTotalFrom',
       params: {
         chain: chainId,
-        host: currentDAO.host,
+        host: currentDAO.id,
         state: 0,
       },
     });
 
     setTotal(t);
-
-    const res = await request({
-      name: 'utils',
-      method: 'getAssetFrom',
-      params: {
-        chain: chainId,
-        host: currentDAO.host,
-        state: 0,
-        limit: [0, 6],
-      },
-    });
-
-    setPageStart(6);
-    setData(res);
+    setPageStart(0);
+    setData(AssetNftDatas || []);
   };
 
   useEffect(() => {
-    if (currentDAO.host) {
+    if (currentDAO.id) {
       setData([]);
       setTotal(0);
       resetData();
     }
-  }, [chainId, address, currentDAO.host]);
+  }, [chainId, address, currentDAO.id]);
+
+  useEffect(() => {
+    if (AssetNftDatas?.length) {
+      setData(AssetNftDatas || []);
+    }
+  }, [AssetNftDatas]);
 
   return (
     <>
@@ -89,7 +91,7 @@ const App = () => {
         ))}
       </Row>
 
-      {data.length < total && (
+      {data.length > total && (
         <div className="footer">
           <Button className="button-all" onClick={getData}>
             {formatMessage({ id: 'viewAllNfts' })}

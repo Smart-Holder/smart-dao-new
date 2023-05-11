@@ -108,7 +108,7 @@ const App = ({ data }: NFTProps) => {
               src={currentDAO.image}
               shape="square"
             />
-            <Paragraph ellipsis>{currentDAO.name}</Paragraph>
+            {/* <Paragraph ellipsis>{currentDAO.name}</Paragraph> */}
           </div>
         )}
 

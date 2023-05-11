@@ -148,7 +148,6 @@ const App = () => {
     resetData();
   }, [searchText, address, chainId]);
 
-  console.log(data.length < total, data.length, total, '999', loading);
   return (
     <div>
       <div className="h1">DAOs</div>
