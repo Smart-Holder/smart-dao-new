@@ -40,8 +40,9 @@ const columns = [
   },
   {
     title: 'Amount',
-    dataIndex: 'amount',
-    key: 'amount',
+    dataIndex: 'price',
+    key: 'price',
+    render: (text: string) => `${text} ETH`,
   },
 ];
 
@@ -51,7 +52,7 @@ const App = ({ data }: Props) => {
   const { chainId, address } = useAppSelector((store) => store.wallet);
   const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
 
-  const pageSize = 10;
+  const pageSize = 1;
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [tableData, setTableData] = useState([]);
@@ -79,12 +80,26 @@ const App = ({ data }: Props) => {
       },
     });
 
-    setAllData(res);
-    setTableData(res.slice(0, pageSize));
+    const all = res || [];
+    let allVotes = 0;
+
+    all.forEach((item: any) => {
+      allVotes += item.votes;
+    });
+
+    const price = fromToken(data.balance || 0) / allVotes;
+
+    all.forEach((item: any) => {
+      item.price = (price * item.votes).toFixed(4);
+    });
+
+    setAllData(all);
+    setTableData(all.slice(0, pageSize));
   };
 
   const getData = (p = 1) => {
-    // setTableData()
+    const start = (p - 1) * pageSize;
+    setTableData(allData.slice(start, start + pageSize));
   };
 
   const onPageChange: PaginationProps['onChange'] = (p) => {

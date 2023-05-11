@@ -52,6 +52,7 @@ export const createDAO = async (params: any) => {
       description,
       image,
       extend: formatToBytes(extend),
+      unlockOperator: process.env.NEXT_PUBLIC_DAOS_PROXY_ADDRESS,
     },
     // address,
     '0x0000000000000000000000000000000000000000',
