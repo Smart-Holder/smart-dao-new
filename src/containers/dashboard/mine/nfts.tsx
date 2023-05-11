@@ -25,7 +25,7 @@ const App = () => {
 
   // 设置默认页数请求7个NFT则有更多NFT 否则没有
   const { items: AssetNftDatas } = useDaosNfts({
-    host: currentDAO.id,
+    host: currentDAO.host,
     first: 7,
     skip: pageStart,
     chainId,
@@ -37,7 +37,7 @@ const App = () => {
       method: 'getAssetFrom',
       params: {
         chain: chainId,
-        host: currentDAO.host || currentDAO.id,
+        host: currentDAO.host,
         state: 0,
         limit: [pageStart, 100],
       },
@@ -53,7 +53,7 @@ const App = () => {
       method: 'getAssetTotalFrom',
       params: {
         chain: chainId,
-        host: currentDAO.id,
+        host: currentDAO.host,
         state: 0,
       },
     });
@@ -64,12 +64,12 @@ const App = () => {
   };
 
   useEffect(() => {
-    if (currentDAO.id) {
+    if (currentDAO.host) {
       setData([]);
       setTotal(0);
       resetData();
     }
-  }, [chainId, address, currentDAO.id]);
+  }, [chainId, address, currentDAO.host]);
 
   useEffect(() => {
     if (AssetNftDatas?.length) {

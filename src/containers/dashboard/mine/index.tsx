@@ -60,7 +60,7 @@ const App = () => {
           method: 'getDAOSummarys',
           params: {
             chain: chainId,
-            host: currentDAO.id,
+            host: currentDAO.host,
           },
         }),
         request({
@@ -74,7 +74,7 @@ const App = () => {
       setLikeDAO(res2);
 
       if (res2) {
-        const like = res2.some((item: any) => item.host === currentDAO.id);
+        const like = res2.some((item: any) => item.host === currentDAO.host);
 
         if (like) {
           setIsLike(true);
@@ -82,10 +82,10 @@ const App = () => {
       }
     };
 
-    if (currentDAO.id && chainId) {
+    if (currentDAO.host && chainId) {
       getData();
     }
-  }, [currentDAO.id, chainId]);
+  }, [currentDAO.host, chainId]);
 
   const setJoin = async () => {
     try {
@@ -137,7 +137,7 @@ const App = () => {
       await request({
         name: 'user',
         method: 'addLikeDAO',
-        params: { dao: currentDAO.id, chain: chainId },
+        params: { dao: currentDAO.host, chain: chainId },
       });
 
       message.success('success');

@@ -67,6 +67,7 @@ export interface daosType extends Daos {
   votePool: votePoolProps;
   isLike?: boolean;
   assetPool?: assetPoolProps;
+  host: string;
 }
 
 type ResponseDataType = {
@@ -87,7 +88,7 @@ const GET_ALL_DAOS_ACTION = gql`
       where: { name_contains: $name_contains }
       skip: $skip
     ) {
-      id
+      host: id
       blockNumber
       extend
       name

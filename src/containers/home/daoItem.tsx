@@ -43,7 +43,7 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
     data?.isMember,
   );
   const { follow, setFollow } = useFollow(
-    Number(data.id),
+    Number(data.host),
     chainId,
     data.isLike || false,
   );
@@ -80,7 +80,6 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
     const type =
       daoType ||
       (join ? DAOType.Join : follow ? DAOType.Follow : DAOType.Visit);
-    console.log(type, 'type');
     dispatch(setDAOType(type));
     dispatch(setCurrentDAO(data));
     router.push('/dashboard/mine/home');
