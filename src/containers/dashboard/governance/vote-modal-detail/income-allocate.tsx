@@ -55,23 +55,10 @@ const App = ({ data }: Props) => {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [tableData, setTableData] = useState([]);
+  const [allData, setAllData] = useState([]);
 
-  const getData = async (page = 1) => {
-    const res = await request({
-      name: 'utils',
-      method: 'getMembersFrom',
-      params: {
-        chain: chainId,
-        host: currentDAO.host,
-        limit: [(page - 1) * pageSize, pageSize],
-      },
-    });
-
-    setTableData(res);
-  };
-
-  const getTotal = async () => {
-    const res = await request({
+  const getAllData = async (page = 1) => {
+    const total = await request({
       name: 'utils',
       method: 'getMembersTotalFrom',
       params: {
@@ -80,7 +67,24 @@ const App = ({ data }: Props) => {
       },
     });
 
-    setTotal(res);
+    setTotal(total);
+
+    const res = await request({
+      name: 'utils',
+      method: 'getMembersFrom',
+      params: {
+        chain: chainId,
+        host: currentDAO.host,
+        limit: [0, Math.min(total, 10000)],
+      },
+    });
+
+    setAllData(res);
+    setTableData(res.slice(0, pageSize));
+  };
+
+  const getData = (p = 1) => {
+    // setTableData()
   };
 
   const onPageChange: PaginationProps['onChange'] = (p) => {
@@ -88,11 +92,9 @@ const App = ({ data }: Props) => {
     getData(p);
   };
 
-  // useEffect(() => {
-  //   setPage(1);
-  //   getData(1);
-  //   getTotal();
-  // }, [chainId, address]);
+  useEffect(() => {
+    getAllData();
+  }, []);
 
   return (
     <>
@@ -100,10 +102,12 @@ const App = ({ data }: Props) => {
         <span className={styles.label}>
           {formatMessage({ id: 'proposal.detail.label.income.allocate' })}:
         </span>
-        <span className={styles.value}>{fromToken(data.balance || 0)} ETH</span>
+        <div className={styles.value} style={{ marginTop: 10, fontSize: 28 }}>
+          {fromToken(data.balance || 0)} ETH
+        </div>
       </div>
 
-      {/* <Table
+      <Table
         columns={columns}
         dataSource={tableData}
         rowKey="id"
@@ -114,7 +118,7 @@ const App = ({ data }: Props) => {
           total,
           onChange: onPageChange,
         }}
-      /> */}
+      />
     </>
   );
 };
