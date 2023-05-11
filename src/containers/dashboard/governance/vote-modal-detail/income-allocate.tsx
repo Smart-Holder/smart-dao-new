@@ -52,7 +52,7 @@ const App = ({ data }: Props) => {
   const { chainId, address } = useAppSelector((store) => store.wallet);
   const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
 
-  const pageSize = 1;
+  const pageSize = 10;
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [tableData, setTableData] = useState([]);
