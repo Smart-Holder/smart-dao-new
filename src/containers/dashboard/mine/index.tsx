@@ -21,7 +21,7 @@ import { join } from '@/api/member';
 import { setDAOType } from '@/store/features/daoSlice';
 import { UserOutlined } from '@ant-design/icons';
 import { useDaosAsset } from '@/api/graph/asset';
-import { assetPoolProps } from '@/api/graph/dao';
+import { assetPoolProps } from '@/api/typings/dao';
 
 import NFTs from '@/containers/dashboard/mine/nfts';
 import DashboardHeader from '@/containers/dashboard/header';

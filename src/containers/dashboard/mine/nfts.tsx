@@ -3,11 +3,12 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useIntl } from 'react-intl';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { useAppSelector } from '@/store/hooks';
 import { request } from '@/api';
-import { useDaosNfts, AssetsResponseType } from '@/api/graph/nfts';
+import { useDaosNfts } from '@/api/graph/nfts';
+import { AssetsResponseType } from '@/api/typings/nfts';
 // import { useRouter } from 'next/router';
 
 import NFT from '@/containers/dashboard/mine/nft';
@@ -24,7 +25,7 @@ const App = () => {
   const [data, setData] = useState<AssetsResponseType[]>([]);
 
   // 设置默认页数请求7个NFT则有更多NFT 否则没有
-  const { items: AssetNftDatas } = useDaosNfts({
+  const { items: AssetNftDatas, fetchMore } = useDaosNfts({
     host: currentDAO.host,
     first: 7,
     skip: pageStart,
@@ -32,22 +33,31 @@ const App = () => {
   });
 
   const getData = async () => {
-    const res = await request({
-      name: 'utils',
-      method: 'getAssetFrom',
-      params: {
-        chain: chainId,
+    fetchMore({
+      variables: {
         host: currentDAO.host,
-        state: 0,
-        limit: [pageStart, 100],
+        first: 6,
+        skip: pageStart,
+        chainId,
       },
     });
 
+    // const res = await request({
+    //   name: 'utils',
+    //   method: 'getAssetFrom',
+    //   params: {
+    //     chain: chainId,
+    //     host: currentDAO.host,
+    //     state: 0,
+    //     limit: [pageStart, 100],
+    //   },
+    // });
+
     setPageStart(100);
-    setData([...data, ...res]);
+    // setData([...data, ...res]);
   };
 
-  const resetData = async () => {
+  const resetData = useCallback(async () => {
     const t = await request({
       name: 'utils',
       method: 'getAssetTotalFrom',
@@ -60,8 +70,16 @@ const App = () => {
 
     setTotal(t);
     setPageStart(0);
-    setData(AssetNftDatas || []);
-  };
+    fetchMore({
+      variables: {
+        host: currentDAO.host,
+        first: 6,
+        skip: 0,
+        chainId,
+      },
+    });
+    // setData(AssetNftDatas || []);
+  }, [chainId, currentDAO.host, fetchMore]);
 
   useEffect(() => {
     if (currentDAO.host) {
@@ -69,11 +87,11 @@ const App = () => {
       setTotal(0);
       resetData();
     }
-  }, [chainId, address, currentDAO.host]);
+  }, [chainId, address, currentDAO.host, resetData]);
 
   useEffect(() => {
     if (AssetNftDatas?.length) {
-      setData(AssetNftDatas || []);
+      setData([...data, ...(AssetNftDatas || [])]);
     }
   }, [AssetNftDatas]);
 

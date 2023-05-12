@@ -5,7 +5,8 @@ import { useRouter } from 'next/router';
 import Item from './daoItem';
 
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
-import { useAllDaos, daosType, useLayoutDaos } from '@/api/graph/dao';
+import { useLayoutDaos } from '@/api/graph/dao';
+import { daosType } from '@/api/typings/dao';
 
 import { Button, Image, List } from 'antd';
 import WalletModal from '@/components/modal/walletModal';

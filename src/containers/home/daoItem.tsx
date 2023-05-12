@@ -15,7 +15,7 @@ import { UserOutlined } from '@ant-design/icons';
 import { DAOType } from '@/config/enum';
 import { DAOExtend } from '@/config/define_ext';
 import { formatToObj, formatToBbjExtend } from '@/utils/extend';
-import { daosType } from '@/api/graph/dao';
+import { daosType } from '@/api/typings/dao';
 
 const { Paragraph } = Typography;
 

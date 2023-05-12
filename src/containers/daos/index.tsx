@@ -8,7 +8,8 @@ import { useAppSelector } from '@/store/hooks';
 
 import { DAOExtend } from '@/config/define_ext';
 import { request } from '@/api';
-import { daosType, useLayoutDaos } from '@/api/graph/dao';
+import { useLayoutDaos } from '@/api/graph/dao';
+import { daosType } from '@/api/typings/dao';
 
 const App = () => {
   const { searchText } = useAppSelector((store) => store.common);
@@ -170,7 +171,7 @@ const App = () => {
         <div style={{ overflow: 'hidden' }}>
           <Row gutter={[16, 16]}>
             {data.map((item: any) => (
-              <Col xs={24} sm={24} lg={12} key={item.id}>
+              <Col xs={24} sm={24} lg={12} key={item.host}>
                 <Item data={item} />
               </Col>
             ))}
