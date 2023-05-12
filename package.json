@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@ant-design/charts": "^1.4.2",
-    "@ant-design/icons": "^4.6.0",
+    "@ant-design/icons": "^5.0.1",
     "@next/font": "13.1.6",
     "@reduxjs/toolkit": "^1.9.2",
     "@types/node": "18.11.18",
