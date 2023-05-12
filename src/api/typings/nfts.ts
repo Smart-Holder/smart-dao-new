@@ -6,6 +6,9 @@ type AssetsResponseType = {
   tokenId: string;
   ownerRecord: owner;
 
+  // graph 查询ID
+  assetId?: string;
+
   name?: string;
   owner?: string;
   image?: string;
@@ -39,10 +42,19 @@ type assetOrdersPropsType = {
 type assetOrdersProps = {
   assetOrders?: assetOrdersPropsType[];
 };
+type listDataType = {
+  id: string;
+  value: string;
+  time: string;
+  fromAddres: string;
+  toAddress: string;
+};
 
 export type {
   assetOrdersProps,
   ResponseDataType,
   queryRecord,
   AssetsResponseType,
+  assetOrdersPropsType,
+  listDataType,
 };

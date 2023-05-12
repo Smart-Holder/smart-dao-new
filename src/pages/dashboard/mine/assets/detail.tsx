@@ -10,6 +10,7 @@ import { useIntl } from 'react-intl';
 import Card, { CardDataProps } from '@/components/card';
 import Header from '@/containers/dashboard/financial/detail/header';
 import { AssetOrderExt } from '@/config/define_ext';
+import { useLayoutNftList } from '@/api/graph/nfts';
 
 const list = [{ name: 'OpenSea', image: '/images/opensea.png' }];
 
@@ -32,7 +33,6 @@ const App: NextPageWithLayout = () => {
   const owner = address.toLowerCase() === storageData.owner.toLowerCase();
 
   const cardData: CardDataProps[] = [];
-
   extra.forEach((item: any) => {
     if (item.trait_type && item.trait_type !== 'tags') {
       cardData.push({
@@ -43,30 +43,46 @@ const App: NextPageWithLayout = () => {
     }
   });
 
+  const { data: listData, fetchMore } = useLayoutNftList({
+    first: pageSize,
+    skip: 0,
+    asset: storageData.assetId,
+  });
+
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [data, setData] = useState<AssetOrderExt[]>([]);
 
   useEffect(() => {
-    const getData = async () => {
-      const res = await request({
-        name: 'utils',
-        method: 'getAssetOrderFrom',
-        params: {
-          chain: chainId,
-          host: currentDAO.host,
-          tokenId: storageData.tokenId,
-          fromAddres_not: '0x0000000000000000000000000000000000000000',
+    // const getData = async () => {
+    //   const res = await request({
+    //     name: 'utils',
+    //     method: 'getAssetOrderFrom',
+    //     params: {
+    //       chain: chainId,
+    //       host: currentDAO.host,
+    //       tokenId: storageData.tokenId,
+    //       fromAddres_not: '0x0000000000000000000000000000000000000000',
+    //     },
+    //   });
+
+    //   if (res) {
+    //     setData(res);
+    //   }
+    // };
+
+    // if (storageData.tokenId) {
+    // getData();
+    // }
+
+    if (storageData.assetId) {
+      fetchMore({
+        variables: {
+          first: pageSize,
+          skip: 0,
+          asset: storageData.assetId,
         },
       });
-
-      if (res) {
-        setData(res);
-      }
-    };
-
-    if (storageData.tokenId) {
-      getData();
     }
   }, []);
 
@@ -112,7 +128,8 @@ const App: NextPageWithLayout = () => {
         currentPage={page}
         total={total}
         pageSize={pageSize}
-        data={data}
+        // data={data}
+        data={listData}
       />
 
       <style jsx>
@@ -151,7 +168,5 @@ const App: NextPageWithLayout = () => {
     </div>
   );
 };
-
-App.getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
 
 export default App;

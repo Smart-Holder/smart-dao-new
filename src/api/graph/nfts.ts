@@ -1,6 +1,7 @@
 import web3 from 'web3';
 import { useQuery } from '@apollo/client';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import dayjs from 'dayjs';
 
 import { request } from '@/api';
 import { GET_DAOS_NFTS_ACTION, GET_DAOS_NFT_LIST } from '@/api/gqls/nfts';
@@ -9,6 +10,8 @@ import {
   ResponseDataType,
   AssetsResponseType,
   queryRecord,
+  assetOrdersPropsType,
+  listDataType,
 } from '@/api/typings/nfts';
 
 const useDaosNfts = ({
@@ -68,6 +71,7 @@ const useDaosNfts = ({
                   ...item2,
                   tokenId: tokenID,
                   id: i.id,
+                  assetId: item2.id,
                   sellPrice: item.sellPrice || item.minimumPrice,
                 };
               }
@@ -113,8 +117,23 @@ const useLayoutNftList = ({
     },
   );
 
+  const recombineData: listDataType[] = useMemo(
+    () =>
+      data?.assetOrders?.map((item) => {
+        const { id, from, to, value, blockTimestamp } = item;
+        return {
+          id,
+          value,
+          fromAddres: from,
+          toAddress: to,
+          time: dayjs.unix(Number(blockTimestamp)).toString(),
+        };
+      }) || [],
+    [data?.assetOrders],
+  );
+
   return {
-    data,
+    data: recombineData,
     error,
     loading,
     fetchMore,

@@ -24,10 +24,9 @@ const App = () => {
   const [total, setTotal] = useState(0);
   const [data, setData] = useState<AssetsResponseType[]>([]);
 
-  // 设置默认页数请求7个NFT则有更多NFT 否则没有
   const { items: AssetNftDatas, fetchMore } = useDaosNfts({
     host: currentDAO.host,
-    first: 7,
+    first: 6,
     skip: pageStart,
     chainId,
   });

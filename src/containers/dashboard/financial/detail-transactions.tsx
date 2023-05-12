@@ -8,11 +8,13 @@ import { useIntl } from 'react-intl';
 import Ellipsis from '@/components/typography/ellipsis';
 import Price from '@/components/price';
 import { AssetOrderExt } from '@/config/define_ext';
+import { listDataType } from '@/api/typings/nfts';
 
 dayjs.extend(customParseFormat);
 
 type DetailTransactionsProps = {
-  data: AssetOrderExt[];
+  // data: AssetOrderExt[];
+  data: listDataType[];
   currentPage?: number;
   pageSize: number;
   total: number;
@@ -66,7 +68,7 @@ const DetailTransactions: FC<DetailTransactionsProps> = (props) => {
               title: formatMessage({ id: 'financial.asset.price' }),
               dataIndex: 'value',
               key: 'value',
-              render: (value, item: AssetOrderExt) => {
+              render: (value) => {
                 return <Price value={fromToken(value)} />;
               },
             },
