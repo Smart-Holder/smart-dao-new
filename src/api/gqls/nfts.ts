@@ -4,13 +4,13 @@ const GET_DAOS_NFTS_ACTION = gql`
   query GetNfts(
     $host: String!
     $first: Int! = 6
-    $state: String = Enable
+    $destroyed: Boolean = false
     $skip: Int! = 0
     $orderBy: String = blockNumber
     $orderDirection: String = desc
   ) {
     assets(
-      where: { host: $host, state: $state }
+      where: { host: $host, destroyed: $destroyed }
       first: $first
       orderBy: $orderBy
       orderDirection: $orderDirection

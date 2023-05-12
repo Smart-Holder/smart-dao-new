@@ -6,6 +6,9 @@ type assetPoolProps = {
   amountTotal: string;
   minimumPriceTotal: string;
 };
+type ledgerPoolsProps = {
+  assetIncomeTotal: string;
+};
 
 type ResponseDataType = {
   votePool: {
@@ -13,11 +16,13 @@ type ResponseDataType = {
   };
   first: assetPoolProps;
   second: assetPoolProps;
+  ledgerPools: ledgerPoolsProps[];
 };
 type queryRecord = {
   vote_id?: string;
   first?: string;
   second?: string;
+  host?: string;
 };
 
 export type { ResponseDataType, queryRecord };

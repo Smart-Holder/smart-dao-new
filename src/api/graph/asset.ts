@@ -6,12 +6,14 @@ const useDaosAsset = ({
   vote_id = '',
   first = '',
   second = '',
+  host = '',
 }: queryRecord) => {
   return useQuery<ResponseDataType>(GET_DAOS_ASSET_ACTION, {
     variables: {
       vote_id,
       first,
       second,
+      host,
     },
   });
 };

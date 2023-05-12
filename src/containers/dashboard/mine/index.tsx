@@ -43,6 +43,7 @@ const App = () => {
     error,
     data: assetData,
   } = useDaosAsset({
+    host: currentDAO.host,
     vote_id: currentDAO.votePool.id,
     first: currentDAO.assetPool.find(
       (item: assetPoolProps) => item.type === 'Frist',
@@ -371,7 +372,8 @@ const App = () => {
             <div className="total-item-2">
               <div className="total-item-right">
                 <span className="num">
-                  {fromToken(DAOInfo.assetLedgerIncomeTotal)} ETH
+                  {/* {fromToken(DAOInfo.assetLedgerIncomeTotal)} ETH */}
+                  {fromToken(assetData?.ledgerPools[0]?.assetIncomeTotal)} ETH
                 </span>
                 <span>{formatMessage({ id: 'my.summary.total.income' })}</span>
               </div>

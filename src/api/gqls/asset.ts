@@ -1,7 +1,12 @@
 import { gql } from '@apollo/client';
 
 const GET_DAOS_ASSET_ACTION = gql`
-  query GetAssets($vote_id: String, $first: String, $second: String) {
+  query GetAssets(
+    $vote_id: String
+    $first: String
+    $second: String
+    $host: String
+  ) {
     votePool(id: $vote_id) {
       count
     }
@@ -10,6 +15,9 @@ const GET_DAOS_ASSET_ACTION = gql`
     }
     second: assetPool(id: $second) {
       ...comparisonFields
+    }
+    ledgerPools(where: { host: $host }) {
+      assetIncomeTotal
     }
   }
 
