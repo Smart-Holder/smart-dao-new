@@ -19,7 +19,7 @@ const App = ({ title, avatar, name, buttons, children, padding }: Data) => {
   const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
 
   const extend = formatToObj(currentDAO?.extend?.data);
-  console.log('extend', extend);
+  // console.log('extend', extend);
 
   return (
     <div>
