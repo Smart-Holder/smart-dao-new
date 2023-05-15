@@ -73,6 +73,7 @@ export async function createVote({
           }
         } catch (error) {
           getContractMessage(error);
+          reject(error);
           throw error;
         }
 

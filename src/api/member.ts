@@ -195,3 +195,34 @@ export async function setPermissions(
     Modal.success({ title: getMessage('proposal.create.message') });
   }
 }
+
+export async function addVotesOfBatch(votesParams: any, extraData: any) {
+  console.log('votesParams', votesParams);
+  const { web3, address } = store.getState().wallet;
+  const { currentDAO } = store.getState().dao;
+  const contract = getContract(web3, Member.abi, currentDAO.member);
+
+  if (await isPermission(0, address)) {
+    await contractSend(contract, address, 'addVotesOfBatch', votesParams);
+    message.success('Success');
+  } else {
+    await createVote({
+      name: getMessage('proposal.member.copies'),
+      description: JSON.stringify({
+        type: 'member',
+        proposalType: proposalType.Member_Votes,
+        values: { data: extraData },
+      }),
+      extra: [
+        {
+          abi: 'member',
+          target: currentDAO.member,
+          method: 'addVotesOfBatch',
+          params: votesParams,
+        },
+      ],
+    });
+
+    Modal.success({ title: getMessage('proposal.create.message') });
+  }
+}
