@@ -54,7 +54,7 @@ export const createDAO = async (params: any) => {
       extend: formatToBytes(extend),
       unlockOperator: process.env.NEXT_PUBLIC_DAOS_PROXY_ADDRESS,
     },
-    // address,
+    // address, // test
     '0x0000000000000000000000000000000000000000',
     {
       // InitMemberArgs
@@ -215,6 +215,8 @@ export const setInformation = async ({
               extend: formatToBytes(extend) || '0x0000',
             },
           ],
+          // method: 'setOperator', // test
+          // params: ['0xe2c9AA9A4e1aca3050C8810C3Ebf6fd5bFE72d3f'],
         },
       ],
     });
