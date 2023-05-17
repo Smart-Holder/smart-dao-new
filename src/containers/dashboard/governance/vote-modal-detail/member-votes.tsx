@@ -130,6 +130,7 @@ const App = ({ data }: Props) => {
         pagination={{
           position: ['bottomCenter'],
           pageSize: 10,
+          hideOnSinglePage: true,
         }}
       />
     </>
