@@ -67,6 +67,8 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
   const extend = formatToBbjExtend(data?.extend);
 
   const handleClick = (e: MouseEvent) => {
+    let data_ = { ...data };
+    data_.root = data.votePool.id;
     if (!isInit) {
       walletModal.current.show();
       return;
@@ -81,7 +83,7 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
       daoType ||
       (join ? DAOType.Join : follow ? DAOType.Follow : DAOType.Visit);
     dispatch(setDAOType(type));
-    dispatch(setCurrentDAO(data));
+    dispatch(setCurrentDAO(data_));
     router.push('/dashboard/mine/home');
   };
 

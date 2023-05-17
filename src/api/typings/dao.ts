@@ -38,6 +38,7 @@ export interface daosType extends Daos {
   isLike?: boolean;
   assetPool?: assetPoolProps;
   host: string;
+  root: string;
 }
 
 type ResponseDataType = {

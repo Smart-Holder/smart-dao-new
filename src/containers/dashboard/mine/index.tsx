@@ -38,11 +38,7 @@ const App = () => {
   const [likeDAO, setLikeDAO] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isLike, setIsLike] = useState(currentDAO?.isLike || false);
-  const {
-    loading: assetLoading,
-    error,
-    data: assetData,
-  } = useDaosAsset({
+  const { data: assetData } = useDaosAsset({
     host: currentDAO.host,
     vote_id: currentDAO.votePool.id,
     first: currentDAO.assetPool.find(
@@ -206,7 +202,7 @@ const App = () => {
               //   ),
               // }}
               >
-                {currentDAO.description}
+                {currentDAO?.description}
               </Paragraph>
             </div>
           </Col>
@@ -271,7 +267,7 @@ const App = () => {
                 />
               </div>
               {/* <span className="num">{DAOInfo.voteProposalTotal}</span> */}
-              <span className="num">{assetData?.votePool?.count}</span>
+              <span className="num">{assetData?.votePool?.proposalTotal}</span>
             </div>
           </Col>
           <Col span={8}>
@@ -286,7 +282,11 @@ const App = () => {
                   preview={false}
                 />
               </div>
-              <span className="num">{DAOInfo.voteProposalPendingTotal}</span>
+              {/* <span className="num">{DAOInfo.voteProposalPendingTotal}</span> */}
+              <span className="num">
+                {Number(assetData?.votePool?.proposalTotal) -
+                  Number(assetData?.votePool?.proposalClosedTotal)}
+              </span>
             </div>
           </Col>
           <Col span={8}>
@@ -301,7 +301,10 @@ const App = () => {
                   preview={false}
                 />
               </div>
-              <span className="num">{DAOInfo.voteProposalResolveTotal}</span>
+              {/* <span className="num">{DAOInfo.voteProposalResolveTotal}</span> */}
+              <span className="num">
+                {assetData?.votePool?.proposalAgreedTotal}
+              </span>
             </div>
           </Col>
         </Row>
@@ -312,8 +315,8 @@ const App = () => {
               <div className="total-item-right">
                 <span className="num">
                   {/* {fromToken(DAOInfo.assetAmountTotal)} ETH */}
-                  {fromToken(assetData?.first.amountTotal) +
-                    fromToken(assetData?.second.amountTotal) +
+                  {fromToken(assetData?.first?.amountTotal) +
+                    fromToken(assetData?.second?.amountTotal) +
                     ' '}
                   ETH
                 </span>
@@ -335,8 +338,8 @@ const App = () => {
               <div className="total-item-right">
                 {/* <span className="num">{DAOInfo.assetTotal}</span> */}
                 <span className="num">
-                  {Number(assetData?.second.total) +
-                    Number(assetData?.first.total)}
+                  {Number(assetData?.second?.total) +
+                    Number(assetData?.first?.total)}
                 </span>
                 <span>{formatMessage({ id: 'my.summary.total.asset' })}</span>
               </div>
@@ -354,8 +357,8 @@ const App = () => {
               <div className="total-item-right">
                 {/* <span className="num">{DAOInfo.assetOrderTotal}</span> */}
                 <span className="num">
-                  {Number(assetData?.second.orderTotal) +
-                    Number(assetData?.first.orderTotal)}
+                  {Number(assetData?.second?.orderTotal) +
+                    Number(assetData?.first?.orderTotal)}
                 </span>
                 <span>{formatMessage({ id: 'my.summary.total.order' })}</span>
               </div>

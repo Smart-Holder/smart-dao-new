@@ -8,7 +8,10 @@ const GET_DAOS_ASSET_ACTION = gql`
     $host: String
   ) {
     votePool(id: $vote_id) {
-      count
+      proposalClosedTotal
+      proposalTotal
+      votedTotal
+      proposalAgreedTotal
     }
     first: assetPool(id: $first) {
       ...comparisonFields

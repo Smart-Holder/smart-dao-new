@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import Select from '@/components/form/filter/select';
 import Layout from '@/components/layout';
 import Footer from '@/components/footer';
-import type { ReactElement } from 'react';
+import { ReactElement, useMemo } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
 import Title from '@/containers/dashboard/header/title';
 
@@ -22,6 +22,8 @@ import { request } from '@/api';
 import { formatDayjsValues } from '@/utils';
 
 import { useAppSelector } from '@/store/hooks';
+import { useVoteQuery } from '@/api/graph/votes';
+import { VOTE_QUERY } from '@/api/gqls/votes';
 
 dayjs.extend(customParseFormat);
 
@@ -35,11 +37,28 @@ const App: NextPageWithLayout = () => {
   const pageSize = 10;
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(-1);
-  const [values, setValues] = useState({ orderBy: 'time desc' });
+  const [values, setValues] = useState<any>({ orderBy: 'time desc' });
+  const [variables, setVariables] = useState<any>({});
+  const [target, setTarget] = useState<null | undefined | []>();
   const [data, setData] = useState([]) as any;
+  const [resData, setResData] = useState() as any;
+  const [status, setStatus] = useState<any>();
 
   const [openModal, setOpenModal] = useState(false);
   const [currentItem, setCurrentItem] = useState<VoteItemType>();
+
+  const {
+    data: voteData,
+    loading: fetchMoreLoading,
+    fetchMore,
+  } = useVoteQuery({
+    first: pageSize,
+    host: currentDAO.host,
+    skip: 0,
+    orderBy: 'blockTimestamp',
+    orderDirection: 'desc',
+    target_not: target,
+  });
 
   const getData = async () => {
     const res = await request({
@@ -54,8 +73,29 @@ const App: NextPageWithLayout = () => {
       },
     });
 
+    await fetchMore({
+      query: VOTE_QUERY({
+        status,
+        name_contains_nocase: values?.name,
+        target_not: target,
+      }),
+      variables: {
+        first: pageSize,
+        skip: data.length || 0,
+        host: currentDAO.host,
+        ...variables,
+      },
+    });
     setPage(page + 1);
-    setData([...data, ...res]);
+    // setData([...data, ...res]);
+
+    // 获取old 数据的origin 作为key 合并到相同orgin新的数组数据中内
+    let obj: any = {};
+    [...res].map((item: any) => {
+      let origin = item.origin.toLocaleLowerCase();
+      obj[origin] = item;
+    });
+    setResData(obj);
   };
 
   const resetData = async () => {
@@ -83,9 +123,29 @@ const App: NextPageWithLayout = () => {
         ...values,
       },
     });
+    await fetchMore({
+      query: VOTE_QUERY({
+        status,
+        name_contains_nocase: values?.name,
+        target_not: target,
+      }),
+      variables: {
+        first: pageSize,
+        skip: 0,
+        host: currentDAO.host,
+        ...variables,
+      },
+    });
+    setPage(1);
 
-    setPage(2);
-    setData(res);
+    // setPage(2);
+
+    let obj: any = {};
+    [...res].map((item: any) => {
+      let origin = item.origin.toLocaleLowerCase();
+      obj[origin] = item;
+    });
+    setResData(obj);
   };
 
   // const getTotal = async () => {
@@ -105,7 +165,7 @@ const App: NextPageWithLayout = () => {
   //   setTotal(res);
   // };
 
-  const onValuesChange = (changedValues: any) => {
+  const onValuesChange = async (changedValues: any) => {
     let [[key, value]]: any = Object.entries(changedValues);
     let nextValues: any = { ...values };
 
@@ -113,24 +173,31 @@ const App: NextPageWithLayout = () => {
       delete nextValues.isClose;
       delete nextValues.isAgree;
       delete nextValues.isExecuted;
-
+      let status;
       const obj: any = {};
 
       switch (value) {
         case 'voting':
           obj.isClose = false;
+          status = 1;
           break;
         case 'agree':
           obj.isAgree = true;
           obj.isClose = true;
+          status = 2;
           break;
         case 'disagree':
           obj.isAgree = false;
           obj.isClose = true;
+          status = 3;
           break;
         case 'execute':
           obj.isExecuted = true;
           obj.isClose = true;
+          status = 4;
+          break;
+        case '':
+          status = -1;
           break;
         default:
           break;
@@ -139,6 +206,7 @@ const App: NextPageWithLayout = () => {
       nextValues = { ...nextValues, ...obj };
       console.log('values', nextValues);
       setValues(nextValues);
+      setStatus(status);
       return;
     }
 
@@ -149,6 +217,15 @@ const App: NextPageWithLayout = () => {
     }
 
     console.log('values', nextValues);
+    setVariables({
+      orderDirection:
+        !nextValues.orderBy || nextValues.orderBy.includes('desc')
+          ? 'desc'
+          : 'asc',
+      orderBy: nextValues.orderBy ? 'blockTimestamp' : 'number',
+    });
+    setTarget(nextValues.target ? [] : undefined);
+
     setValues(nextValues);
   };
 
@@ -159,12 +236,29 @@ const App: NextPageWithLayout = () => {
   // }, [currentDAO]);
   useEffect(() => {
     if (currentDAO.root) {
-      setData([]);
+      // setData([]);
       setTotal(0);
       resetData();
       // getTotal();
     }
   }, [searchText, values, chainId, address, currentDAO.root]);
+
+  useEffect(() => {
+    if (voteData?.proposals) {
+      if (page === 1) {
+        let list = [...voteData?.proposals].map((item) => {
+          return { ...resData[item.origin], ...item };
+        });
+        setData([...list]);
+      } else {
+        let list = [...voteData?.proposals].map((item) => {
+          return { ...resData[item.origin], ...item };
+        });
+
+        setData([...data, ...list]);
+      }
+    }
+  }, [voteData?.proposals, resData]);
 
   const onClickItem = (item: any) => {
     console.log('item', item);
@@ -349,7 +443,11 @@ const App: NextPageWithLayout = () => {
             dataLength={data.length}
             next={getData}
             hasMore={data.length < total}
-            loader={loading && <Skeleton paragraph={{ rows: 1 }} active />}
+            loader={
+              (loading || fetchMoreLoading) && (
+                <Skeleton paragraph={{ rows: 1 }} active />
+              )
+            }
             scrollableTarget="scrollTarget"
           >
             <Row gutter={[35, 35]} style={{ width: '100%' }}>

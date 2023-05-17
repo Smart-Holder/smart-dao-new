@@ -12,7 +12,10 @@ type ledgerPoolsProps = {
 
 type ResponseDataType = {
   votePool: {
-    count: string;
+    proposalTotal: string;
+    votedTotal: string;
+    proposalClosedTotal: string;
+    proposalAgreedTotal: string;
   };
   first: assetPoolProps;
   second: assetPoolProps;
