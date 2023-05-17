@@ -44,6 +44,12 @@ a {
   overflow: hidden;
 }
 
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 /* ------------ layout ------------ */
 .ant-layout {
   background: #fff;
@@ -256,6 +262,11 @@ a {
 .ant-modal.modal .ant-modal-close {
   top: 32px;
   right: 32px;
+}
+
+.ant-modal.modal.modal-vote .ant-modal-content {
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .ant-modal.modal.modal-vote .ant-modal-close {

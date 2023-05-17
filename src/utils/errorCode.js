@@ -87,9 +87,13 @@ export const getContractMessage = (error, method) => {
 
     if (error?.message.includes('{')) {
       const errorObj = JSON.parse(error.message.split('\n').slice(1).join(''));
-      const data = errorObj?.originalError?.data;
+      const { data, message } = errorObj?.originalError || {};
       const code = data?.slice(0, 10);
-      msg = code ? errorCode[code] : defaultMessage;
+      // msg = code ? errorCode[code] : defaultMessage;
+      msg =
+        errorCode[code] ||
+        message.replace('execution reverted: ') ||
+        defaultMessage;
     } else {
       msg = error?.message || defaultMessage;
     }

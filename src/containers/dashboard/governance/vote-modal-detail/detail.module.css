@@ -1,0 +1,38 @@
+.vote-detail {
+  margin-top: 40px;
+}
+
+.vote-detail-title {
+  height: 19px;
+  margin-top: 32px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #000000;
+  line-height: 19px;
+}
+
+.vote-detail-content {
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #818181;
+  line-height: 24px;
+}
+
+.item {
+  margin-bottom: 20px;
+}
+
+.label {
+  margin-right: 6px;
+}
+
+.value {
+  margin-right: 6px;
+  color: #2c2c2c;
+  font-weight: bold;
+}
+
+.vote-detail-content img {
+  object-fit: cover;
+}

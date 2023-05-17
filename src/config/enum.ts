@@ -56,3 +56,14 @@ export type Member = {
   votes: number;
   owner: string;
 };
+
+// 自动化提案类型
+export enum proposalType {
+  Basic_Information, // 修改基础信息
+  Basic_Executor, // 修改执行人
+  Member_Rights, // 修改 NFTP 权限
+  Member_Create, // 添加 NFTP
+  Member_Votes, // 修改 NFTP 的投票数
+  Asset_Publish, // 发行资产
+  Income_Allocate, // 分配收入
+}

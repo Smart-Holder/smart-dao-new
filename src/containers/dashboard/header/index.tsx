@@ -18,8 +18,10 @@ type Data = {
 const App = ({ title, avatar, name, buttons, children, padding }: Data) => {
   const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
 
-  // const extend = formatToObj(currentDAO?.extend?.data);
-  const extend = formatToBbjExtend(currentDAO?.extend);
+  const extend_ = formatToBbjExtend(currentDAO?.extend);
+  const extend = formatToObj(currentDAO?.extend?.data);
+  // console.log('extend_', extend_);
+
   return (
     <div>
       {title && <Title title={title} />}
@@ -28,7 +30,7 @@ const App = ({ title, avatar, name, buttons, children, padding }: Data) => {
         <div className="image-box">
           <Image
             className="poster"
-            src={extend?.poster || currentDAO.image}
+            src={extend?.poster || extend_?.poster || currentDAO.image}
             width="100%"
             height={380}
             preview={false}

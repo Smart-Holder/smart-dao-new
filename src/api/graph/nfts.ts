@@ -72,7 +72,7 @@ const useDaosNfts = ({
                   tokenId: tokenID,
                   id: i.id,
                   assetId: item2.id,
-                  sellPrice: item.sellPrice || item.minimumPrice,
+                  sellPrice: item2.sellPrice || item2.minimumPrice,
                 };
               }
               return obj;

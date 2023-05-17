@@ -17,17 +17,22 @@ const Card = ({
   data,
   title,
   style,
+  size = 'normal',
 }: {
   data: CardDataProps[];
   title?: string;
   style?: CSSProperties;
+  size?: string;
 }) => {
   const { formatMessage } = useIntl();
 
   return (
-    <div className="cards" style={style}>
+    <div
+      className={size === 'small' ? 'cards cards-small' : 'cards'}
+      style={style}
+    >
       {title && <div className="cards-title">{title}</div>}
-      <Row gutter={[24, 24]} style={{ marginTop: 40 }}>
+      <Row gutter={[24, 24]} style={{ marginTop: size === 'small' ? 10 : 40 }}>
         {data.map((item, index) => (
           <Col span={8} key={index}>
             <div className="item">
@@ -75,6 +80,13 @@ const Card = ({
             line-height: 45px;
           }
 
+          .cards-small .cards-title {
+            height: 28px;
+            font-size: 20px;
+            line-height: 28px;
+            font-family: var(--font-family-primary);
+          }
+
           .item {
             display: flex;
             flex-direction: column;
@@ -84,6 +96,11 @@ const Card = ({
             padding: 30px 24px;
             background: #ffffff;
             box-shadow: -7px 7px 29px 0px rgba(30, 30, 30, 0.05);
+          }
+
+          .cards-small .item {
+            height: 99px;
+            padding: 15px;
           }
 
           .card-width {
@@ -98,6 +115,12 @@ const Card = ({
             line-height: 21px;
           }
 
+          .cards-small .label {
+            height: 14px;
+            font-size: 12px;
+            line-height: 14px;
+          }
+
           .value {
             display: inline-block;
             height: 26px;
@@ -106,6 +129,13 @@ const Card = ({
             font-weight: bold;
             color: #000000;
             line-height: 26px;
+          }
+
+          .cards-small .value {
+            height: 16px;
+            margin-top: 9px;
+            font-size: 14px;
+            line-height: 16px;
           }
 
           .value-hover:hover {
@@ -121,6 +151,13 @@ const Card = ({
             font-weight: 500;
             color: #000000;
             line-height: 19px;
+          }
+
+          .cards-small .ratio {
+            height: 14px;
+            margin-top: 9px;
+            font-size: 12px;
+            line-height: 14px;
           }
         `}
       </style>

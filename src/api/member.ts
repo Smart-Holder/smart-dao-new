@@ -8,6 +8,7 @@ import { getMessage } from '../utils/language';
 
 import Modal from '@/components/modal';
 import { message } from 'antd';
+import { proposalType } from '@/config/enum';
 
 export function getMemberId() {
   const { web3, address } = store.getState().wallet;
@@ -175,17 +176,11 @@ export async function setPermissions(
     const labels = permissions.map((v: number) => PermissionMap[v]);
 
     await createVote({
-      name: getMessage('proposal.basic.rights'),
+      name: getMessage('proposal.member.rights'),
       description: JSON.stringify({
-        type: 'basic',
-        purpose: `${getMessage('proposal.basic.rights')}: ${labels.valueOf()}`,
-        extra: [
-          {
-            label: getMessage('proposal.basic.rights'),
-            value: permissions,
-            type: 'checkbox',
-          },
-        ],
+        type: 'member',
+        proposalType: proposalType.Member_Rights,
+        values: { address, permissions },
       }),
       extra: [
         {
@@ -199,4 +194,28 @@ export async function setPermissions(
 
     Modal.success({ title: getMessage('proposal.create.message') });
   }
+}
+
+export async function addVotesOfBatch(votesParams: any, extraData: any) {
+  console.log('votesParams', votesParams);
+  const { currentDAO } = store.getState().dao;
+
+  await createVote({
+    name: getMessage('proposal.member.copies'),
+    description: JSON.stringify({
+      type: 'member',
+      proposalType: proposalType.Member_Votes,
+      values: { data: extraData },
+    }),
+    extra: [
+      {
+        abi: 'member',
+        target: currentDAO.member,
+        method: 'addVotesOfBatch',
+        params: votesParams,
+      },
+    ],
+  });
+
+  Modal.success({ title: getMessage('proposal.create.message') });
 }
