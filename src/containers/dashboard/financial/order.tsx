@@ -18,6 +18,8 @@ import type { PaginationProps } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
 import { useIntl, FormattedMessage } from 'react-intl';
 import Ellipsis from '@/components/typography/ellipsis';
+import { useDaosAsset } from '@/api/graph/asset';
+import { assetPoolProps } from '@/api/typings/dao';
 
 dayjs.extend(customParseFormat);
 
@@ -121,6 +123,17 @@ const App = () => {
   const [amount, setAmount] = useState({ total: 0, amount: '0' });
 
   const [timer, setTimer] = useState() as any;
+
+  const { data: assetData } = useDaosAsset({
+    host: currentDAO.host,
+    vote_id: currentDAO.votePool.id,
+    first: currentDAO.assetPool.find(
+      (item: assetPoolProps) => item.type === 'Frist',
+    ).id,
+    second: currentDAO.assetPool.find(
+      (item: assetPoolProps) => item.type === 'Second',
+    ).id,
+  });
 
   const getData = async (page = 1) => {
     const res = await request({
@@ -232,11 +245,18 @@ const App = () => {
           data={[
             {
               label: formatMessage({ id: 'financial.order.total' }),
-              value: amount.total,
+              // value: amount.total,
+              value:
+                Number(assetData?.first.orderTotal) +
+                Number(assetData?.second.orderTotal),
             },
             {
               label: formatMessage({ id: 'financial.order.total.amount' }),
-              value: fromToken(amount.amount || 0) + ' ETH',
+              // value: fromToken(amount.amount || 0) + ' ETH',
+              value:
+                fromToken(assetData?.first.orderAmountTotal || 0) +
+                fromToken(assetData?.second.orderAmountTotal || 0) +
+                ' ETH',
             },
           ]}
         />
