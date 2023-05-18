@@ -90,7 +90,7 @@ function parseJSONObject(str) {
   let idx = start, end = start;
 
   // Simple Lexical Analysis
-  while (++idx < str.length) {
+  while (++idx < str.length && indent > 0) {
     switch (str.charCodeAt(idx)) {
       case 123:
         indent++;
