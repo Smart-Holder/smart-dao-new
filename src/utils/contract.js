@@ -49,10 +49,8 @@ const setGasPrice = async () => {
     );
     const data = await res.json();
     const { ProposeGasPrice } = data.result;
-
     return ProposeGasPrice * 1000000000 + '';
   }
-
   return 0;
 };
 
@@ -65,23 +63,17 @@ export async function contractSend(
 ) {
   try {
     setLoading();
-
-    const gasPrice = await setGasPrice();
-
-    if (gasPrice) {
-      await contract.methods[method](...params).call({ from, gasPrice }); //try call
-    } else {
-      await contract.methods[method](...params).call({ from }); //try call
-    }
+    await contract.methods[method](...params).call({ from }); //try call
   } catch (error) {
     getContractMessage(error, method);
     closeLoading();
     throw error;
   }
+  const gasPrice = await setGasPrice();
 
   return await new Promise((resolve, reject) => {
     contract.methods[method](...params)
-      .send({ from })
+      .send(gasPrice?{ from, gasPrice }: {from})
       .then((receipt) => {
         next(receipt)
           .then(() => {
