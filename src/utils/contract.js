@@ -48,6 +48,22 @@ const closeLoading = () => {
   window.removeEventListener('click', stopClick, true);
 };
 
+const setGasPrice = async () => {
+  const chainId = store.getState().wallet.chainId;
+
+  if (Number(chainId) === 137) {
+    const res = await fetch(
+      'https://gpoly.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle',
+    );
+    const data = await res.json();
+    const { ProposeGasPrice } = data.result;
+
+    return ProposeGasPrice * 1000000000 + '';
+  }
+
+  return 0;
+};
+
 export async function contractSend(
   contract,
   from,
@@ -57,7 +73,14 @@ export async function contractSend(
 ) {
   try {
     setLoading();
-    await contract.methods[method](...params).call({ from }); //try call
+
+    const gasPrice = await setGasPrice();
+
+    if (gasPrice) {
+      await contract.methods[method](...params).call({ from, gasPrice }); //try call
+    } else {
+      await contract.methods[method](...params).call({ from }); //try call
+    }
   } catch (error) {
     // let msg = error.message || `call contract method error, ${method}`;
     // let msg_0 = msg.split('\n')[0];
