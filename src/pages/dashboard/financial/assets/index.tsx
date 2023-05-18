@@ -21,6 +21,10 @@ import { useIntl } from 'react-intl';
 import Card from '@/components/card';
 import Ellipsis from '@/components/typography/ellipsis';
 import { DAOType } from '@/config/enum';
+import { useDaosAsset } from '@/api/graph/asset';
+import { assetPoolProps } from '@/api/typings/dao';
+import { useDaosNfts } from '@/api/graph/nfts';
+import { GET_DAOS_NFTS_ACTION } from '@/api/gqls/nfts';
 
 dayjs.extend(customParseFormat);
 
@@ -33,6 +37,7 @@ const App: NextPageWithLayout = () => {
   const { chainId, address } = useAppSelector((store) => store.wallet);
   const { loading } = useAppSelector((store) => store.common);
 
+  const [pageStart, setPageStart] = useState(0);
   const [chainData, setChainData] = useState({ name: '' }) as any;
   const [summary, setSummary] = useState({
     assetOrderAmountTotal: 0,
@@ -47,8 +52,38 @@ const App: NextPageWithLayout = () => {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [data, setData] = useState([]) as any;
-
+  const [variables, setVariables] = useState<{
+    orderBy: string;
+    orderDirection: string;
+    name_contains_nocase?: string;
+  }>({
+    orderBy: 'blockNumber',
+    orderDirection: 'desc',
+  });
   const isMember = daoType === DAOType.Join && currentMember.tokenId;
+
+  const { data: assetData } = useDaosAsset({
+    host: currentDAO.host,
+    vote_id: currentDAO.votePool.id,
+    first: currentDAO.assetPool.find(
+      (item: assetPoolProps) => item.type === 'Frist',
+    ).id,
+    second: currentDAO.assetPool.find(
+      (item: assetPoolProps) => item.type === 'Second',
+    ).id,
+  });
+
+  const {
+    items: AssetNftDatas,
+    fetchMore,
+    loading: nftLoading,
+  } = useDaosNfts({
+    host: currentDAO.host,
+    first: pageSize,
+    skip: pageStart,
+    chainId,
+    destroyed: false,
+  });
 
   useEffect(() => {
     if (ETH_CHAINS_INFO[chainId]) {
@@ -56,72 +91,104 @@ const App: NextPageWithLayout = () => {
     }
   }, [chainId]);
 
-  useEffect(() => {
-    const getData = async () => {
-      const res = await request({
-        name: 'dao',
-        method: 'getDAOSummarys',
-        params: { chain: chainId, host: currentDAO.host },
-      });
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     const res = await request({
+  //       name: 'dao',
+  //       method: 'getDAOSummarys',
+  //       params: { chain: chainId, host: currentDAO.host },
+  //     });
 
-      if (res) {
-        setSummary(res);
-      }
-    };
+  //     if (res) {
+  //       setSummary(res);
+  //     }
+  //   };
 
-    if (currentDAO.host) {
-      getData();
-    }
-  }, []);
+  //   if (currentDAO.host) {
+  //     getData();
+  //   }
+  // }, []);
 
   const getData = async () => {
-    const res = await request({
-      name: 'utils',
-      method: 'getAssetFrom',
-      params: {
-        chain: chainId,
+    const { name_contains_nocase, orderBy, orderDirection } = variables;
+    // const res = await request({
+    //   name: 'utils',
+    //   method: 'getAssetFrom',
+    //   params: {
+    //     chain: chainId,
+    //     host: currentDAO.host,
+    //     state: 0,
+    //     limit: [(page - 1) * pageSize, pageSize],
+    //     ...values,
+    //   },
+    // });
+    // setPage(page + 1);
+    // setData([...data, ...res]);
+
+    await fetchMore({
+      query: GET_DAOS_NFTS_ACTION({
+        destroyed: false,
+        name_contains_nocase,
+      }),
+      variables: {
         host: currentDAO.host,
-        state: 0,
-        limit: [(page - 1) * pageSize, pageSize],
-        ...values,
+        first: pageSize,
+        skip: data.length || 0,
+        chainId,
+        orderBy,
+        orderDirection,
       },
     });
-
-    setPage(page + 1);
-    setData([...data, ...res]);
   };
 
   const resetData = async () => {
-    const t = await request({
-      name: 'utils',
-      method: 'getAssetTotalFrom',
-      params: {
-        chain: chainId,
+    const { name_contains_nocase, orderBy, orderDirection } = variables;
+    // const t = await request({
+    //   name: 'utils',
+    //   method: 'getAssetTotalFrom',
+    //   params: {
+    //     chain: chainId,
+    //     host: currentDAO.host,
+    //     state: 0,
+    //     ...values,
+    //   },
+    // });
+
+    // setTotal(t);
+
+    // const res = await request({
+    //   name: 'utils',
+    //   method: 'getAssetFrom',
+    //   params: {
+    //     chain: chainId,
+    //     host: currentDAO.host,
+    //     state: 0,
+    //     limit: [0, pageSize],
+    //     ...values,
+    //   },
+    // });
+
+    await fetchMore({
+      query: GET_DAOS_NFTS_ACTION({
+        destroyed: false,
+        name_contains_nocase,
+      }),
+      variables: {
         host: currentDAO.host,
-        state: 0,
-        ...values,
+        first: pageSize,
+        skip: 0,
+        chainId,
+        orderBy,
+        orderDirection,
       },
     });
 
-    setTotal(t);
-
-    const res = await request({
-      name: 'utils',
-      method: 'getAssetFrom',
-      params: {
-        chain: chainId,
-        host: currentDAO.host,
-        state: 0,
-        limit: [0, pageSize],
-        ...values,
-      },
-    });
-
-    setPage(2);
-    setData(res);
+    // setPage(1);
+    // setData(res);
   };
 
   const onValuesChange = (changedValues: any) => {
+    let varobj = { ...variables };
     let [[key, value]]: any = Object.entries(changedValues);
     const nextValues: any = { ...values };
 
@@ -131,7 +198,42 @@ const App: NextPageWithLayout = () => {
       nextValues[key] = key === 'time' ? formatDayjsValues(value) : value;
     }
 
-    console.log('values', nextValues);
+    console.log('nextValues', nextValues);
+    switch (key) {
+      case 'orderBy':
+        switch (value) {
+          case 'sellPrice':
+            varobj.orderBy = 'sellPrice';
+            varobj.orderDirection = 'asc';
+            break;
+          case 'sellPrice desc':
+            varobj.orderBy = 'sellPrice';
+            varobj.orderDirection = 'desc';
+            break;
+          case 'sellingTime desc':
+            varobj.orderBy = 'sellingTime';
+            varobj.orderDirection = 'desc';
+            break;
+          case 'blockNumber desc':
+            varobj.orderBy = 'blockNumber';
+            varobj.orderDirection = 'desc';
+            break;
+          case 'soldTime desc':
+            varobj.orderBy = 'soldTime';
+            varobj.orderDirection = 'desc';
+            break;
+          default:
+            break;
+        }
+        break;
+      case 'name':
+        varobj.name_contains_nocase = value ? value : undefined;
+        break;
+      default:
+        break;
+    }
+
+    setVariables(varobj);
     setValues(nextValues);
   };
 
@@ -139,10 +241,25 @@ const App: NextPageWithLayout = () => {
     if (currentDAO.host) {
       setData([]);
       setTotal(0);
+      setPage(1);
+      setPageStart(0);
       resetData();
       // getTotal();
     }
-  }, [values, chainId, address, currentDAO.host]);
+  }, [variables, chainId, address, currentDAO.host]);
+
+  useEffect(() => {
+    if (AssetNftDatas) {
+      if (page === 1) {
+        setData([...AssetNftDatas]);
+      } else {
+        if (AssetNftDatas.length < pageSize) {
+          setTotal([...data, ...AssetNftDatas].length);
+        }
+        setData([...data, ...AssetNftDatas]);
+      }
+    }
+  }, [AssetNftDatas]);
 
   const onCountClick = () => {
     router.push('/dashboard/financial/order');
@@ -197,7 +314,7 @@ const App: NextPageWithLayout = () => {
             <span className="dao-info-item-label">
               {formatMessage({ id: 'financial.asset.time.create' })}:
             </span>
-            {dayjs(currentDAO.time).format('YYYY-MM-DD')}
+            {dayjs(Number(currentDAO.time)).format('YYYY-MM-DD')}
           </div>
           <div className="dao-info-item">{chainData.name}</div>
         </DashboardHeader>
@@ -217,7 +334,11 @@ const App: NextPageWithLayout = () => {
           data={[
             {
               label: formatMessage({ id: 'financial.asset.total.trading' }),
-              value: `${fromToken(summary?.assetOrderAmountTotal || 0)} ETH`,
+              // value: `${fromToken(summary?.assetOrderAmountTotal || 0)} ETH`,
+              value: `${
+                fromToken(assetData?.first.orderAmountTotal) +
+                fromToken(assetData?.second.orderAmountTotal)
+              } ETH`,
               onClick: onCountClick,
             },
             {
@@ -226,7 +347,10 @@ const App: NextPageWithLayout = () => {
             },
             {
               label: formatMessage({ id: 'financial.asset.total' }),
-              value: summary?.assetTotal || 0,
+              // value: summary?.assetTotal || 0,
+              value:
+                Number(assetData?.second?.total) +
+                  Number(assetData?.first?.total) || 0,
             },
             // { num: 31232, title: '所有者' },
             // { num: 31232, title: '挂单率' },
@@ -304,7 +428,7 @@ const App: NextPageWithLayout = () => {
             dataLength={data.length}
             next={getData}
             hasMore={data.length < total}
-            loader={loading && <Skeleton active />}
+            loader={nftLoading && <Skeleton active />}
             scrollableTarget="scrollTarget"
             style={{ overflow: 'inherit' }}
           >
@@ -333,7 +457,7 @@ const App: NextPageWithLayout = () => {
                 );
               })}
             </Row>
-            {!loading && data.length === 0 && <Empty />}
+            {!nftLoading && data.length === 0 && <Empty />}
           </InfiniteScroll>
         </div>
       </div>

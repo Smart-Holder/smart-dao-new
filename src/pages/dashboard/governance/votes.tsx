@@ -245,23 +245,23 @@ const App: NextPageWithLayout = () => {
 
   useEffect(() => {
     if (voteData?.proposals) {
+      let list = [...voteData?.proposals].map((item) => {
+        return {
+          ...resData[item.origin],
+          ...item,
+          modify: dayjs.unix(Number(item.modify)),
+        };
+      });
       if (page === 1) {
-        let list = [...voteData?.proposals].map((item) => {
-          return { ...resData[item.origin], ...item };
-        });
         setData([...list]);
       } else {
-        let list = [...voteData?.proposals].map((item) => {
-          return { ...resData[item.origin], ...item };
-        });
-
         setData([...data, ...list]);
       }
     }
   }, [voteData?.proposals, resData]);
 
   const onClickItem = (item: any) => {
-    console.log('item', item);
+    console.log(data, 'item', item);
     setCurrentItem(item);
     setOpenModal(true);
   };

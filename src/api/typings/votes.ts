@@ -23,6 +23,7 @@ type Proposal = {
   agreeTotal: string;
   modify: string;
   expiry: string;
+  time: string;
 };
 type voteQueryResponse = {
   proposals: Proposal[];

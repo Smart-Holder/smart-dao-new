@@ -29,6 +29,7 @@ const GET_DAOS_ASSET_ACTION = gql`
     total
     orderTotal
     amountTotal
+    orderAmountTotal
     minimumPriceTotal
   }
 `;

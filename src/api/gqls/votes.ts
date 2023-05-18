@@ -79,6 +79,7 @@ const VOTE_QUERY = ({
             voteTotal
             agreeTotal
             modify:modifyTime
+            time:executeTime
         }
     }`;
 };

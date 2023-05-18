@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
+import dayjs from 'dayjs';
 
 import Item from './daoItem';
 
@@ -35,10 +36,17 @@ const App = () => {
   //   first: 4,
   // });
 
-  const [
-    getLayoutData,
-    { loading: layoutLoading, error: layoutError, data: layoutData },
-  ] = useLayoutDaos();
+  // const [
+  //   getLayoutData,
+  //   { loading: layoutLoading, error: layoutError, data: layoutData },
+  // ] = useLayoutDaos();
+
+  const {
+    fetchMore: getLayoutData,
+    loading: layoutLoading,
+    error: layoutError,
+    data: layoutData,
+  } = useLayoutDaos();
 
   const pageSize = useRef(4);
   const [loading, setLoading] = useState(false);
@@ -79,7 +87,7 @@ const App = () => {
     //   params: { chain: chainId || defaultChain, name: searchText },
     // });
     // setTotal(t);
-    setTotal(Number(layoutData?.statistic.totalDAOs || 0));
+    setTotal(Number(layoutData.statistic?.totalDAOs || 0));
 
     // const list = (await request({
     //   method: 'getAllDAOs',

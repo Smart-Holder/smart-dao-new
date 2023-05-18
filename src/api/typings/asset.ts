@@ -4,6 +4,7 @@ type assetPoolProps = {
   type: 'Frist' | 'Second';
   orderTotal: string;
   amountTotal: string;
+  orderAmountTotal: string;
   minimumPriceTotal: string;
 };
 type ledgerPoolsProps = {

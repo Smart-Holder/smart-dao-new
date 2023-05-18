@@ -9,6 +9,7 @@ import { useAppSelector } from '@/store/hooks';
 import { request } from '@/api';
 import { useDaosNfts } from '@/api/graph/nfts';
 import { AssetsResponseType } from '@/api/typings/nfts';
+import { GET_DAOS_NFTS_ACTION } from '@/api/gqls/nfts';
 // import { useRouter } from 'next/router';
 
 import NFT from '@/containers/dashboard/mine/nft';
@@ -29,10 +30,14 @@ const App = () => {
     first: 6,
     skip: pageStart,
     chainId,
+    destroyed: false,
   });
 
   const getData = async () => {
     fetchMore({
+      query: GET_DAOS_NFTS_ACTION({
+        destroyed: false,
+      }),
       variables: {
         host: currentDAO.host,
         first: 6,
@@ -69,7 +74,10 @@ const App = () => {
 
     setTotal(t);
     setPageStart(0);
-    fetchMore({
+    await fetchMore({
+      query: GET_DAOS_NFTS_ACTION({
+        destroyed: false,
+      }),
       variables: {
         host: currentDAO.host,
         first: 6,

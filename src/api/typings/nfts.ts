@@ -26,6 +26,15 @@ type queryRecord = {
   first: number;
   skip: number;
   chainId: number;
+  name_contains_nocase?: string;
+  orderBy?: string;
+  orderDirection?: string;
+  destroyed?: boolean;
+};
+
+type daosNftsGqlProps = {
+  name_contains_nocase?: string;
+  destroyed?: boolean;
 };
 
 /**
@@ -57,4 +66,5 @@ export type {
   AssetsResponseType,
   assetOrdersPropsType,
   listDataType,
+  daosNftsGqlProps,
 };

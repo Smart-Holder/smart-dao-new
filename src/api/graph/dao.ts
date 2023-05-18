@@ -1,6 +1,8 @@
+import { useMemo } from 'react';
 import { useQuery, useLazyQuery } from '@apollo/client';
 import { GET_ALL_DAOS_ACTION } from '@/api/gqls/dao';
 import { ResponseDataType, queryRecord } from '@/api/typings/dao';
+import dayjs from 'dayjs';
 // interface Options {
 //   first?: number;
 //   skip?: number;
@@ -19,7 +21,24 @@ const useAllDaos = ({ name_contains = '', first = 4 }: queryRecord) => {
   });
 };
 const useLayoutDaos = () => {
-  return useLazyQuery<ResponseDataType>(GET_ALL_DAOS_ACTION);
+  const [fetchMore, { data, loading, error }] =
+    useLazyQuery<ResponseDataType>(GET_ALL_DAOS_ACTION);
+  let dataSource = useMemo(() => {
+    let result = Object.assign({}, data);
+    result.daos = result.daos?.map((item) => {
+      return {
+        ...item,
+        time: dayjs.unix(Number(item.time)).valueOf().toString(),
+      };
+    });
+    return result;
+  }, [data]);
+  return {
+    fetchMore,
+    data: dataSource,
+    loading,
+    error,
+  };
 };
 
 export { useAllDaos, useLayoutDaos };

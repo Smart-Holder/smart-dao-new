@@ -10,6 +10,8 @@ const GET_ALL_DAOS_ACTION = gql`
       skip: $skip
     ) {
       host: id
+      address: id
+      time: blockTimestamp
       blockNumber
       extend
       name

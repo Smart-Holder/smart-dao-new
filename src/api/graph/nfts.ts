@@ -1,5 +1,5 @@
 import web3 from 'web3';
-import { useQuery } from '@apollo/client';
+import { useQuery, useLazyQuery } from '@apollo/client';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 
@@ -19,28 +19,38 @@ const useDaosNfts = ({
   first = 6,
   skip = 0,
   chainId,
+  destroyed,
+  name_contains_nocase,
+  orderBy = 'blockNumber',
+  orderDirection = 'desc',
 }: queryRecord) => {
   const [items, setItems] = useState<AssetsResponseType[]>([]);
-  const { data, fetchMore, loading, error } = useQuery<ResponseDataType>(
-    GET_DAOS_NFTS_ACTION,
+  const [fetchMore, { data, loading, error }] = useLazyQuery<ResponseDataType>(
+    GET_DAOS_NFTS_ACTION({ name_contains_nocase, destroyed }),
     {
       variables: {
         host,
         first,
         skip,
+        orderBy,
+        orderDirection,
       },
+      fetchPolicy: 'no-cache',
     },
   );
+
   const ids = useMemo(
     () =>
-      data?.assets?.map((item) =>
+      (data?.assets || [])?.map((item) =>
         web3.utils.padLeft(
           web3.utils.numberToHex(web3.utils.toBN(item.tokenId)),
           64,
         ),
       ) || [],
-    [data?.assets],
+    [data],
   );
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
 
   const fetch = useCallback(async () => {
     await request({
@@ -84,8 +94,10 @@ const useDaosNfts = ({
   }, [chainId, first, host, ids, data?.assets]);
 
   useEffect(() => {
-    if (ids.length) {
+    if (ids.length > 0) {
       fetch();
+    } else {
+      setItems([]);
     }
   }, [fetch, ids]);
 

@@ -31,7 +31,8 @@ const App = () => {
 
   const defaultChain = Number(process.env.NEXT_PUBLIC_DEFAULT_CHAIN);
 
-  const [getLayoutData] = useLayoutDaos();
+  // const [getLayoutData] = useLayoutDaos();
+  const { fetchMore: getLayoutData } = useLayoutDaos();
 
   const getData = async () => {
     if (!isSupportChain) {
