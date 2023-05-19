@@ -380,13 +380,14 @@ const App = () => {
           columns={columns}
           dataSource={data}
           rowKey="id"
-          pagination={{
-            position: ['bottomCenter'],
-            current: page,
-            pageSize,
-            total,
-            onChange: onPageChange,
-          }}
+          pagination={false}
+          // pagination={{
+          //   position: ['bottomCenter'],
+          //   current: page,
+          //   pageSize,
+          //   total,
+          //   onChange: onPageChange,
+          // }}
           loading={loading}
         />
       </div>

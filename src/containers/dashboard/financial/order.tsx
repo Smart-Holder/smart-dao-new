@@ -1,5 +1,15 @@
 import { useEffect, useState } from 'react';
-import { Table, Form, message, Image, Input, Typography } from 'antd';
+import {
+  Table,
+  Form,
+  message,
+  Image,
+  Input,
+  Typography,
+  Row,
+  Col,
+  Button,
+} from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
@@ -167,7 +177,6 @@ const App = () => {
     skip: 0,
     host: currentDAO.host,
   });
-  console.log(listData, 'listData');
 
   const getData = async (page = 1) => {
     // const res = await request({
@@ -332,11 +341,7 @@ const App = () => {
   }, [searchText, values, chainId, address, currentDAO.host]);
 
   useEffect(() => {
-    if (page === 1) {
-      setData(listData);
-    } else {
-      setData([...data, ...listData]);
-    }
+    setData(listData);
   }, [listData]);
 
   return (
@@ -442,19 +447,42 @@ const App = () => {
           </Form>
         </div>
 
-        <Table
-          columns={columns}
-          dataSource={data}
-          rowKey="id"
-          pagination={{
-            position: ['bottomCenter'],
-            current: page,
-            pageSize,
-            total,
-            onChange: onPageChange,
-          }}
-          loading={listLoading}
-        />
+        <>
+          <Table
+            columns={columns}
+            dataSource={data}
+            rowKey="id"
+            pagination={false}
+            // pagination={{
+            //   position: ['bottomCenter'],
+            //   current: page,
+            //   pageSize,
+            //   total,
+            //   onChange: onPageChange,
+            // }}
+            loading={listLoading}
+          />
+          <Row justify="center" style={{ marginTop: 20 }}>
+            <Col span={3}>
+              <Button
+                disabled={page === 1}
+                onClick={() =>
+                  onPageChange(page - 1 <= 1 ? 1 : page - 1, pageSize)
+                }
+              >
+                &lt; Previous
+              </Button>
+            </Col>
+            <Col span={2}>
+              <Button
+                disabled={!data.length}
+                onClick={() => onPageChange(page + 1, pageSize)}
+              >
+                Next &gt;
+              </Button>
+            </Col>
+          </Row>
+        </>
       </div>
     </div>
   );
