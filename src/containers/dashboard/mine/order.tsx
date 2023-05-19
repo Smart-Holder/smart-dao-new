@@ -12,7 +12,7 @@ import { request } from '@/api';
 
 import { useAppSelector } from '@/store/hooks';
 
-import { formatDayjsValues, fromToken } from '@/utils';
+import { formatDayjsValues, fromToken, getUnit } from '@/utils';
 
 import type { PaginationProps } from 'antd';
 
@@ -272,8 +272,7 @@ const App = () => {
               label: formatMessage({
                 id: 'my.order.amount',
               }),
-              // value: fromToken(amount.amount || 0) + ' ETH',
-              value: amount.amount + ' ETH',
+              value: amount.amount + ' ' + getUnit(),
             },
           ]}
         />

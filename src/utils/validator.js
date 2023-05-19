@@ -10,7 +10,7 @@ export const validateMinETH = (rule, value) => {
 
 export const validateETH = (rule, value) => {
   if (value && !/^\d*(\.\d*)?$/.test(value)) {
-    return Promise.reject(new Error('Incorrect ETH'));
+    return Promise.reject(new Error('Incorrect Price'));
   }
   return Promise.resolve();
 };

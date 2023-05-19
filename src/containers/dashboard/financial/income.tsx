@@ -15,7 +15,7 @@ import { request } from '@/api';
 
 import { useAppSelector } from '@/store/hooks';
 
-import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
+import { formatAddress, formatDayjsValues, fromToken, getUnit } from '@/utils';
 
 import type { PaginationProps } from 'antd';
 import { getBalance, release } from '@/api/asset';
@@ -306,13 +306,11 @@ const App = () => {
           data={[
             {
               label: formatMessage({ id: 'financial.income.total' }),
-              value: fromToken(amount.amount) + ' ETH',
+              value: fromToken(amount.amount) + ' ' + getUnit(),
             },
-            // { num: fromToken(amount.amount) + ' ETH', title: '累计发行税收入' },
-            // { num: fromToken(amount.amount) + ' ETH', title: '累计交易税收入' },
             {
               label: formatMessage({ id: 'financial.income.balance' }),
-              value: fromToken(balance || 0) + ' ETH',
+              value: fromToken(balance || 0) + ' ' + getUnit(),
             },
           ]}
         />

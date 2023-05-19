@@ -1,5 +1,5 @@
 import { Asset } from '@/config/define';
-import { fromToken } from '@/utils';
+import { fromToken, getUnit } from '@/utils';
 import { Image } from 'antd';
 
 type PriceProps = {
@@ -12,7 +12,7 @@ type PriceProps = {
 const App = ({
   icon = '/images/market/icon_nft_card_unit_eth_default@2x.png',
   value,
-  unit = 'ETH',
+  unit = '',
   data,
 }: PriceProps) => {
   let v = 0;
@@ -37,7 +37,7 @@ const App = ({
     <div style={{ display: 'flex', alignItems: 'center' }}>
       <Image src={icon} width={20} height={20} preview={false} alt="" />
 
-      <span>{`${v} ${unit}`}</span>
+      <span>{`${v} ${getUnit()}`}</span>
     </div>
   );
 };

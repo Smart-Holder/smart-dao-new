@@ -4,6 +4,7 @@ import { Avatar, Space, Image, Row, Col, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
+import { getUnit } from '@/utils';
 
 const { Paragraph } = Typography;
 
@@ -150,7 +151,7 @@ const App = () => {
           <Col span={12}>
             <div className="total-item-2">
               <div className="total-item-right">
-                <span className="num">0 ETH</span>
+                <span className="num">0 {getUnit()}</span>
                 <span>
                   {formatMessage({ id: 'my.summary.total.assetAmount' })}
                 </span>
@@ -197,7 +198,7 @@ const App = () => {
           <Col span={12}>
             <div className="total-item-2">
               <div className="total-item-right">
-                <span className="num">0 ETH</span>
+                <span className="num">0 {getUnit()}</span>
                 <span>{formatMessage({ id: 'my.summary.total.income' })}</span>
               </div>
               <Image

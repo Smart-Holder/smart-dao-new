@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { Input } from 'antd';
+import { getUnit } from '@/utils';
 
 interface NumericInputProps {
   style?: React.CSSProperties;
@@ -46,7 +47,7 @@ const App = (props: NumericInputProps) => {
       style={{ width: 200 }}
       {...rest}
       value={value}
-      suffix="ETH"
+      suffix={getUnit()}
       onChange={handleChange}
       onBlur={handleBlur}
     />

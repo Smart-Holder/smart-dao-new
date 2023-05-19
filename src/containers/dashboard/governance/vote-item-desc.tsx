@@ -1,7 +1,7 @@
 import { Typography } from 'antd';
 import { useIntl } from 'react-intl';
 
-import { fromToken } from '@/utils';
+import { fromToken, getUnit } from '@/utils';
 import { proposalType as Types } from '@/config/enum';
 
 const { Paragraph } = Typography;
@@ -65,7 +65,7 @@ const App = ({ data }: Props) => {
   } else if (proposalType === Types.Income_Allocate) {
     desc += `${formatMessage({
       id: 'proposal.detail.label.income.allocate',
-    })}: ${fromToken(values.balance)} ETH`;
+    })}: ${fromToken(values.balance)} ${getUnit()}`;
   }
 
   return (
