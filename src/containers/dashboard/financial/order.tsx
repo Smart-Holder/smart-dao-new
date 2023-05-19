@@ -200,7 +200,7 @@ const App = () => {
         ...queryParams,
       }),
       variables: {
-        skip: page !== 1 ? data.length : 0,
+        skip: page !== 1 ? (page - 1) * data.length : 0,
         first: pageSize,
         ...queryVariables,
       },
@@ -261,8 +261,12 @@ const App = () => {
         break;
       case 'time':
         if (value) {
-          queryParamsCopy.blockTimestamp_gte = value[0];
-          queryParamsCopy.blockTimestamp_lte = value[1];
+          queryParamsCopy.blockTimestamp_gte = dayjs
+            .unix(Number(value[0]))
+            .toString();
+          queryParamsCopy.blockTimestamp_lte = dayjs
+            .unix(Number(value[1]))
+            .toString();
         } else {
           delete queryParamsCopy.blockTimestamp_gte;
           delete queryParamsCopy.blockTimestamp_lte;
