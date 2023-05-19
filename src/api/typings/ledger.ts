@@ -22,6 +22,7 @@ type ledger = {
   target: string;
   blockNumber: string;
   blockTimestamp: string;
+  id: string;
 };
 type ledgerQueryResponse = {
   ledgers: ledger[];

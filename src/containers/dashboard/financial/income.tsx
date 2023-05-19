@@ -121,7 +121,6 @@ const App = () => {
     host: currentDAO.host,
     ...ledgerVariables,
   });
-  console.log(ledgerData, 'ledgerData');
 
   const nftpModal: any = useRef(null);
 
@@ -222,23 +221,23 @@ const App = () => {
   //   setTotal(res);
   // };
 
-  const getTotal = async () => {
-    const filterValues: any = { ...values };
-    delete filterValues.time;
+  // const getTotal = async () => {
+  //   const filterValues: any = { ...values };
+  //   delete filterValues.time;
 
-    const res = await request({
-      name: 'utils',
-      method: 'getLedgerItemsTotalFromHost',
-      params: {
-        chain: chainId,
-        host: currentDAO.host,
-        name: searchText,
-        ...filterValues,
-      },
-    });
+  //   const res = await request({
+  //     name: 'utils',
+  //     method: 'getLedgerItemsTotalFromHost',
+  //     params: {
+  //       chain: chainId,
+  //       host: currentDAO.host,
+  //       name: searchText,
+  //       ...filterValues,
+  //     },
+  //   });
 
-    setTotal(res);
-  };
+  //   setTotal(res);
+  // };
 
   const onValuesChange = (changedValues: any) => {
     let [[key, value]]: any = Object.entries(changedValues);
@@ -355,7 +354,7 @@ const App = () => {
         getAmount();
         setPage(1);
         getData(1);
-        getTotal();
+        // getTotal();
       } catch (error) {
         console.error(error);
       }
@@ -369,7 +368,7 @@ const App = () => {
     if (currentDAO.host) {
       setPage(1);
       getData(1);
-      getTotal();
+      // getTotal();
     }
   }, [searchText, values, balance, chainId, address, currentDAO.host]);
 

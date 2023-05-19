@@ -142,7 +142,7 @@ const useLayoutNftList = ({
 
   const recombineData: listDataType[] = useMemo(
     () =>
-      data?.assetOrders?.map((item) => {
+      data?.assetOrders?.map((item, index) => {
         const { id, from, to, value, blockTimestamp, blockNumber } = item;
         return {
           id,

@@ -33,6 +33,7 @@ const LEDGER_QUERY = (opt: ledgerQueryGqlProps) => {
             skip: $skip
             where: { host: $host, ${optionsStr} }
         ) {
+          id
           name
           state
           target
