@@ -30,6 +30,7 @@ export const ETH_CHAINS_INFO: any = {
     opensea: 'https://opensea.io/assets/ethereum',
     DAOsProxy: '0x555309800BDDd188A5B51728d5611725d9bBad02',
     unit: 'ETH',
+    icon: '/images/market/icon_nft_card_unit_eth_default@2x.png',
   },
   // 4: {
   //   rpc: ETH_TESTNET,
@@ -57,6 +58,7 @@ export const ETH_CHAINS_INFO: any = {
     opensea: 'https://testnets.opensea.io/assets/goerli',
     DAOsProxy: '0x555309800BDDd188A5B51728d5611725d9bBad02',
     unit: 'ETH',
+    icon: '/images/market/icon_nft_card_unit_eth_default@2x.png',
   },
   137: {
     rpc: 'https://polygon-mainnet.infura.io',
@@ -72,6 +74,7 @@ export const ETH_CHAINS_INFO: any = {
     opensea: 'https://opensea.io/assets/matic',
     DAOsProxy: '0x179596783388e24a9D4E1ef982bc0c9224C41F43',
     unit: 'MATIC',
+    icon: '/images/market/icon_nft_card_unit_eth_default@2x.png',
   },
   // 56: {
   //   rpc: BNB_MAINNET,

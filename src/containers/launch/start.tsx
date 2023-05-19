@@ -172,17 +172,19 @@ const App: React.FC = () => {
   };
 
   const validateRepeat = async (rule: any, value: string) => {
-    const res = await request({
-      name: 'dao',
-      method: 'getAllDAOs',
-      params: {
-        chain: chainId,
-        name: value,
-      },
-    });
+    if (value) {
+      const res = await request({
+        name: 'dao',
+        method: 'getAllDAOs',
+        params: {
+          chain: chainId,
+          name: value,
+        },
+      });
 
-    if (res && res.length > 0) {
-      return Promise.reject(new Error('Repeat'));
+      if (res && res.length > 0) {
+        return Promise.reject(new Error('Repeat'));
+      }
     }
 
     return Promise.resolve();
