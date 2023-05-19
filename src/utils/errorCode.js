@@ -109,7 +109,7 @@ function parseJSONObject(str) {
   }
 }
 
-function getMessage(error) {
+function getMessage(error) {debugger
   const defaultMessage = `Call contract method error`;
 
   if (!error) {
