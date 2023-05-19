@@ -53,7 +53,7 @@ export function setApprovalForAll({
   return new Promise((resolve, reject) => {
     const contract = new web3.eth.Contract(ERC721.abi, contractAddress);
 
-    contractSend(contract, address, 'setApprovalForAll', [operator, true]).then(resolve).catch(reject);
+    contractSend(contract, address, 'setApprovalForAll', [operator, true], async ()=>{/*no wait*/}).then(resolve).catch(reject);
   });
 }
 
