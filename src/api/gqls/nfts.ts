@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { daosNftsGqlProps } from '../typings/nfts';
+import { daosNftsGqlProps, Daos_Nft_List_Props } from '../typings/nfts';
 
 const JsonToGqlStr = (options: any) => {
   let optionsStr = ``;
@@ -46,29 +46,32 @@ const GET_DAOS_NFTS_ACTION = (opt: daosNftsGqlProps) => {
   `;
 };
 
-const GET_DAOS_NFT_LIST = gql`
-  query GetNftList(
-    $first: Int! = 6
-    $orderBy: String = blockNumber
-    $orderDirection: String = desc
-    $skip: Int = 0
-    $asset: String! = ""
-  ) {
-    assetOrders(
-      first: $first
-      orderBy: $orderBy
-      orderDirection: $orderDirection
-      skip: $skip
-      where: { asset: $asset }
+const GET_DAOS_NFT_LIST = (opt: Daos_Nft_List_Props) => {
+  let optionsStr = JsonToGqlStr(opt);
+  return gql`
+    query GetNftList(
+      $first: Int! = 6
+      $orderBy: String = blockNumber
+      $orderDirection: String = desc
+      $skip: Int = 0
     ) {
-      id
-      txHash
-      value
-      from
-      to
-      blockTimestamp
+      assetOrders(
+        first: $first
+        orderBy: $orderBy
+        orderDirection: $orderDirection
+        skip: $skip
+        where: { ${optionsStr} }
+      ) {
+        id
+        txHash
+        value
+        from
+        to
+        blockTimestamp
+        blockNumber
+      }
     }
-  }
-`;
+  `;
+};
 
 export { GET_DAOS_NFTS_ACTION, GET_DAOS_NFT_LIST };

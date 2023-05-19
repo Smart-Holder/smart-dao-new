@@ -47,6 +47,7 @@ type assetOrdersPropsType = {
   from: string;
   to: string;
   blockTimestamp: string;
+  blockNumber: string;
 };
 type assetOrdersProps = {
   assetOrders?: assetOrdersPropsType[];
@@ -59,6 +60,26 @@ type listDataType = {
   toAddress: string;
 };
 
+type Daos_Nft_List_Props = {
+  asset?: string;
+  host?: string;
+  blockTimestamp_gte?: string;
+  blockTimestamp_lte?: string;
+  asset_contains_nocase?: string;
+};
+
+type LayoutNftListProps = Daos_Nft_List_Props & {
+  first: number;
+  skip: number;
+  orderBy?: string;
+  orderDirection?: string;
+  // asset?: string;
+  // host?: string;
+  // blockTimestamp_gte?: string;
+  // blockTimestamp_lte?: string;
+  // asset_contains_nocase?: string;
+};
+
 export type {
   assetOrdersProps,
   ResponseDataType,
@@ -67,4 +88,6 @@ export type {
   assetOrdersPropsType,
   listDataType,
   daosNftsGqlProps,
+  LayoutNftListProps,
+  Daos_Nft_List_Props,
 };

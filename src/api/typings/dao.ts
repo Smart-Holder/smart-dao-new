@@ -11,7 +11,9 @@ type membersType = {
   image: string;
   tokenId: string;
 };
-
+type ledgerPoolProps = {
+  id: string;
+};
 type votePoolProps = {
   id: string;
 };
@@ -41,6 +43,7 @@ export interface daosType extends Daos {
   root: string;
   time: string;
   address: string;
+  ledgerPool?: ledgerPoolProps;
 }
 
 type ResponseDataType = {

@@ -29,10 +29,12 @@ const useLayoutDaos = () => {
       return {
         ...item,
         time: dayjs.unix(Number(item.time)).valueOf().toString(),
+        ledger: item.ledgerPool?.id,
       };
     });
     return result;
   }, [data]);
+
   return {
     fetchMore,
     data: dataSource,

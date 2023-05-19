@@ -20,6 +20,9 @@ import { useIntl, FormattedMessage } from 'react-intl';
 import Ellipsis from '@/components/typography/ellipsis';
 import { useDaosAsset } from '@/api/graph/asset';
 import { assetPoolProps } from '@/api/typings/dao';
+import { useLayoutNftList } from '@/api/graph/nfts';
+import { GET_DAOS_NFT_LIST } from '@/api/gqls/nfts';
+import { listDataType } from '@/api/typings/nfts';
 
 dayjs.extend(customParseFormat);
 
@@ -36,12 +39,18 @@ const copy = (str: string) => {
 };
 
 const columns = [
+  // graph 暂时没有orderID 暂时去除 增加blockNumber
+  // {
+  //   title: <FormattedMessage id="financial.order.id" />,
+  //   dataIndex: 'id',
+  //   key: 'id',
+  // },
+  // { title: '市场', dataIndex: 'votes', key: 'votes' },
   {
     title: <FormattedMessage id="financial.order.id" />,
-    dataIndex: 'id',
-    key: 'id',
+    dataIndex: 'blockNumber',
+    key: 'blockNumber',
   },
-  // { title: '市场', dataIndex: 'votes', key: 'votes' },
   {
     title: <FormattedMessage id="financial.order.amount" />,
     dataIndex: 'value',
@@ -118,13 +127,27 @@ const App = () => {
   const [values, setValues] = useState({});
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<listDataType[]>([]);
+  const [timeStr, setTimeStr] = useState<[]>();
+
+  const [queryParams, setQueryParams] = useState<{
+    blockTimestamp_gte?: string;
+    blockTimestamp_lte?: string;
+    asset_contains_nocase?: string;
+  }>({});
+  const [queryVariables, setQueryVariables] = useState<{
+    orderBy: string;
+    orderDirection: 'asc' | 'desc';
+  }>({
+    orderBy: 'blockNumber',
+    orderDirection: 'desc',
+  });
 
   const [amount, setAmount] = useState({ total: 0, amount: '0' });
 
   const [timer, setTimer] = useState() as any;
 
-  const { data: assetData } = useDaosAsset({
+  const { data: assetData, refetch } = useDaosAsset({
     host: currentDAO.host,
     vote_id: currentDAO.votePool.id,
     first: currentDAO.assetPool.find(
@@ -135,22 +158,44 @@ const App = () => {
     ).id,
   });
 
+  const {
+    data: listData,
+    loading: listLoading,
+    fetchMore,
+  } = useLayoutNftList({
+    first: pageSize,
+    skip: 0,
+    host: currentDAO.host,
+  });
+  console.log(listData, 'listData');
+
   const getData = async (page = 1) => {
-    const res = await request({
-      name: 'utils',
-      method: 'getAssetOrderFrom',
-      params: {
-        chain: chainId,
+    // const res = await request({
+    //   name: 'utils',
+    //   method: 'getAssetOrderFrom',
+    //   params: {
+    //     chain: chainId,
+    //     host: currentDAO.host,
+    //     limit: [(page - 1) * pageSize, pageSize],
+    //     name: searchText,
+    //     fromAddres_not: '0x0000000000000000000000000000000000000000',
+    //     toAddress_not: '0x0000000000000000000000000000000000000000',
+    //     ...values,
+    //   },
+    // });
+
+    // setData(res);
+    await fetchMore({
+      query: GET_DAOS_NFT_LIST({
         host: currentDAO.host,
-        limit: [(page - 1) * pageSize, pageSize],
-        name: searchText,
-        fromAddres_not: '0x0000000000000000000000000000000000000000',
-        toAddress_not: '0x0000000000000000000000000000000000000000',
-        ...values,
+        ...queryParams,
+      }),
+      variables: {
+        skip: page !== 1 ? data.length : 0,
+        first: pageSize,
+        ...queryVariables,
       },
     });
-
-    setData(res);
   };
 
   const getTotal = async () => {
@@ -176,6 +221,58 @@ const App = () => {
   const onValuesChange = (changedValues: any) => {
     let [[key, value]]: any = Object.entries(changedValues);
     const nextValues: any = { ...values };
+    const queryParamsCopy = { ...queryParams };
+    const queryVariablesCopy = { ...queryVariables };
+
+    switch (key) {
+      case 'orderBy':
+        switch (value) {
+          case 'time desc':
+            queryVariablesCopy.orderBy = 'blockTimestamp';
+            queryVariablesCopy.orderDirection = 'desc';
+            break;
+
+          case 'time':
+            queryVariablesCopy.orderBy = 'blockTimestamp';
+            queryVariablesCopy.orderDirection = 'asc';
+            break;
+
+          case 'value desc':
+            queryVariablesCopy.orderBy = 'value';
+            queryVariablesCopy.orderDirection = 'desc';
+            break;
+
+          case 'value':
+            queryVariablesCopy.orderBy = 'value';
+            queryVariablesCopy.orderDirection = 'asc';
+            break;
+          default:
+            break;
+        }
+        break;
+      case 'time':
+        if (value) {
+          queryParamsCopy.blockTimestamp_gte = value[0];
+          queryParamsCopy.blockTimestamp_lte = value[1];
+        } else {
+          delete queryParamsCopy.blockTimestamp_gte;
+          delete queryParamsCopy.blockTimestamp_lte;
+        }
+        break;
+      case 'name':
+        if (value) {
+          queryParamsCopy.asset_contains_nocase = value;
+        } else {
+          delete queryParamsCopy.asset_contains_nocase;
+        }
+        break;
+      default:
+        break;
+    }
+
+    setQueryParams(queryParamsCopy);
+    setQueryVariables(queryVariablesCopy);
+    console.log(queryParamsCopy, 'queryParamsCopy');
 
     if (key === 'name') {
       clearTimeout(timer);
@@ -199,7 +296,6 @@ const App = () => {
     } else {
       nextValues[key] = key === 'time' ? formatDayjsValues(value) : value;
     }
-
     console.log('values', nextValues);
     setValues(nextValues);
   };
@@ -211,16 +307,17 @@ const App = () => {
 
   useEffect(() => {
     const getAmount = async () => {
-      const res = await request({
-        name: 'utils',
-        method: 'getOrderTotalAmount',
-        params: { chain: chainId, host: currentDAO.host },
-      });
+      await refetch();
+      // const res = await request({
+      //   name: 'utils',
+      //   method: 'getOrderTotalAmount',
+      //   params: { chain: chainId, host: currentDAO.host },
+      // });
 
-      console.log('amount', res);
-      if (res) {
-        setAmount(res);
-      }
+      // console.log('amount', res);
+      // if (res) {
+      //   setAmount(res);
+      // }
     };
 
     getAmount();
@@ -233,6 +330,14 @@ const App = () => {
       getTotal();
     }
   }, [searchText, values, chainId, address, currentDAO.host]);
+
+  useEffect(() => {
+    if (page === 1) {
+      setData(listData);
+    } else {
+      setData([...data, ...listData]);
+    }
+  }, [listData]);
 
   return (
     <div>
@@ -348,7 +453,7 @@ const App = () => {
             total,
             onChange: onPageChange,
           }}
-          loading={loading}
+          loading={listLoading}
         />
       </div>
     </div>

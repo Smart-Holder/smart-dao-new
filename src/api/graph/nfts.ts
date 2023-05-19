@@ -12,6 +12,7 @@ import {
   queryRecord,
   assetOrdersPropsType,
   listDataType,
+  LayoutNftListProps,
 } from '@/api/typings/nfts';
 
 const useDaosNfts = ({
@@ -114,28 +115,39 @@ const useLayoutNftList = ({
   skip = 0,
   orderBy = 'blockNumber',
   orderDirection = 'desc',
-  asset = '',
-}) => {
-  const { data, fetchMore, loading, error } = useQuery<assetOrdersProps>(
-    GET_DAOS_NFT_LIST,
+  asset,
+  host,
+  blockTimestamp_gte,
+  blockTimestamp_lte,
+  asset_contains_nocase,
+}: LayoutNftListProps) => {
+  const [fetchMore, { data, loading, error }] = useLazyQuery<assetOrdersProps>(
+    GET_DAOS_NFT_LIST({
+      asset,
+      blockTimestamp_gte,
+      blockTimestamp_lte,
+      host,
+      asset_contains_nocase,
+    }),
     {
       variables: {
         first,
         skip,
-        asset,
         orderBy,
         orderDirection,
       },
+      fetchPolicy: 'no-cache',
     },
   );
 
   const recombineData: listDataType[] = useMemo(
     () =>
       data?.assetOrders?.map((item) => {
-        const { id, from, to, value, blockTimestamp } = item;
+        const { id, from, to, value, blockTimestamp, blockNumber } = item;
         return {
           id,
           value,
+          blockNumber,
           fromAddres: from,
           toAddress: to,
           time: dayjs.unix(Number(blockTimestamp)).toString(),

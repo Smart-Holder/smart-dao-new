@@ -239,7 +239,7 @@ const App = () => {
                       return (
                         <Avatar
                           style={{ backgroundColor: '#000', borderWidth: 3 }}
-                          icon={<UserOutlined />}
+                          icon={<UserOutlined rev={undefined} />}
                           key={index}
                         />
                       );

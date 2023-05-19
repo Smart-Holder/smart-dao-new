@@ -37,6 +37,9 @@ const GET_ALL_DAOS_ACTION = gql`
         type
         id
       }
+      ledgerPool {
+        id
+      }
     }
     statistic(id: "0x0000000000000000000000000000000000000000") {
       totalDAOs
