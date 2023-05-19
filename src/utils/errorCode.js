@@ -71,41 +71,84 @@ export const errorCode = {
   '0xf76273e9': 'amount minimum limit',
 };
 
-export const getContractMessage = (error, method) => {
-  console.error('error', error);
+function getMessageFromCode(err) {
+  if (err && err.data) {
+    return errorCode[String(err.data).slice(0, 10)];
+  }
+}
 
-  // 用户取消操作
-  if (error?.code === 4001) {
+function getMessageFromString(msg) {
+  if (msg) {
+    return String(msg).replace(/\#\w+(\#|\.)\w+\s*/, '');
+  }
+}
+
+function parseJSONObject(str) {
+  let start = str.indexOf('{');
+  if (start == -1) return;
+  let indent = 1;
+  let idx = start, end = start;
+
+  // Simple Lexical Analysis
+  while (++idx < str.length && indent > 0) {
+    switch (str.charCodeAt(idx)) {
+      case 123:
+        indent++;
+        break;
+      case 125:
+        indent--;
+        end = idx+1;
+        break;
+    }
+  }
+
+  if (indent == 0) {
+    let json = str.substring(start, end);
+    if (json)
+      return JSON.parse(json);
+  }
+}
+
+function getMessage(error) {debugger
+  const defaultMessage = `Call contract method error`;
+
+  if (!error) {
+    return defaultMessage;
+  }
+  if (error.code === 4001) { // user cancel action
     return '';
   }
 
-  // const defaultMessage = `call contract method error, ${method}`;
-  const defaultMessage = `Call contract method error`;
-
   try {
     let msg = '';
-
-    if (error?.message.includes('{')) {
-      const errorObj = JSON.parse(error.message.split('\n').slice(1).join(''));
-      const { data, message } = errorObj?.originalError || {};
-      const code = data?.slice(0, 10);
-      // msg = code ? errorCode[code] : defaultMessage;
-      msg =
-        errorCode[code] ||
-        message.replace('execution reverted: ') ||
-        defaultMessage;
-    } else {
-      msg = error?.message || defaultMessage;
+    let errors = [error, error.originalError];
+    let errObj = parseJSONObject(error.message);
+    if (errObj) {
+      errors.push(errObj);
+      errors.push(errObj.originalError);
+      errors.push(errObj.value);
+      errors.push(errObj.value?.data);
     }
-
+    for (let err of errors.reverse()) {
+      if (msg)
+        break;
+      if (err) {
+        msg = getMessageFromCode(err) || getMessageFromString(err.message);
+      }
+    }
+    msg = msg || defaultMessage;
     msg = msg.slice(0, 1).toUpperCase() + msg.slice(1);
-
-    console.error(msg);
-    message.error(msg);
     return msg;
   } catch (error) {
-    console.error(error);
-    message.error(defaultMessage);
     return defaultMessage;
   }
+}
+
+export const getContractMessage = (error, method) => {
+  let msg = getMessage(error);
+  if (!msg)
+    return '';
+  // console.error(msg);
+  message.error(msg);
+  return msg;
 };

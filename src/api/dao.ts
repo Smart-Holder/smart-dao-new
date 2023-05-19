@@ -16,6 +16,7 @@ import DAO from '@/config/abi/DAO.json';
 import DAOs from '@/config/abi/DAOs.json';
 import { Permissions, proposalType } from '@/config/enum';
 import { message } from 'antd';
+import { ETH_CHAINS_INFO } from '@/config/chains';
 
 export const createDAO = async (params: any) => {
   const { web3, address, chainId: chain } = store.getState().wallet;
@@ -39,7 +40,7 @@ export const createDAO = async (params: any) => {
   const contract = getContract(
     web3,
     DAOs.abi,
-    process.env.NEXT_PUBLIC_DAOS_PROXY_ADDRESS,
+    ETH_CHAINS_INFO[chain].DAOsProxy,
   );
 
   const baseURI = `${process.env.NEXT_PUBLIC_BASE_URL}/service-api/utils/printJSON`;
@@ -52,7 +53,7 @@ export const createDAO = async (params: any) => {
       description,
       image,
       extend: formatToBytes(extend),
-      unlockOperator: process.env.NEXT_PUBLIC_DAOS_PROXY_ADDRESS,
+      unlockOperator: ETH_CHAINS_INFO[chain].DAOsProxy,
     },
     // address, // test
     '0x0000000000000000000000000000000000000000',

@@ -28,8 +28,6 @@ const setLoading = () => {
   const root = createRoot(dom);
   root.render(<Spin />);
   document.body.appendChild(dom);
-  // clearTimeout(store.getters.loadingTimer);
-  // store.commit('SET_LOADING', true);
   store.dispatch({ type: 'common/setLoading', payload: true });
   window.addEventListener('beforeunload', beforeUnload);
   window.addEventListener('click', stopClick, true);
@@ -37,15 +35,23 @@ const setLoading = () => {
 
 const closeLoading = () => {
   document.body.removeChild(document.getElementById('globalLoading'));
-  // store.commit(
-  //   'SET_LOADING_TIMER',
-  //   setTimeout(() => {
-  //     store.commit('SET_LOADING', false);
-  //   }, 100),
-  // );
   store.dispatch({ type: 'common/setLoading', payload: false });
   window.removeEventListener('beforeunload', beforeUnload);
   window.removeEventListener('click', stopClick, true);
+};
+
+const setGasPrice = async () => {
+  const chainId = store.getState().wallet.chainId;
+
+  if (Number(chainId) === 137) {
+    const res = await fetch(
+      'https://gpoly.blockscan.com/gasapi.ashx?apikey=key&method=gasoracle',
+    );
+    const data = await res.json();
+    const { ProposeGasPrice } = data.result;
+    return ProposeGasPrice * 1000000000 + '';
+  }
+  return 0;
 };
 
 export async function contractSend(
@@ -59,24 +65,15 @@ export async function contractSend(
     setLoading();
     await contract.methods[method](...params).call({ from }); //try call
   } catch (error) {
-    // let msg = error.message || `call contract method error, ${method}`;
-    // let msg_0 = msg.split('\n')[0];
-    // // execution reverted: #Department#OnlyDAO caller does not have permission
-    // // if (msg.indexOf('#Department#OnlyDAO') != -1) {
-    // //   msg_0 = `Caller does not have permission, only DAO call`;
-    // // } else
-    // if (msg.indexOf('not have permission') != -1) {
-    //   msg_0 = `Caller does not have permission`;
-    // }
-
     getContractMessage(error, method);
     closeLoading();
     throw error;
   }
+  const gasPrice = await setGasPrice();
 
   return await new Promise((resolve, reject) => {
     contract.methods[method](...params)
-      .send({ from })
+      .send(gasPrice?{ from, gasPrice }: {from})
       .then((receipt) => {
         next(receipt)
           .then(() => {
@@ -88,12 +85,6 @@ export async function contractSend(
           });
       })
       .catch((error) => {
-        // console.error(
-        //   error?.message || `send contract method error, ${method}`,
-        // );
-        // message.error(
-        //   error?.message || `send contract method error, ${method}`,
-        // );
         getContractMessage(error, method);
         closeLoading();
         reject(error);
