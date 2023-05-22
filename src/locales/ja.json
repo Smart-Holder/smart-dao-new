@@ -458,6 +458,7 @@
   "proposal.detail.label.basic.executor.former": "Former Executor Address",
   "proposal.detail.label.member.rights": "NFTP Rights has been updated",
   "proposal.detail.label.member.create": "NFTP Address",
+  "proposal.detail.label.member.join": "Request to join DAO",
   "proposal.detail.label.member.votes": "NFTP Copies has been updated",
   "proposal.detail.label.asset.publish": "Publish new assets",
   "proposal.detail.label.income.allocate": "Allocate Undistributed Income",

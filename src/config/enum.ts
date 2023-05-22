@@ -66,4 +66,5 @@ export enum proposalType {
   Member_Votes, // 修改 NFTP 的投票数
   Asset_Publish, // 发行资产
   Income_Allocate, // 分配收入
+  Member_Join, // 加入一个 DAO
 }

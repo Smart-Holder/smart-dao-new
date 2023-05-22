@@ -70,7 +70,7 @@ export function request({ name, method, params, listen = false }) {
     } else {
       sdk[name].methods[method](params)
         .then((res) => {
-          console.log(method, res);
+          // console.log(method, res);
           closeLoading(listen);
           resolve(res);
         })

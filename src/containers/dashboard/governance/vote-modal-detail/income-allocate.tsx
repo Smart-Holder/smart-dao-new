@@ -124,14 +124,15 @@ const App = ({ data }: Props) => {
 
       <Table
         columns={columns}
-        dataSource={tableData}
+        dataSource={allData}
         rowKey="id"
         pagination={{
           position: ['bottomCenter'],
-          current: page,
-          pageSize,
-          total,
-          onChange: onPageChange,
+          // current: page,
+          pageSize: 10,
+          // total,
+          hideOnSinglePage: true,
+          // onChange: onPageChange,
         }}
       />
     </>

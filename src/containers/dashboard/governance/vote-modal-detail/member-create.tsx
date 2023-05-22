@@ -43,27 +43,42 @@ const App = ({ data }: Props) => {
         >
           <Row style={{ width: '100%' }} gutter={[0, 10]}>
             <Col span={12}>
-              <Checkbox value={Permissions.Action_VotePool_Vote}>
+              <Checkbox
+                value={Permissions.Action_VotePool_Vote}
+                className="checked"
+              >
                 {formatMessage({ id: 'my.information.rights.vote' })}
               </Checkbox>
             </Col>
             <Col span={12}>
-              <Checkbox value={Permissions.Action_VotePool_Create}>
+              <Checkbox
+                value={Permissions.Action_VotePool_Create}
+                className="checked"
+              >
                 {formatMessage({ id: 'my.information.rights.proposal' })}
               </Checkbox>
             </Col>
             <Col span={12}>
-              <Checkbox value={Permissions.Action_Member_Create}>
+              <Checkbox
+                value={Permissions.Action_Member_Create}
+                className="checked"
+              >
                 {formatMessage({ id: 'my.information.rights.add' })}
               </Checkbox>
             </Col>
             <Col span={12}>
-              <Checkbox value={Permissions.Action_Asset_SafeMint}>
+              <Checkbox
+                value={Permissions.Action_Asset_SafeMint}
+                className="checked"
+              >
                 {formatMessage({ id: 'my.information.rights.publish' })}
               </Checkbox>
             </Col>
             <Col span={16}>
-              <Checkbox value={Permissions.Action_DAO_Settings}>
+              <Checkbox
+                value={Permissions.Action_DAO_Settings}
+                className="checked"
+              >
                 {formatMessage({ id: 'my.information.rights.basic' })}
               </Checkbox>
             </Col>

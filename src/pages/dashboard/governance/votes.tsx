@@ -137,7 +137,7 @@ const App: NextPageWithLayout = () => {
       }
 
       nextValues = { ...nextValues, ...obj };
-      console.log('values', nextValues);
+      // console.log('values', nextValues);
       setValues(nextValues);
       return;
     }
@@ -148,7 +148,7 @@ const App: NextPageWithLayout = () => {
       nextValues[key] = key === 'time' ? formatDayjsValues(value) : value;
     }
 
-    console.log('values', nextValues);
+    // console.log('values', nextValues);
     setValues(nextValues);
   };
 
@@ -167,7 +167,7 @@ const App: NextPageWithLayout = () => {
   }, [searchText, values, chainId, address, currentDAO.root]);
 
   const onClickItem = (item: any) => {
-    console.log('item', item);
+    // console.log('item', item);
     setCurrentItem(item);
     setOpenModal(true);
   };

@@ -16,6 +16,8 @@ import { useIntl } from 'react-intl';
 import Ellipsis from '@/components/typography/ellipsis';
 
 import Detail from '@/containers/dashboard/governance/vote-modal-detail';
+import { proposalType } from '@/config/enum';
+import UserItem from '@/containers/dashboard/governance/user-item';
 
 dayjs.extend(customParseFormat);
 
@@ -73,7 +75,7 @@ const VoteModal: FC<VoteModalProps> = (props) => {
         setIsVote(true);
         setYourVote(res[0]?.votes || 0);
       }
-      console.log(res);
+
       setLoading(false);
     };
 
@@ -141,12 +143,17 @@ const VoteModal: FC<VoteModalProps> = (props) => {
             </Space>
 
             <div className="owner">
-              <div className="address">
-                {/* {formatAddress(data.origin)} */}
-                <Ellipsis copyable={{ text: data.origin }}>
-                  {formatAddress(data.origin, 6, 6)}
-                </Ellipsis>
-              </div>
+              {data?.extra.proposalType === proposalType.Member_Join ? (
+                <UserItem data={data?.extra.values} />
+              ) : (
+                <UserItem
+                  data={{
+                    name: data?.originData?.nickname,
+                    image: data?.originData?.image,
+                  }}
+                />
+              )}
+
               <div className={`status ${data.status}`}>
                 {statusMap[data.status]}
               </div>

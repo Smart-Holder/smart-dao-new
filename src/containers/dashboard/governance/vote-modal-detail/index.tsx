@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl';
 import BasicInfo from './basic-info';
 import BasicExecutor from './basic-executor';
 import MemberCreate from './member-create';
+import MemberJoin from './member-join';
 import MemberRights from './member-rights';
 import MemberVotes from './member-votes';
 import AssetPublish from './asset-publish';
@@ -40,6 +41,7 @@ const App = ({ data }: Props) => {
           <BasicExecutor data={values} />
         )}
         {proposalType === Types.Member_Create && <MemberCreate data={values} />}
+        {proposalType === Types.Member_Join && <MemberJoin data={values} />}
         {proposalType === Types.Member_Rights && <MemberRights data={values} />}
         {proposalType === Types.Member_Votes && <MemberVotes data={values} />}
         {proposalType === Types.Asset_Publish && <AssetPublish data={values} />}
