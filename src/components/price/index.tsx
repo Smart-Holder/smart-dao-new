@@ -1,6 +1,8 @@
 import { Asset } from '@/config/define';
-import { fromToken } from '@/utils';
+import { fromToken, getUnit } from '@/utils';
 import { Image } from 'antd';
+import { ETH_CHAINS_INFO } from '@/config/chains';
+import { useAppSelector } from '@/store/hooks';
 
 type PriceProps = {
   icon?: string;
@@ -12,9 +14,11 @@ type PriceProps = {
 const App = ({
   icon = '/images/market/icon_nft_card_unit_eth_default@2x.png',
   value,
-  unit = 'ETH',
+  unit = '',
   data,
 }: PriceProps) => {
+  const { chainId } = useAppSelector((store) => store.wallet);
+
   let v = 0;
 
   if (value !== undefined) {
@@ -35,9 +39,16 @@ const App = ({
 
   return (
     <div style={{ display: 'flex', alignItems: 'center' }}>
-      <Image src={icon} width={20} height={20} preview={false} alt="" />
+      <Image
+        src={ETH_CHAINS_INFO[chainId]?.icon || icon}
+        width={20}
+        height={20}
+        preview={false}
+        alt=""
+      />
+      {/* <Image src={Matic} width={20} height={20} preview={false} alt="" /> */}
 
-      <span>{`${v} ${unit}`}</span>
+      <span style={{ marginLeft: 1 }}>{`${v} ${getUnit()}`}</span>
     </div>
   );
 };

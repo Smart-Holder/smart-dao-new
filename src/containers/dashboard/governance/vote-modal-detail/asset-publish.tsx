@@ -5,6 +5,7 @@ import { AttrParams } from '@/components/modal/assetAttrModal';
 import Card, { CardDataProps } from '@/components/card';
 
 import styles from './detail.module.css';
+import { getUnit } from '@/utils';
 
 const { Paragraph } = Typography;
 
@@ -69,7 +70,9 @@ const App = ({ data }: Props) => {
                   </span>
                 </Col>
                 <Col span={14}>
-                  <span className="dao-info-item-value">{data.price} ETH</span>
+                  <span className="dao-info-item-value">
+                    {data.price} {getUnit()}
+                  </span>
                 </Col>
               </Row>
 
@@ -81,7 +84,7 @@ const App = ({ data }: Props) => {
                 </Col>
                 <Col span={14}>
                   <span className="dao-info-item-value">
-                    {data.listingPrice} ETH
+                    {data.listingPrice} {getUnit()}
                   </span>
                 </Col>
               </Row>

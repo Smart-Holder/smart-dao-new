@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import Ellipsis from '@/components/typography/ellipsis';
 
-import { formatAddress, fromToken } from '@/utils';
+import { formatAddress, fromToken, getUnit } from '@/utils';
 
 import { useIntl, FormattedMessage } from 'react-intl';
 
@@ -42,7 +42,7 @@ const columns = [
     title: 'Amount',
     dataIndex: 'price',
     key: 'price',
-    render: (text: string) => `${text} ETH`,
+    render: (text: string) => `${text} ${getUnit()}`,
   },
 ];
 
@@ -118,7 +118,7 @@ const App = ({ data }: Props) => {
           {formatMessage({ id: 'proposal.detail.label.income.allocate' })}:
         </span>
         <div className={styles.value} style={{ marginTop: 10, fontSize: 28 }}>
-          {fromToken(data.balance || 0)} ETH
+          {fromToken(data.balance || 0)} {getUnit()}
         </div>
       </div>
 

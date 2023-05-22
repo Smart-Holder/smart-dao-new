@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Avatar, Button, Image, message, Space } from 'antd';
 import { useIntl } from 'react-intl';
 import { Market } from '@/config/chains';
-import { fromToken } from '@/utils';
+import { fromToken, getUnit } from '@/utils';
 import { revoke } from '@/api/asset';
 import { useRouter } from 'next/router';
 
@@ -61,7 +61,7 @@ const App = () => {
                 fromToken(storageData.minimumPrice),
                 fromToken(storageData.sellPrice || 0),
               )}{' '}
-              ETH
+              {getUnit()}
             </div>
             <div className="market-item-bottom">
               <Button

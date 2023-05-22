@@ -1,5 +1,5 @@
 import React, { useState, MouseEvent, useEffect, useRef } from 'react';
-import { Dropdown, Image, Avatar } from 'antd';
+import { Dropdown, Image, Avatar, Button } from 'antd';
 import type { MenuProps } from 'antd';
 import { useRouter } from 'next/router';
 
@@ -232,9 +232,19 @@ const Menu = () => {
         overlayClassName="connect-menu"
       >
         <div className="dropdown-trigger" onClick={handleDropdownClick}>
-          {address && image ? (
-            <Avatar size={34} src={image} />
-          ) : (
+          {!address && (
+            <Button
+              type="primary"
+              className="button-connect"
+              // onClick={handleDropdownClick}
+            >
+              {formatMessage({ id: 'home.connectWallet' })}
+            </Button>
+          )}
+
+          {address && image && <Avatar size={34} src={image} />}
+
+          {address && !image && (
             <Avatar
               size={34}
               src="/images/header/img_circle_no_avatar@2x.png"
@@ -244,9 +254,22 @@ const Menu = () => {
           <style jsx>
             {`
               .dropdown-trigger {
-                height: 34px;
+                display: flex;
+                align-items: center;
+                height: 44px;
                 line-height: 0;
                 cursor: pointer;
+              }
+
+              .dropdown-trigger :global(.button-connect) {
+                width: 153px;
+                height: 44px;
+                font-size: 14px;
+                font-weight: 600;
+                color: #ffffff;
+                line-height: 21px;
+                background: #000000;
+                border-radius: 23px;
               }
             `}
           </style>

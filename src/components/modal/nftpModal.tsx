@@ -30,6 +30,8 @@ const App = (props: any, ref: any) => {
   const { nickname, image, description } = useAppSelector(
     (store) => store.user.userInfo,
   );
+  const { chainId, address } = useAppSelector((store) => store.wallet);
+  const { currentDAO } = useAppSelector((store) => store.dao);
 
   useImperativeHandle(ref, () => ({
     show: () => {
@@ -39,6 +41,26 @@ const App = (props: any, ref: any) => {
 
   const hideModal = () => {
     setIsModalOpen(false);
+  };
+
+  const validateRepeat = async (rule: any, value: string) => {
+    if (value) {
+      const res = await request({
+        name: 'utils',
+        method: 'getMembersFrom',
+        params: {
+          chain: chainId,
+          host: currentDAO.host,
+          owner: value,
+        },
+      });
+
+      if (res && res.length > 0) {
+        return Promise.reject(new Error('Repeat'));
+      }
+    }
+
+    return Promise.resolve();
   };
 
   const onFinish = async (values: any) => {
@@ -133,7 +155,11 @@ const App = (props: any, ref: any) => {
         <Form.Item
           name="address"
           label={formatMessage({ id: 'address' })}
-          rules={[{ required: true }, { validator: validateEthAddress }]}
+          rules={[
+            { required: true },
+            { validator: validateEthAddress },
+            { validator: validateRepeat },
+          ]}
         >
           <Input />
         </Form.Item>

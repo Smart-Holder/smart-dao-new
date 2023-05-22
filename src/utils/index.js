@@ -2,6 +2,8 @@
 import dayjs from 'dayjs';
 import { rng } from 'somes/rng';
 import BigNumber from 'bignumber.js';
+import store from '@/store';
+import { ETH_CHAINS_INFO } from '@/config/chains';
 
 export function fromToken(number, precision = 18, decimal = 4) {
   if (typeof Number(number) === 'number') {
@@ -248,4 +250,10 @@ export const getEvenNumber = () => {
   }
 
   return getEvenNumber();
+};
+
+export const getUnit = () => {
+  const { chainId } = store.getState().wallet;
+
+  return ETH_CHAINS_INFO[chainId]?.unit || '';
 };

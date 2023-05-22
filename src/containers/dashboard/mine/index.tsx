@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 
 // import { rng } from 'somes/rng';
 
-import { fromToken } from '@/utils';
+import { fromToken, getUnit } from '@/utils';
 import { useIntl } from 'react-intl';
 import { request } from '@/api';
 import { DAOType, Permissions } from '@/config/enum';
@@ -317,6 +317,7 @@ const App = () => {
               <div className="total-item-right">
                 <span className="num">
                   {/* {fromToken(DAOInfo.assetAmountTotal)} ETH */}
+                  {/* {fromToken(DAOInfo.assetAmountTotal)} {getUnit()} */}
                   {fromToken(assetData?.first?.amountTotal) +
                     fromToken(assetData?.second?.amountTotal) +
                     ' '}
@@ -378,6 +379,7 @@ const App = () => {
               <div className="total-item-right">
                 <span className="num">
                   {/* {fromToken(DAOInfo.assetLedgerIncomeTotal)} ETH */}
+                  {/* {fromToken(DAOInfo.assetLedgerIncomeTotal)} {getUnit()} */}
                   {fromToken(assetData?.ledgerPools[0]?.assetIncomeTotal)} ETH
                 </span>
                 <span>{formatMessage({ id: 'my.summary.total.income' })}</span>

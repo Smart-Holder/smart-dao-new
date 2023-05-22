@@ -30,7 +30,7 @@ import Upload from '@/components/form/upload';
 import Select from '@/components/form/select';
 import { useRouter } from 'next/router';
 import { validateETH } from '@/utils/validator';
-import { getEvenNumber, toToken } from '@/utils';
+import { getEvenNumber, getUnit, toToken } from '@/utils';
 import { getMessage } from '@/utils/language';
 
 type IssueFormProps = {};
@@ -409,8 +409,11 @@ const IssueForm: FC<IssueFormProps> = () => {
           rules={[{ required: true }, { validator: validateETH }]}
           wrapperCol={{ span: 7 }}
         >
-          {/* <InputPrice min={0} suffix="ETH" /> */}
-          <Input min={0} suffix="ETH" placeholder="Enter the Ethereum price" />
+          <Input
+            min={0}
+            suffix={getUnit()}
+            placeholder="Enter the Ethereum price"
+          />
         </Form.Item>
         <Form.Item
           name="listingPrice"
@@ -422,7 +425,11 @@ const IssueForm: FC<IssueFormProps> = () => {
           ]}
           wrapperCol={{ span: 7 }}
         >
-          <Input min={0} suffix="ETH" placeholder="Enter the Ethereum price" />
+          <Input
+            min={0}
+            suffix={getUnit()}
+            placeholder="Enter the Ethereum price"
+          />
         </Form.Item>
         <Form.Item
           name="supply"

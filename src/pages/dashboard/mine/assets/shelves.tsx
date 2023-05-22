@@ -368,7 +368,6 @@ const App: NextPageWithLayout = () => {
               dataIndex: 'minimumPrice',
               key: 'minimumPrice',
               render: (value, item) => {
-                // return getPrice(item) + ' ETH';
                 return <Price value={getPrice(item)} />;
               },
             },
@@ -377,7 +376,6 @@ const App: NextPageWithLayout = () => {
               dataIndex: 'listingPrice',
               key: 'listingPrice',
               render: (value, item) => {
-                // return getListingPrice(item) + ' ETH';
                 return <Price value={getListingPrice(item)} />;
               },
             },

@@ -16,6 +16,7 @@ import { useAppSelector } from '@/store/hooks';
 
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
+import { request } from '@/api';
 
 // const validateMessages = {
 //   required: '${label} is required!',
@@ -170,10 +171,20 @@ const App: React.FC = () => {
     setMembers(newMembers);
   };
 
-  const validateRepeat = (rule: any, value: string) => {
-    if ((members || []).find((item: any) => item.owner === value)) {
-      // callback(new Error(this.$t("rules.repeat", { name: "address" })));
-      return Promise.reject(new Error('repeat'));
+  const validateRepeat = async (rule: any, value: string) => {
+    if (value) {
+      const res = await request({
+        name: 'dao',
+        method: 'getAllDAOs',
+        params: {
+          chain: chainId,
+          name: value,
+        },
+      });
+
+      if (res && res.length > 0) {
+        return Promise.reject(new Error('Repeat'));
+      }
     }
 
     return Promise.resolve();
@@ -242,6 +253,7 @@ const App: React.FC = () => {
             { required: true },
             { type: 'string', min: 5, max: 12 },
             { validator: validateChinese },
+            { validator: validateRepeat },
           ]}
         >
           <Input id="ii" />

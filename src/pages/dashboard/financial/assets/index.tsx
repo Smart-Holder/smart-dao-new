@@ -14,7 +14,7 @@ import type { NextPageWithLayout } from '@/pages/_app';
 
 import { useAppSelector } from '@/store/hooks';
 import { ETH_CHAINS_INFO } from '@/config/chains';
-import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
+import { formatAddress, formatDayjsValues, fromToken, getUnit } from '@/utils';
 import { request } from '@/api';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
@@ -335,10 +335,14 @@ const App: NextPageWithLayout = () => {
             {
               label: formatMessage({ id: 'financial.asset.total.trading' }),
               // value: `${fromToken(summary?.assetOrderAmountTotal || 0)} ETH`,
+              // value: `${fromToken(
+              //   summary?.assetOrderAmountTotal || 0,
+              // )} ${getUnit()}`,
               value: `${
                 fromToken(assetData?.first.orderAmountTotal) +
                 fromToken(assetData?.second.orderAmountTotal)
               } ETH`,
+
               onClick: onCountClick,
             },
             {

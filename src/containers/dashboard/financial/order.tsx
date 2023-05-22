@@ -22,7 +22,7 @@ import { request } from '@/api';
 
 import { useAppSelector } from '@/store/hooks';
 
-import { formatAddress, formatDayjsValues, fromToken } from '@/utils';
+import { formatAddress, formatDayjsValues, fromToken, getUnit } from '@/utils';
 
 import type { PaginationProps } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
@@ -367,6 +367,7 @@ const App = () => {
             {
               label: formatMessage({ id: 'financial.order.total.amount' }),
               // value: fromToken(amount.amount || 0) + ' ETH',
+              // value: fromToken(amount.amount || 0) + ' ' + getUnit(),
               value:
                 fromToken(assetData?.first.orderAmountTotal || 0) +
                 fromToken(assetData?.second.orderAmountTotal || 0) +
