@@ -12,14 +12,14 @@ import dayjs from 'dayjs';
 //   subs?: Dict<Options>;
 // }
 
-const useAllDaos = ({ name_contains = '', first = 4 }: queryRecord) => {
-  return useQuery<ResponseDataType>(GET_ALL_DAOS_ACTION, {
-    variables: {
-      name_contains,
-      first,
-    },
-  });
-};
+// const useAllDaos = ({ name_contains = '', first = 4 }: queryRecord) => {
+//   return useQuery<ResponseDataType>(GET_ALL_DAOS_ACTION, {
+//     variables: {
+//       name_contains,
+//       first,
+//     },
+//   });
+// };
 const useLayoutDaos = () => {
   const [fetchMore, { data, loading, error }] =
     useLazyQuery<ResponseDataType>(GET_ALL_DAOS_ACTION);
@@ -30,6 +30,7 @@ const useLayoutDaos = () => {
         ...item,
         time: dayjs.unix(Number(item.time)).valueOf().toString(),
         ledger: item.ledgerPool?.id,
+        member: item.memberPool?.id,
       };
     });
     return result;
@@ -43,4 +44,4 @@ const useLayoutDaos = () => {
   };
 };
 
-export { useAllDaos, useLayoutDaos };
+export { useLayoutDaos };

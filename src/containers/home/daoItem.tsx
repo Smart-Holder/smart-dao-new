@@ -43,7 +43,7 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
     data?.isMember,
   );
   const { follow, setFollow } = useFollow(
-    Number(data.host),
+    data.host,
     chainId,
     data.isLike || false,
   );
@@ -196,7 +196,7 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
                   <Avatar
                     className="member-avatar"
                     style={{ backgroundColor: '#000' }}
-                    icon={<UserOutlined />}
+                    icon={<UserOutlined rev={undefined} />}
                     key={index}
                   />
                 );

@@ -32,7 +32,11 @@ export const useJoin = (
   return { join, setJoin, loading };
 };
 
-export const useFollow = (id: number, chainId: number, isLike: boolean) => {
+export const useFollow = (
+  id: number | string,
+  chainId: number,
+  isLike: boolean,
+) => {
   const [follow, setFollow_] = useState(isLike);
 
   const setFollow = () => {
