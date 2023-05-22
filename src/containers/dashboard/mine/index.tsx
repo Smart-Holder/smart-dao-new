@@ -134,7 +134,7 @@ const App = () => {
       await request({
         name: 'user',
         method: 'addLikeDAO',
-        params: { dao: currentDAO.host, chain: chainId },
+        params: { host: currentDAO.host, chain: chainId },
       });
 
       message.success('success');

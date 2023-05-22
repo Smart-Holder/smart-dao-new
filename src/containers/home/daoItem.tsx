@@ -37,9 +37,11 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
   const { nickname } = useAppSelector((store) => store.user.userInfo);
   const { isInit } = useAppSelector((store) => store.common);
 
+  console.log(data, 'data2');
+
   const { join, setJoin, loading } = useJoin(
-    data?.votePool.id,
-    data?.memberPool.id,
+    data?.votePool?.id || data.id,
+    data?.memberPool?.id,
     data?.isMember,
   );
   const { follow, setFollow } = useFollow(
@@ -59,16 +61,16 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
   //   members = new Array(data.members || 1).fill('');
   // }
 
-  let members = data.memberPool.members || [];
+  let members = data.memberPool?.members || [];
   if (members.length === 0) {
-    members = new Array(Number(data.memberPool.count) || 1).fill('');
+    members = new Array(Number(data.memberPool?.count) || 1).fill('');
   }
   // const extend = formatToObj(data?.extend?.data);
   const extend = formatToBbjExtend(data?.extend);
 
   const handleClick = (e: MouseEvent) => {
     let data_ = { ...data };
-    data_.root = data.votePool.id;
+    data_.root = data.votePool?.id;
     if (!isInit) {
       walletModal.current.show();
       return;
@@ -205,7 +207,7 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
             <span className="total">
               {formatMessage(
                 { id: 'home.total.member' },
-                { value: data.memberPool.count || 1 },
+                { value: data.memberPool?.count || 1 },
                 // { value: data.members || 1 },
               )}
             </span>

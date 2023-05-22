@@ -40,12 +40,14 @@ export const useFollow = (
   const [follow, setFollow_] = useState(isLike);
 
   const setFollow = () => {
+    let obj: any = {};
+    typeof id === 'string' ? (obj.host = id) : (obj.dao = id);
     if (!follow) {
-      sdk.user.methods.addLikeDAO({ dao: id, chain: chainId }).then(() => {
+      sdk.user.methods.addLikeDAO({ ...obj, chain: chainId }).then(() => {
         setFollow_(true);
       });
     } else {
-      sdk.user.methods.deleteLikeDAO({ dao: id, chain: chainId }).then(() => {
+      sdk.user.methods.deleteLikeDAO({ ...obj, chain: chainId }).then(() => {
         setFollow_(false);
       });
     }
