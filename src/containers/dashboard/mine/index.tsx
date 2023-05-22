@@ -71,7 +71,9 @@ const App = () => {
       setLikeDAO(res2);
 
       if (res2) {
-        const like = res2.some((item: any) => item.host === currentDAO.host);
+        const like = res2.some(
+          (item: any) => item.host.toLocaleLowerCase() === currentDAO.host,
+        );
 
         if (like) {
           setIsLike(true);

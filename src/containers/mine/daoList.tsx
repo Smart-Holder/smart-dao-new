@@ -11,13 +11,15 @@ import { getMakeDAOStorage } from '@/utils/launch';
 import { request } from '@/api';
 import { DAOType } from '@/config/enum';
 import { DAOExtend } from '@/config/define_ext';
-import { daosType } from '@/api/graph/dao';
+import { daosType } from '@/api/typings/dao';
+import { useCreatorDaos } from '@/api/graph/dao';
+import { GET_CREATOR_DAOS_ACTION } from '@/api/gqls/dao';
 
 type Active = 'create' | DAOType.Join | DAOType.Follow;
 
 const App = () => {
   const { formatMessage } = useIntl();
-
+  const pageSize = 100;
   const { address, chainId } = useAppSelector((store) => store.wallet);
 
   const [active, setActive] = useState<Active>('create');
@@ -29,22 +31,61 @@ const App = () => {
 
   const [list, setList] = useState<daosType[]>([]);
 
+  const { fetchMore } = useCreatorDaos();
+  const { fetchMore: joinedFetchMore } = useCreatorDaos();
+
   const cacheDAO = getMakeDAOStorage('start');
 
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
 
+      // const [res1, res2, res3] = await Promise.all([
+      //   request({
+      //     name: 'dao',
+      //     method: 'getDAOsFromCreatedBy',
+      //     params: { chain: chainId, owner: address, memberObjs: 100 },
+      //   }),
+      //   request({
+      //     name: 'utils',
+      //     method: 'getDAOsFromOwner',
+      //     params: { chain: chainId, owner: address, memberObjs: 100 },
+      //   }),
+      //   request({
+      //     name: 'user',
+      //     method: 'getUserLikeDAOs',
+      //     params: { chain: chainId, memberObjs: 100 },
+      //   }),
+      // ]);
+
+      // (res3 || []).forEach((item: daosType) => {
+      //   item.isMember =
+      //     item.isMember ||
+      //     (res2 || []).some((el: daosType) => el.id === item.id);
+      // });
+
       const [res1, res2, res3] = await Promise.all([
-        request({
-          name: 'dao',
-          method: 'getDAOsFromCreatedBy',
-          params: { chain: chainId, owner: address, memberObjs: 100 },
+        fetchMore({
+          query: GET_CREATOR_DAOS_ACTION({
+            creator_: {
+              owner: address,
+            },
+          }),
+          variables: {
+            first: pageSize,
+            skip: 0,
+          },
         }),
-        request({
-          name: 'utils',
-          method: 'getDAOsFromOwner',
-          params: { chain: chainId, owner: address, memberObjs: 100 },
+        joinedFetchMore({
+          query: GET_CREATOR_DAOS_ACTION({
+            accounts_: {
+              id: address,
+            },
+          }),
+          variables: {
+            first: pageSize,
+            skip: 0,
+          },
         }),
         request({
           name: 'user',
@@ -56,15 +97,22 @@ const App = () => {
       (res3 || []).forEach((item: daosType) => {
         item.isMember =
           item.isMember ||
-          (res2 || []).some((el: daosType) => el.id === item.id);
+          (res2.data?.daos || []).some((el: daosType) => el.host === item.host);
       });
 
-      setCreateDAOs(res1);
-      setJoinDAOs(res2);
+      let creatorDaos = res1.data?.daos || [];
+      let joinDAO = res2.data?.daos || [];
+
+      setCreateDAOs(creatorDaos);
+      setJoinDAOs(joinDAO);
       setFollowDAOs(res3);
 
       setList(
-        active === 'create' ? res1 : active === DAOType.Join ? res2 : res3,
+        active === 'create'
+          ? creatorDaos
+          : active === DAOType.Join
+          ? joinDAO
+          : res3,
       );
 
       setLoading(false);
@@ -105,6 +153,16 @@ const App = () => {
     }, 300);
   };
 
+  // useEffect(() => {
+  //   setList(
+  //     active === 'create'
+  //       ? [...(creatorDao?.daos || [])]
+  //       : active === DAOType.Join
+  //       ? [...(joinedDao.daos || [])]
+  //       : [...followDAOs],
+  //   );
+  // }, [active, creatorDao?.daos, followDAOs, joinDAOs, joinedDao.daos]);
+
   return (
     <div className="dao-list-wrap">
       <Space size={28}>
@@ -143,8 +201,8 @@ const App = () => {
                 <ItemCache data={cacheDAO} daoType={DAOType.Cache} readOnly />
               </Col>
             )}
-            {list.map((item: daosType) => (
-              <Col xs={24} sm={24} lg={12} key={item.id}>
+            {list.map((item: daosType, index) => (
+              <Col xs={24} sm={24} lg={12} key={index}>
                 <Item
                   data={item}
                   daoType={
