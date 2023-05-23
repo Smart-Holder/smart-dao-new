@@ -66,30 +66,29 @@ const useDaosNfts = ({
       },
     }).then((res) => {
       if (data?.assets) {
+        let arr: any = [];
         for (let i = 0; i < ids.length; i++) {
-          const item = res[i];
-          const item2 = data?.assets?.[i];
+          let item2 = data?.assets?.[i];
           const tokenID = web3.utils.padLeft(
             web3.utils.toHex(web3.utils.toBN(item2.tokenId)),
             64,
           );
-          setItems(() =>
-            res.map((i: any) => {
-              let obj = {};
-              if (tokenID === i.tokenId) {
-                obj = {
-                  ...item,
-                  ...item2,
-                  tokenId: tokenID,
-                  id: i.id,
-                  assetId: item2.id,
-                  sellPrice: item2.sellPrice || item2.minimumPrice,
-                };
-              }
-              return obj;
-            }),
-          );
+
+          res.map((item: any) => {
+            if (tokenID === item.tokenId) {
+              let obj = {
+                ...item,
+                ...item2,
+                tokenId: tokenID,
+                id: item.id,
+                assetId: item2.id,
+                sellPrice: item2.sellPrice || item2.minimumPrice,
+              };
+              arr.push(obj);
+            }
+          });
         }
+        setItems(arr);
       }
     });
   }, [chainId, first, host, ids, data?.assets]);
