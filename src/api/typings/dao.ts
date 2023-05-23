@@ -18,7 +18,7 @@ type votePoolProps = {
   id: string;
 };
 export type assetPoolProps = {
-  id: String;
+  id: string;
   type: 'Frist' | 'Second';
 };
 
@@ -53,7 +53,7 @@ type ResponseDataType = {
   statistic: statisticProps;
 };
 type queryRecord = {
-  name_contains?: String;
+  name_contains?: string;
   first?: number;
 };
 

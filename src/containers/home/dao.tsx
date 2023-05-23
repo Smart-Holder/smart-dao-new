@@ -44,7 +44,6 @@ const App = () => {
   const {
     fetchMore: getLayoutData,
     loading: layoutLoading,
-    error: layoutError,
     data: layoutData,
   } = useLayoutDaos();
 

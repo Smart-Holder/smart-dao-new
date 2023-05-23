@@ -68,7 +68,7 @@ const App = () => {
         fetchMore({
           query: GET_CREATOR_DAOS_ACTION({
             creator_: {
-              owner: address,
+              owner: address.toLocaleLowerCase(),
             },
           }),
           variables: {
@@ -79,7 +79,7 @@ const App = () => {
         joinedFetchMore({
           query: GET_CREATOR_DAOS_ACTION({
             accounts_: {
-              id: address,
+              id: address.toLocaleLowerCase(),
             },
           }),
           variables: {
@@ -104,6 +104,7 @@ const App = () => {
 
       let creatorDaos = res1.data?.daos || [];
       let joinDAO = res2.data?.daos || [];
+
       setCreateDAOs(creatorDaos);
       setJoinDAOs(joinDAO);
       setFollowDAOs(res3);
@@ -129,7 +130,8 @@ const App = () => {
     setActive('create');
 
     setTimeout(() => {
-      setList(createDAOs);
+      // setList(createDAOs);
+      setList(creatorDao.daos);
       setLoading(false);
     }, 300);
   };
@@ -139,7 +141,8 @@ const App = () => {
     setActive(DAOType.Join);
 
     setTimeout(() => {
-      setList(joinDAOs);
+      // setList(joinDAOs);
+      setList(joinedDao.daos);
       setLoading(false);
     }, 300);
   };
@@ -162,7 +165,7 @@ const App = () => {
         ? [...(joinedDao.daos || [])]
         : [...followDAOs],
     );
-  }, [active, creatorDao?.daos, followDAOs, joinDAOs, joinedDao.daos]);
+  }, [active, creatorDao?.daos, followDAOs, joinedDao.daos]);
 
   return (
     <div className="dao-list-wrap">

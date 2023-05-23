@@ -39,14 +39,10 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [isLike, setIsLike] = useState(currentDAO?.isLike || false);
   const { data: assetData } = useDaosAsset({
-    host: currentDAO.host,
-    vote_id: currentDAO.votePool.id,
-    first: currentDAO.assetPool.find(
-      (item: assetPoolProps) => item.type === 'Frist',
-    ).id,
-    second: currentDAO.assetPool.find(
-      (item: assetPoolProps) => item.type === 'Second',
-    ).id,
+    host: currentDAO.host.toLocaleLowerCase(),
+    vote_id: currentDAO.root.toLocaleLowerCase(),
+    first: currentDAO.first.toLocaleLowerCase(),
+    second: currentDAO.second.toLocaleLowerCase(),
   });
 
   useEffect(() => {

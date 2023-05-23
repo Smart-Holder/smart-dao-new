@@ -118,7 +118,7 @@ const App = () => {
   const { data: ledgerData, fetchMore } = useLedgerQuery({
     first: pageSize,
     skip: 0,
-    host: currentDAO.host,
+    host: currentDAO.host.toLocaleLowerCase(),
     ...ledgerVariables,
   });
 
@@ -192,7 +192,7 @@ const App = () => {
         ...ledgerQueryParams,
       }),
       variables: {
-        host: currentDAO.host,
+        host: currentDAO.host.toLocaleLowerCase(),
         first: pageSize,
         skip: page === 1 ? 0 : (page - 1) * pageSize,
         ...ledgerVariables,

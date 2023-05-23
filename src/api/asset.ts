@@ -53,7 +53,17 @@ export function setApprovalForAll({
   return new Promise((resolve, reject) => {
     const contract = new web3.eth.Contract(ERC721.abi, contractAddress);
 
-    contractSend(contract, address, 'setApprovalForAll', [operator, true], async ()=>{/*no wait*/}).then(resolve).catch(reject);
+    contractSend(
+      contract,
+      address,
+      'setApprovalForAll',
+      [operator, true],
+      async () => {
+        /*no wait*/
+      },
+    )
+      .then(resolve)
+      .catch(reject);
   });
 }
 
@@ -192,7 +202,11 @@ export function release({
   const { web3, address } = store.getState().wallet;
   const { currentDAO } = store.getState().dao;
 
-  const contract = getContract(web3, Ledger.abi, currentDAO.ledger);
+  const contract = getContract(
+    web3,
+    Ledger.abi,
+    currentDAO?.ledger || currentDAO.ledgerPool.id,
+  );
 
   return contractSend(contract, address, 'release', [amount, description]);
 }
@@ -202,7 +216,11 @@ export function getBalance() {
   const { web3, address } = store.getState().wallet;
   const { currentDAO } = store.getState().dao;
 
-  const contract = getContract(web3, Ledger.abi, currentDAO.ledger);
+  const contract = getContract(
+    web3,
+    Ledger.abi,
+    currentDAO?.ledger || currentDAO.ledgerPool.id,
+  );
 
   return contractCall(contract, 'getBalance');
 }

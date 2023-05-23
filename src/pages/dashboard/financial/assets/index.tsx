@@ -64,13 +64,9 @@ const App: NextPageWithLayout = () => {
 
   const { data: assetData } = useDaosAsset({
     host: currentDAO.host,
-    vote_id: currentDAO.votePool.id,
-    first: currentDAO.assetPool.find(
-      (item: assetPoolProps) => item.type === 'Frist',
-    ).id,
-    second: currentDAO.assetPool.find(
-      (item: assetPoolProps) => item.type === 'Second',
-    ).id,
+    vote_id: currentDAO.root,
+    first: currentDAO.first,
+    second: currentDAO.second,
   });
 
   const {
@@ -131,7 +127,7 @@ const App: NextPageWithLayout = () => {
         name_contains_nocase,
       }),
       variables: {
-        host: currentDAO.host,
+        host: currentDAO.host.toLocaleLowerCase(),
         first: pageSize,
         skip: data.length || 0,
         chainId,
@@ -174,7 +170,7 @@ const App: NextPageWithLayout = () => {
         name_contains_nocase,
       }),
       variables: {
-        host: currentDAO.host,
+        host: currentDAO.host.toLocaleLowerCase(),
         first: pageSize,
         skip: 0,
         chainId,
@@ -339,8 +335,8 @@ const App: NextPageWithLayout = () => {
               //   summary?.assetOrderAmountTotal || 0,
               // )} ${getUnit()}`,
               value: `${
-                fromToken(assetData?.first.orderAmountTotal) +
-                fromToken(assetData?.second.orderAmountTotal)
+                fromToken(assetData?.first?.orderAmountTotal) +
+                fromToken(assetData?.second?.orderAmountTotal)
               } ETH`,
 
               onClick: onCountClick,

@@ -158,14 +158,10 @@ const App = () => {
   const [timer, setTimer] = useState() as any;
 
   const { data: assetData, refetch } = useDaosAsset({
-    host: currentDAO.host,
-    vote_id: currentDAO.votePool.id,
-    first: currentDAO.assetPool.find(
-      (item: assetPoolProps) => item.type === 'Frist',
-    ).id,
-    second: currentDAO.assetPool.find(
-      (item: assetPoolProps) => item.type === 'Second',
-    ).id,
+    host: currentDAO.host.toLocaleLowerCase(),
+    vote_id: currentDAO.root.toLocaleLowerCase(),
+    first: currentDAO.first.toLocaleLowerCase(),
+    second: currentDAO.second.toLocaleLowerCase(),
   });
 
   const {
@@ -175,7 +171,7 @@ const App = () => {
   } = useLayoutNftList({
     first: pageSize,
     skip: 0,
-    host: currentDAO.host,
+    host: currentDAO.host.toLocaleLowerCase(),
   });
 
   const getData = async (page = 1) => {
@@ -285,7 +281,6 @@ const App = () => {
 
     setQueryParams(queryParamsCopy);
     setQueryVariables(queryVariablesCopy);
-    console.log(queryParamsCopy, 'queryParamsCopy');
 
     if (key === 'name') {
       clearTimeout(timer);
@@ -361,16 +356,16 @@ const App = () => {
               label: formatMessage({ id: 'financial.order.total' }),
               // value: amount.total,
               value:
-                Number(assetData?.first.orderTotal) +
-                Number(assetData?.second.orderTotal),
+                Number(assetData?.first?.orderTotal || 0) +
+                Number(assetData?.second?.orderTotal || 0),
             },
             {
               label: formatMessage({ id: 'financial.order.total.amount' }),
               // value: fromToken(amount.amount || 0) + ' ETH',
               // value: fromToken(amount.amount || 0) + ' ' + getUnit(),
               value:
-                fromToken(assetData?.first.orderAmountTotal || 0) +
-                fromToken(assetData?.second.orderAmountTotal || 0) +
+                fromToken(assetData?.first?.orderAmountTotal || 0) +
+                fromToken(assetData?.second?.orderAmountTotal || 0) +
                 ' ETH',
             },
           ]}

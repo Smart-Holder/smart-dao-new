@@ -38,7 +38,7 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
   const { isInit } = useAppSelector((store) => store.common);
 
   const { join, setJoin, loading } = useJoin(
-    data?.votePool?.id || data.id,
+    data?.votePool?.id || data?.root || data.id,
     data?.memberPool?.id,
     data?.isMember,
   );
@@ -48,6 +48,7 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
     data.isLike || false,
   );
 
+  console.log(follow, 'follow', data);
   // const [loading, setLoading] = useState(false);
 
   const infoModal: any = useRef(null);
@@ -95,7 +96,6 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
       infoModal.current.show();
       return;
     }
-    console.log(data_, 'data_');
 
     const type =
       daoType ||
