@@ -37,8 +37,6 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
   const { nickname } = useAppSelector((store) => store.user.userInfo);
   const { isInit } = useAppSelector((store) => store.common);
 
-  console.log(data, 'data2');
-
   const { join, setJoin, loading } = useJoin(
     data?.votePool?.id || data.id,
     data?.memberPool?.id,
