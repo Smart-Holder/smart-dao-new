@@ -48,7 +48,6 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
     data.isLike || false,
   );
 
-  console.log(follow, 'follow', data);
   // const [loading, setLoading] = useState(false);
 
   const infoModal: any = useRef(null);

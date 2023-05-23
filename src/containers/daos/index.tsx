@@ -17,13 +17,14 @@ const App = () => {
     (store) => store.wallet,
   );
 
-  const pageSize = useRef(4);
+  const pageSize = useRef(6);
   // const [pageStart, setPageStart] = useState(0);
   const [pageStart, setPageStart] = useState(0);
   const [total, setTotal] = useState(0);
   const [currentTotal, setCurrentTotal] = useState(0);
   // const [data, setData] = useState<DAOExtend[]>([]);
   const [data, setData] = useState<daosType[]>([]);
+  const [followDAOs, setFollowDAOs] = useState<daosType[]>([]);
   const [loading, setLoading] = useState(false);
   const [init, setInit] = useState(false);
 
@@ -32,13 +33,13 @@ const App = () => {
   const defaultChain = Number(process.env.NEXT_PUBLIC_DEFAULT_CHAIN);
 
   // const [getLayoutData] = useLayoutDaos();
-  const { fetchMore: getLayoutData } = useLayoutDaos();
+  const { fetchMore: getLayoutData, data: dataDaos } = useLayoutDaos();
 
   const getData = async () => {
     if (!isSupportChain) {
       return;
     }
-    // setLoading(true);
+    setLoading(true);
     // const res = (await request({
     //   method: 'getAllDAOs',
     //   name: 'dao',
@@ -58,22 +59,23 @@ const App = () => {
     // setPageStart(pageStart + pageSize.current);
     // setData([...data, ...res]);
 
-    const {
-      loading,
-      error,
-      data: dataDaos,
-    } = await getLayoutData({
+    const [res1] = await Promise.all([
+      request({
+        name: 'user',
+        method: 'getUserLikeDAOs',
+        params: { chain: chainId, memberObjs: 100 },
+      }),
+    ]);
+    setFollowDAOs(res1);
+
+    await getLayoutData({
       variables: {
         name_contains: searchText,
         first: pageSize.current,
         skip: pageStart + pageSize.current,
       },
     });
-    setTotal(Number(dataDaos?.statistic?.totalDAOs || 0));
-    setCurrentTotal(Number(dataDaos?.daos.length));
-    setPageStart(pageStart + pageSize.current);
-    setData([...data, ...(dataDaos?.daos || [])]);
-    setLoading(loading);
+    setLoading(false);
     setInit(false);
   };
 
@@ -81,8 +83,7 @@ const App = () => {
     if (!isSupportChain) {
       return;
     }
-    let allList: daosType[] = [];
-
+    setLoading(true);
     // const t = await request({
     //   method: 'getAllDAOsTotal',
     //   name: 'dao',
@@ -117,29 +118,14 @@ const App = () => {
     // }
     // setPageStart(pageSize.current);
     // setData(list);
-    const {
-      loading,
-      error,
-      data: dataDaos,
-    } = await getLayoutData({
+    await getLayoutData({
       variables: {
         name_contains: searchText,
         first: pageSize.current,
         skip: 0,
       },
     });
-    setLoading(loading);
-
-    (dataDaos?.daos || []).forEach((item) => {
-      let items = { ...item };
-      items.isMember = item.accounts.some((el) => el.id === address);
-      allList.push(items);
-    });
-    setTotal(Number(dataDaos?.statistic?.totalDAOs || 0));
-    setCurrentTotal(Number(dataDaos?.daos.length));
-    setPageStart(0);
-    setData([...allList]);
-    // setLoading(false);
+    setLoading(false);
     setInit(true);
   };
 
@@ -149,6 +135,32 @@ const App = () => {
     setCurrentTotal(0);
     resetData();
   }, [searchText, address, chainId]);
+
+  useEffect(() => {
+    if (dataDaos.daos) {
+      let allList: daosType[] = [];
+
+      (dataDaos?.daos || []).forEach((item) => {
+        let items = { ...item };
+        items.isMember = item.accounts.some((el) => el.id === address);
+        items.isLike = followDAOs.some(
+          (el: any) => el.host.toLocaleLowerCase() === item.host,
+        );
+        allList.push(items);
+      });
+
+      setTotal(Number(dataDaos?.statistic?.totalDAOs || 0));
+      setCurrentTotal(Number(dataDaos?.daos.length) || 0);
+
+      if (pageStart === 0) {
+        setPageStart(allList.length || 0);
+        setData([...allList]);
+      } else {
+        setPageStart(pageStart + pageSize.current);
+        setData([...data, ...allList]);
+      }
+    }
+  }, [dataDaos]);
 
   return (
     <div>

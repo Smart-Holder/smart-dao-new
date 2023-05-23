@@ -51,6 +51,7 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   // const [data, setData] = useState<DAOExtend[]>([]);
   const [data, setData] = useState<daosType[]>([]);
+  const [followDAOs, setFollowDAOs] = useState<daosType[]>([]);
   // const [myDAOList, setMyDAOList] = useState<DAOExtend[]>([]);
   const [total, setTotal] = useState(0);
 
@@ -77,7 +78,6 @@ const App = () => {
     if (!isSupportChain) {
       return;
     }
-    let allList: daosType[] = [];
     setLoading(layoutLoading);
 
     // const t = await request({
@@ -86,7 +86,7 @@ const App = () => {
     //   params: { chain: chainId || defaultChain, name: searchText },
     // });
     // setTotal(t);
-    setTotal(Number(layoutData.statistic?.totalDAOs || 0));
+    // setTotal(Number(layoutData.statistic?.totalDAOs || 0));
 
     // const list = (await request({
     //   method: 'getAllDAOs',
@@ -124,19 +124,18 @@ const App = () => {
     // });
     // setData(allList || []);
 
-    getLayoutData({
+    const [res1] = await Promise.all([
+      request({
+        name: 'user',
+        method: 'getUserLikeDAOs',
+        params: { chain: chainId, memberObjs: 100 },
+      }),
+    ]);
+    setFollowDAOs(res1);
+    await getLayoutData({
       variables: { name_contains: searchText, first: 4, skip: 0 },
     });
-
-    (layoutData?.daos || []).forEach((item) => {
-      let items = { ...item };
-      items.isMember = item.accounts.some((el) => el.id === address);
-      allList.push(items);
-    });
-
-    setData(allList || []);
-
-    // setLoading(false);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -144,6 +143,22 @@ const App = () => {
     setTotal(0);
     getData();
   }, [searchText, address, chainId, layoutData]);
+
+  useEffect(() => {
+    if (layoutData.daos) {
+      let allList: daosType[] = [];
+      (layoutData?.daos || []).forEach((item) => {
+        let items = { ...item };
+        items.isMember = item.accounts.some((el) => el.id === address);
+        items.isLike = followDAOs.some(
+          (el: any) => el.host.toLocaleLowerCase() === item.host,
+        );
+        allList.push(items);
+      });
+      setTotal(Number(layoutData.statistic?.totalDAOs || 0));
+      setData(allList || []);
+    }
+  }, [layoutData.daos, followDAOs, address]);
 
   const renderItem = (item: daosType) => (
     <List.Item style={{ padding: 0 }}>
