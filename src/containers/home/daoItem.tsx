@@ -68,7 +68,24 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
 
   const handleClick = (e: MouseEvent) => {
     let data_ = { ...data };
-    data_.root = data.votePool?.id;
+    data_.host = data.host.toLocaleLowerCase();
+    data_.root = data?.votePool?.id || data.root.toLocaleLowerCase();
+    data_.votePool = {
+      id: data?.votePool?.id || data.root.toLocaleLowerCase(),
+    };
+    data_.assetPool = data_.assetPool
+      ? data_.assetPool
+      : [
+          {
+            type: 'Frist',
+            id: (data?.first || '').toLocaleLowerCase(),
+          },
+          {
+            type: 'Second',
+            id: (data?.second || '').toLocaleLowerCase(),
+          },
+        ];
+
     if (!isInit) {
       walletModal.current.show();
       return;
@@ -78,6 +95,7 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
       infoModal.current.show();
       return;
     }
+    console.log(data_, 'data_');
 
     const type =
       daoType ||

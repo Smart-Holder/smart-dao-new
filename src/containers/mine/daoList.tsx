@@ -31,8 +31,8 @@ const App = () => {
 
   const [list, setList] = useState<daosType[]>([]);
 
-  const { fetchMore } = useCreatorDaos();
-  const { fetchMore: joinedFetchMore } = useCreatorDaos();
+  const { fetchMore, data: creatorDao } = useCreatorDaos();
+  const { fetchMore: joinedFetchMore, data: joinedDao } = useCreatorDaos();
 
   const cacheDAO = getMakeDAOStorage('start');
 
@@ -97,23 +97,24 @@ const App = () => {
       (res3 || []).forEach((item: daosType) => {
         item.isMember =
           item.isMember ||
-          (res2.data?.daos || []).some((el: daosType) => el.host === item.host);
+          (res2.data?.daos || []).some(
+            (el: daosType) => el.host === item.host.toLocaleLowerCase(),
+          );
       });
 
       let creatorDaos = res1.data?.daos || [];
       let joinDAO = res2.data?.daos || [];
-
       setCreateDAOs(creatorDaos);
       setJoinDAOs(joinDAO);
       setFollowDAOs(res3);
 
-      setList(
-        active === 'create'
-          ? creatorDaos
-          : active === DAOType.Join
-          ? joinDAO
-          : res3,
-      );
+      // setList(
+      //   active === 'create'
+      //     ? creatorDaos
+      //     : active === DAOType.Join
+      //     ? joinDAO
+      //     : res3,
+      // );
 
       setLoading(false);
     };
@@ -153,15 +154,15 @@ const App = () => {
     }, 300);
   };
 
-  // useEffect(() => {
-  //   setList(
-  //     active === 'create'
-  //       ? [...(creatorDao?.daos || [])]
-  //       : active === DAOType.Join
-  //       ? [...(joinedDao.daos || [])]
-  //       : [...followDAOs],
-  //   );
-  // }, [active, creatorDao?.daos, followDAOs, joinDAOs, joinedDao.daos]);
+  useEffect(() => {
+    setList(
+      active === 'create'
+        ? [...(creatorDao?.daos || [])]
+        : active === DAOType.Join
+        ? [...(joinedDao.daos || [])]
+        : [...followDAOs],
+    );
+  }, [active, creatorDao?.daos, followDAOs, joinDAOs, joinedDao.daos]);
 
   return (
     <div className="dao-list-wrap">

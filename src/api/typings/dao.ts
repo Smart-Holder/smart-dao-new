@@ -38,12 +38,14 @@ export interface daosType extends Daos {
   image: string;
   votePool: votePoolProps;
   isLike?: boolean;
-  assetPool?: assetPoolProps;
+  assetPool?: assetPoolProps[];
   host: string;
   root: string;
   time: string;
   address: string;
   ledgerPool?: ledgerPoolProps;
+  second?: string;
+  first?: string;
 }
 
 type ResponseDataType = {
