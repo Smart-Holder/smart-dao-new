@@ -1,22 +1,5 @@
+import { JsonToGqlStr } from '@/utils';
 import { gql } from '@apollo/client';
-
-const JsonToGqlStr = (options: any) => {
-  let optionsStr = ``;
-  if (options) {
-    for (let key of Object.keys(options)) {
-      if (key && (options[key] != undefined || options[key] != null)) {
-        if (typeof options[key] === 'boolean') {
-          optionsStr += `${key}:${options[key]},`;
-        } else if (typeof options[key] === 'string') {
-          optionsStr += `${key}:"${options[key]}",`;
-        } else if (typeof options[key] === 'object') {
-          optionsStr += `${key}: { ${JsonToGqlStr(options[key])} }`;
-        }
-      }
-    }
-  }
-  return optionsStr;
-};
 
 const GET_ALL_DAOS_ACTION = gql`
   query GetAllDaos($name_contains: String, $first: Int, $skip: Int) {

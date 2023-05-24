@@ -51,8 +51,6 @@ const useDaosNfts = ({
     [data],
   );
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-
   const fetch = useCallback(async () => {
     await request({
       name: 'utils',
@@ -94,11 +92,12 @@ const useDaosNfts = ({
   }, [chainId, first, host, ids, data?.assets]);
 
   useEffect(() => {
-    if (ids.length > 0) {
+    if (ids && ids.length > 0) {
       fetch();
     } else {
       setItems([]);
     }
+    console.log(ids);
   }, [fetch, ids]);
 
   return {

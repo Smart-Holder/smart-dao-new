@@ -1,20 +1,6 @@
 import { gql } from '@apollo/client';
 import { daosNftsGqlProps, Daos_Nft_List_Props } from '../typings/nfts';
-
-const JsonToGqlStr = (options: any) => {
-  let optionsStr = ``;
-  for (let key of Object.keys(options)) {
-    if (key && (options[key] != undefined || options[key] != null)) {
-      if (typeof options[key] === 'boolean') {
-        optionsStr += `${key}:${options[key]},`;
-      } else {
-        optionsStr += `${key}:"${options[key]}",`;
-      }
-    }
-  }
-
-  return optionsStr;
-};
+import { JsonToGqlStr } from '@/utils';
 
 const GET_DAOS_NFTS_ACTION = (opt: daosNftsGqlProps) => {
   let optionsStr = JsonToGqlStr(opt);

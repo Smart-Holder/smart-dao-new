@@ -35,6 +35,13 @@ type queryRecord = {
 type daosNftsGqlProps = {
   name_contains_nocase?: string;
   destroyed?: boolean;
+  owner_?: {
+    id: string;
+  };
+  author_?: {
+    id?: string;
+    id_not?: string;
+  };
 };
 
 /**

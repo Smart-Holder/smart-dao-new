@@ -257,3 +257,21 @@ export const getUnit = () => {
 
   return ETH_CHAINS_INFO[chainId]?.unit || '';
 };
+
+export const JsonToGqlStr = (options) => {
+  let optionsStr = ``;
+  if (options) {
+    for (let key of Object.keys(options)) {
+      if (key && (options[key] != undefined || options[key] != null)) {
+        if (typeof options[key] === 'boolean') {
+          optionsStr += `${key}:${options[key]},`;
+        } else if (typeof options[key] === 'string') {
+          optionsStr += `${key}:"${options[key]}",`;
+        } else if (typeof options[key] === 'object') {
+          optionsStr += `${key}: { ${JsonToGqlStr(options[key])} }`;
+        }
+      }
+    }
+  }
+  return optionsStr;
+};

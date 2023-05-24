@@ -16,9 +16,15 @@ import { useAppSelector } from '@/store/hooks';
 import { getCookie } from '@/utils/cookie';
 import { request } from '@/api';
 import { formatDayjsValues } from '@/utils';
-import { useDaosAsset } from '@/api/graph/asset';
 import { assetPoolProps } from '@/api/typings/dao';
-import { useLayoutNftList } from '@/api/graph/nfts';
+import { useDaosNfts, useLayoutNftList } from '@/api/graph/nfts';
+import {
+  AssetsResponseType,
+  daosNftsGqlProps,
+  queryRecord,
+} from '@/api/typings/nfts';
+import { GET_DAOS_NFTS_ACTION } from '@/api/gqls/nfts';
+import { Address } from 'cluster';
 
 type ItemProperty = {
   trait_type: string;
@@ -45,12 +51,37 @@ const App: NextPageWithLayout = () => {
   const [init, setInit] = useState(false);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [data, setData] = useState<ItemType[]>([]);
+  // const [data, setData] = useState<ItemType[]>([]);
+  const [data, setData] = useState<AssetsResponseType[]>([]);
   const [pageStart, setPageStart] = useState(0);
   const [values, setValues] = useState({ orderBy: 'blockNumber desc' });
   const [initialValues, setInitialValues] = useState({
     orderBy: 'blockNumber desc',
   });
+
+  const [queryParams, setQueryParams] = useState<daosNftsGqlProps>({
+    owner_: {
+      id: address,
+    },
+  });
+
+  const [variablesParmas, setVariablesParams] = useState<queryRecord>({
+    host: currentDAO.host,
+    first: pageSize,
+    skip: pageStart,
+    chainId,
+    orderBy: 'blockNumber',
+    orderDirection: 'desc',
+  });
+
+  const { items: nftList, fetchMore } = useDaosNfts({
+    host: currentDAO.host,
+    chainId,
+    first: pageSize,
+    skip: pageStart,
+  });
+
+  console.log(nftList, 'nftList');
 
   const getDataParams = useCallback(() => {
     return {
@@ -65,6 +96,62 @@ const App: NextPageWithLayout = () => {
   const onValuesChange = (changedValues: any) => {
     let [[key, value]]: any = Object.entries(changedValues);
     let nextValues: any = { ...values };
+    let queryParamsCopy = { ...queryParams };
+    let variablesParmasCopy = { ...variablesParmas };
+
+    switch (key) {
+      case 'type':
+        switch (value) {
+          case '1':
+            queryParamsCopy.author_ = {
+              id: address,
+            };
+            break;
+          case '2':
+            queryParamsCopy.author_ = {
+              id_not: address,
+            };
+            break;
+          default:
+            delete queryParamsCopy.author_;
+            break;
+        }
+        break;
+      case 'orderBy':
+        switch (value) {
+          case 'sellPrice desc':
+            variablesParmasCopy.orderBy = 'sellPrice';
+            variablesParmasCopy.orderDirection = 'desc';
+            break;
+          case 'sellPrice asc':
+            variablesParmasCopy.orderBy = 'sellPrice';
+            variablesParmasCopy.orderDirection = 'asc';
+            break;
+          case 'sellingTime desc':
+            variablesParmasCopy.orderBy = 'sellingTime';
+            variablesParmasCopy.orderDirection = 'desc';
+            break;
+          case 'blockNumber desc':
+            variablesParmasCopy.orderBy = 'blockNumber';
+            variablesParmasCopy.orderDirection = 'desc';
+            break;
+          case 'soldTime desc':
+            variablesParmasCopy.orderBy = 'soldTime';
+            variablesParmasCopy.orderDirection = 'desc';
+            break;
+          default:
+            variablesParmasCopy.orderBy = 'blockNumber';
+            variablesParmasCopy.orderDirection = 'desc';
+            break;
+        }
+        break;
+      case 'name':
+        variablesParmasCopy.name_contains_nocase = value ? value : undefined;
+        break;
+
+      default:
+        break;
+    }
 
     if (key === 'type') {
       delete nextValues.author;
@@ -88,19 +175,31 @@ const App: NextPageWithLayout = () => {
 
     console.log('values', nextValues);
     setValues(nextValues);
+    setQueryParams(queryParams);
+    setVariablesParams(variablesParmas);
   };
 
   const getData = async () => {
-    const res = await request({
-      name: 'utils',
-      method: 'getAssetFrom',
-      params: {
-        ...getDataParams(),
-        limit: [pageStart, 100],
+    // const res = await request({
+    //   name: 'utils',
+    //   method: 'getAssetFrom',
+    //   params: {
+    //     ...getDataParams(),
+    //     limit: [pageStart, 100],
+    //   },
+    // });
+
+    // setData([...data, ...res]);
+
+    await fetchMore({
+      query: GET_DAOS_NFTS_ACTION({
+        ...queryParams,
+      }),
+      variables: {
+        ...variablesParmas,
+        skip: data.length,
       },
     });
-
-    setData([...data, ...res]);
   };
 
   // const getData = useCallback(
@@ -136,19 +235,27 @@ const App: NextPageWithLayout = () => {
       params: getDataParams(),
     });
 
-    setTotal(t);
+    // const res = await request({
+    //   name: 'utils',
+    //   method: 'getAssetFrom',
+    //   params: {
+    //     ...getDataParams(),
+    //     limit: [0, 6],
+    //   },
+    // });
 
-    const res = await request({
-      name: 'utils',
-      method: 'getAssetFrom',
-      params: {
-        ...getDataParams(),
-        limit: [0, 6],
+    await fetchMore({
+      query: GET_DAOS_NFTS_ACTION({
+        ...queryParams,
+      }),
+      variables: {
+        ...variablesParmas,
       },
     });
 
-    setPageStart(6);
-    setData(res);
+    // setPageStart(6);
+    // setData(res);
+    setTotal(t);
     setInit(true);
   };
 
@@ -167,9 +274,24 @@ const App: NextPageWithLayout = () => {
     if (currentDAO.host) {
       setData([]);
       setTotal(0);
+      setPage(1);
+      setPageStart(0);
       resetData();
     }
   }, [address, chainId, currentDAO.host, values]);
+
+  useEffect(() => {
+    if (nftList) {
+      if (page === 1) {
+        setData(nftList);
+      } else {
+        let d = [...data, ...nftList];
+        setData(d);
+        setPage(page + 1);
+        setPageStart(d.length);
+      }
+    }
+  }, [nftList]);
 
   const goShelves = () => {
     router.push('/dashboard/mine/assets/shelves');

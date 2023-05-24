@@ -1,20 +1,6 @@
 import { gql } from '@apollo/client';
 import { ledgerQueryGqlProps } from '../typings/ledger';
-
-const JsonToGqlStr = (options: any) => {
-  let optionsStr = ``;
-  for (let key of Object.keys(options)) {
-    if (key && (options[key] != undefined || options[key] != null)) {
-      if (typeof options[key] === 'boolean') {
-        optionsStr += `${key}:${options[key]},`;
-      } else {
-        optionsStr += `${key}:"${options[key]}",`;
-      }
-    }
-  }
-
-  return optionsStr;
-};
+import { JsonToGqlStr } from '@/utils';
 
 const LEDGER_QUERY = (opt: ledgerQueryGqlProps) => {
   let optionsStr = JsonToGqlStr(opt);
