@@ -12,8 +12,8 @@ import { request } from '@/api';
 import { DAOType } from '@/config/enum';
 import { DAOExtend } from '@/config/define_ext';
 import { daosType } from '@/api/typings/dao';
-import { useCreatorDaos } from '@/api/graph/dao';
-import { GET_CREATOR_DAOS_ACTION } from '@/api/gqls/dao';
+import { useLayoutDaos } from '@/api/graph/dao';
+import { GET_DAOS_ACTION } from '@/api/gqls/dao';
 
 type Active = 'create' | DAOType.Join | DAOType.Follow;
 
@@ -31,8 +31,8 @@ const App = () => {
 
   const [list, setList] = useState<daosType[]>([]);
 
-  const { fetchMore, data: creatorDao } = useCreatorDaos();
-  const { fetchMore: joinedFetchMore, data: joinedDao } = useCreatorDaos();
+  const { fetchMore, data: creatorDao } = useLayoutDaos();
+  const { fetchMore: joinedFetchMore, data: joinedDao } = useLayoutDaos();
 
   const cacheDAO = getMakeDAOStorage('start');
 
@@ -66,7 +66,7 @@ const App = () => {
 
       const [res1, res2, res3] = await Promise.all([
         fetchMore({
-          query: GET_CREATOR_DAOS_ACTION({
+          query: GET_DAOS_ACTION({
             creator_: {
               owner: address.toLocaleLowerCase(),
             },
@@ -77,7 +77,7 @@ const App = () => {
           },
         }),
         joinedFetchMore({
-          query: GET_CREATOR_DAOS_ACTION({
+          query: GET_DAOS_ACTION({
             accounts_: {
               id: address.toLocaleLowerCase(),
             },

@@ -10,6 +10,7 @@ import { DAOExtend } from '@/config/define_ext';
 import { request } from '@/api';
 import { useLayoutDaos } from '@/api/graph/dao';
 import { daosType } from '@/api/typings/dao';
+import { GET_DAOS_ACTION } from '@/api/gqls/dao';
 
 const App = () => {
   const { searchText } = useAppSelector((store) => store.common);
@@ -32,7 +33,6 @@ const App = () => {
 
   const defaultChain = Number(process.env.NEXT_PUBLIC_DEFAULT_CHAIN);
 
-  // const [getLayoutData] = useLayoutDaos();
   const { fetchMore: getLayoutData, data: dataDaos } = useLayoutDaos();
 
   const getData = async () => {
@@ -69,8 +69,8 @@ const App = () => {
     setFollowDAOs(res1);
 
     await getLayoutData({
+      query: GET_DAOS_ACTION({ name_contains: searchText }),
       variables: {
-        name_contains: searchText,
         first: pageSize.current,
         skip: pageStart + pageSize.current,
       },
@@ -119,8 +119,8 @@ const App = () => {
     // setPageStart(pageSize.current);
     // setData(list);
     await getLayoutData({
+      query: GET_DAOS_ACTION({ name_contains: searchText }),
       variables: {
-        name_contains: searchText,
         first: pageSize.current,
         skip: 0,
       },

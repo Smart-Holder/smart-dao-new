@@ -15,6 +15,7 @@ import CreateModal from '@/components/modal/createModal';
 import InfoModal from '@/components/modal/infoModal';
 import { request } from '@/api';
 import { DAOExtend } from '@/config/define_ext';
+import { GET_DAOS_ACTION } from '@/api/gqls/dao';
 
 const App = () => {
   const { formatMessage } = useIntl();
@@ -27,25 +28,7 @@ const App = () => {
     (store) => store.wallet,
   );
 
-  // const {
-  //   loading: allDaoDataLoading,
-  //   error,
-  //   data: allDaoData,
-  // } = useAllDaos({
-  //   name_contains: '',
-  //   first: 4,
-  // });
-
-  // const [
-  //   getLayoutData,
-  //   { loading: layoutLoading, error: layoutError, data: layoutData },
-  // ] = useLayoutDaos();
-
-  const {
-    fetchMore: getLayoutData,
-    loading: layoutLoading,
-    data: layoutData,
-  } = useLayoutDaos();
+  const { fetchMore: getLayoutData, data: layoutData } = useLayoutDaos();
 
   const pageSize = useRef(4);
   const [loading, setLoading] = useState(false);
@@ -78,7 +61,7 @@ const App = () => {
     if (!isSupportChain) {
       return;
     }
-    setLoading(layoutLoading);
+    setLoading(true);
 
     // const t = await request({
     //   method: 'getAllDAOsTotal',
@@ -133,7 +116,8 @@ const App = () => {
     ]);
     setFollowDAOs(res1);
     await getLayoutData({
-      variables: { name_contains: searchText, first: 4, skip: 0 },
+      query: GET_DAOS_ACTION({ name_contains: searchText }),
+      variables: { first: 4, skip: 0 },
     });
     setLoading(false);
   };
@@ -142,7 +126,7 @@ const App = () => {
     setData([]);
     setTotal(0);
     getData();
-  }, [searchText, address, chainId, layoutData]);
+  }, [searchText, address, chainId]);
 
   useEffect(() => {
     if (layoutData.daos) {
