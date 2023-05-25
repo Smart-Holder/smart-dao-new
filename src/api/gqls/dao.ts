@@ -10,6 +10,7 @@ let gqlFragment = gql`
     extend
     name
     description
+    mission
     image
     memberPool {
       count
@@ -26,6 +27,7 @@ let gqlFragment = gql`
     }
     votePool {
       id
+      lifespan
     }
     assetPool {
       type
@@ -38,6 +40,7 @@ let gqlFragment = gql`
   }
 `;
 
+// 多个DAO查询
 const GET_DAOS_ACTION = (opt?: any) => {
   let optionsStr = JsonToGqlStr(opt);
   return gql`
@@ -59,4 +62,16 @@ const GET_DAOS_ACTION = (opt?: any) => {
   `;
 };
 
-export { GET_DAOS_ACTION };
+// 查询DAO详情
+const GET_DAO_ACTION = () => {
+  return gql`
+    query GetDao($host: String) {
+      dao(id: $host) {
+        ...comparisonFields
+      }
+    }
+    ${gqlFragment}
+  `;
+};
+
+export { GET_DAOS_ACTION, GET_DAO_ACTION };

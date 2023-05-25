@@ -16,6 +16,7 @@ type ledgerPoolProps = {
 };
 type votePoolProps = {
   id: string;
+  lifespan: string;
 };
 export type assetPoolProps = {
   id: string;
@@ -28,7 +29,7 @@ type memberPoolType = {
   id: string;
   members: membersType[];
 };
-export interface daosType extends Daos {
+interface daosType extends Daos {
   blockNumber: string;
   memberPool: memberPoolType;
   accounts: Daos[];
@@ -47,15 +48,18 @@ export interface daosType extends Daos {
   ledgerPool?: ledgerPoolProps;
   second?: string;
   first?: string;
+  executor: string;
+  mission: string;
 }
 
 type ResponseDataType = {
   daos: daosType[];
   statistic: statisticProps;
+  dao?: daosType;
 };
 type queryRecord = {
   name_contains?: string;
   first?: number;
 };
 
-export type { ResponseDataType, queryRecord };
+export type { ResponseDataType, queryRecord, daosType };

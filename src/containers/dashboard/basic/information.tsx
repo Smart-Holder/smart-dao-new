@@ -12,10 +12,12 @@ import { getDAO, setCurrentDAO } from '@/store/features/daoSlice';
 
 import { isRepeate } from '@/utils';
 import { validateChinese } from '@/utils/validator';
-import { formatToObj } from '@/utils/extend';
+import { formatToBbjExtend, formatToObj } from '@/utils/extend';
 
 import { request } from '@/api';
 import { setInformation } from '@/api/dao';
+
+import { useDao } from '@/api/graph/dao';
 
 // const validateMessages = {
 //   required: '${label} is required!',
@@ -39,45 +41,87 @@ const App: React.FC = () => {
   const [logo, setLogo] = useState(currentDAO.image);
   const [poster, setPoster] = useState();
 
+  const { fetchMore, data: daoData } = useDao();
+  console.log(daoData, 'daoData');
+
   useEffect(() => {
     const getDAO = async () => {
       try {
-        const res = await request({
-          name: 'utils',
-          method: 'getDAO',
-          params: { chain: chainId, address: currentDAO.address },
+        await fetchMore({
+          variables: {
+            host: currentDAO.address.toLocaleLowerCase(),
+          },
         });
+        // const res = await request({
+        //   name: 'utils',
+        //   method: 'getDAO',
+        //   params: { chain: chainId, address: currentDAO.address },
+        // });
 
-        if (res) {
-          dispatch(setCurrentDAO(res));
+        // await fetchMore({
+        //   variables: {
+        //     host: currentDAO.address.toLocaleLowerCase(),
+        //   },
+        // });
 
-          const extend = formatToObj(res?.extend?.data);
-          setLogo(res.image);
-          setPoster(extend.poster || res.image);
+        // if (res) {
+        //   dispatch(setCurrentDAO(res));
 
-          setInitialValues({
-            name: res.name,
-            mission: res.mission,
-            description: res.description,
-            image: res.image,
-            poster: extend.poster || res.image,
-          });
+        //   const extend = formatToObj(res?.extend?.data);
+        //   setLogo(res.image);
+        //   setPoster(extend.poster || res.image);
 
-          form.setFieldsValue({
-            name: res.name,
-            mission: res.mission,
-            description: res.description,
-            image: res.image,
-            poster: extend.poster || res.image,
-          });
+        //   setInitialValues({
+        //     name: res.name,
+        //     mission: res.mission,
+        //     description: res.description,
+        //     image: res.image,
+        //     poster: extend.poster || res.image,
+        //   });
 
-          setIsEdit(false);
-        }
+        //   form.setFieldsValue({
+        //     name: res.name,
+        //     mission: res.mission,
+        //     description: res.description,
+        //     image: res.image,
+        //     poster: extend.poster || res.image,
+        //   });
+
+        //   setIsEdit(false);
+        // }
       } catch (error) {}
     };
 
     getDAO();
   }, [chainId, address]);
+
+  useEffect(() => {
+    if (daoData) {
+      dispatch(setCurrentDAO(daoData));
+      console.log(currentDAO, 'currentDAO');
+      const extend = formatToBbjExtend(daoData?.extend);
+      setLogo(daoData.image);
+      setPoster(extend.poster || daoData.image);
+
+      setInitialValues({
+        name: daoData.name,
+        mission: daoData.description,
+        description: daoData.description,
+        image: daoData.image,
+        poster: extend.poster || daoData.image,
+      });
+
+      form.setFieldsValue({
+        name: daoData.name,
+        mission: daoData.description,
+        description: daoData.description,
+        image: daoData.image,
+        poster: extend.poster || daoData.image,
+      });
+
+      setIsEdit(false);
+    }
+  }, [daoData]);
 
   const onValuesChange = (changedValues: any, values: any) => {
     setIsEdit(!isRepeate(initialValues, values));
