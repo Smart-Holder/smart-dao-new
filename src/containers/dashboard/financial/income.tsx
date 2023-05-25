@@ -265,12 +265,6 @@ const App = () => {
         break;
       case 'time':
         if (value) {
-          console.log(
-            value,
-            'valuevalue',
-            dayjs(value[0]).unix(),
-            dayjs(dayjs(value[0])).unix(),
-          );
           ledgerQueryParamsCopy.blockTimestamp_gte = dayjs(value[0])
             .unix()
             .toString();

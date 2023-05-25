@@ -161,7 +161,7 @@ const App = () => {
   const [amount, setAmount] = useState({ total: 0, amount: 0 });
 
   const [queryParams, setQueryParams] = useState<Daos_Nft_List_Props>({
-    host: currentDAO.host,
+    host: currentDAO.host.toLocaleLowerCase(),
     from: address,
   });
 

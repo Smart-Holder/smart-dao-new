@@ -81,8 +81,6 @@ const App: NextPageWithLayout = () => {
     skip: pageStart,
   });
 
-  console.log(nftList, 'nftList');
-
   const getDataParams = useCallback(() => {
     return {
       chain: chainId,

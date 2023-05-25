@@ -2,6 +2,7 @@ type gqlProps = {
   blockTimestamp_gte?: string;
   blockTimestamp_lte?: string;
   type?: string;
+  ref?: string;
 };
 
 type ledgerQueryType = gqlProps & {
@@ -34,4 +35,5 @@ export type {
   ledgerQueryResponse,
   ledgerQueryGqlProps,
   gqlProps,
+  ledger,
 };
