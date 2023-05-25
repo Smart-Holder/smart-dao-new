@@ -26,6 +26,7 @@ import { isPermission } from '@/api/member';
 import { Permissions, proposalType } from '@/config/enum';
 import { LedgerType } from '@/config/enum';
 import { getMessage } from '@/utils/language';
+import { Amount } from '@/config/enum';
 
 dayjs.extend(customParseFormat);
 
@@ -56,8 +57,8 @@ const columns = [
   },
   {
     title: <FormattedMessage id="financial.income.amount" />,
-    dataIndex: 'balance',
-    key: 'balance',
+    dataIndex: 'amount',
+    key: 'amount',
     render: (text: string) => <Price value={fromToken(text)} />,
   },
   {
@@ -96,7 +97,7 @@ const App = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [amount, setAmount] = useState({ total: 0, amount: '0' });
+  const [amount, setAmount] = useState<Amount>();
 
   const nftpModal: any = useRef(null);
 
@@ -118,7 +119,11 @@ const App = () => {
     });
 
     if (res) {
-      setAmount(res);
+      const symbol = getUnit();
+      const ledgerItem: Amount = res.find(
+        (item: Amount) => item.balance.symbol === symbol,
+      );
+      setAmount(ledgerItem);
     }
   };
 
@@ -306,7 +311,7 @@ const App = () => {
           data={[
             {
               label: formatMessage({ id: 'financial.income.total' }),
-              value: fromToken(amount.amount) + ' ' + getUnit(),
+              value: fromToken(amount?.amount) + ' ' + getUnit(),
             },
             {
               label: formatMessage({ id: 'financial.income.balance' }),

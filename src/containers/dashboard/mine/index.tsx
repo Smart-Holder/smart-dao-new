@@ -15,7 +15,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { fromToken, getUnit } from '@/utils';
 import { useIntl } from 'react-intl';
 import { request } from '@/api';
-import { DAOType, Permissions } from '@/config/enum';
+import { Amount, DAOType, Permissions } from '@/config/enum';
 import { join } from '@/api/member';
 import { setDAOType } from '@/store/features/daoSlice';
 import { UserOutlined } from '@ant-design/icons';
@@ -36,8 +36,6 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [isLike, setIsLike] = useState(currentDAO?.isLike || false);
 
-  console.log('DAOInfo', DAOInfo);
-
   useEffect(() => {
     const getData = async () => {
       const [res, res2] = await Promise.all([
@@ -55,6 +53,12 @@ const App = () => {
           params: { chain: chainId },
         }),
       ]);
+
+      const symbol = getUnit();
+      const ledgerItem: Amount = res.ledgerSummarys.find(
+        (item: Amount) => item.balance.symbol === symbol,
+      );
+      res.ledgerIncomTotal = ledgerItem?.amount || '0';
 
       setDAOInfo(res);
       setLikeDAO(res2);
@@ -342,7 +346,7 @@ const App = () => {
             <div className="total-item-2">
               <div className="total-item-right">
                 <span className="num">
-                  {fromToken(DAOInfo.assetLedgerIncomeTotal)} {getUnit()}
+                  {fromToken(DAOInfo.ledgerIncomTotal)} {getUnit()}
                 </span>
                 <span>{formatMessage({ id: 'my.summary.total.income' })}</span>
               </div>

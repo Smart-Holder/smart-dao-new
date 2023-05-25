@@ -204,7 +204,11 @@ export function release({
 
   const contract = getContract(web3, Ledger.abi, currentDAO.ledger);
 
-  return contractSend(contract, address, 'release', [amount, description]);
+  return contractSend(contract, address, 'release', [
+    '0x0000000000000000000000000000000000000000',
+    amount,
+    description,
+  ]);
 }
 
 // 未分配收入

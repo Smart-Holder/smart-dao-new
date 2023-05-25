@@ -1,3 +1,5 @@
+import { LedgerBalance } from './define';
+
 export const connectType = {
   MetaMask: 1,
   WalletConnect: 2,
@@ -68,3 +70,11 @@ export enum proposalType {
   Income_Allocate, // 分配收入
   Member_Join, // 加入一个 DAO
 }
+
+export type Amount = {
+  items: number;
+  income: string;
+  expenditure: string;
+  amount: string;
+  balance: LedgerBalance;
+};

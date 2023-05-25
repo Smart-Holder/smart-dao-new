@@ -22,7 +22,7 @@ import { getBalance } from '@/api/asset';
 import { createVote } from '@/api/vote';
 import { useIntl, FormattedMessage } from 'react-intl';
 import Card from '@/components/card';
-import { LedgerType } from '@/config/enum';
+import { LedgerType, Amount } from '@/config/enum';
 
 dayjs.extend(customParseFormat);
 
@@ -50,8 +50,8 @@ const columns = [
   },
   {
     title: <FormattedMessage id="my.income.amount" />,
-    dataIndex: 'balance',
-    key: 'balance',
+    dataIndex: 'amount',
+    key: 'amount',
     render: (text: string) => <Price value={fromToken(text)} />,
   },
   {
@@ -86,7 +86,7 @@ const App = () => {
   const [total, setTotal] = useState(0);
   const [data, setData] = useState([]);
 
-  const [amount, setAmount] = useState({ total: 0, amount: '0' });
+  const [amount, setAmount] = useState<Amount>();
 
   const [balance, setBalance] = useState(0);
 
@@ -166,9 +166,12 @@ const App = () => {
         params: { chain: chainId, host: currentDAO.host, ref: address },
       });
 
-      console.log('amount', res);
       if (res) {
-        setAmount(res);
+        const symbol = getUnit();
+        const ledgerItem: Amount = res.find(
+          (item: Amount) => item.balance.symbol === symbol,
+        );
+        setAmount(ledgerItem);
       }
     };
 
@@ -189,7 +192,7 @@ const App = () => {
           data={[
             {
               label: formatMessage({ id: 'my.income.total' }),
-              value: fromToken(amount.amount) + ' ' + getUnit(),
+              value: fromToken(amount?.amount) + ' ' + getUnit(),
             },
           ]}
         />

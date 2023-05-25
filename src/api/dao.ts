@@ -53,7 +53,8 @@ export const createDAO = async (params: any) => {
       description,
       image,
       extend: formatToBytes(extend),
-      unlockOperator: ETH_CHAINS_INFO[chain].DAOsProxy,
+      // unlockOperator: ETH_CHAINS_INFO[chain].DAOsProxy,
+      unlockOperator: '0xe2c9AA9A4e1aca3050C8810C3Ebf6fd5bFE72d3f',
     },
     // address, // test
     '0x0000000000000000000000000000000000000000',
@@ -91,6 +92,7 @@ export const createDAO = async (params: any) => {
       fee_recipient: '0x0000000000000000000000000000000000000000', // auto set
       base_contract_uri: baseURI,
       base_uri: '',
+      enable_lock: false,
     },
   ];
 
