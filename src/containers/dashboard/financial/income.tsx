@@ -82,9 +82,9 @@ const columns = [
   },
   {
     title: <FormattedMessage id="financial.income.date" />,
-    dataIndex: 'time',
-    key: 'time',
-    render: (text: string) => dayjs(text).format('MM/DD/YYYY'),
+    dataIndex: 'blockTimestamp',
+    key: 'blockTimestamp',
+    render: (text: number) => dayjs(dayjs.unix(text)).format('MM/DD/YYYY'),
   },
 ];
 
@@ -265,11 +265,17 @@ const App = () => {
         break;
       case 'time':
         if (value) {
-          ledgerQueryParamsCopy.blockTimestamp_gte = dayjs
-            .unix(Number(value[0]))
+          console.log(
+            value,
+            'valuevalue',
+            dayjs(value[0]).unix(),
+            dayjs(dayjs(value[0])).unix(),
+          );
+          ledgerQueryParamsCopy.blockTimestamp_gte = dayjs(value[0])
+            .unix()
             .toString();
-          ledgerQueryParamsCopy.blockTimestamp_lte = dayjs
-            .unix(Number(value[1]))
+          ledgerQueryParamsCopy.blockTimestamp_lte = dayjs(value[1])
+            .unix()
             .toString();
         } else {
           delete ledgerQueryParamsCopy.blockTimestamp_gte;

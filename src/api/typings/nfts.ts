@@ -55,6 +55,9 @@ type assetOrdersPropsType = {
   to: string;
   blockTimestamp: string;
   blockNumber: string;
+  asset: {
+    tokenId: string;
+  };
 };
 type assetOrdersProps = {
   assetOrders?: assetOrdersPropsType[];
@@ -65,6 +68,7 @@ type listDataType = {
   time: string;
   fromAddres: string;
   toAddress: string;
+  tokenId: string;
 };
 
 type Daos_Nft_List_Props = {
@@ -73,6 +77,12 @@ type Daos_Nft_List_Props = {
   blockTimestamp_gte?: string;
   blockTimestamp_lte?: string;
   asset_contains_nocase?: string;
+  from?: string;
+  to?: string;
+  asset_?: {
+    owner?: string;
+    owner_not?: string;
+  };
 };
 
 type LayoutNftListProps = Daos_Nft_List_Props & {

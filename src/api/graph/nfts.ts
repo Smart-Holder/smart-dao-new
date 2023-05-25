@@ -14,6 +14,7 @@ import {
   listDataType,
   LayoutNftListProps,
 } from '@/api/typings/nfts';
+import { tokenIdFormat } from '@/utils';
 
 const useDaosNfts = ({
   host = '',
@@ -42,12 +43,7 @@ const useDaosNfts = ({
 
   const ids = useMemo(
     () =>
-      (data?.assets || [])?.map((item) =>
-        web3.utils.padLeft(
-          web3.utils.numberToHex(web3.utils.toBN(item.tokenId)),
-          64,
-        ),
-      ) || [],
+      (data?.assets || [])?.map((item) => tokenIdFormat(item.tokenId)) || [],
     [data],
   );
 
@@ -141,7 +137,8 @@ const useLayoutNftList = ({
   const recombineData: listDataType[] = useMemo(
     () =>
       data?.assetOrders?.map((item, index) => {
-        const { id, from, to, value, blockTimestamp, blockNumber } = item;
+        const { id, from, to, value, blockTimestamp, blockNumber, asset } =
+          item;
         return {
           id,
           value,
@@ -149,6 +146,7 @@ const useLayoutNftList = ({
           fromAddres: from,
           toAddress: to,
           time: dayjs.unix(Number(blockTimestamp)).toString(),
+          tokenId: asset.tokenId,
         };
       }) || [],
     [data?.assetOrders],

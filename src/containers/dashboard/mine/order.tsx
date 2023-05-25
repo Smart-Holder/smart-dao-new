@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Table, Form } from 'antd';
+import { Table, Form, Row, Col, Button } from 'antd';
 import dayjs from 'dayjs';
+import web3 from 'web3';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 import Select from '@/components/form/filter/select';
@@ -12,12 +13,26 @@ import { request } from '@/api';
 
 import { useAppSelector } from '@/store/hooks';
 
-import { formatDayjsValues, fromToken, getUnit } from '@/utils';
+import {
+  formatAddress,
+  formatDayjsValues,
+  fromToken,
+  getUnit,
+  tokenIdFormat,
+} from '@/utils';
 
 import type { PaginationProps } from 'antd';
 
 import { useIntl, FormattedMessage } from 'react-intl';
 import Card from '@/components/card';
+import { useLayoutNftList } from '@/api/graph/nfts';
+import { GET_DAOS_NFT_LIST } from '@/api/gqls/nfts';
+import {
+  Daos_Nft_List_Props,
+  LayoutNftListProps,
+  listDataType,
+} from '@/api/typings/nfts';
+import Ellipsis from '@/components/typography/ellipsis';
 
 dayjs.extend(customParseFormat);
 
@@ -66,10 +81,15 @@ const columns = [
 const getColumns = (type = 'Seller') => {
   return [
     {
-      title: <FormattedMessage id="my.order.id" />,
-      dataIndex: 'id',
-      key: 'id',
+      title: 'BlockNumber',
+      dataIndex: 'blockNumber',
+      key: 'blockNumber',
     },
+    // {
+    //   title: <FormattedMessage id="my.order.id" />,
+    //   dataIndex: 'id',
+    //   key: 'id',
+    // },
     // {
     //   title: '标签',
     //   dataIndex: 'tags',
@@ -79,12 +99,28 @@ const getColumns = (type = 'Seller') => {
     //     return arr?.value || '';
     //   },
     // },
+    // {
+    //   title: <FormattedMessage id="my.order.asset" />,
+    //   // dataIndex: ['asset', 'name'],
+    //   dataIndex: 'asset_id',
+    //   key: 'asset_id',
+    //   render: (text: string) => '#' + text,
+    // },
+
     {
       title: <FormattedMessage id="my.order.asset" />,
       // dataIndex: ['asset', 'name'],
-      dataIndex: 'asset_id',
-      key: 'asset_id',
-      render: (text: string) => '#' + text,
+      dataIndex: 'tokenId',
+      key: 'tokenId',
+      // render: (text: string) => '#' + text,
+      render: (text: string) => {
+        let text2 = tokenIdFormat(text);
+        return (
+          <Ellipsis copyable={{ text: text2 }}>
+            {formatAddress(text2, 6, 6)}
+          </Ellipsis>
+        );
+      },
     },
     // { title: '市场', dataIndex: 'votes', key: 'votes' },
     {
@@ -118,11 +154,29 @@ const App = () => {
   const [values, setValues] = useState({ toAddress: '', fromAddres: address });
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<listDataType[]>([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [amount, setAmount] = useState({ total: 0, amount: 0 });
+
+  const [queryParams, setQueryParams] = useState<Daos_Nft_List_Props>({
+    host: currentDAO.host,
+    from: address,
+  });
+
+  const [variablesParams, setVariablesParams] = useState<LayoutNftListProps>({
+    first: pageSize,
+    skip: data.length,
+  });
+
+  const { data: listData, fetchMore } = useLayoutNftList({
+    first: pageSize,
+    skip: 0,
+    host: currentDAO.host.toLocaleLowerCase(),
+  });
+
+  console.log(listData, 'listData');
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -130,22 +184,32 @@ const App = () => {
   };
 
   const getData = async (page = 1) => {
-    const res = await request({
-      name: 'utils',
-      method: 'getAssetOrderFrom',
-      params: {
-        chain: chainId,
-        host: currentDAO.host,
-        limit: [(page - 1) * pageSize, pageSize],
-        name: searchText,
-        fromAddres_not: '0x0000000000000000000000000000000000000000',
-        toAddress_not: '0x0000000000000000000000000000000000000000',
-        // toAddress: address,
-        ...values,
+    // const res = await request({
+    //   name: 'utils',
+    //   method: 'getAssetOrderFrom',
+    //   params: {
+    //     chain: chainId,
+    //     host: currentDAO.host,
+    //     limit: [(page - 1) * pageSize, pageSize],
+    //     name: searchText,
+    //     fromAddres_not: '0x0000000000000000000000000000000000000000',
+    //     toAddress_not: '0x0000000000000000000000000000000000000000',
+    //     // toAddress: address,
+    //     ...values,
+    //   },
+    // });
+
+    await fetchMore({
+      query: GET_DAOS_NFT_LIST({
+        ...queryParams,
+      }),
+      variables: {
+        ...variablesParams,
+        skip: page === 1 ? 0 : data.length,
       },
     });
 
-    setData(res);
+    // setData(res);
   };
 
   const getTotal = async () => {
@@ -171,6 +235,57 @@ const App = () => {
   const onValuesChange = (changedValues: any) => {
     let [[key, value]]: any = Object.entries(changedValues);
     const nextValues: any = { ...values };
+    let queryParamsCopy = { ...queryParams };
+    let variablesParamsCopy = { ...variablesParams };
+
+    switch (key) {
+      case 'type':
+        delete queryParamsCopy.from;
+        delete queryParamsCopy.to;
+        if (value === 'buyer') {
+          queryParamsCopy.to = address;
+        } else if (value === 'seller') {
+          queryParamsCopy.from = address;
+        } else {
+          queryParamsCopy.to = address;
+        }
+        break;
+      case 'orderBy':
+        switch (value) {
+          case 'value':
+            variablesParamsCopy.orderBy = 'value';
+            variablesParamsCopy.orderDirection = 'asc';
+            break;
+          case 'value desc':
+            variablesParamsCopy.orderBy = 'value';
+            variablesParamsCopy.orderDirection = 'desc';
+            break;
+          default:
+            variablesParamsCopy.orderBy = 'blockNumber';
+            variablesParamsCopy.orderDirection = 'desc';
+            break;
+        }
+        break;
+      case 'time':
+        if (value) {
+          queryParamsCopy.blockTimestamp_gte = dayjs(value[0])
+            .unix()
+            .toString();
+          queryParamsCopy.blockTimestamp_lte = dayjs(value[1])
+            .unix()
+            .toString();
+        } else {
+          delete queryParamsCopy.blockTimestamp_gte;
+          delete queryParamsCopy.blockTimestamp_lte;
+        }
+        break;
+      default:
+        break;
+    }
+
+    console.log(queryParamsCopy, 'queryParamsCopy');
+    setValues(nextValues);
+    setQueryParams(queryParamsCopy);
 
     if (key === 'type') {
       delete nextValues.toAddress;
@@ -194,7 +309,7 @@ const App = () => {
     }
 
     console.log('values', nextValues);
-    setValues(nextValues);
+    setVariablesParams(variablesParamsCopy);
   };
 
   const onPageChange: PaginationProps['onChange'] = (p) => {
@@ -254,6 +369,12 @@ const App = () => {
     currentDAO.host,
     currentMember.tokenId,
   ]);
+
+  useEffect(() => {
+    if (listData) {
+      setData(listData);
+    }
+  }, [listData]);
 
   return (
     <div style={{ padding: '30px 24px 50px' }}>
@@ -347,19 +468,43 @@ const App = () => {
           分配
         </Button> */}
         </div>
-        <Table
-          columns={getColumns(values.fromAddres ? 'Seller' : 'Buyer')}
-          dataSource={data}
-          rowKey="id"
-          pagination={{
-            position: ['bottomCenter'],
-            current: page,
-            pageSize,
-            total,
-            onChange: onPageChange,
-          }}
-          loading={loading}
-        />
+        <>
+          <Table
+            columns={getColumns(values.fromAddres ? 'Seller' : 'Buyer')}
+            dataSource={data}
+            rowKey="id"
+            pagination={false}
+            // pagination={{
+            //   position: ['bottomCenter'],
+            //   current: page,
+            //   pageSize,
+            //   total,
+            //   onChange: onPageChange,
+            // }}
+            loading={loading}
+          />
+
+          <Row justify="center" style={{ marginTop: 20 }}>
+            <Col span={3}>
+              <Button
+                disabled={page === 1}
+                onClick={() =>
+                  onPageChange(page - 1 <= 1 ? 1 : page - 1, pageSize)
+                }
+              >
+                &lt; Previous
+              </Button>
+            </Col>
+            <Col span={2}>
+              <Button
+                disabled={!data.length}
+                onClick={() => onPageChange(page + 1, pageSize)}
+              >
+                Next &gt;
+              </Button>
+            </Col>
+          </Row>
+        </>
       </div>
 
       {/* <NftpModal ref={nftpModal} /> */}

@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import { rng } from 'somes/rng';
 import BigNumber from 'bignumber.js';
 import store from '@/store';
+import web3 from 'web3';
 import { ETH_CHAINS_INFO } from '@/config/chains';
 
 export function fromToken(number, precision = 18, decimal = 4) {
@@ -275,3 +276,6 @@ export const JsonToGqlStr = (options) => {
   }
   return optionsStr;
 };
+
+export const tokenIdFormat = (text) =>
+  web3.utils.padLeft(web3.utils.toHex(web3.utils.toBN(text)), 64);

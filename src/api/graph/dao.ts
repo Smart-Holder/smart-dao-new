@@ -7,23 +7,6 @@ import {
   queryRecord,
 } from '@/api/typings/dao';
 import dayjs from 'dayjs';
-// interface Options {
-//   first?: number;
-//   skip?: number;
-//   orderDirection?: 'desc' | 'asc';
-//   orderBy?: string;
-//   where?: Dict;
-//   subs?: Dict<Options>;
-// }
-
-// const useAllDaos = ({ name_contains = '', first = 4 }: queryRecord) => {
-//   return useQuery<ResponseDataType>(GET_ALL_DAOS_ACTION, {
-//     variables: {
-//       name_contains,
-//       first,
-//     },
-//   });
-// };
 const useLayoutDaos = () => {
   const [fetchMore, { data, loading, error }] =
     useLazyQuery<ResponseDataType>(GET_ALL_DAOS_ACTION);
@@ -32,10 +15,10 @@ const useLayoutDaos = () => {
     result.daos = result.daos?.map((item) => {
       let first = item.assetPool?.find(
         (item: assetPoolProps) => item.type === 'Frist',
-      )?.id;
+      );
       let second = item.assetPool?.find(
         (item: assetPoolProps) => item.type === 'Second',
-      )?.id;
+      );
 
       return {
         ...item,
@@ -44,8 +27,10 @@ const useLayoutDaos = () => {
         member: item.memberPool?.id,
         host: item.host.toLocaleLowerCase(),
         root: item.votePool?.id,
-        first,
-        second,
+        first: first?.id,
+        second: second?.id,
+        assetIssuanceTax: first?.tax,
+        assetCirculationTax: second?.tax,
       };
     });
     return result;
@@ -71,10 +56,10 @@ const useCreatorDaos = () => {
     result.daos = result.daos?.map((item) => {
       let first = item.assetPool?.find(
         (item: assetPoolProps) => item.type === 'Frist',
-      )?.id;
+      );
       let second = item.assetPool?.find(
         (item: assetPoolProps) => item.type === 'Second',
-      )?.id;
+      );
       return {
         ...item,
         time: dayjs.unix(Number(item.time)).valueOf().toString(),
@@ -82,8 +67,10 @@ const useCreatorDaos = () => {
         member: item.memberPool?.id,
         root: item.votePool?.id,
         host: item.host.toLocaleLowerCase(),
-        first,
-        second,
+        first: first?.id,
+        second: second?.id,
+        assetIssuanceTax: first?.tax,
+        assetCirculationTax: second?.tax,
       };
     });
     return result;

@@ -20,6 +20,7 @@ type votePoolProps = {
 export type assetPoolProps = {
   id: string;
   type: 'Frist' | 'Second';
+  tax: string;
 };
 
 type memberPoolType = {

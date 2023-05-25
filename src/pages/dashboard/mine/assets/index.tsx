@@ -66,7 +66,7 @@ const App: NextPageWithLayout = () => {
   });
 
   const [variablesParmas, setVariablesParams] = useState<queryRecord>({
-    host: currentDAO.host,
+    host: currentDAO.host.toLocaleLowerCase(),
     first: pageSize,
     skip: pageStart,
     chainId,
@@ -75,7 +75,7 @@ const App: NextPageWithLayout = () => {
   });
 
   const { items: nftList, fetchMore } = useDaosNfts({
-    host: currentDAO.host,
+    host: currentDAO.host.toLocaleLowerCase(),
     chainId,
     first: pageSize,
     skip: pageStart,

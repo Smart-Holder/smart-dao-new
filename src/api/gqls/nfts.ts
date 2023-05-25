@@ -55,6 +55,9 @@ const GET_DAOS_NFT_LIST = (opt: Daos_Nft_List_Props) => {
         to
         blockTimestamp
         blockNumber
+        asset {
+          tokenId
+        }
       }
     }
   `;

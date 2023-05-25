@@ -37,6 +37,7 @@ const GET_ALL_DAOS_ACTION = gql`
       assetPool {
         type
         id
+        tax
       }
       ledgerPool {
         id
@@ -86,6 +87,7 @@ const GET_CREATOR_DAOS_ACTION = (opt?: any) => {
         assetPool {
           type
           id
+          tax
         }
         ledgerPool {
           id

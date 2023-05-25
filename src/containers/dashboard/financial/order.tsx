@@ -257,11 +257,11 @@ const App = () => {
         break;
       case 'time':
         if (value) {
-          queryParamsCopy.blockTimestamp_gte = dayjs
-            .unix(Number(value[0]))
+          queryParamsCopy.blockTimestamp_gte = dayjs(dayjs(value[0]))
+            .unix()
             .toString();
-          queryParamsCopy.blockTimestamp_lte = dayjs
-            .unix(Number(value[1]))
+          queryParamsCopy.blockTimestamp_lte = dayjs(dayjs(value[1]))
+            .unix()
             .toString();
         } else {
           delete queryParamsCopy.blockTimestamp_gte;
