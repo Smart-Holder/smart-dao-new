@@ -69,7 +69,7 @@ const App = ({ data }: Props) => {
   } else if (proposalType === Types.Income_Allocate) {
     desc += `${formatMessage({
       id: 'proposal.detail.label.income.allocate',
-    })}: ${fromToken(values.balance)} ${getUnit()}`;
+    })}: ${fromToken(values.balance)} ${values.symbol || getUnit()}`;
   }
 
   return (

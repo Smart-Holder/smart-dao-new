@@ -20,7 +20,10 @@ const App = ({
   const dispatch = useAppDispatch();
 
   const startValues = getMakeDAOStorage('start') || {};
-  const storageValues = getMakeDAOStorage('executor') || {};
+  const storageValues = getMakeDAOStorage('executor') || {
+    address: startValues.members[0].owner,
+    executor: startValues.members[0].id,
+  };
 
   const [form] = Form.useForm();
 

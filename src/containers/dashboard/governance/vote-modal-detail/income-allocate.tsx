@@ -16,6 +16,7 @@ import type { PaginationProps } from 'antd';
 type Props = {
   data: {
     balance: string;
+    symbol?: string;
   };
 };
 
@@ -42,7 +43,7 @@ const columns = [
     title: 'Amount',
     dataIndex: 'price',
     key: 'price',
-    render: (text: string) => `${text} ${getUnit()}`,
+    render: (text: string, row: any) => `${text} ${row.symbol || getUnit()}`,
   },
 ];
 
@@ -91,6 +92,7 @@ const App = ({ data }: Props) => {
 
     all.forEach((item: any) => {
       item.price = (price * item.votes).toFixed(4);
+      item.symbol = data.symbol;
     });
 
     setAllData(all);
@@ -118,7 +120,7 @@ const App = ({ data }: Props) => {
           {formatMessage({ id: 'proposal.detail.label.income.allocate' })}:
         </span>
         <div className={styles.value} style={{ marginTop: 10, fontSize: 28 }}>
-          {fromToken(data.balance || 0)} {getUnit()}
+          {fromToken(data.balance || 0)} {data.symbol || getUnit()}
         </div>
       </div>
 

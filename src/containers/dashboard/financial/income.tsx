@@ -33,6 +33,7 @@ import { Permissions, proposalType } from '@/config/enum';
 import { LedgerType } from '@/config/enum';
 import { getMessage } from '@/utils/language';
 import { Amount } from '@/config/enum';
+import { LedgerBalance } from '@/config/define';
 
 dayjs.extend(customParseFormat);
 
@@ -101,7 +102,7 @@ const App = () => {
   const [total, setTotal] = useState(0);
   const [data, setData] = useState([]);
 
-  const [balance, setBalance] = useState(0);
+  const [balance, setBalance] = useState<LedgerBalance>();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -110,9 +111,14 @@ const App = () => {
   const nftpModal: any = useRef(null);
 
   const getBalanceData = async () => {
-    const res = await getBalance();
-    // console.log('balance', res);
-    setBalance(res || 0);
+    // const res1 = await getBalance();
+    const res = await request({
+      name: 'ledger',
+      method: 'getLedgerBalance',
+      params: { chain: chainId, host: currentDAO.host },
+    });
+
+    setBalance(res[0]);
   };
 
   useEffect(() => {
@@ -239,14 +245,18 @@ const App = () => {
       description: JSON.stringify({
         type: 'finance',
         proposalType: proposalType.Income_Allocate,
-        values: { balance },
+        values: { balance: balance?.value, symbol: balance?.symbol },
       }),
       extra: [
         {
           abi: 'ledger',
           target: currentDAO.ledger,
           method: 'release',
-          params: [balance, 'description'],
+          params: [
+            '0x0000000000000000000000000000000000000000',
+            balance?.value,
+            'description',
+          ],
         },
       ],
     };
@@ -275,13 +285,13 @@ const App = () => {
 
   // 收入分配
   const allocation = async () => {
-    if (balance <= 0) {
+    if (!balance?.value) {
       return;
     }
 
     if (await isPermission(Permissions.Action_Ledger_Release)) {
       try {
-        await release({ amount: balance, description: 'description' });
+        await release({ amount: balance?.value, description: 'description' });
         setIsModalOpen(false);
         message.success('success');
         getBalanceData();
@@ -327,8 +337,8 @@ const App = () => {
             {
               label: formatMessage({ id: 'financial.income.balance' }),
               // value: fromToken(balance || 0) + ' ' + getUnit(),
-              value: `${fromToken(amount?.balance.value)} ${
-                amount?.balance.symbol || ''
+              value: `${fromToken(balance?.value || 0)} ${
+                balance?.symbol || ''
               }`,
             },
           ]}

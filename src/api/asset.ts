@@ -196,7 +196,7 @@ export function release({
   amount,
   description,
 }: {
-  amount: number;
+  amount: number | string;
   description: string;
 }) {
   const { web3, address } = store.getState().wallet;
