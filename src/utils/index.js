@@ -279,3 +279,13 @@ export const JsonToGqlStr = (options) => {
 
 export const tokenIdFormat = (text) =>
   web3.utils.padLeft(web3.utils.toHex(web3.utils.toBN(text)), 64);
+
+export const getChain = (label) => {
+  const { chainId } = store.getState().wallet;
+
+  if (ETH_CHAINS_INFO[chainId]) {
+    return ETH_CHAINS_INFO[chainId][label] || '';
+  }
+
+  return '';
+};

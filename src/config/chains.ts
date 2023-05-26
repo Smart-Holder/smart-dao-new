@@ -31,6 +31,7 @@ export const ETH_CHAINS_INFO: any = {
     DAOsProxy: '0xe5a75c22B074B563185856F5a679DB56daD2c227',
     unit: 'ETH',
     icon: '/images/market/icon_nft_card_unit_eth_default@2x.png',
+    symbol2: 'ETH',
   },
   // 4: {
   //   rpc: ETH_TESTNET,
@@ -59,6 +60,7 @@ export const ETH_CHAINS_INFO: any = {
     DAOsProxy: '0xe5a75c22B074B563185856F5a679DB56daD2c227',
     unit: 'ETH',
     icon: '/images/market/icon_nft_card_unit_eth_default@2x.png',
+    symbol2: 'GOERLI',
   },
   137: {
     rpc: 'https://polygon-mainnet.infura.io',
@@ -75,6 +77,7 @@ export const ETH_CHAINS_INFO: any = {
     DAOsProxy: '0xa209a92D0230018b8016b6d7cCDa1E219a0174E1',
     unit: 'MATIC',
     icon: '/images/market/icon_nft_card_unit_eth_default@2x.png',
+    symbol2: 'MATIC',
   },
   // 56: {
   //   rpc: BNB_MAINNET,

@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 
 // import { rng } from 'somes/rng';
 
-import { fromToken, getUnit } from '@/utils';
+import { fromToken, getChain, getUnit } from '@/utils';
 import { useIntl } from 'react-intl';
 import { request } from '@/api';
 import { Amount, DAOType, Permissions } from '@/config/enum';
@@ -63,7 +63,7 @@ const App = () => {
         }),
       ]);
 
-      const symbol = getUnit();
+      const symbol = getChain('symbol2');
       const ledgerItem: Amount = res.ledgerSummarys.find(
         (item: Amount) => item.balance.symbol === symbol,
       );
