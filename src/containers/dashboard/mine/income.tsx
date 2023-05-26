@@ -109,7 +109,7 @@ const App = () => {
     orderBy: string;
     orderDirection: 'desc' | 'asc';
   }>({
-    orderBy: 'balance',
+    orderBy: 'amount',
     orderDirection: 'desc',
   });
 

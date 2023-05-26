@@ -112,7 +112,7 @@ const App = () => {
     orderBy: string;
     orderDirection: 'desc' | 'asc';
   }>({
-    orderBy: 'balance',
+    orderBy: 'amount',
     orderDirection: 'desc',
   });
 
@@ -253,12 +253,12 @@ const App = () => {
       case 'orderBy':
         switch (value) {
           case 'value desc':
-            ledgerVariablesCopy.orderBy = 'balance';
+            ledgerVariablesCopy.orderBy = 'amount';
             ledgerVariablesCopy.orderDirection = 'desc';
             break;
 
           case 'value':
-            ledgerVariablesCopy.orderBy = 'balance';
+            ledgerVariablesCopy.orderBy = 'amount';
             ledgerVariablesCopy.orderDirection = 'asc';
             break;
           default:

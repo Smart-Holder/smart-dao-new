@@ -7,7 +7,7 @@ const LEDGER_QUERY = (opt: ledgerQueryGqlProps) => {
   return gql`
     query QueryVote(
         $first: Int = 10
-        $orderBy: String = balance
+        $orderBy: String = amount
         $orderDirection: String = desc
         $skip: Int = 0
         $host: String = ""
@@ -24,6 +24,7 @@ const LEDGER_QUERY = (opt: ledgerQueryGqlProps) => {
           state
           target
           balance
+          amount
           type
           description
           address
