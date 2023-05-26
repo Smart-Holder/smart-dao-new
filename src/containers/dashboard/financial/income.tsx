@@ -29,6 +29,7 @@ import { getMessage } from '@/utils/language';
 import { useLedgerQuery } from '@/api/graph/ledger';
 import { gqlProps, ledgerQueryType } from '@/api/typings/ledger';
 import { LEDGER_QUERY } from '@/api/gqls/ledgers';
+import { Amount } from '@/config/enum';
 
 dayjs.extend(customParseFormat);
 
@@ -64,8 +65,8 @@ const columns = [
   },
   {
     title: <FormattedMessage id="financial.income.amount" />,
-    dataIndex: 'balance',
-    key: 'balance',
+    dataIndex: 'amount',
+    key: 'amount',
     render: (text: string) => <Price value={fromToken(text)} />,
   },
   {
@@ -104,7 +105,7 @@ const App = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [amount, setAmount] = useState({ total: 0, amount: '0' });
+  const [amount, setAmount] = useState<Amount>();
 
   const [ledgerQueryParams, setLedgerQueryParams] = useState<gqlProps>();
   const [ledgerVariables, setLedgerVariables] = useState<{
@@ -142,7 +143,11 @@ const App = () => {
     });
 
     if (res) {
-      setAmount(res);
+      const symbol = getUnit();
+      const ledgerItem: Amount = res.find(
+        (item: Amount) => item.balance.symbol === symbol,
+      );
+      setAmount(ledgerItem);
     }
   };
 
@@ -386,7 +391,7 @@ const App = () => {
           data={[
             {
               label: formatMessage({ id: 'financial.income.total' }),
-              value: fromToken(amount.amount) + ' ' + getUnit(),
+              value: fromToken(amount?.amount) + ' ' + getUnit(),
             },
             {
               label: formatMessage({ id: 'financial.income.balance' }),

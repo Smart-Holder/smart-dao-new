@@ -208,7 +208,11 @@ export function release({
     currentDAO?.ledger || currentDAO.ledgerPool.id,
   );
 
-  return contractSend(contract, address, 'release', [amount, description]);
+  return contractSend(contract, address, 'release', [
+    '0x0000000000000000000000000000000000000000',
+    amount,
+    description,
+  ]);
 }
 
 // 未分配收入

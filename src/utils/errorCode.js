@@ -87,7 +87,8 @@ function parseJSONObject(str) {
   let start = str.indexOf('{');
   if (start == -1) return;
   let indent = 1;
-  let idx = start, end = start;
+  let idx = start,
+    end = start;
 
   // Simple Lexical Analysis
   while (++idx < str.length && indent > 0) {
@@ -97,25 +98,25 @@ function parseJSONObject(str) {
         break;
       case 125:
         indent--;
-        end = idx+1;
+        end = idx + 1;
         break;
     }
   }
 
   if (indent == 0) {
     let json = str.substring(start, end);
-    if (json)
-      return JSON.parse(json);
+    if (json) return JSON.parse(json);
   }
 }
 
-function getMessage(error) {debugger
+function getMessage(error) {
   const defaultMessage = `Call contract method error`;
 
   if (!error) {
     return defaultMessage;
   }
-  if (error.code === 4001) { // user cancel action
+  if (error.code === 4001) {
+    // user cancel action
     return '';
   }
 
@@ -130,8 +131,7 @@ function getMessage(error) {debugger
       errors.push(errObj.value?.data);
     }
     for (let err of errors.reverse()) {
-      if (msg)
-        break;
+      if (msg) break;
       if (err) {
         msg = getMessageFromCode(err) || getMessageFromString(err.message);
       }
@@ -146,8 +146,7 @@ function getMessage(error) {debugger
 
 export const getContractMessage = (error, method) => {
   let msg = getMessage(error);
-  if (!msg)
-    return '';
+  if (!msg) return '';
   // console.error(msg);
   message.error(msg);
   return msg;

@@ -904,3 +904,21 @@ a {
 .ant-carousel .slick-slide {
   transition-duration: 1s !important;
 }
+
+/* ------------------- Checkbox ---------------------- */
+.ant-checkbox-wrapper.checked {
+  color: rgba(0, 0, 0, 0.88);
+}
+
+.ant-checkbox-wrapper.checked .ant-checkbox-disabled + span {
+  color: rgba(0, 0, 0, 0.88);
+}
+
+.ant-checkbox-wrapper.checked .ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #000;
+  border-color: #000;
+}
+
+.ant-checkbox-wrapper.checked .ant-checkbox-checked .ant-checkbox-inner::after {
+  border-color: #fff;
+}

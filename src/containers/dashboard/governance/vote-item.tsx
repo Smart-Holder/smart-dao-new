@@ -1,12 +1,17 @@
-import { Statistic, Typography } from 'antd';
-import { FC } from 'react';
+import { Avatar, Statistic, Typography } from 'antd';
+import { FC, useEffect, useState } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
 
 import Progress from '@/containers/dashboard/governance/progress';
 import Desc from '@/containers/dashboard/governance/vote-item-desc';
+import UserItem from '@/containers/dashboard/governance/user-item';
 
 import { formatAddress } from '@/utils';
 import Ellipsis from '@/components/typography/ellipsis';
+import { decodeParameters } from '@/utils/decode';
+import { proposalType } from '@/config/enum';
+import { request } from '@/api';
+import { User } from '@/config/define';
 
 const { Countdown } = Statistic;
 const { Paragraph } = Typography;
@@ -74,6 +79,8 @@ const getStatus = (isClose: boolean, isAgree: boolean, isExecuted: boolean) => {
 const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
   const { formatMessage } = useIntl();
 
+  const [origin, setOrigin] = useState<User>();
+
   const status = getStatus(data.isClose, data.isAgree, data.isExecuted);
 
   let extra: any;
@@ -81,7 +88,7 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
   try {
     extra = data.description ? JSON.parse(data.description || '{}') : {};
   } catch (error) {
-    extra = { type: 'normal', purpose: '' };
+    extra = decodeParameters(data?.data[0]) || { type: 'normal', purpose: '' };
   }
 
   const purpose = extra?.purpose;
@@ -92,8 +99,24 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
       : 0;
 
   const handleClick = () => {
-    onClick({ ...data, status, extra, percent });
+    onClick({ ...data, status, extra, percent, originData: origin });
   };
+
+  useEffect(() => {
+    const getOrigin = async () => {
+      const user = await request({
+        name: 'user',
+        method: 'getUserFrom',
+        params: { address: data.origin },
+      });
+
+      setOrigin(user);
+    };
+
+    if (data.origin) {
+      getOrigin();
+    }
+  }, []);
 
   return (
     <div className="item" onClick={handleClick}>
@@ -116,17 +139,11 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
       </div>
 
       <div className="item-footer">
-        <div>
-          <div className="item-owner-address">
-            {/* {formatAddress(data.origin)} */}
-            {/* <EllipsisMiddle prefixCount={6} suffixCount={6} copyable>
-              {data.origin}
-            </EllipsisMiddle> */}
-            <Ellipsis copyable={{ text: data.origin }}>
-              {formatAddress(data.origin, 6, 6)}
-            </Ellipsis>
-          </div>
-        </div>
+        {extra.proposalType === proposalType.Member_Join ? (
+          <UserItem data={extra.values} />
+        ) : (
+          <UserItem data={{ name: origin?.nickname, image: origin?.image }} />
+        )}
 
         <Progress style={{ marginTop: 15 }} data={{ ...data, percent }} />
       </div>
@@ -247,6 +264,20 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
 
           .item-footer {
             margin-top: 15px;
+          }
+
+          .item-owner {
+            display: flex;
+            align-items: center;
+          }
+
+          .item-owner :global(.ant-typography) {
+            margin-bottom: 0;
+            margin-left: 4px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #000000;
+            line-height: 19px;
           }
 
           .item-owner-address {

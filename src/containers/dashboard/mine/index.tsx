@@ -16,7 +16,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { fromToken, getUnit } from '@/utils';
 import { useIntl } from 'react-intl';
 import { request } from '@/api';
-import { DAOType, Permissions } from '@/config/enum';
+import { Amount, DAOType, Permissions } from '@/config/enum';
 import { join } from '@/api/member';
 import { setDAOType } from '@/store/features/daoSlice';
 import { UserOutlined } from '@ant-design/icons';
@@ -62,6 +62,12 @@ const App = () => {
           params: { chain: chainId },
         }),
       ]);
+
+      const symbol = getUnit();
+      const ledgerItem: Amount = res.ledgerSummarys.find(
+        (item: Amount) => item.balance.symbol === symbol,
+      );
+      res.ledgerIncomTotal = ledgerItem?.amount || '0';
 
       setDAOInfo(res);
       setLikeDAO(res2);
@@ -379,6 +385,7 @@ const App = () => {
                   {/* {fromToken(DAOInfo.assetLedgerIncomeTotal)} ETH */}
                   {/* {fromToken(DAOInfo.assetLedgerIncomeTotal)} {getUnit()} */}
                   {fromToken(assetData?.ledgerPools[0]?.assetIncomeTotal)} ETH
+                  {/* {fromToken(DAOInfo.ledgerIncomTotal)} {getUnit()} */}
                 </span>
                 <span>{formatMessage({ id: 'my.summary.total.income' })}</span>
               </div>

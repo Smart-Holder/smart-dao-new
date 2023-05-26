@@ -54,6 +54,10 @@ const App = ({ data }: Props) => {
     desc += `${formatMessage({ id: 'proposal.detail.label.member.create' })}: ${
       values.address
     }`;
+  } else if (proposalType === Types.Member_Join) {
+    desc += `${formatMessage({
+      id: 'proposal.detail.label.member.join',
+    })}, ${formatMessage({ id: 'address' })}: ${values.address}`;
   } else if (proposalType === Types.Member_Votes) {
     desc += `${formatMessage({
       id: 'proposal.detail.label.member.votes',

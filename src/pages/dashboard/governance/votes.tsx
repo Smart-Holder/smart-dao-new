@@ -204,7 +204,7 @@ const App: NextPageWithLayout = () => {
       }
 
       nextValues = { ...nextValues, ...obj };
-      console.log('values', nextValues);
+      // console.log('values', nextValues);
       setValues(nextValues);
       setStatus(status);
       return;
@@ -216,7 +216,6 @@ const App: NextPageWithLayout = () => {
       nextValues[key] = key === 'time' ? formatDayjsValues(value) : value;
     }
 
-    console.log('values', nextValues);
     setVariables({
       orderDirection:
         !nextValues.orderBy || nextValues.orderBy.includes('desc')
@@ -226,6 +225,7 @@ const App: NextPageWithLayout = () => {
     });
     setTarget(nextValues.target ? [] : undefined);
 
+    // console.log('values', nextValues);
     setValues(nextValues);
   };
 
@@ -261,7 +261,7 @@ const App: NextPageWithLayout = () => {
   }, [voteData?.proposals, resData]);
 
   const onClickItem = (item: any) => {
-    console.log(data, 'item', item);
+    // console.log('item', item);
     setCurrentItem(item);
     setOpenModal(true);
   };
