@@ -257,3 +257,13 @@ export const getUnit = () => {
 
   return ETH_CHAINS_INFO[chainId]?.unit || '';
 };
+
+export const getChain = (label) => {
+  const { chainId } = store.getState().wallet;
+
+  if (ETH_CHAINS_INFO[chainId]) {
+    return ETH_CHAINS_INFO[chainId][label] || '';
+  }
+
+  return '';
+};

@@ -15,7 +15,13 @@ import { request } from '@/api';
 
 import { useAppSelector } from '@/store/hooks';
 
-import { formatAddress, formatDayjsValues, fromToken, getUnit } from '@/utils';
+import {
+  formatAddress,
+  formatDayjsValues,
+  fromToken,
+  getChain,
+  getUnit,
+} from '@/utils';
 
 import type { PaginationProps } from 'antd';
 import { getBalance, release } from '@/api/asset';
@@ -119,7 +125,7 @@ const App = () => {
     });
 
     if (res) {
-      const symbol = getUnit();
+      const symbol = getChain('symbol2');
       const ledgerItem: Amount = res.find(
         (item: Amount) => item.balance.symbol === symbol,
       );
@@ -315,7 +321,8 @@ const App = () => {
             },
             {
               label: formatMessage({ id: 'financial.income.balance' }),
-              value: fromToken(balance || 0) + ' ' + getUnit(),
+              // value: fromToken(balance || 0) + ' ' + getUnit(),
+              value: fromToken(amount?.balance.value) + ' ' + getUnit(),
             },
           ]}
         />
