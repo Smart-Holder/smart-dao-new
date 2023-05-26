@@ -58,7 +58,7 @@ export const ETH_CHAINS_INFO: any = {
     decimals: 18,
     opensea: 'https://testnets.opensea.io/assets/goerli',
     DAOsProxy: '0xe5a75c22B074B563185856F5a679DB56daD2c227',
-    unit: 'ETH',
+    unit: 'GOERLI',
     icon: '/images/market/icon_nft_card_unit_eth_default@2x.png',
     symbol2: 'GOERLI',
   },

@@ -65,7 +65,9 @@ const columns = [
     title: <FormattedMessage id="financial.income.amount" />,
     dataIndex: 'amount',
     key: 'amount',
-    render: (text: string) => <Price value={fromToken(text)} />,
+    render: (text: string, row: any) => (
+      <Price value={fromToken(text)} unit={row.symbol} />
+    ),
   },
   {
     title: 'Target',
@@ -125,11 +127,12 @@ const App = () => {
     });
 
     if (res) {
-      const symbol = getChain('symbol2');
-      const ledgerItem: Amount = res.find(
-        (item: Amount) => item.balance.symbol === symbol,
-      );
-      setAmount(ledgerItem);
+      // const symbol = getChain('symbol2');
+      // const ledgerItem: Amount = res.find(
+      //   (item: Amount) => item.balance.symbol === symbol,
+      // );
+      // setAmount(ledgerItem);
+      setAmount(res[0]);
     }
   };
 
@@ -317,12 +320,16 @@ const App = () => {
           data={[
             {
               label: formatMessage({ id: 'financial.income.total' }),
-              value: fromToken(amount?.amount) + ' ' + getUnit(),
+              value: `${fromToken(amount?.amount)} ${
+                amount?.balance.symbol || ''
+              }`,
             },
             {
               label: formatMessage({ id: 'financial.income.balance' }),
               // value: fromToken(balance || 0) + ' ' + getUnit(),
-              value: fromToken(amount?.balance.value) + ' ' + getUnit(),
+              value: `${fromToken(amount?.balance.value)} ${
+                amount?.balance.symbol || ''
+              }`,
             },
           ]}
         />

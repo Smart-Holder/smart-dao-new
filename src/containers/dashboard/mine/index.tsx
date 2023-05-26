@@ -54,11 +54,13 @@ const App = () => {
         }),
       ]);
 
-      const symbol = getChain('symbol2');
-      const ledgerItem: Amount = res.ledgerSummarys.find(
-        (item: Amount) => item.balance.symbol === symbol,
-      );
+      // const symbol = getChain('symbol2');
+      // const ledgerItem: Amount = res.ledgerSummarys.find(
+      //   (item: Amount) => item.balance.symbol === symbol,
+      // );
+      const ledgerItem: Amount = res.ledgerSummarys[0];
       res.ledgerIncomTotal = ledgerItem?.amount || '0';
+      res.symbol = ledgerItem?.balance.symbol || '';
 
       setDAOInfo(res);
       setLikeDAO(res2);
@@ -297,7 +299,7 @@ const App = () => {
             <div className="total-item-2">
               <div className="total-item-right">
                 <span className="num">
-                  {fromToken(DAOInfo.assetAmountTotal)} {getUnit()}
+                  {fromToken(DAOInfo.assetAmountTotal)} {DAOInfo.symbol}
                 </span>
                 <span>
                   {formatMessage({ id: 'my.summary.total.assetAmount' })}
@@ -346,7 +348,7 @@ const App = () => {
             <div className="total-item-2">
               <div className="total-item-right">
                 <span className="num">
-                  {fromToken(DAOInfo.ledgerIncomTotal)} {getUnit()}
+                  {fromToken(DAOInfo.ledgerIncomTotal)} {DAOInfo.symbol}
                 </span>
                 <span>{formatMessage({ id: 'my.summary.total.income' })}</span>
               </div>
@@ -474,6 +476,12 @@ const App = () => {
             font-weight: 500;
             color: #282d32;
             line-height: 59px;
+          }
+
+          @media screen and (max-width: 1420px) {
+            .total-item-2 .num {
+              font-size: 26px;
+            }
           }
         `}
       </style>
