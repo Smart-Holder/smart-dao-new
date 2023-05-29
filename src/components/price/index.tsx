@@ -48,7 +48,7 @@ const App = ({
       />
       {/* <Image src={Matic} width={20} height={20} preview={false} alt="" /> */}
 
-      <span style={{ marginLeft: 1 }}>{`${v} ${getUnit()}`}</span>
+      <span style={{ marginLeft: 1 }}>{`${v} ${unit || getUnit()}`}</span>
     </div>
   );
 };

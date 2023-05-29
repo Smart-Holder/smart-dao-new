@@ -65,7 +65,7 @@ const columns = [
     title: <FormattedMessage id="financial.order.amount" />,
     dataIndex: 'value',
     key: 'value',
-    render: (text: string) => fromToken(text),
+    render: (text: string) => fromToken(text) + ' ' + getUnit(),
   },
   // { title: '标签', dataIndex: 'votes', key: 'votes' },
   {
@@ -361,12 +361,12 @@ const App = () => {
             },
             {
               label: formatMessage({ id: 'financial.order.total.amount' }),
-              // value: fromToken(amount.amount || 0) + ' ETH',
               // value: fromToken(amount.amount || 0) + ' ' + getUnit(),
               value:
                 fromToken(assetData?.first?.orderAmountTotal || 0) +
                 fromToken(assetData?.second?.orderAmountTotal || 0) +
-                ' ETH',
+                ' ' +
+                getUnit(),
             },
           ]}
         />

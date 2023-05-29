@@ -18,7 +18,6 @@ type ledger = {
   description: string;
 
   type: string;
-  balance: string;
   amount: string;
   state: string;
   target: string;

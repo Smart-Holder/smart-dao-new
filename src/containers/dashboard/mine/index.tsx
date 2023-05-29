@@ -63,11 +63,13 @@ const App = () => {
         }),
       ]);
 
-      const symbol = getChain('symbol2');
-      const ledgerItem: Amount = res.ledgerSummarys.find(
-        (item: Amount) => item.balance.symbol === symbol,
-      );
+      // const symbol = getChain('symbol2');
+      // const ledgerItem: Amount = res.ledgerSummarys.find(
+      //   (item: Amount) => item.balance.symbol === symbol,
+      // );
+      const ledgerItem: Amount = res.ledgerSummarys[0];
       res.ledgerIncomTotal = ledgerItem?.amount || '0';
+      res.symbol = ledgerItem?.balance.symbol || '';
 
       setDAOInfo(res);
       setLikeDAO(res2);
@@ -324,8 +326,9 @@ const App = () => {
                   {/* {fromToken(DAOInfo.assetAmountTotal)} {getUnit()} */}
                   {fromToken(assetData?.first?.amountTotal || 0) +
                     fromToken(assetData?.second?.amountTotal || 0) +
-                    ' '}
-                  ETH
+                    ' ' +
+                    getUnit()}
+                  {/* {fromToken(DAOInfo.assetAmountTotal)} {DAOInfo.symbol} */}
                 </span>
                 <span>
                   {formatMessage({ id: 'my.summary.total.assetAmount' })}
@@ -384,8 +387,11 @@ const App = () => {
                 <span className="num">
                   {/* {fromToken(DAOInfo.assetLedgerIncomeTotal)} ETH */}
                   {/* {fromToken(DAOInfo.assetLedgerIncomeTotal)} {getUnit()} */}
-                  {fromToken(assetData?.ledgerPools[0]?.assetIncomeTotal)} ETH
+                  {fromToken(assetData?.ledgerPools[0]?.assetIncomeTotal) +
+                    ' ' +
+                    getUnit()}
                   {/* {fromToken(DAOInfo.ledgerIncomTotal)} {getUnit()} */}
+                  {/* {fromToken(DAOInfo.ledgerIncomTotal)} {DAOInfo.symbol} */}
                 </span>
                 <span>{formatMessage({ id: 'my.summary.total.income' })}</span>
               </div>
@@ -513,6 +519,12 @@ const App = () => {
             font-weight: 500;
             color: #282d32;
             line-height: 59px;
+          }
+
+          @media screen and (max-width: 1420px) {
+            .total-item-2 .num {
+              font-size: 26px;
+            }
           }
         `}
       </style>

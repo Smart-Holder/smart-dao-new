@@ -23,7 +23,6 @@ const LEDGER_QUERY = (opt: ledgerQueryGqlProps) => {
           name
           state
           target
-          balance
           amount
           type
           description

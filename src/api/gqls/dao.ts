@@ -3,6 +3,7 @@ import { gql } from '@apollo/client';
 
 let gqlFragment = gql`
   fragment comparisonFields on DAO {
+    asset
     host: id
     address: id
     time: blockTimestamp

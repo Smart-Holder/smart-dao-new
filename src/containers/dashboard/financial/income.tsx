@@ -36,6 +36,7 @@ import { useLedgerQuery } from '@/api/graph/ledger';
 import { gqlProps, ledgerQueryType } from '@/api/typings/ledger';
 import { LEDGER_QUERY } from '@/api/gqls/ledgers';
 import { Amount } from '@/config/enum';
+import { LedgerBalance } from '@/config/define';
 
 dayjs.extend(customParseFormat);
 
@@ -73,7 +74,9 @@ const columns = [
     title: <FormattedMessage id="financial.income.amount" />,
     dataIndex: 'amount',
     key: 'amount',
-    render: (text: string) => <Price value={fromToken(text)} />,
+    render: (text: string, row: any) => (
+      <Price value={fromToken(text)} unit={row.symbol} />
+    ),
   },
   {
     title: 'Target',
@@ -107,7 +110,7 @@ const App = () => {
   const [total, setTotal] = useState(0);
   const [data, setData] = useState<any[]>([]);
 
-  const [balance, setBalance] = useState(0);
+  const [balance, setBalance] = useState<LedgerBalance>();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -132,9 +135,14 @@ const App = () => {
   const nftpModal: any = useRef(null);
 
   const getBalanceData = async () => {
-    const res = await getBalance();
-    // console.log('balance', res);
-    setBalance(res || 0);
+    // const res1 = await getBalance();
+    const res = await request({
+      name: 'ledger',
+      method: 'getLedgerBalance',
+      params: { chain: chainId, host: currentDAO.host },
+    });
+
+    setBalance(res[0]);
   };
 
   useEffect(() => {
@@ -149,11 +157,12 @@ const App = () => {
     });
 
     if (res) {
-      const symbol = getChain('symbol2');
-      const ledgerItem: Amount = res.find(
-        (item: Amount) => item.balance.symbol === symbol,
-      );
-      setAmount(ledgerItem);
+      // const symbol = getChain('symbol2');
+      // const ledgerItem: Amount = res.find(
+      //   (item: Amount) => item.balance.symbol === symbol,
+      // );
+      // setAmount(ledgerItem);
+      setAmount(res[0]);
     }
   };
 
@@ -316,14 +325,18 @@ const App = () => {
       description: JSON.stringify({
         type: 'finance',
         proposalType: proposalType.Income_Allocate,
-        values: { balance },
+        values: { balance: balance?.value, symbol: balance?.symbol },
       }),
       extra: [
         {
           abi: 'ledger',
           target: currentDAO.ledger,
           method: 'release',
-          params: [balance, 'description'],
+          params: [
+            '0x0000000000000000000000000000000000000000',
+            balance?.value,
+            'description',
+          ],
         },
       ],
     };
@@ -352,13 +365,13 @@ const App = () => {
 
   // 收入分配
   const allocation = async () => {
-    if (balance <= 0) {
+    if (!balance?.value) {
       return;
     }
 
     if (await isPermission(Permissions.Action_Ledger_Release)) {
       try {
-        await release({ amount: balance, description: 'description' });
+        await release({ amount: balance?.value, description: 'description' });
         setIsModalOpen(false);
         message.success('success');
         getBalanceData();
@@ -397,12 +410,16 @@ const App = () => {
           data={[
             {
               label: formatMessage({ id: 'financial.income.total' }),
-              value: fromToken(amount?.amount) + ' ' + getUnit(),
+              value: `${fromToken(amount?.amount)} ${
+                amount?.balance.symbol || ''
+              }`,
             },
             {
               label: formatMessage({ id: 'financial.income.balance' }),
               // value: fromToken(balance || 0) + ' ' + getUnit(),
-              value: fromToken(amount?.balance.value) + ' ' + getUnit(),
+              value: `${fromToken(balance?.value || 0)} ${
+                balance?.symbol || ''
+              }`,
             },
           ]}
         />

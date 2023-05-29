@@ -337,7 +337,7 @@ const App: NextPageWithLayout = () => {
               value: `${
                 fromToken(assetData?.first?.orderAmountTotal) +
                 fromToken(assetData?.second?.orderAmountTotal)
-              } ETH`,
+              } ${getUnit()}`,
 
               onClick: onCountClick,
             },
