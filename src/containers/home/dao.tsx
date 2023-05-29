@@ -56,44 +56,48 @@ const App = () => {
 
     setLoading(true);
 
-    const t = await request({
-      method: 'getAllDAOsTotal',
-      name: 'dao',
-      params: { chain: chainId || defaultChain, name: searchText },
-    });
+    try {
+      const t = await request({
+        method: 'getAllDAOsTotal',
+        name: 'dao',
+        params: { chain: chainId || defaultChain, name: searchText },
+      });
 
-    setTotal(t);
+      setTotal(t);
 
-    const list = (await request({
-      method: 'getAllDAOs',
-      name: 'dao',
-      params: {
-        chain: chainId || defaultChain,
-        name: searchText,
-        limit: [0, pageSize.current],
-        orderBy: 'time desc',
-        memberObjs: 100,
-        // owner: address || '',
-      },
-    })) as DAOExtend[];
-
-    if (chainId && address) {
-      const myDAOList = (await request({
-        method: 'getDAOsFromOwner',
-        name: 'utils',
-        params: { chain: chainId, owner: address },
+      const list = (await request({
+        method: 'getAllDAOs',
+        name: 'dao',
+        params: {
+          chain: chainId || defaultChain,
+          name: searchText,
+          limit: [0, pageSize.current],
+          orderBy: 'time desc',
+          memberObjs: 100,
+          // owner: address || '',
+        },
       })) as DAOExtend[];
 
-      // setMyDAOList(res || []);
+      if (chainId && address) {
+        const myDAOList = (await request({
+          method: 'getDAOsFromOwner',
+          name: 'utils',
+          params: { chain: chainId, owner: address },
+        })) as DAOExtend[];
 
-      (list || []).forEach((item) => {
-        item.isMember =
-          item.isMember || myDAOList.some((el) => el.host === item.host);
-      });
+        // setMyDAOList(res || []);
+
+        (list || []).forEach((item) => {
+          item.isMember =
+            item.isMember || myDAOList.some((el) => el.host === item.host);
+        });
+      }
+
+      setData(list || []);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
     }
-
-    setData(list || []);
-    setLoading(false);
   };
 
   useEffect(() => {
