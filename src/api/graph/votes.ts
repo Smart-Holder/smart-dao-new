@@ -1,6 +1,8 @@
 import { useQuery, useLazyQuery } from '@apollo/client';
 import { VOTE_QUERY } from '@/api/gqls/votes';
 import { voteQueryType, voteQueryResponse } from '@/api/typings/votes';
+import { useMemo } from 'react';
+import dayjs from 'dayjs';
 
 const useVoteQuery = ({
   first = 6,
@@ -30,8 +32,25 @@ const useVoteQuery = ({
     },
   );
 
+  const dataSource = useMemo(() => {
+    return {
+      ...data,
+      proposals: data?.proposals.map((item) => {
+        let index_ = item.proposal_id.indexOf('-') + 1;
+        return {
+          ...item,
+          time: Number(item.time) * 1000,
+          proposal_id:
+            index_ !== 0
+              ? item.proposal_id.slice(index_, item.proposal_id.length)
+              : item.proposal_id,
+        };
+      }),
+    };
+  }, [data]);
+
   return {
-    data,
+    data: dataSource,
     loading,
     error,
     fetchMore,

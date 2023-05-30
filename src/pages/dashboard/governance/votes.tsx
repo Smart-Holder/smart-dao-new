@@ -142,8 +142,9 @@ const App: NextPageWithLayout = () => {
 
     let obj: any = {};
     [...res].map((item: any) => {
-      let origin = item.origin.toLocaleLowerCase();
-      obj[origin] = item;
+      // let origin = item.origin.toLocaleLowerCase();
+      let proposal_id = item.proposal_id.toLocaleLowerCase();
+      obj[proposal_id] = item;
     });
     setResData(obj);
   };
@@ -247,11 +248,13 @@ const App: NextPageWithLayout = () => {
     if (voteData?.proposals) {
       let list = [...voteData?.proposals].map((item) => {
         return {
-          ...resData[item.origin],
+          ...resData[item.proposal_id],
           ...item,
           modify: dayjs.unix(Number(item.modify)),
         };
       });
+
+      console.log(list, 'list');
       if (page === 1) {
         setData([...list]);
       } else {
@@ -275,6 +278,7 @@ const App: NextPageWithLayout = () => {
     router.push('/dashboard/governance/proposal');
   };
 
+  console.log(data, 'data');
   return (
     <div className="dashboard-content-scroll" id="scrollTarget">
       <div

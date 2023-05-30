@@ -69,6 +69,7 @@ const VOTE_QUERY = ({
             where: { host: $host, ${optionsStr} }
         ) {
             id:number
+            proposal_id:id
             name
             expiry
             target
@@ -79,7 +80,7 @@ const VOTE_QUERY = ({
             voteTotal
             agreeTotal
             modify:modifyTime
-            time:executeTime
+            time:blockTimestamp
         }
     }`;
 };

@@ -24,6 +24,7 @@ type Proposal = {
   modify: string;
   expiry: string;
   time: string;
+  proposal_id: string;
 };
 type voteQueryResponse = {
   proposals: Proposal[];

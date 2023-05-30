@@ -72,19 +72,28 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
     data_.root = data?.votePool?.id || data.root.toLocaleLowerCase();
     data_.votePool = {
       id: data?.votePool?.id || data.root.toLocaleLowerCase(),
+      lifespan: data.votePool.lifespan,
     };
-    data_.assetPool = data_.assetPool
-      ? data_.assetPool
-      : [
-          {
-            type: 'Frist',
-            id: (data?.first || '').toLocaleLowerCase(),
-          },
-          {
-            type: 'Second',
-            id: (data?.second || '').toLocaleLowerCase(),
-          },
-        ];
+    let firstData = data?.assetPool?.map((item) =>
+      item.type === 'Frist' ? item : '',
+    );
+    let secondData = data?.assetPool?.map((item) =>
+      item.type === 'Frist' ? item : '',
+    );
+    data_.assetPool = data_.assetPool;
+    // ? data_.assetPool
+    // : [
+    //     {
+    //       type: 'Frist',
+    //       id: (data?.first || '').toLocaleLowerCase(),
+    //       tax: firstData?.tax || 0,
+    //     },
+    //     {
+    //       type: 'Second',
+    //       id: (data?.second || '').toLocaleLowerCase(),
+    //       tax: secondData?.tax || 0,
+    //     },
+    //   ];
 
     if (!isInit) {
       walletModal.current.show();

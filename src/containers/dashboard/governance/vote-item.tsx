@@ -1,5 +1,5 @@
 import { Avatar, Statistic, Typography } from 'antd';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState, useCallback } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
 
 import Progress from '@/containers/dashboard/governance/progress';
@@ -90,6 +90,7 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
   } catch (error) {
     extra = decodeParameters(data?.data[0]) || { type: 'normal', purpose: '' };
   }
+  // debugger;
 
   const purpose = extra?.purpose;
 
@@ -116,7 +117,7 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
     if (data.origin) {
       getOrigin();
     }
-  }, []);
+  }, [data.origin]);
 
   return (
     <div className="item" onClick={handleClick}>

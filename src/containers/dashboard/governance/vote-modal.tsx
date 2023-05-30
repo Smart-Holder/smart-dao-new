@@ -63,8 +63,14 @@ const VoteModal: FC<VoteModalProps> = (props) => {
         // isPermission(Permissions.Action_VotePool_Vote),
       ]);
 
-      // console.log('permission', data?.time, currentMember.time);
       const permission = data?.time > currentMember.time;
+      console.log(
+        'permission',
+        data?.time,
+        currentMember.time,
+        data,
+        currentMember,
+      );
 
       if (permission && res?.length === 0) {
         // 未投票

@@ -180,7 +180,7 @@ export function setVote({
   const params = [
     proposal_id,
     currentMember.tokenId,
-    vote ? Number(currentMember.votes) : -1,
+    vote ? Number(currentMember.votes) : 0 - Number(currentMember.votes),
     true,
   ];
 
