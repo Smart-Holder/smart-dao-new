@@ -7,7 +7,7 @@ import Modal from '@/components/modal';
 export type AttrParams = {
   trait_type: string;
   value: string;
-  ratio: string;
+  ratio?: string;
 };
 
 type Props = {
@@ -71,7 +71,7 @@ const App = ({ onOk }: Props, ref: any) => {
           <Input />
         </Form.Item>
 
-        <Form.Item
+        {/* <Form.Item
           name="ratio"
           label={formatMessage({ id: 'financial.asset.issue.rate' })}
           rules={[
@@ -83,7 +83,7 @@ const App = ({ onOk }: Props, ref: any) => {
           ]}
         >
           <Input />
-        </Form.Item>
+        </Form.Item> */}
 
         <Form.Item style={{ marginTop: 50, marginBottom: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
