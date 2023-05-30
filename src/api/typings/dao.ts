@@ -10,6 +10,7 @@ type membersType = {
   name: string;
   image: string;
   tokenId: string;
+  votes: string;
 };
 type ledgerPoolProps = {
   id: string;
