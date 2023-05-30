@@ -90,7 +90,7 @@ export const ETH_CHAINS_INFO: any = {
     type: 'TESTNET',
     label: 'ETH_TEST',
     decimals: 18,
-    opensea: 'https://testnets.opensea.io/assets/arbitrum',
+    opensea: 'https://testnets.opensea.io/assets/arbitrum-goerli',
     DAOsProxy: '0x6AC24E60569c57f75352575F82A90eE778d42f79',
     unit: 'GOERLI',
     icon: '/images/market/icon_nft_card_unit_eth_default@2x.png',
