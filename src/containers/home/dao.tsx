@@ -120,6 +120,48 @@ const App = () => {
       variables: { first: 4, skip: 0 },
     });
     setLoading(false);
+    // try {
+    //   const t = await request({
+    //     method: 'getAllDAOsTotal',
+    //     name: 'dao',
+    //     params: { chain: chainId || defaultChain, name: searchText },
+    //   });
+
+    //   setTotal(t);
+
+    //   const list = (await request({
+    //     method: 'getAllDAOs',
+    //     name: 'dao',
+    //     params: {
+    //       chain: chainId || defaultChain,
+    //       name: searchText,
+    //       limit: [0, pageSize.current],
+    //       orderBy: 'time desc',
+    //       memberObjs: 100,
+    //       // owner: address || '',
+    //     },
+    //   })) as DAOExtend[];
+
+    //   if (chainId && address) {
+    //     const myDAOList = (await request({
+    //       method: 'getDAOsFromOwner',
+    //       name: 'utils',
+    //       params: { chain: chainId, owner: address },
+    //     })) as DAOExtend[];
+
+    //     // setMyDAOList(res || []);
+
+    //     (list || []).forEach((item) => {
+    //       item.isMember =
+    //         item.isMember || myDAOList.some((el) => el.host === item.host);
+    //     });
+    //   }
+
+    //   setData(list || []);
+    //   setLoading(false);
+    // } catch (error) {
+    //   setLoading(false);
+    // }
   };
 
   useEffect(() => {

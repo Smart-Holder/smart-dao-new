@@ -38,33 +38,37 @@ const App = () => {
   const getData = async () => {
     setLoading(true);
 
-    const t = await request({
-      name: 'utils',
-      method: 'getAssetTotalFrom',
-      params: {
-        chain: chainId || defaultChain,
-        state: 0,
-        selling_not: 0,
-      },
-    });
+    try {
+      const t = await request({
+        name: 'utils',
+        method: 'getAssetTotalFrom',
+        params: {
+          chain: chainId || defaultChain,
+          state: 0,
+          selling_not: 0,
+        },
+      });
 
-    setTotal(t);
+      setTotal(t);
 
-    let res = await request({
-      name: 'utils',
-      method: 'getAssetFrom',
-      params: {
-        chain: chainId || defaultChain,
-        state: 0,
-        selling_not: 0,
-        limit: [0, 8],
-        orderBy: 'blockNumber desc',
-      },
-    });
+      let res = await request({
+        name: 'utils',
+        method: 'getAssetFrom',
+        params: {
+          chain: chainId || defaultChain,
+          state: 0,
+          selling_not: 0,
+          limit: [0, 8],
+          orderBy: 'blockNumber desc',
+        },
+      });
 
-    res = (res || []).filter((item: AssetExt) => item?.dao !== undefined);
-    setLoading(false);
-    setData(res);
+      res = (res || []).filter((item: AssetExt) => item?.dao !== undefined);
+      setLoading(false);
+      setData(res);
+    } catch (error) {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
