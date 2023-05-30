@@ -13,9 +13,11 @@ import { request } from '@/api';
 import { isPermission, setExecutor } from '@/api/member';
 import { createVote } from '@/api/vote';
 import { useIntl } from 'react-intl';
-import { isRepeate } from '@/utils';
+import { isRepeate, tokenIdFormat } from '@/utils';
 import { Permissions, proposalType } from '@/config/enum';
 import { getMessage } from '@/utils/language';
+import { useDao, useDaoMembers } from '@/api/graph/dao';
+import { membersType } from '@/api/typings/dao';
 
 // const options = [
 //   { label: 'Apple', value: 'Apple' },
@@ -31,40 +33,65 @@ const App = () => {
   const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
   // const { loading } = useAppSelector((store) => store.common);
   const [loading, setLoading] = useState(false);
-  const [members, setMembers] = useState([]);
+  const [members, setMembers] = useState<membersType[]>([]);
   const [initialValues, setInitialValues] = useState(null) as any;
   const [isEdit, setIsEdit] = useState(false);
 
+  const { data, fetchMore } = useDaoMembers();
+  const { fetchMore: fetchMoreDao } = useDao();
+
   useEffect(() => {
     const getMembers = async () => {
-      const members = await request({
-        name: 'utils',
-        method: 'getMembersFrom',
-        params: { chain: chainId, host: currentDAO.host },
+      // const members = await request({
+      //   name: 'utils',
+      //   method: 'getMembersFrom',
+      //   params: { chain: chainId, host: currentDAO.host },
+      // });
+
+      await fetchMore({
+        variables: {
+          host: currentDAO.host,
+        },
       });
 
-      setMembers(members);
-      const member = members.find(
-        (item: any) => item.tokenId === currentDAO.executor,
-      );
+      // setMembers(members);
+      // const member = members.find(
+      //   (item: any) => item.tokenId === currentDAO.executor,
+      // );
 
-      const values = { address: '', executor: '' };
+      // const values = { address: '', executor: '' };
 
-      if (member) {
-        values.address = member.owner;
-        values.executor = member.tokenId;
-      }
+      // if (member) {
+      //   values.address = member.owner;
+      //   values.executor = member.tokenId;
+      // }
 
-      console.log('values', values);
+      // console.log('values', values);
 
-      setInitialValues(values);
-      form.setFieldsValue({ ...values });
+      // setInitialValues(values);
+      // form.setFieldsValue({ ...values });
     };
 
     if (chainId && currentDAO.host) {
       getMembers();
     }
   }, [chainId, currentDAO]);
+
+  useEffect(() => {
+    if (data) {
+      setMembers(data);
+      const member = data.find(
+        (item: any) => item.tokenId === currentDAO.executor,
+      );
+      const values = { address: '', executor: '' };
+      if (member) {
+        values.address = member.owner as string;
+        values.executor = member.tokenId;
+      }
+      setInitialValues(values);
+      form.setFieldsValue({ ...values });
+    }
+  }, [data]);
 
   const onValuesChange = (changedValues: any, values: any) => {
     setIsEdit(!isRepeate(initialValues, values));
@@ -116,14 +143,14 @@ const App = () => {
           message.success('Success');
         }
 
-        const res = await request({
-          name: 'utils',
-          method: 'getDAO',
-          params: { chain: chainId, address: currentDAO.address },
+        const { data: daoData } = await fetchMoreDao({
+          variables: {
+            host: currentDAO.address.toLocaleLowerCase(),
+          },
         });
 
-        if (res) {
-          dispatch(setCurrentDAO(res));
+        if (daoData) {
+          dispatch(setCurrentDAO(daoData.dao));
         }
 
         setIsEdit(false);

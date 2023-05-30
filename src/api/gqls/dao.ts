@@ -1,6 +1,19 @@
 import { JsonToGqlStr } from '@/utils';
 import { gql } from '@apollo/client';
 
+let membersFragment = gql`
+  fragment comparisonMembersFields on Member {
+    id
+    image
+    name
+    tokenId
+    votes
+    owner {
+      id
+    }
+  }
+`;
+
 let gqlFragment = gql`
   fragment comparisonFields on DAO {
     asset
@@ -18,11 +31,7 @@ let gqlFragment = gql`
       count
       id
       members(orderBy: tokenId, orderDirection: asc) {
-        id
-        image
-        name
-        tokenId
-        votes
+        ...comparisonMembersFields
       }
     }
     accounts {
@@ -41,6 +50,7 @@ let gqlFragment = gql`
       id
     }
   }
+  ${membersFragment}
 `;
 
 // 多个DAO查询
@@ -77,4 +87,17 @@ const GET_DAO_ACTION = () => {
   `;
 };
 
-export { GET_DAOS_ACTION, GET_DAO_ACTION };
+// 查询DAO 成员信息
+const GET_DAO_MEMBERS_ACTION = (opt?: any) => {
+  let optionsStr = JsonToGqlStr(opt);
+  return gql`
+    query GetMembers($host: String) {
+      members(where: { host: $host, ${optionsStr} }) {
+        ...comparisonMembersFields
+      }
+    }
+    ${membersFragment}
+  `;
+};
+
+export { GET_DAOS_ACTION, GET_DAO_ACTION, GET_DAO_MEMBERS_ACTION };

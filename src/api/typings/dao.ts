@@ -11,6 +11,7 @@ type membersType = {
   image: string;
   tokenId: string;
   votes: string;
+  owner: any;
 };
 type ledgerPoolProps = {
   id: string;
@@ -63,4 +64,14 @@ type queryRecord = {
   first?: number;
 };
 
-export type { ResponseDataType, queryRecord, daosType };
+type membersRes = {
+  members: membersType[];
+};
+
+export type {
+  ResponseDataType,
+  queryRecord,
+  daosType,
+  membersRes,
+  membersType,
+};

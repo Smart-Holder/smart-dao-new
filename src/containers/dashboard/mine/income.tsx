@@ -128,8 +128,6 @@ const App = () => {
     ...ledgerVariables,
   });
 
-  console.log(ledgerData, 'ledgerData');
-
   const getBalanceData = async () => {
     const res = await getBalance();
     setBalance(res || 0);
@@ -213,12 +211,11 @@ const App = () => {
         break;
       case 'time':
         if (value) {
-          ledgerQueryParamsCopy.blockTimestamp_gte = dayjs
-            .unix(value[0])
+          ledgerQueryParamsCopy.blockTimestamp_gte = dayjs(value[0])
+            .unix()
             .toString();
-
-          ledgerQueryParamsCopy.blockTimestamp_lte = dayjs
-            .unix(value[1])
+          ledgerQueryParamsCopy.blockTimestamp_lte = dayjs(value[1])
+            .unix()
             .toString();
         } else {
           delete ledgerQueryParamsCopy.blockTimestamp_gte;
@@ -229,7 +226,7 @@ const App = () => {
         break;
     }
 
-    setLedgerQueryParams(ledgerQueryParams);
+    setLedgerQueryParams(ledgerQueryParamsCopy);
     setLedgerVariables(ledgerVariablesCopy);
 
     if (!value) {

@@ -278,7 +278,6 @@ const App: NextPageWithLayout = () => {
     router.push('/dashboard/governance/proposal');
   };
 
-  console.log(data, 'data');
   return (
     <div className="dashboard-content-scroll" id="scrollTarget">
       <div

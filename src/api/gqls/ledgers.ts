@@ -5,7 +5,7 @@ import { JsonToGqlStr } from '@/utils';
 const LEDGER_QUERY = (opt: ledgerQueryGqlProps) => {
   let optionsStr = JsonToGqlStr(opt);
   return gql`
-    query QueryVote(
+    query QueryLedger(
         $first: Int = 10
         $orderBy: String = amount
         $orderDirection: String = desc

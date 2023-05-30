@@ -47,31 +47,39 @@ const App = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const [res, res2] = await Promise.all([
-        request({
-          name: 'dao',
-          method: 'getDAOSummarys',
-          params: {
-            chain: chainId,
-            host: currentDAO.host,
-          },
-        }),
+      const [res2] = await Promise.all([
         request({
           name: 'user',
           method: 'getUserLikeDAOs',
           params: { chain: chainId },
         }),
       ]);
+      // const [res, res2] = await Promise.all([
+      //   request({
+      //     name: 'dao',
+      //     method: 'getDAOSummarys',
+      //     params: {
+      //       chain: chainId,
+      //       host: currentDAO.host,
+      //     },
+      //   }),
+      //   request({
+      //     name: 'user',
+      //     method: 'getUserLikeDAOs',
+      //     params: { chain: chainId },
+      //   }),
+      // ]);
 
       // const symbol = getChain('symbol2');
       // const ledgerItem: Amount = res.ledgerSummarys.find(
       //   (item: Amount) => item.balance.symbol === symbol,
       // );
-      const ledgerItem: Amount = res.ledgerSummarys[0];
-      res.ledgerIncomTotal = ledgerItem?.amount || '0';
-      res.symbol = ledgerItem?.balance.symbol || '';
 
-      setDAOInfo(res);
+      // const ledgerItem: Amount = res.ledgerSummarys[0];
+      // res.ledgerIncomTotal = ledgerItem?.amount || '0';
+      // res.symbol = ledgerItem?.balance.symbol || '';
+
+      // setDAOInfo(res);
       setLikeDAO(res2);
 
       if (res2) {
@@ -156,7 +164,7 @@ const App = () => {
     }
   };
 
-  if (!DAOInfo) {
+  if (!currentDAO) {
     return null;
   }
 
@@ -214,9 +222,13 @@ const App = () => {
           </Col>
           <Col span={10} offset={2}>
             <div className="member-header">
-              {DAOInfo.membersTotal}{' '}
+              {/* {DAOInfo.membersTotal}{' '}
               {formatMessage({
                 id: DAOInfo.membersTotal === 1 ? 'member' : 'members',
+              })} */}
+              {currentDAO.memberPool.count}
+              {formatMessage({
+                id: currentDAO.memberPool.count === 1 ? 'member' : 'members',
               })}
             </div>
             <div className="member-content">

@@ -42,7 +42,6 @@ const App: React.FC = () => {
   const [poster, setPoster] = useState();
 
   const { fetchMore, data: daoData } = useDao();
-  console.log(daoData, 'daoData');
 
   useEffect(() => {
     const getDAO = async () => {
@@ -98,7 +97,6 @@ const App: React.FC = () => {
   useEffect(() => {
     if (daoData) {
       dispatch(setCurrentDAO(daoData));
-      console.log(currentDAO, 'currentDAO');
       const extend = formatToBbjExtend(daoData?.extend);
       setLogo(daoData.image);
       setPoster(extend.poster || daoData.image);

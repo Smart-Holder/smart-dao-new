@@ -18,6 +18,8 @@ import {
 import { useRouter } from 'next/router';
 import { request } from '@/api';
 import { DAOType } from '@/config/enum';
+import { useDaoMembers } from '@/api/graph/dao';
+import { GET_DAO_MEMBERS_ACTION } from '@/api/gqls/dao';
 
 // const Header = dynamic(() => import('@/components/header'), { ssr: false });
 
@@ -38,6 +40,8 @@ export default function BasicLayout({
   const router = useRouter();
   const [init, setInit] = useState(false);
 
+  const { fetchMore } = useDaoMembers();
+
   useEffect(() => {
     const initData = async () => {
       const dao = getSessionStorage('currentDAO');
@@ -54,14 +58,23 @@ export default function BasicLayout({
       }
 
       if (type === DAOType.Join) {
-        const members = await request({
-          name: 'utils',
-          method: 'getMembersFrom',
-          params: { chain: chainId, host: dao.host, owner: address },
+        // const members = await request({
+        //   name: 'utils',
+        //   method: 'getMembersFrom',
+        //   params: { chain: chainId, host: dao.host, owner: address },
+        // });
+
+        const { data } = await fetchMore({
+          query: GET_DAO_MEMBERS_ACTION({
+            owner: address,
+          }),
+          variables: {
+            host: dao.host,
+          },
         });
 
-        if (members && members.length > 0) {
-          dispatch(setCurrentMember(members[0]));
+        if (data && data.members.length > 0) {
+          dispatch(setCurrentMember(data.members[0]));
         }
       } else {
         dispatch(setCurrentMember({}));
@@ -99,14 +112,23 @@ export default function BasicLayout({
       dispatch(setCurrentDAO(dao));
       dispatch(setDAOType(DAOType.Join));
 
-      const members = await request({
-        name: 'utils',
-        method: 'getMembersFrom',
-        params: { chain: chainId, host: dao.host, owner: address },
+      // const members = await request({
+      //   name: 'utils',
+      //   method: 'getMembersFrom',
+      //   params: { chain: chainId, host: dao.host, owner: address },
+      // });
+
+      const { data } = await fetchMore({
+        query: GET_DAO_MEMBERS_ACTION({
+          owner: address,
+        }),
+        variables: {
+          host: currentDAO.host,
+        },
       });
 
-      if (members && members.length > 0) {
-        dispatch(setCurrentMember(members[0]));
+      if (data && data.members.length > 0) {
+        dispatch(setCurrentMember(data.members[0]));
       } else {
         dispatch(setCurrentMember({ name: '' }));
       }
