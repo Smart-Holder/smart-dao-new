@@ -93,7 +93,6 @@ const useDaosNfts = ({
     } else {
       setItems([]);
     }
-    console.log(ids);
   }, [fetch, ids]);
 
   return {

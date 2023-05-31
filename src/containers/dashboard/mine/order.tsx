@@ -176,8 +176,6 @@ const App = () => {
     host: currentDAO.host.toLocaleLowerCase(),
   });
 
-  console.log(listData, 'listData');
-
   const showModal = () => {
     setIsModalOpen(true);
     // nftpModal.current.show();
@@ -342,7 +340,7 @@ const App = () => {
         }),
       ]);
 
-      console.log('amount', res1, res2);
+      // console.log('amount', res1, res2);
 
       if (res1 || res2) {
         setAmount({
