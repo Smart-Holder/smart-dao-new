@@ -8,7 +8,7 @@ import somes from 'somes';
 // import { Message } from "element-ui";
 // import store from "@/store";
 import { errorCode } from '@/utils/errorCode';
-import { beforeUnload, stopClick } from '@/utils';
+import { beforeUnload, stopClick } from '@/utils/tool';
 
 import store from '@/store';
 
