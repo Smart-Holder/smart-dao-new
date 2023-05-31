@@ -38,15 +38,15 @@ const ConnectModal = (props: any, ref: any) => {
   };
 
   const handleMetaMask = () => {
-    if (!isSupportChain) {
-      Modal.warning({
-        title: 'Supported networks: Ethereum, Goerli',
-      });
+    // if (!isSupportChain) {
+    //   Modal.warning({
+    //     title: 'Supported networks: Ethereum, Goerli',
+    //   });
 
-      handleCancel();
+    //   handleCancel();
 
-      return;
-    }
+    //   return;
+    // }
 
     dispatch(connectWallet(types.MetaMask));
     handleCancel();
