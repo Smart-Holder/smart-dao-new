@@ -98,6 +98,10 @@ export const walletSlice = createSlice({
         console.log('connect fulfilled', payload);
         const { provider, chainId, address, connectType: type } = payload;
 
+        if (!chainId) {
+          return;
+        }
+
         const isSupport = Object.keys(ETH_CHAINS_INFO).includes(chainId);
 
         if (!isSupport) {

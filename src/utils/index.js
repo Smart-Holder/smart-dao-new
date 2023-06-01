@@ -126,26 +126,6 @@ export function setSessionStorage(key, value) {
   return sessionStorage.setItem(key, JSON.stringify(value));
 }
 
-/**
- * 刷新或关闭页面前，浏览器默认的弹窗提示
- * @param {*} e
- * @returns
- */
-export function beforeUnload(e) {
-  e.returnValue = 'loading';
-  e.preventDefault();
-  return 'loading';
-}
-
-/**
- * 禁止页面的 click 事件
- * @param {*} e
- */
-export function stopClick(e) {
-  e.stopPropagation();
-  e.preventDefault();
-}
-
 // export function splitString(str, len = 2) {
 //   if (typeof str !== 'string') {
 //     return str;

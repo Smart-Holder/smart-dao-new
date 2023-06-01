@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import { beforeUnload, stopClick } from '@/utils';
+import { beforeUnload, stopClick } from '@/utils/tool';
 import { message, Spin } from 'antd';
 import { waitBlockNumber } from '../api';
 import store from '@/store';
@@ -73,7 +73,7 @@ export async function contractSend(
 
   return await new Promise((resolve, reject) => {
     contract.methods[method](...params)
-      .send(gasPrice?{ from, gasPrice }: {from})
+      .send(gasPrice ? { from, gasPrice } : { from })
       .then((receipt) => {
         next(receipt)
           .then(() => {

@@ -9,15 +9,18 @@ import {
 // import { setCurrentDAO } from '@/store/features/daoSlice';
 import { ETH_CHAINS_INFO } from '@/config/chains';
 import { setCookie } from '@/utils/cookie';
+import { setLoading, closeLoading } from '@/utils/tool';
 
 export async function connect(type, dispatch) {
   if (typeof window.ethereum !== 'undefined') {
     try {
+      setLoading();
       const [accounts, chainId] = await Promise.all([
         window.ethereum.request({ method: 'eth_requestAccounts' }),
         window.ethereum.request({ method: 'eth_chainId' }),
       ]);
 
+      closeLoading();
       console.log('connect metamask', chainId, accounts[0]);
 
       window.ethereum.on('chainChanged', (res) => {
@@ -54,6 +57,7 @@ export async function connect(type, dispatch) {
         provider: window.ethereum,
       };
     } catch (error) {
+      closeLoading();
       console.error('Error connecting to MetaMask', error);
       // Message.error({ message: "Error connecting to MetaMask" });
       // Message.error({ message: i18n.t("message.metaMaskConnect") });
