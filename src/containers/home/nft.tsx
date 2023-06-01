@@ -63,7 +63,7 @@ const App = () => {
         },
       });
 
-      res = (res || []).filter((item: AssetExt) => item?.dao !== undefined);
+      // res = (res || []).filter((item: AssetExt) => item?.dao !== undefined);
       setLoading(false);
       setData(res);
     } catch (error) {
@@ -78,7 +78,7 @@ const App = () => {
   }, [chainId]);
 
   const renderItem = (item: AssetExt) => {
-    if (!item.dao) {
+    if (!item) {
       return null;
     }
 
