@@ -332,7 +332,7 @@ const App = () => {
           dataSource={data}
           rowKey="tokenId"
           rowSelection={
-            currentDAO.memberObjs.findIndex(
+            data.findIndex(
               (item: any) =>
                 item.owner.toLocaleLowerCase() === address.toLocaleLowerCase(),
             ) != -1
