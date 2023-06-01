@@ -188,7 +188,7 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
                   <Avatar
                     className="member-avatar"
                     style={{ backgroundColor: '#000' }}
-                    icon={<UserOutlined rev={undefined} />}
+                    icon={<UserOutlined />}
                     key={index}
                   />
                 );
