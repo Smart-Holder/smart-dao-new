@@ -22,8 +22,8 @@ const App = ({ type }: { type?: string }) => {
   const [defaultVotePassRate, setDefaultVotePassRate] = useState(
     storageValues.defaultVotePassRate || 10,
   );
-  const [hours, setHours] = useState(storageValues.hours || 12);
-  const [min, setMin] = useState(12);
+  const [hours, setHours] = useState(storageValues.hours || 168);
+  const [min, setMin] = useState(48);
 
   // useEffect(() => {
   //   getLifespan()

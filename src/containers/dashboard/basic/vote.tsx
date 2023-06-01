@@ -75,7 +75,7 @@ const App = () => {
             value={value}
             label={formatMessage({ id: 'basic.vote.period' })}
             unit="h"
-            min={min}
+            min={48}
             max={720}
             readOnly
             // onAfterChange={onTaxChange2}
