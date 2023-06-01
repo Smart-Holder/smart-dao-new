@@ -417,6 +417,7 @@
   "financial.income.type": "収入タイプ",
   "financial.income.amount": "収入金額",
   "financial.income.date": "日付",
+  "financial.income.allocation.tips": "分配可能な収入がない",
 
   "member.nftp.total": "すべてのNFTP",
   "member.nftp.list": "NFTPリスト",

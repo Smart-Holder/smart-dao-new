@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { Table, Button, Form, message, Image } from 'antd';
+import { Table, Button, Form, message, Image, Tooltip } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
@@ -107,6 +107,8 @@ const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [amount, setAmount] = useState<Amount>();
+  const [amountList, setAmountList] = useState<any>();
+  const [balanceList, setBalanceList] = useState<any>();
 
   const nftpModal: any = useRef(null);
 
@@ -118,7 +120,14 @@ const App = () => {
       params: { chain: chainId, host: currentDAO.host },
     });
 
+    let balances = res.map((item: any) => {
+      return {
+        value: fromToken(item?.value || 0) + ' ' + item.symbol,
+        symbol: item.symbol,
+      };
+    });
     setBalance(res[0]);
+    setBalanceList(balances);
   };
 
   useEffect(() => {
@@ -138,7 +147,16 @@ const App = () => {
       //   (item: Amount) => item.balance.symbol === symbol,
       // );
       // setAmount(ledgerItem);
+
+      let amounts = res.map((item: any) => {
+        return {
+          value: fromToken(item?.income || 0) + ' ' + item.balance.symbol,
+          symbol: item.balance.symbol,
+        };
+      });
+
       setAmount(res[0]);
+      setAmountList(amounts);
     }
   };
 
@@ -330,16 +348,18 @@ const App = () => {
           data={[
             {
               label: formatMessage({ id: 'financial.income.total' }),
-              value: `${fromToken(amount?.amount)} ${
-                amount?.balance.symbol || ''
-              }`,
+              // value: `${fromToken(amount?.amount)} ${
+              //   amount?.balance.symbol || ''
+              // }`,
+              value: amountList,
             },
             {
               label: formatMessage({ id: 'financial.income.balance' }),
               // value: fromToken(balance || 0) + ' ' + getUnit(),
-              value: `${fromToken(balance?.value || 0)} ${
-                balance?.symbol || ''
-              }`,
+              // value: `${fromToken(balance?.value || 0)} ${
+              //   balance?.symbol || ''
+              // }`,
+              value: balanceList,
             },
           ]}
         />
@@ -393,15 +413,27 @@ const App = () => {
               <RangePicker format="YYYY-MM-DD" />
             </Form.Item>
           </Form>
-          {currentMember.tokenId && (
-            <Button
-              className="button-filter"
-              type="primary"
-              onClick={allocation}
-            >
-              {formatMessage({ id: 'financial.income.allocation' })}
-            </Button>
-          )}
+          {currentMember.tokenId &&
+            (fromToken(balance?.value || 0) <= 0 ? (
+              <Tooltip
+                title={formatMessage({
+                  id: 'financial.income.allocation.tips',
+                })}
+                color="#666"
+              >
+                <Button type="primary" onClick={allocation} disabled>
+                  {formatMessage({ id: 'financial.income.allocation' })}
+                </Button>
+              </Tooltip>
+            ) : (
+              <Button
+                className="button-filter"
+                type="primary"
+                onClick={allocation}
+              >
+                {formatMessage({ id: 'financial.income.allocation' })}
+              </Button>
+            ))}
         </div>
         <Table
           columns={columns}

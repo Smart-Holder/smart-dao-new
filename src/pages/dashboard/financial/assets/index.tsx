@@ -42,6 +42,7 @@ const App: NextPageWithLayout = () => {
     orderBy: 'blockNumber desc',
   });
   const [values, setValues] = useState(initialValues);
+  const [ledgerSummarys, setLedgerSummarys] = useState([]);
 
   const pageSize = 20;
   const [page, setPage] = useState(1);
@@ -65,6 +66,13 @@ const App: NextPageWithLayout = () => {
       });
 
       if (res) {
+        let ledgerSummarysData = res.ledgerSummarys.map((item: any) => {
+          return {
+            value: fromToken(item.value || 0) + ' ' + item.balance.symbol,
+            symbol: item.balance.symbol,
+          };
+        });
+        setLedgerSummarys(ledgerSummarysData);
         setSummary(res);
       }
     };
@@ -217,14 +225,16 @@ const App: NextPageWithLayout = () => {
           data={[
             {
               label: formatMessage({ id: 'financial.asset.total.trading' }),
-              value: `${fromToken(
-                summary?.assetOrderAmountTotal || 0,
-              )} ${getUnit()}`,
+              // value: `${fromToken(
+              //   summary?.assetOrderAmountTotal || 0,
+              // )} ${getUnit()}`,
+              value: ledgerSummarys,
               onClick: onCountClick,
             },
             {
               label: formatMessage({ id: 'financial.asset.royalties' }),
-              value: '3%',
+              // value: '3%',
+              value: currentDAO.assetIssuanceTax / 100 + '%',
             },
             {
               label: formatMessage({ id: 'financial.asset.total' }),

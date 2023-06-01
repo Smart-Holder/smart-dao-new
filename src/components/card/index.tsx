@@ -6,7 +6,7 @@ const { Text } = Typography;
 
 export type CardDataProps = {
   image?: string;
-  value: string | number;
+  value: string | number | any[];
   label: string;
   ratio?: string;
 
@@ -25,7 +25,6 @@ const Card = ({
   size?: string;
 }) => {
   const { formatMessage } = useIntl();
-
   return (
     <div
       className={size === 'small' ? 'cards cards-small' : 'cards'}
@@ -39,17 +38,29 @@ const Card = ({
               <Text ellipsis={true}>
                 <span className="label">{item.label}</span>
               </Text>
-              {item.onClick ? (
+
+              {Array.isArray(item.value) ? (
+                item.value.map((k, i) => (
+                  <Text ellipsis={true} key={i}>
+                    <span
+                      className="value value-hover"
+                      onClick={item.onClick ? item.onClick : undefined}
+                    >
+                      {k.value}
+                    </span>
+                  </Text>
+                ))
+              ) : (
                 <Text ellipsis={true}>
-                  <span className="value value-hover" onClick={item.onClick}>
+                  <span
+                    className="value value-hover"
+                    onClick={item.onClick ? item.onClick : undefined}
+                  >
                     {item.value}
                   </span>
                 </Text>
-              ) : (
-                <Text ellipsis={true}>
-                  <span className="value">{item.value}</span>
-                </Text>
               )}
+
               {item.ratio && (
                 <Text ellipsis={true}>
                   <span className="ratio">

@@ -214,7 +214,7 @@
   "my.order.type": "Type",
   "my.order.date": "Date",
 
-  "my.income.total": "Cumulative income",
+  "my.income.total": "Income",
   "my.income.total.publish": "Cumulative publishing revenue",
   "my.income.total.sale": "Accumulated sales revenue",
   "my.income.total.balance": "Cumulative DAO distribution income",
@@ -417,6 +417,7 @@
   "financial.income.type": "Income type",
   "financial.income.amount": "Amount of income",
   "financial.income.date": "Date",
+  "financial.income.allocation.tips": "No distributable income",
 
   "member.nftp.total": "All NFTP",
   "member.nftp.list": "NFTP list",
