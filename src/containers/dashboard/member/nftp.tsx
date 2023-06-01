@@ -331,7 +331,14 @@ const App = () => {
           columns={columns}
           dataSource={data}
           rowKey="tokenId"
-          rowSelection={rowSelection}
+          rowSelection={
+            currentDAO.memberObjs.findIndex(
+              (item: any) =>
+                item.owner.toLocaleLowerCase() === address.toLocaleLowerCase(),
+            ) != -1
+              ? rowSelection
+              : undefined
+          }
           pagination={{
             position: ['bottomCenter'],
             // current: page,

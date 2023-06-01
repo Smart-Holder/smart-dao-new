@@ -68,7 +68,8 @@ const App: NextPageWithLayout = () => {
       if (res) {
         let ledgerSummarysData = res.ledgerSummarys.map((item: any) => {
           return {
-            value: fromToken(item.value || 0) + ' ' + item.balance.symbol,
+            value:
+              fromToken(item.assetSaleAmount || 0) + ' ' + item.balance.symbol,
             symbol: item.balance.symbol,
           };
         });
@@ -228,7 +229,7 @@ const App: NextPageWithLayout = () => {
               // value: `${fromToken(
               //   summary?.assetOrderAmountTotal || 0,
               // )} ${getUnit()}`,
-              value: ledgerSummarys,
+              value: ledgerSummarys.length ? ledgerSummarys : 0,
               onClick: onCountClick,
             },
             {

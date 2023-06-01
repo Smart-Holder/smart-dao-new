@@ -351,7 +351,7 @@ const App = () => {
               // value: `${fromToken(amount?.amount)} ${
               //   amount?.balance.symbol || ''
               // }`,
-              value: amountList,
+              value: amountList.length ? amountList : 0,
             },
             {
               label: formatMessage({ id: 'financial.income.balance' }),
@@ -359,7 +359,7 @@ const App = () => {
               // value: `${fromToken(balance?.value || 0)} ${
               //   balance?.symbol || ''
               // }`,
-              value: balanceList,
+              value: balanceList.length ? balanceList : 0,
             },
           ]}
         />
