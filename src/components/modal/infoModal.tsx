@@ -35,7 +35,7 @@ const InfoModal = (props: any, ref: any) => {
 
   const { userInfo } = useAppSelector((store) => store.user);
 
-  const [image, setImage] = useState();
+  const [image, setImage] = useState<string>();
 
   useImperativeHandle(ref, () => ({
     show: () => {
@@ -77,7 +77,9 @@ const InfoModal = (props: any, ref: any) => {
   ) => {
     if (info.file.status === 'done') {
       console.log('upload', info.file);
-      setImage(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+      // setImage(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+      let qiniuImgUrl = getCookie('qiniuImgUrl');
+      setImage(qiniuImgUrl + info.file.response.key);
     }
   };
 

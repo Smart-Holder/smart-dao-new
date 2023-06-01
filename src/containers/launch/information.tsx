@@ -16,6 +16,7 @@ import { useAppSelector } from '@/store/hooks';
 import type { UploadChangeParam } from 'antd/es/upload';
 import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { request } from '@/api';
+import { getCookie } from '@/utils/cookie';
 
 // const validateMessages = {
 //   required: '${label} is required!',
@@ -187,7 +188,8 @@ const App: React.FC = () => {
     //   return;
     // }
     if (info.file.status === 'done') {
-      setLogo(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+      // setLogo(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+      setLogo(getCookie('qiniuImgUrl') + info.file.response.key);
       setImageMessage1('');
     }
   };
@@ -201,7 +203,8 @@ const App: React.FC = () => {
     // }
 
     if (info.file.status === 'done') {
-      setPoster(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+      // setPoster(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+      setPoster(getCookie('qiniuImgUrl') + info.file.response.key);
       setImageMessage2('');
     }
   };

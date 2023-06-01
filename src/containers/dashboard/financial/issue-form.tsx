@@ -32,6 +32,7 @@ import { useRouter } from 'next/router';
 import { validateETH } from '@/utils/validator';
 import { getEvenNumber, getUnit, toToken } from '@/utils';
 import { getMessage } from '@/utils/language';
+import { getCookie } from '@/utils/cookie';
 
 type IssueFormProps = {};
 
@@ -215,7 +216,8 @@ const IssueForm: FC<IssueFormProps> = () => {
     info: UploadChangeParam<UploadFile>,
   ) => {
     if (info.file.status === 'done') {
-      setImage(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+      // setImage(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+      setImage(getCookie('qiniuImgUrl') + info.file.response.key);
       setImageMessage('');
     }
   };
