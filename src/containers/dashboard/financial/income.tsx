@@ -107,8 +107,8 @@ const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [amount, setAmount] = useState<Amount>();
-  const [amountList, setAmountList] = useState<any>();
-  const [balanceList, setBalanceList] = useState<any>();
+  const [amountList, setAmountList] = useState<any>([]);
+  const [balanceList, setBalanceList] = useState<any>([]);
 
   const nftpModal: any = useRef(null);
 

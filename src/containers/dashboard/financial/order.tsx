@@ -130,7 +130,7 @@ const App = () => {
         chain: chainId,
         host: currentDAO.host,
         limit: [(page - 1) * pageSize, pageSize],
-        name: searchText,
+        // name: searchText,
         fromAddres_not: '0x0000000000000000000000000000000000000000',
         toAddress_not: '0x0000000000000000000000000000000000000000',
         ...values,
@@ -150,7 +150,7 @@ const App = () => {
       params: {
         chain: chainId,
         host: currentDAO.host,
-        name: searchText,
+        // name: searchText,
         fromAddres_not: '0x0000000000000000000000000000000000000000',
         toAddress_not: '0x0000000000000000000000000000000000000000',
         ...filterValues,
