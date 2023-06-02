@@ -43,6 +43,7 @@ const App: NextPageWithLayout = () => {
   });
   const [values, setValues] = useState(initialValues);
   const [ledgerSummarys, setLedgerSummarys] = useState([]);
+  const [assetTax, setAssetTax] = useState<any[]>([]);
 
   const pageSize = 20;
   const [page, setPage] = useState(1);
@@ -75,6 +76,28 @@ const App: NextPageWithLayout = () => {
         });
         setLedgerSummarys(ledgerSummarysData);
         setSummary(res);
+      }
+      if (currentDAO) {
+        let taxList = [
+          {
+            value:
+              formatMessage({ id: 'financial.asset.issuance.tax' }) +
+              ':' +
+              currentDAO.assetIssuanceTax / 100 +
+              '%',
+            symbol: '%',
+          },
+          {
+            value:
+              formatMessage({ id: 'financial.asset.circulation.tax' }) +
+              ':' +
+              currentDAO.assetCirculationTax / 100 +
+              '%',
+            symbol: '%',
+          },
+        ];
+
+        setAssetTax(taxList);
       }
     };
 
@@ -235,7 +258,7 @@ const App: NextPageWithLayout = () => {
             {
               label: formatMessage({ id: 'financial.asset.royalties' }),
               // value: '3%',
-              value: currentDAO.assetIssuanceTax / 100 + '%',
+              value: assetTax.length ? assetTax : 0,
             },
             {
               label: formatMessage({ id: 'financial.asset.total' }),

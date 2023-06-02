@@ -326,6 +326,8 @@
   "financial.asset.total.trading": "総取引量",
   "financial.asset.floorPrice": "フロア価格",
   "financial.asset.royalties": "ロイヤリティ",
+  "financial.asset.issuance.tax": "資産発行税",
+  "financial.asset.circulation.tax": "資産流通税",
   "financial.asset.total": "資産数",
   "financial.asset.owner": "保有者",
   "financial.asset.pending.rate": "未決注文率",

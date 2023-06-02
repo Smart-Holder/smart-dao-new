@@ -211,7 +211,7 @@ const App = () => {
               // value: `${fromToken(amount?.income)} ${
               //   amount?.balance.symbol || ''
               // }`,
-              value: amountList,
+              value: amountList.length ? amountList : 0,
             },
           ]}
         />

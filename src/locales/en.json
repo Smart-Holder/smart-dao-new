@@ -326,6 +326,8 @@
   "financial.asset.total.trading": "Total trading volume",
   "financial.asset.floorPrice": "Floor price",
   "financial.asset.royalties": "Royalties",
+  "financial.asset.issuance.tax": "Asset issuance tax",
+  "financial.asset.circulation.tax": "Asset circulation tax",
   "financial.asset.total": "Number of assets",
   "financial.asset.owner": "Owner",
   "financial.asset.pending.rate": "pending order rate",

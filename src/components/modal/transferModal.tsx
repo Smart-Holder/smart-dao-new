@@ -1,14 +1,23 @@
-import React, { useState, useImperativeHandle, forwardRef } from 'react';
+import React, {
+  useState,
+  useImperativeHandle,
+  forwardRef,
+  useEffect,
+} from 'react';
 import { useRouter } from 'next/router';
-import { Button, Input } from 'antd';
+import { Button, Input, message } from 'antd';
 import { Form } from 'antd';
 
 import { validateEthAddress } from '@/utils/validator';
+import { setDAOType, setCurrentMember } from '@/store/features/daoSlice';
+
+import { useAppDispatch } from '@/store/hooks';
 
 import Modal from '@/components/modal';
 
 import { transfer } from '@/api/member';
 import { useIntl } from 'react-intl';
+import { DAOType } from '@/config/enum';
 
 // const validateMessages = {
 //   required: '${label} is required!',
@@ -18,6 +27,7 @@ import { useIntl } from 'react-intl';
 // };
 
 const App = (props: any, ref: any) => {
+  const dispatch = useAppDispatch();
   const { formatMessage } = useIntl();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
@@ -42,10 +52,20 @@ const App = (props: any, ref: any) => {
       await transfer({ to: values.address });
       setLoading(false);
       handleCancel();
+
+      // 转移成功后 清理当前DAO成员的信息
+      message.success('Transfer successful.');
+      dispatch(setCurrentMember({ name: '' }));
+      dispatch(setDAOType(DAOType.Visit));
+      router.push('/dashboard/mine/home');
+
       Modal.success({
         title: 'Transfer successful.',
         onOk: () => {
-          router.push('/');
+          router.push('/dashboard/mine/home');
+        },
+        onCancel: () => {
+          router.push('/dashboard/mine/home');
         },
       });
     } catch (error) {
@@ -68,7 +88,7 @@ const App = (props: any, ref: any) => {
 
           <Form
             className="form"
-            name="info"
+            // name="info"
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
