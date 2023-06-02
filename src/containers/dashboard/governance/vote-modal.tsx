@@ -63,10 +63,10 @@ const VoteModal: FC<VoteModalProps> = (props) => {
         // isPermission(Permissions.Action_VotePool_Vote),
       ]);
 
-      // console.log('permission', data?.time, currentMember.time);
+      // 原逻辑 创建提案的时间 需 大于成员加入的时间 才可以投票
       const permission = data?.time > currentMember.time;
-
-      if (permission && res?.length === 0) {
+      // if (permission && res?.length === 0) {
+      if (res?.length === 0) {
         // 未投票
         setIsVote(false);
         setYourVote(0);
