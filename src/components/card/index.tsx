@@ -7,9 +7,10 @@ const { Text } = Typography;
 export type CardDataProps = {
   image?: string;
   value: string | number | any[];
-  label: string;
+  label?: string;
   ratio?: string;
-
+  style?: CSSProperties;
+  childStyle?: CSSProperties;
   onClick?: () => void;
 };
 
@@ -35,15 +36,18 @@ const Card = ({
         {data.map((item, index) => (
           <Col span={8} key={index}>
             <div className="item">
-              <Text ellipsis={true}>
-                <span className="label">{item.label}</span>
-              </Text>
+              {item.label && (
+                <Text ellipsis={true}>
+                  <span className="label">{item.label}</span>
+                </Text>
+              )}
 
               {Array.isArray(item.value) ? (
                 item.value.map((k, i) => (
-                  <Text ellipsis={true} key={i}>
+                  <Text ellipsis={true} key={i} style={item.style}>
                     <span
                       className="value value-hover"
+                      style={item.childStyle}
                       onClick={item.onClick ? item.onClick : undefined}
                     >
                       {k.value}
@@ -51,9 +55,10 @@ const Card = ({
                   </Text>
                 ))
               ) : (
-                <Text ellipsis={true}>
+                <Text ellipsis={true} style={item.style}>
                   <span
                     className="value value-hover"
+                    style={item.childStyle}
                     onClick={item.onClick ? item.onClick : undefined}
                   >
                     {item.value}

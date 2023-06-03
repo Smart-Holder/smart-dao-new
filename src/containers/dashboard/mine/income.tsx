@@ -95,7 +95,7 @@ const App = () => {
   const [data, setData] = useState([]);
 
   const [amount, setAmount] = useState<Amount>();
-  const [amountList, setAmountList] = useState<any>();
+  const [amountList, setAmountList] = useState<any>([]);
 
   const [balance, setBalance] = useState(0);
 

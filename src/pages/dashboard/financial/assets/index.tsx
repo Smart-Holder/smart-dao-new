@@ -82,7 +82,7 @@ const App: NextPageWithLayout = () => {
           {
             value:
               formatMessage({ id: 'financial.asset.issuance.tax' }) +
-              ':' +
+              ' : ' +
               currentDAO.assetIssuanceTax / 100 +
               '%',
             symbol: '%',
@@ -90,7 +90,7 @@ const App: NextPageWithLayout = () => {
           {
             value:
               formatMessage({ id: 'financial.asset.circulation.tax' }) +
-              ':' +
+              ' : ' +
               currentDAO.assetCirculationTax / 100 +
               '%',
             symbol: '%',
@@ -256,9 +256,10 @@ const App: NextPageWithLayout = () => {
               onClick: onCountClick,
             },
             {
-              label: formatMessage({ id: 'financial.asset.royalties' }),
+              // label: formatMessage({ id: 'financial.asset.royalties' }),
               // value: '3%',
               value: assetTax.length ? assetTax : 0,
+              childStyle: { marginTop: '0', fontSize: '18px' },
             },
             {
               label: formatMessage({ id: 'financial.asset.total' }),
