@@ -3,7 +3,7 @@ import { Image, Upload } from 'antd';
 import type { RcFile } from 'antd/es/upload/interface';
 import { useIntl } from 'react-intl';
 
-import { getCookie } from '@/utils/cookie';
+import { getCookie, setCookie } from '@/utils/cookie';
 import { validateImage } from '@/utils/image';
 
 import { request } from '@/api';
@@ -14,14 +14,34 @@ const App = (props: any) => {
   const { formatMessage } = useIntl();
 
   const [token, setToken] = useState();
+  const [qiniuImgUrl, setQiniuImgUrl] = useState<string>();
+  const [upLoadUrl, setUploadUrl] = useState<string>();
+
+  // useEffect(() => {
+  //   request({
+  //     name: 'utils',
+  //     method: 'qiniuToken',
+  //     params: null,
+  //   }).then((res) => {
+  //     setToken(res);
+  //   });
+  // }, []);
 
   useEffect(() => {
     request({
       name: 'utils',
-      method: 'qiniuToken',
+      method: 'qiniuConfig',
       params: null,
-    }).then((res) => {
-      setToken(res);
+    }).then((qiniu) => {
+      if (qiniu) {
+        setToken(qiniu.token);
+        setQiniuImgUrl(`${qiniu.prefix}/`);
+        setUploadUrl(`https://${qiniu.config.cdnUpHosts[0]}/`);
+
+        setCookie('qiniuToken', qiniu.token);
+        setCookie('qiniuUploadUrl', `https://${qiniu.config.cdnUpHosts[0]}/`);
+        setCookie('qiniuImgUrl', `${qiniu.prefix}/`);
+      }
     });
   }, []);
 
@@ -46,7 +66,8 @@ const App = (props: any) => {
     <div className="wrap">
       <Upload
         className={type === 'rectangle' ? 'upload-rectangle' : ''}
-        action={process.env.NEXT_PUBLIC_QINIU_UPLOAD_URL}
+        action={upLoadUrl}
+        // action={process.env.NEXT_PUBLIC_QINIU_UPLOAD_URL}
         // data={{ token: getCookie('qiniuToken') }}
         data={{ token }}
         showUploadList={false}

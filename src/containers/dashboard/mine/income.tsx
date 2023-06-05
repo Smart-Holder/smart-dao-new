@@ -105,6 +105,7 @@ const App = () => {
   const [data, setData] = useState<ledger[]>([]);
 
   const [amount, setAmount] = useState<Amount>();
+  const [amountList, setAmountList] = useState<any>([]);
 
   const [balance, setBalance] = useState(0);
 
@@ -259,6 +260,13 @@ const App = () => {
         // );
         // setAmount(ledgerItem);
         setAmount(res[0]);
+        let amounts = res.map((item: any) => {
+          return {
+            value: fromToken(item?.income || 0) + ' ' + item.balance.symbol,
+            symbol: item.balance.symbol,
+          };
+        });
+        setAmountList(amounts);
       }
     };
 
@@ -285,9 +293,10 @@ const App = () => {
           data={[
             {
               label: formatMessage({ id: 'my.income.total' }),
-              value: `${fromToken(amount?.amount)} ${
-                amount?.balance.symbol || ''
-              }`,
+              // value: `${fromToken(amount?.income)} ${
+              //   amount?.balance.symbol || ''
+              // }`,
+              value: amountList.length ? amountList : 0,
             },
           ]}
         />

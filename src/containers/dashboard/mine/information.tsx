@@ -19,6 +19,7 @@ import Upload from '@/components/form/upload';
 
 import { setMemberInfo } from '@/api/member';
 import Ellipsis from '@/components/typography/ellipsis';
+import { getCookie } from '@/utils/cookie';
 
 const App = () => {
   const [form] = Form.useForm();
@@ -85,7 +86,8 @@ const App = () => {
     info: UploadChangeParam<UploadFile>,
   ) => {
     if (info.file.status === 'done') {
-      setImage(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+      // setImage(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+      setImage(getCookie('qiniuImgUrl') + info.file.response.key);
       setImageMessage('');
       setIsEdit(true);
     }

@@ -32,6 +32,7 @@ import { useRouter } from 'next/router';
 import { validateETH } from '@/utils/validator';
 import { getEvenNumber, getUnit, toToken } from '@/utils';
 import { getMessage } from '@/utils/language';
+import { getCookie } from '@/utils/cookie';
 
 type IssueFormProps = {};
 
@@ -215,7 +216,8 @@ const IssueForm: FC<IssueFormProps> = () => {
     info: UploadChangeParam<UploadFile>,
   ) => {
     if (info.file.status === 'done') {
-      setImage(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+      // setImage(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+      setImage(getCookie('qiniuImgUrl') + info.file.response.key);
       setImageMessage('');
     }
   };
@@ -327,10 +329,10 @@ const IssueForm: FC<IssueFormProps> = () => {
                 <div className="attr-item">
                   <div className="attr-item-label">{attr.trait_type}</div>
                   <div className="attr-item-value">{attr.value}</div>
-                  <div className="attr-item-ratio">
+                  {/* <div className="attr-item-ratio">
                     {attr.ratio}%{' '}
                     {formatMessage({ id: 'financial.asset.issue.rate.extra' })}
-                  </div>
+                  </div> */}
                   <span
                     className="attr-item-close"
                     onClick={() => {
@@ -492,7 +494,6 @@ const IssueForm: FC<IssueFormProps> = () => {
           .attr-item {
             position: relative;
             width: 100%;
-            height: 160px;
             padding: 30px 24px;
             background: #ffffff;
             box-shadow: -7px 7px 29px 0px rgba(30, 30, 30, 0.05);

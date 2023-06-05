@@ -41,13 +41,15 @@ const App = (props: any) => {
       try {
         await initialize(address);
 
-        const [token, user] = await Promise.all([
-          sdk.utils.methods.qiniuToken(),
+        const [qiniu, user] = await Promise.all([
+          sdk.utils.methods.qiniuConfig(),
           sdk.user.methods.getUser(),
         ]);
 
-        if (token) {
-          setCookie('qiniuToken', token);
+        if (qiniu) {
+          setCookie('qiniuToken', qiniu.token);
+          setCookie('qiniuUploadUrl', `https://${qiniu.config.cdnUpHosts[0]}/`);
+          setCookie('qiniuImgUrl', `${qiniu.prefix}/`);
         }
 
         if (user && user.nickname) {

@@ -10,9 +10,9 @@
     "export": "next export"
   },
   "dependencies": {
-    "@ant-design/charts": "^1.4.2",
-    "@ant-design/icons": "^5.0.1",
     "@apollo/client": "^3.7.14",
+    "@ant-design/charts": "~1.4.2",
+    "@ant-design/icons": "~5.0.1",
     "@next/font": "13.1.6",
     "@reduxjs/toolkit": "^1.9.2",
     "@types/node": "18.11.18",
@@ -27,7 +27,7 @@
     "eslint": "8.33.0",
     "eslint-config-next": "13.1.6",
     "graphql": "^16.6.0",
-    "hcstore": "0.1.4",
+    "hcstore": "0.1.6",
     "lodash": "^4.17.21",
     "next": "13.1.6",
     "react": "18.2.0",

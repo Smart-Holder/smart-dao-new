@@ -16,6 +16,7 @@ import { formatToBbjExtend, formatToObj } from '@/utils/extend';
 
 import { request } from '@/api';
 import { setInformation } from '@/api/dao';
+import { getCookie } from '@/utils/cookie';
 
 import { useDao } from '@/api/graph/dao';
 
@@ -39,7 +40,7 @@ const App: React.FC = () => {
   const [isEdit, setIsEdit] = useState(false);
 
   const [logo, setLogo] = useState(currentDAO.image);
-  const [poster, setPoster] = useState();
+  const [poster, setPoster] = useState<string>();
 
   const { fetchMore, data: daoData } = useDao();
 
@@ -159,8 +160,10 @@ const App: React.FC = () => {
     info: UploadChangeParam<UploadFile>,
   ) => {
     if (info.file.status === 'done') {
-      const newLogo =
-        process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key;
+      // const newLogo =
+      //   process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key;
+
+      const newLogo = getCookie('qiniuImgUrl') + info.file.response.key;
 
       setLogo(newLogo);
       setIsEdit(true);
@@ -171,8 +174,10 @@ const App: React.FC = () => {
     info: UploadChangeParam<UploadFile>,
   ) => {
     if (info.file.status === 'done') {
-      const newPoster =
-        process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key;
+      // const newPoster =
+      //   process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key;
+
+      const newPoster = getCookie('qiniuImgUrl') + info.file.response.key;
       setPoster(newPoster);
       setIsEdit(true);
     }

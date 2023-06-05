@@ -47,6 +47,8 @@ const App: NextPageWithLayout = () => {
     orderBy: 'blockNumber desc',
   });
   const [values, setValues] = useState(initialValues);
+  const [ledgerSummarys, setLedgerSummarys] = useState([]);
+  const [assetTax, setAssetTax] = useState<any[]>([]);
 
   const pageSize = 20;
   const [page, setPage] = useState(1);
@@ -95,10 +97,40 @@ const App: NextPageWithLayout = () => {
   //       params: { chain: chainId, host: currentDAO.host },
   //     });
 
-  //     if (res) {
-  //       setSummary(res);
-  //     }
-  //   };
+  // if (res) {
+  //   let ledgerSummarysData = res.ledgerSummarys.map((item: any) => {
+  //     return {
+  //       value:
+  //         fromToken(item.assetSaleAmount || 0) + ' ' + item.balance.symbol,
+  //       symbol: item.balance.symbol,
+  //     };
+  //   });
+  //   setLedgerSummarys(ledgerSummarysData);
+  //   setSummary(res);
+  // }
+  // if (currentDAO) {
+  //   let taxList = [
+  //     {
+  //       value:
+  //         formatMessage({ id: 'financial.asset.issuance.tax' }) +
+  //         ' : ' +
+  //         currentDAO.assetIssuanceTax / 100 +
+  //         '%',
+  //       symbol: '%',
+  //     },
+  //     {
+  //       value:
+  //         formatMessage({ id: 'financial.asset.circulation.tax' }) +
+  //         ' : ' +
+  //         currentDAO.assetCirculationTax / 100 +
+  //         '%',
+  //       symbol: '%',
+  //     },
+  //   ];
+
+  //   setAssetTax(taxList);
+  // }
+  // };
 
   //   if (currentDAO.host) {
   //     getData();
@@ -330,20 +362,21 @@ const App: NextPageWithLayout = () => {
           data={[
             {
               label: formatMessage({ id: 'financial.asset.total.trading' }),
-              // value: `${fromToken(summary?.assetOrderAmountTotal || 0)} ETH`,
               // value: `${fromToken(
               //   summary?.assetOrderAmountTotal || 0,
               // )} ${getUnit()}`,
+              // value: ledgerSummarys.length ? ledgerSummarys : 0,
               value: `${
                 fromToken(assetData?.first?.orderAmountTotal) +
                 fromToken(assetData?.second?.orderAmountTotal)
               } ${getUnit()}`,
-
               onClick: onCountClick,
             },
             {
-              label: formatMessage({ id: 'financial.asset.royalties' }),
-              value: '3%',
+              // label: formatMessage({ id: 'financial.asset.royalties' }),
+              // value: '3%',
+              value: assetTax.length ? assetTax : 0,
+              childStyle: { marginTop: '0', fontSize: '18px' },
             },
             {
               label: formatMessage({ id: 'financial.asset.total' }),

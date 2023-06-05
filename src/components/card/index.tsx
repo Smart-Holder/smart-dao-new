@@ -6,10 +6,11 @@ const { Text } = Typography;
 
 export type CardDataProps = {
   image?: string;
-  value: string | number;
-  label: string;
+  value: string | number | any[];
+  label?: string;
   ratio?: string;
-
+  style?: CSSProperties;
+  childStyle?: CSSProperties;
   onClick?: () => void;
 };
 
@@ -25,7 +26,6 @@ const Card = ({
   size?: string;
 }) => {
   const { formatMessage } = useIntl();
-
   return (
     <div
       className={size === 'small' ? 'cards cards-small' : 'cards'}
@@ -36,20 +36,36 @@ const Card = ({
         {data.map((item, index) => (
           <Col span={8} key={index}>
             <div className="item">
-              <Text ellipsis={true}>
-                <span className="label">{item.label}</span>
-              </Text>
-              {item.onClick ? (
+              {item.label && (
                 <Text ellipsis={true}>
-                  <span className="value value-hover" onClick={item.onClick}>
+                  <span className="label">{item.label}</span>
+                </Text>
+              )}
+
+              {Array.isArray(item.value) ? (
+                item.value.map((k, i) => (
+                  <Text ellipsis={true} key={i} style={item.style}>
+                    <span
+                      className="value value-hover"
+                      style={item.childStyle}
+                      onClick={item.onClick ? item.onClick : undefined}
+                    >
+                      {k.value}
+                    </span>
+                  </Text>
+                ))
+              ) : (
+                <Text ellipsis={true} style={item.style}>
+                  <span
+                    className="value value-hover"
+                    style={item.childStyle}
+                    onClick={item.onClick ? item.onClick : undefined}
+                  >
                     {item.value}
                   </span>
                 </Text>
-              ) : (
-                <Text ellipsis={true}>
-                  <span className="value">{item.value}</span>
-                </Text>
               )}
+
               {item.ratio && (
                 <Text ellipsis={true}>
                   <span className="ratio">

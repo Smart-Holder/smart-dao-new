@@ -85,11 +85,12 @@ const Info = () => {
     info: UploadChangeParam<UploadFile>,
   ) => {
     if (info.file.status === 'done') {
-      console.log(
-        '----',
-        process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key,
-      );
-      setImage(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+      // console.log(
+      //   '----',
+      //   process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key,
+      // );
+      // setImage(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
+      setImage(getCookie('qiniuImgUrl') + info.file.response.key);
       setIsEdit(true);
     }
   };
