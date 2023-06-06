@@ -8,7 +8,7 @@ type assetPoolProps = {
   minimumPriceTotal: string;
 };
 type ledgerPoolsProps = {
-  assetIncomeTotal: string;
+  assetIncomeAmount: string;
 };
 
 type ResponseDataType = {

@@ -167,7 +167,6 @@ const App = () => {
     );
   }, [active, creatorDao?.daos, followDAOs, joinedDao.daos]);
 
-  console.log(list, 'list');
   return (
     <div className="dao-list-wrap">
       <Space size={28}>

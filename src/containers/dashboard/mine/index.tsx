@@ -257,7 +257,7 @@ const App = () => {
                       return (
                         <Avatar
                           style={{ backgroundColor: '#000', borderWidth: 3 }}
-                          icon={<UserOutlined rev={undefined} />}
+                          icon={<UserOutlined />}
                           key={index}
                         />
                       );
@@ -399,7 +399,7 @@ const App = () => {
                 <span className="num">
                   {/* {fromToken(DAOInfo.assetLedgerIncomeTotal)} ETH */}
                   {/* {fromToken(DAOInfo.assetLedgerIncomeTotal)} {getUnit()} */}
-                  {fromToken(assetData?.ledgerPools[0]?.assetIncomeTotal) +
+                  {fromToken(assetData?.ledgerPools[0]?.assetIncomeAmount) +
                     ' ' +
                     getUnit()}
                   {/* {fromToken(DAOInfo.ledgerIncomTotal)} {getUnit()} */}

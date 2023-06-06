@@ -254,7 +254,6 @@ const App: NextPageWithLayout = () => {
         };
       });
 
-      console.log(list, 'list');
       if (page === 1) {
         setData([...list]);
       } else {

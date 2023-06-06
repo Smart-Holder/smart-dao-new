@@ -137,6 +137,31 @@ const App: NextPageWithLayout = () => {
   //   }
   // }, []);
 
+  useEffect(() => {
+    if (currentDAO) {
+      let taxList = [
+        {
+          value:
+            formatMessage({ id: 'financial.asset.issuance.tax' }) +
+            ' : ' +
+            currentDAO.assetIssuanceTax / 100 +
+            '%',
+          symbol: '%',
+        },
+        {
+          value:
+            formatMessage({ id: 'financial.asset.circulation.tax' }) +
+            ' : ' +
+            currentDAO.assetCirculationTax / 100 +
+            '%',
+          symbol: '%',
+        },
+      ];
+
+      setAssetTax(taxList);
+    }
+  }, [currentDAO]);
+
   const getData = async () => {
     const { name_contains_nocase, orderBy, orderDirection } = variables;
     // const res = await request({

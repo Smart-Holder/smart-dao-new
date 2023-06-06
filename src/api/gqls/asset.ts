@@ -20,7 +20,7 @@ const GET_DAOS_ASSET_ACTION = gql`
       ...comparisonFields
     }
     ledgerPools(where: { host: $host }) {
-      assetIncomeTotal
+      assetIncomeAmount
     }
   }
 

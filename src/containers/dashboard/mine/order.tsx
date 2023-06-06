@@ -357,7 +357,7 @@ const App = () => {
     if (currentDAO.host) {
       setPage(1);
       getData(1);
-      getTotal();
+      // getTotal();
     }
   }, [
     searchText,
