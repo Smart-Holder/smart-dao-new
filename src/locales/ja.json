@@ -195,7 +195,7 @@
   "my.asset.shelves.label": "ラベル",
   "my.asset.shelves.name": "名称/ID",
   "my.asset.shelves.price": "価格",
-  "my.asset.shelves.listingPrice": "Listing price",
+  "my.asset.shelves.listingPrice": "Reserve price",
 
   "my.order.total": "オーダー数",
   "my.order.total.amount": "総取引額",
