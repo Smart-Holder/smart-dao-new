@@ -55,6 +55,7 @@ const columns = [
     title: 'Updated Copies',
     dataIndex: 'votes',
     key: 'votes',
+    render: (text: number, record: any) => text + record.formerVotes,
   },
 ];
 

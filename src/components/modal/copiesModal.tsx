@@ -24,6 +24,7 @@ const App = ({ callback = () => {} }: Props, ref: any) => {
 
   useImperativeHandle(ref, () => ({
     show: (items: Member[]) => {
+      console.log(items, 'items');
       setIsModalOpen(true);
       setData(items);
     },
@@ -48,13 +49,14 @@ const App = ({ callback = () => {} }: Props, ref: any) => {
 
     data.forEach((item) => {
       ids.push(item.tokenId);
-      votes.push(value);
+      let num = value - Number(item.votes);
+      votes.push(num);
       extraData.push({
         tokenId: item.tokenId,
         name: item.name,
         owner: item.owner,
         formerVotes: item.votes,
-        votes: value,
+        votes: num,
       });
     });
 

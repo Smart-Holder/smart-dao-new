@@ -124,7 +124,8 @@ const ConnectModal = (props: any, ref: any) => {
         <div className="footer">
           <Link
             style={{ color: '#818181' }}
-            href="https://smartdao.gitbook.io/smartdao/guides/shu-zi-qian-bao-cha-jian-zhun-bei"
+            // href="https://smartdao.gitbook.io/smartdao/guides/shu-zi-qian-bao-cha-jian-zhun-bei"
+            href="https://metamask.io/download/"
             target="_blank"
           >
             {formatMessage({ id: 'home.noAccount' })}

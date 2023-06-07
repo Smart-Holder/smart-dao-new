@@ -1,7 +1,7 @@
 import { Button, Statistic, Skeleton, Space, Image } from 'antd';
 import { FC, useEffect, useState } from 'react';
 import { statusMap, TypeKeyMap, Type, typesMap } from './vote-item';
-import { setVote } from '@/api/vote';
+import { setVote, voteClose } from '@/api/vote';
 import { request } from '@/api';
 import { useAppSelector } from '@/store/hooks';
 import Progress from '@/containers/dashboard/governance/progress';
@@ -40,6 +40,7 @@ const VoteModal: FC<VoteModalProps> = (props) => {
   const [loading, setLoading] = useState(true);
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
+  const [loading3, setLoading3] = useState(false);
   const [isVote, setIsVote] = useState(true);
   const [yourVote, setYourVote] = useState(0);
 
@@ -110,6 +111,20 @@ const VoteModal: FC<VoteModalProps> = (props) => {
       window.location.reload();
     } catch (error) {
       setLoading2(false);
+    }
+  };
+
+  const onImplement = async () => {
+    try {
+      setLoading3(true);
+      await voteClose({
+        vote: data.proposal_id,
+        tryExecute: true,
+      });
+      window.location.reload();
+      setLoading3(false);
+    } catch (error) {
+      setLoading3(false);
     }
   };
 
@@ -243,6 +258,20 @@ const VoteModal: FC<VoteModalProps> = (props) => {
                     {formatMessage({ id: 'governance.votes.against' })}
                   </Button>
                 </div>
+              )}
+
+            {currentMember.tokenId &&
+              Number(data.expiry) < dayjs().unix() &&
+              (data.agreeTotal / data.voteTotal) * 10000 > data.passRate && (
+                <Button
+                  style={{ marginLeft: 20 }}
+                  className="button-submit"
+                  type="primary"
+                  onClick={onImplement}
+                  loading={loading3}
+                >
+                  {formatMessage({ id: 'governance.votes.implement' })}
+                </Button>
               )}
           </div>
         </div>

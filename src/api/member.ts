@@ -158,12 +158,12 @@ export async function setPermissions(
   removeActions: number[],
   permissions: number[],
   PermissionMap: any,
+  owner?: string,
 ) {
   const { lang } = store.getState().common;
   const { web3, address } = store.getState().wallet;
   const { currentDAO } = store.getState().dao;
   const contract = getContract(web3, Member.abi, currentDAO.member);
-
   if (await isPermission(0, address)) {
     // match OnlyDAO
     await contractSend(contract, address, 'setPermissions', [
@@ -174,13 +174,12 @@ export async function setPermissions(
     message.success('Success');
   } else {
     const labels = permissions.map((v: number) => PermissionMap[v]);
-
     await createVote({
       name: getMessage('proposal.member.rights'),
       description: JSON.stringify({
         type: 'member',
         proposalType: proposalType.Member_Rights,
-        values: { address, permissions },
+        values: { address: owner, permissions },
       }),
       extra: [
         {

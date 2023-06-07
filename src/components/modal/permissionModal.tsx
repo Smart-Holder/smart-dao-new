@@ -100,6 +100,7 @@ const App = (props: any, ref: any) => {
         remove,
         values.permissions,
         PermissionMap,
+        currentMember.owner,
       );
       setLoading(false);
       handleCancel();
