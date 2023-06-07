@@ -17,6 +17,7 @@ const App = ({ callback = () => {} }: Props, ref: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // const [isEdit, setIsEdit] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
   const [initialValues, setInitialValues] = useState({ votes: 1 });
 
@@ -24,7 +25,6 @@ const App = ({ callback = () => {} }: Props, ref: any) => {
 
   useImperativeHandle(ref, () => ({
     show: (items: Member[]) => {
-      console.log(items, 'items');
       setIsModalOpen(true);
       setData(items);
     },
@@ -77,6 +77,15 @@ const App = ({ callback = () => {} }: Props, ref: any) => {
     console.log('validate Failed:', errorInfo);
   };
 
+  const btnValidator = (rule: any, value: any) => {
+    let voteList = data.find((item) => Number(item.votes) === Number(value));
+
+    if (voteList) {
+      return Promise.reject('same number of votes！');
+    }
+    return Promise.resolve();
+  };
+
   return (
     <>
       <Modal type="form" open={isModalOpen} onCancel={handleCancel}>
@@ -107,6 +116,9 @@ const App = ({ callback = () => {} }: Props, ref: any) => {
                 pattern: /^[1-9][0-9]*$/,
                 message: 'votes is not a valid number',
               },
+              {
+                validator: btnValidator,
+              },
             ]}
           >
             <Input />
@@ -118,7 +130,7 @@ const App = ({ callback = () => {} }: Props, ref: any) => {
               type="primary"
               htmlType="submit"
               loading={loading}
-              // disabled={!isEdit}
+              disabled={isDisabled}
             >
               {formatMessage({ id: 'my.information.change' })}
             </Button>
