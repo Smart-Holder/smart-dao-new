@@ -124,10 +124,12 @@ const Info = () => {
         <Input />
       </Form.Item>
 
-      <Form.Item label="Upload Rectangle Picture" valuePropName="fileList">
+      <Form.Item
+        label={formatMessage({ id: 'my.information.picture' })}
+        valuePropName="fileList"
+      >
         <Upload value={image} onChange={onImageChange} />
       </Form.Item>
-
       <Form.Item style={{ marginTop: 100 }}>
         <Button
           className="button-submit"

@@ -142,7 +142,7 @@
 
   "my.home.dao": "My DAO",
   "my.home.information": "Personal information",
-  "my.home.dao.create": "Creation",
+  "my.home.dao.create": "My creations",
   "my.home.dao.join": "Joined",
   "my.home.dao.follow": "Followed",
 
@@ -162,6 +162,7 @@
   "my.information.id": "User ID",
   "my.information.copies": "Copies",
   "my.information.nickname": "Nickname",
+  "my.information.picture": "Upload Rectangle Picture",
   "my.information.upload": "Upload",
   "my.information.save": "Save",
   "my.information.transfer": "Transfer",
@@ -467,6 +468,7 @@
   "proposal.detail.label.asset.publish": "Publish new assets",
   "proposal.detail.label.income.allocate": "Allocate Undistributed Income",
 
+  "footer.copyright": "CopyRight © 2023 SmartDAO. All Rights Reserved",
   "footer.txt1": "Build a platform to help web2 stars, sports and artists quickly enter the web3 world.",
   "footer.txt2": "Powered by Smartholder.",
   "footer.li1": "TERM & CONDITION",

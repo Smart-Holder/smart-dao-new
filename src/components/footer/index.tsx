@@ -66,7 +66,8 @@ const App = ({ hasSider }: { hasSider?: boolean }) => {
         </Row>
 
         <div className="bottom">
-          CopyRight © 2023 SmartDAO. All Rights Reserved
+          {formatMessage({ id: 'footer.copyright' })}
+          {/* CopyRight © 2023 SmartDAO. All Rights Reserved */}
         </div>
       </div>
 
