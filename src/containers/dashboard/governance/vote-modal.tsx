@@ -262,6 +262,7 @@ const VoteModal: FC<VoteModalProps> = (props) => {
 
             {currentMember.tokenId &&
               Number(data.expiry) < dayjs().unix() &&
+              !data.isClose &&
               (data.agreeTotal / data.voteTotal) * 10000 > data.passRate && (
                 <Button
                   style={{ marginLeft: 20 }}
