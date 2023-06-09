@@ -271,7 +271,7 @@ const VoteModal: FC<VoteModalProps> = (props) => {
                   onClick={onImplement}
                   loading={loading3}
                 >
-                  {formatMessage({ id: 'governance.votes.implement' })}
+                  {formatMessage({ id: 'governance.votes.excute' })}
                 </Button>
               )}
           </div>

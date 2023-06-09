@@ -300,7 +300,7 @@
   "governance.votes.sponsor": "Sponsor",
   "governance.votes.support": "Support",
   "governance.votes.against": "Against",
-  "governance.votes.implement": "Implement",
+  "governance.votes.excute": "Excute",
   "governance.votes.warning": "Cannot be amended and revoked after voting",
   "governance.votes.number": "{value} votes",
   "governance.votes.think": "think again",

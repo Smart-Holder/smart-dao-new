@@ -299,7 +299,7 @@
   "governance.votes.sponsor": "発起人",
   "governance.votes.support": "支持",
   "governance.votes.against": "反対",
-  "governance.votes.implement": "執行",
+  "governance.votes.excute": "執行",
   "governance.votes.warning": "投票後変更や取り消しは出来ません",
   "governance.votes.number": "{value} 票",
   "governance.votes.think": "改めてご確認ください",
