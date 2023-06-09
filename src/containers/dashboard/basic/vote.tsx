@@ -43,7 +43,7 @@ const App = () => {
   const handleSubmit = () => {};
 
   const value = currentDAO.defaultVoteTime
-    ? Math.floor(currentDAO.defaultVoteTime / 3600)
+    ? Math.floor(currentDAO.defaultVoteTime / 3600) / 7
     : 0;
 
   if (!min) {
