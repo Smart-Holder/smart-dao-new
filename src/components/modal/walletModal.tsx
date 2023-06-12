@@ -48,6 +48,15 @@ const ConnectModal = (props: any, ref: any) => {
     //   return;
     // }
 
+    if (!window.ethereum) {
+      Modal.warning({
+        title: 'Please install MetaMask!',
+        onOk: () => {
+          window.open('https://metamask.io/download/');
+        },
+      });
+    }
+
     dispatch(connectWallet(types.MetaMask));
     handleCancel();
   };
@@ -61,10 +70,10 @@ const ConnectModal = (props: any, ref: any) => {
     <Modal open={isModalOpen} onCancel={handleCancel}>
       <div className="wallet">
         <div className="title">
-          <span>{formatMessage({ id: 'home.selectNetwork' })}</span>
+          {/* <span>{formatMessage({ id: 'home.selectNetwork' })}</span> */}
         </div>
 
-        <Space size={30} className="types">
+        {/* <Space size={30} className="types">
           <Button
             className={active === 'Ethereum' ? 'active' : ''}
             shape="round"
@@ -83,7 +92,7 @@ const ConnectModal = (props: any, ref: any) => {
           >
             Goerli
           </Button>
-        </Space>
+        </Space> */}
 
         <div className="title" style={{ marginTop: 64 }}>
           <span>{formatMessage({ id: 'home.selectWallet' })}</span>
@@ -115,7 +124,8 @@ const ConnectModal = (props: any, ref: any) => {
         <div className="footer">
           <Link
             style={{ color: '#818181' }}
-            href="https://smartdao.gitbook.io/smartdao/guides/shu-zi-qian-bao-cha-jian-zhun-bei"
+            // href="https://smartdao.gitbook.io/smartdao/guides/shu-zi-qian-bao-cha-jian-zhun-bei"
+            href="https://metamask.io/download/"
             target="_blank"
           >
             {formatMessage({ id: 'home.noAccount' })}

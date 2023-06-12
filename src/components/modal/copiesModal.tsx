@@ -17,6 +17,7 @@ const App = ({ callback = () => {} }: Props, ref: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // const [isEdit, setIsEdit] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
   const [initialValues, setInitialValues] = useState({ votes: 1 });
 
@@ -48,13 +49,14 @@ const App = ({ callback = () => {} }: Props, ref: any) => {
 
     data.forEach((item) => {
       ids.push(item.tokenId);
-      votes.push(value);
+      let num = value - Number(item.votes);
+      votes.push(num);
       extraData.push({
         tokenId: item.tokenId,
         name: item.name,
         owner: item.owner,
         formerVotes: item.votes,
-        votes: value,
+        votes: num,
       });
     });
 
@@ -73,6 +75,15 @@ const App = ({ callback = () => {} }: Props, ref: any) => {
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('validate Failed:', errorInfo);
+  };
+
+  const btnValidator = (rule: any, value: any) => {
+    let voteList = data.find((item) => Number(item.votes) === Number(value));
+
+    if (voteList) {
+      return Promise.reject('same number of votes！');
+    }
+    return Promise.resolve();
   };
 
   return (
@@ -105,6 +116,9 @@ const App = ({ callback = () => {} }: Props, ref: any) => {
                 pattern: /^[1-9][0-9]*$/,
                 message: 'votes is not a valid number',
               },
+              {
+                validator: btnValidator,
+              },
             ]}
           >
             <Input />
@@ -116,7 +130,7 @@ const App = ({ callback = () => {} }: Props, ref: any) => {
               type="primary"
               htmlType="submit"
               loading={loading}
-              // disabled={!isEdit}
+              disabled={isDisabled}
             >
               {formatMessage({ id: 'my.information.change' })}
             </Button>

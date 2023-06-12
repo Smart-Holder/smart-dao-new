@@ -19,7 +19,6 @@ const App = ({
   showDetail?: boolean;
 }) => {
   const { formatMessage } = useIntl();
-
   return (
     <>
       <Progress
@@ -43,8 +42,10 @@ const App = ({
               </span>
             )}
           </>
-        ) : (
+        ) : data.expiry != 0 ? (
           <Countdown className="countdown" value={data.expiry * 1000} />
+        ) : (
+          ''
         )}
         <span>
           {data.voteTotal - data.agreeTotal}{' '}

@@ -188,3 +188,21 @@ export function setVote({
 
   return contractSend(contract, address, 'vote', params);
 }
+
+export function voteClose({
+  vote,
+  tryExecute,
+}: {
+  vote: string;
+  tryExecute: boolean;
+}) {
+  const { web3, address } = store.getState().wallet;
+  const { currentDAO, currentMember } = store.getState().dao;
+  const contract = getContract(web3, Vote.abi, currentDAO.root);
+
+  const params = [vote, tryExecute];
+
+  console.log('voteClose params:', params);
+
+  return contractSend(contract, address, 'tryClose', params);
+}
