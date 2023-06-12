@@ -14,6 +14,9 @@ import InfoModal from '@/components/modal/infoModal';
 import WalletModal from '@/components/modal/walletModal';
 
 import NFT from '@/containers/dashboard/mine/nft';
+import { useDaosNfts } from '@/api/graph/nfts';
+import { GET_DAOS_NFTS_ACTION } from '@/api/gqls/nfts';
+import { AssetsResponseType } from '@/api/typings/nfts';
 
 dayjs.extend(customParseFormat);
 
@@ -28,44 +31,59 @@ const App = () => {
   const infoModal: any = useRef(null);
   const walletModal: any = useRef(null);
 
-  const pageSize = useRef(8);
+  const pageSize = useRef(9);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
-  const [data, setData] = useState<AssetExt[]>([]);
+  // const [data, setData] = useState<AssetExt[]>([]);
+  const [data, setData] = useState<AssetsResponseType[]>([]);
 
   const defaultChain = Number(process.env.NEXT_PUBLIC_DEFAULT_CHAIN);
+
+  const { items: nftDatas, fetchMore } = useDaosNfts({
+    first: 8,
+    skip: 0,
+    chainId,
+  });
 
   const getData = async () => {
     setLoading(true);
 
     try {
-      const t = await request({
-        name: 'utils',
-        method: 'getAssetTotalFrom',
-        params: {
-          chain: chainId || defaultChain,
-          state: 0,
-          selling_not: 0,
-        },
-      });
+      // const t = await request({
+      //   name: 'utils',
+      //   method: 'getAssetTotalFrom',
+      //   params: {
+      //     chain: chainId || defaultChain,
+      //     state: 0,
+      //     selling_not: 0,
+      //   },
+      // });
 
-      setTotal(t);
+      // setTotal(t);
 
-      let res = await request({
-        name: 'utils',
-        method: 'getAssetFrom',
-        params: {
-          chain: chainId || defaultChain,
-          state: 0,
-          selling_not: 0,
-          limit: [0, 8],
-          orderBy: 'blockNumber desc',
+      // let res = await request({
+      //   name: 'utils',
+      //   method: 'getAssetFrom',
+      //   params: {
+      //     chain: chainId || defaultChain,
+      //     state: 0,
+      //     selling_not: 0,
+      //     limit: [0, 8],
+      //     orderBy: 'blockNumber desc',
+      //   },
+      // });
+
+      await fetchMore({
+        query: GET_DAOS_NFTS_ACTION({ destroyed: false, listed: true }),
+        variables: {
+          first: pageSize.current,
+          skip: 0,
         },
       });
 
       // res = (res || []).filter((item: AssetExt) => item?.dao !== undefined);
       setLoading(false);
-      setData(res);
+      // setData(res);
     } catch (error) {
       setLoading(false);
     }
@@ -73,11 +91,15 @@ const App = () => {
 
   useEffect(() => {
     setData([]);
-    setTotal(0);
+    setTotal(8);
     getData();
   }, [chainId]);
 
-  const renderItem = (item: AssetExt) => {
+  useEffect(() => {
+    setData([...nftDatas]);
+  }, [nftDatas]);
+
+  const renderItem = (item: AssetsResponseType) => {
     if (!item) {
       return null;
     }
@@ -115,7 +137,7 @@ const App = () => {
         renderItem={renderItem}
       />
 
-      {data.length > 0 && pageSize.current < total && (
+      {data.length > 0 && data.length > total && (
         <div style={{ paddingTop: 40, textAlign: 'center' }}>
           <Button className="button-view-all" onClick={getAll}>
             {formatMessage({ id: 'viewAllNfts' })}

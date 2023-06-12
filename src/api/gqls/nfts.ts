@@ -6,14 +6,13 @@ const GET_DAOS_NFTS_ACTION = (opt: daosNftsGqlProps) => {
   let optionsStr = JsonToGqlStr(opt);
   return gql`
     query GetNfts(
-      $host: String!
       $first: Int! = 6
       $skip: Int! = 0
       $orderBy: String = blockNumber
       $orderDirection: String = desc
     ) {
       assets(
-        where: { host: $host,  ${optionsStr} }
+        where: { ${optionsStr} }
         first: $first
         orderBy: $orderBy
         orderDirection: $orderDirection

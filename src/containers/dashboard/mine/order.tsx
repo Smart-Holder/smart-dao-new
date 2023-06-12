@@ -32,6 +32,9 @@ import {
   LayoutNftListProps,
   listDataType,
 } from '@/api/typings/nfts';
+import { useAssetsStatistic } from '@/api/graph/statistic';
+import { GET_DAOS_ASSET_STATISTIC_ACTION } from '@/api/gqls/statistic';
+
 import Ellipsis from '@/components/typography/ellipsis';
 
 dayjs.extend(customParseFormat);
@@ -174,6 +177,12 @@ const App = () => {
     first: pageSize,
     skip: 0,
     host: currentDAO.host.toLocaleLowerCase(),
+  });
+
+  const { data: statisticData } = useAssetsStatistic({
+    first: 1,
+    host: currentDAO.host.toLocaleLowerCase(),
+    owner: address.toLocaleLowerCase(),
   });
 
   const showModal = () => {
@@ -340,8 +349,6 @@ const App = () => {
         }),
       ]);
 
-      // console.log('amount', res1, res2);
-
       if (res1 || res2) {
         setAmount({
           total: Number(res1?.total || 0) + Number(res2?.total || 0),
@@ -350,7 +357,7 @@ const App = () => {
       }
     };
 
-    getAmount();
+    // getAmount();
   }, [address, chainId, currentDAO.host]);
 
   useEffect(() => {
@@ -385,13 +392,16 @@ const App = () => {
               label: formatMessage({
                 id: 'my.order.total',
               }),
-              value: amount.total,
+              value: statisticData?.assetOrderTotal || 0,
+              // value: amount.total,
             },
             {
               label: formatMessage({
                 id: 'my.order.amount',
               }),
-              value: amount.amount + ' ' + getUnit(),
+              // value: amount.amount + ' ' + getUnit(),
+              value:
+                fromToken(statisticData?.assetOrderAmount || 0) + getUnit(),
             },
           ]}
         />

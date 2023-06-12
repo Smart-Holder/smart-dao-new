@@ -22,7 +22,7 @@ type ResponseDataType = {
   assets?: AssetsResponseType[];
 };
 type queryRecord = {
-  host: string;
+  host?: string;
   first: number;
   skip: number;
   chainId: number;
@@ -30,11 +30,13 @@ type queryRecord = {
   orderBy?: string;
   orderDirection?: string;
   destroyed?: boolean;
+  listed?: boolean;
 };
 
 type daosNftsGqlProps = {
   name_contains_nocase?: string;
   destroyed?: boolean;
+  listed?: boolean;
   owner_?: {
     id: string;
   };
@@ -42,6 +44,7 @@ type daosNftsGqlProps = {
     id?: string;
     id_not?: string;
   };
+  host?: string;
 };
 
 /**

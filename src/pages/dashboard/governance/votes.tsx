@@ -10,7 +10,7 @@ import Footer from '@/components/footer';
 import { ReactElement, useMemo } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
 import Title from '@/containers/dashboard/header/title';
-
+import { tokenIdFormat } from '@/utils';
 import { useIntl } from 'react-intl';
 
 import VoteItem, {
@@ -248,7 +248,7 @@ const App: NextPageWithLayout = () => {
     if (voteData?.proposals) {
       let list = [...voteData?.proposals].map((item) => {
         return {
-          ...resData[item.proposal_id],
+          ...resData[tokenIdFormat(item.proposal_id)],
           ...item,
           modify: dayjs.unix(Number(item.modify)),
         };

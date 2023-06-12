@@ -33,6 +33,7 @@ import { assetPoolProps } from '@/api/typings/dao';
 import { useLayoutNftList } from '@/api/graph/nfts';
 import { GET_DAOS_NFT_LIST } from '@/api/gqls/nfts';
 import { listDataType } from '@/api/typings/nfts';
+import { useAssetsStatistic } from '@/api/graph/statistic';
 
 dayjs.extend(customParseFormat);
 
@@ -171,6 +172,11 @@ const App = () => {
   } = useLayoutNftList({
     first: pageSize,
     skip: 0,
+    host: currentDAO.host.toLocaleLowerCase(),
+  });
+
+  const { data: statisticData } = useAssetsStatistic({
+    first: 1,
     host: currentDAO.host.toLocaleLowerCase(),
   });
 

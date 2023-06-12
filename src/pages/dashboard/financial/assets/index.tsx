@@ -182,9 +182,9 @@ const App: NextPageWithLayout = () => {
       query: GET_DAOS_NFTS_ACTION({
         destroyed: false,
         name_contains_nocase,
+        host: currentDAO.host.toLocaleLowerCase(),
       }),
       variables: {
-        host: currentDAO.host.toLocaleLowerCase(),
         first: pageSize,
         skip: data.length || 0,
         chainId,
@@ -225,9 +225,9 @@ const App: NextPageWithLayout = () => {
       query: GET_DAOS_NFTS_ACTION({
         destroyed: false,
         name_contains_nocase,
+        host: currentDAO.host.toLocaleLowerCase(),
       }),
       variables: {
-        host: currentDAO.host.toLocaleLowerCase(),
         first: pageSize,
         skip: 0,
         chainId,
@@ -300,6 +300,7 @@ const App: NextPageWithLayout = () => {
       // getTotal();
     }
   }, [variables, chainId, address, currentDAO.host]);
+  console.log(AssetNftDatas, 'AssetNftDatas');
 
   useEffect(() => {
     if (AssetNftDatas) {

@@ -37,9 +37,9 @@ const App = () => {
     fetchMore({
       query: GET_DAOS_NFTS_ACTION({
         destroyed: false,
+        host: currentDAO.host,
       }),
       variables: {
-        host: currentDAO.host,
         first: 6,
         skip: pageStart,
         chainId,
@@ -77,9 +77,9 @@ const App = () => {
     await fetchMore({
       query: GET_DAOS_NFTS_ACTION({
         destroyed: false,
+        host: currentDAO.host,
       }),
       variables: {
-        host: currentDAO.host,
         first: 6,
         skip: 0,
         chainId,

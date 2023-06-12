@@ -16,15 +16,15 @@ import { useAppSelector } from '@/store/hooks';
 import { getCookie } from '@/utils/cookie';
 import { request } from '@/api';
 import { formatDayjsValues } from '@/utils';
-import { assetPoolProps } from '@/api/typings/dao';
-import { useDaosNfts, useLayoutNftList } from '@/api/graph/nfts';
+// import { assetPoolProps } from '@/api/typings/dao';
+import { useDaosNfts } from '@/api/graph/nfts';
 import {
   AssetsResponseType,
   daosNftsGqlProps,
   queryRecord,
 } from '@/api/typings/nfts';
 import { GET_DAOS_NFTS_ACTION } from '@/api/gqls/nfts';
-import { Address } from 'cluster';
+import { useAssetsStatistic } from '@/api/graph/statistic';
 
 type ItemProperty = {
   trait_type: string;
@@ -60,13 +60,13 @@ const App: NextPageWithLayout = () => {
   });
 
   const [queryParams, setQueryParams] = useState<daosNftsGqlProps>({
+    host: currentDAO.host.toLocaleLowerCase(),
     owner_: {
       id: address,
     },
   });
 
   const [variablesParmas, setVariablesParams] = useState<queryRecord>({
-    host: currentDAO.host.toLocaleLowerCase(),
     first: pageSize,
     skip: pageStart,
     chainId,
@@ -79,6 +79,12 @@ const App: NextPageWithLayout = () => {
     chainId,
     first: pageSize,
     skip: pageStart,
+  });
+
+  const { data: statisticData } = useAssetsStatistic({
+    first: 1,
+    host: currentDAO.host.toLocaleLowerCase(),
+    owner: address.toLocaleLowerCase(),
   });
 
   const getDataParams = useCallback(() => {
@@ -227,11 +233,11 @@ const App: NextPageWithLayout = () => {
   // }, [getDataParams]);
 
   const resetData = async () => {
-    const t = await request({
-      name: 'utils',
-      method: 'getAssetTotalFrom',
-      params: getDataParams(),
-    });
+    // const t = await request({
+    //   name: 'utils',
+    //   method: 'getAssetTotalFrom',
+    //   params: getDataParams(),
+    // });
 
     // const res = await request({
     //   name: 'utils',
@@ -253,7 +259,7 @@ const App: NextPageWithLayout = () => {
 
     // setPageStart(6);
     // setData(res);
-    setTotal(t);
+    // setTotal(t);
     setInit(true);
   };
 
@@ -271,7 +277,7 @@ const App: NextPageWithLayout = () => {
   useEffect(() => {
     if (currentDAO.host) {
       setData([]);
-      setTotal(0);
+      // setTotal(0);
       setPage(1);
       setPageStart(0);
       resetData();
@@ -290,6 +296,10 @@ const App: NextPageWithLayout = () => {
       }
     }
   }, [nftList]);
+
+  useEffect(() => {
+    setTotal(Number(statisticData?.assetTotal) || 0);
+  }, [statisticData]);
 
   const goShelves = () => {
     router.push('/dashboard/mine/assets/shelves');

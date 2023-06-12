@@ -17,7 +17,7 @@ import {
 import { tokenIdFormat } from '@/utils';
 
 const useDaosNfts = ({
-  host = '',
+  host,
   first = 6,
   skip = 0,
   chainId,
@@ -25,13 +25,13 @@ const useDaosNfts = ({
   name_contains_nocase,
   orderBy = 'blockNumber',
   orderDirection = 'desc',
+  listed,
 }: queryRecord) => {
   const [items, setItems] = useState<AssetsResponseType[]>([]);
   const [fetchMore, { data, loading, error }] = useLazyQuery<ResponseDataType>(
-    GET_DAOS_NFTS_ACTION({ name_contains_nocase, destroyed }),
+    GET_DAOS_NFTS_ACTION({ name_contains_nocase, destroyed, host, listed }),
     {
       variables: {
-        host,
         first,
         skip,
         orderBy,
