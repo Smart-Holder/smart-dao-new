@@ -47,7 +47,6 @@ const App = ({ callback = () => {} }: Props, ref: any) => {
 
   useImperativeHandle(ref, () => ({
     show: (item: Member) => {
-      console.log(item, 'itemitem');
       setIsModalOpen(true);
       setData(item);
       setInitialValues({ permissions: item.permissions });

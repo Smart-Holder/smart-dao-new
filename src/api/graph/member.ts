@@ -1,26 +1,20 @@
 import { useQuery, useLazyQuery } from '@apollo/client';
-import { VOTE_QUERY } from '@/api/gqls/votes';
-import { voteQueryType, voteQueryResponse } from '@/api/typings/votes';
+import { MEMBERS_QUERY } from '@/api/gqls/member';
+import { QueryMembersType, QueryMembersResponse } from '@/api/typings/member';
 import { useMemo } from 'react';
 import dayjs from 'dayjs';
+import { tokenIdFormat } from '@/utils';
+import Web3 from 'web3';
 
 const useMember = ({
   first = 6,
-  orderBy = 'number',
+  orderBy = 'id',
   orderDirection = 'desc',
   skip = 0,
   host = '',
-  name_contains_nocase,
-  target_not,
-  status,
-}: voteQueryType) => {
-  const [fetchMore, { data, loading, error }] = useLazyQuery<voteQueryResponse>(
-    VOTE_QUERY({
-      name_contains_nocase,
-      status,
-      target_not,
-    }),
-    {
+}: QueryMembersType) => {
+  const [fetchMore, { data, loading, error }] =
+    useLazyQuery<QueryMembersResponse>(MEMBERS_QUERY(), {
       variables: {
         first,
         skip,
@@ -29,24 +23,22 @@ const useMember = ({
         host,
       },
       fetchPolicy: 'no-cache',
-    },
-  );
+    });
 
   const dataSource = useMemo(() => {
-    return {
-      ...data,
-      proposals: data?.proposals.map((item) => {
-        let index_ = item.proposal_id.indexOf('-') + 1;
+    if (data?.members) {
+      return [...data?.members].map((item) => {
         return {
           ...item,
-          time: Number(item.time) * 1000,
-          proposal_id:
-            index_ !== 0
-              ? item.proposal_id.slice(index_, item.proposal_id.length)
-              : item.proposal_id,
+          tokenId: tokenIdFormat(item.tokenId),
+          owner: item.owner?.id.toLocaleLowerCase(),
+          permissions: item.permissions.map((item) =>
+            Number(Web3.utils.toBN(item).toString()),
+          ),
+          count: item.memberPool?.count || 0,
         };
-      }),
-    };
+      });
+    }
   }, [data]);
 
   return {

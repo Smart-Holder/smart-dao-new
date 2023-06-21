@@ -1,8 +1,9 @@
 import { useEffect, useState, useRef } from 'react';
-import { Table, Button, Form, Image, message } from 'antd';
+import { Table, Button, Form, Image, message, Row, Col } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import dynamic from 'next/dynamic';
+import web3 from 'web3';
 
 import NftpModal from '@/components/modal/nftpModal';
 import Select from '@/components/form/filter/select';
@@ -22,6 +23,10 @@ import { useIntl, FormattedMessage } from 'react-intl';
 import type { PaginationProps } from 'antd';
 import Card from '@/components/card';
 import Ellipsis from '@/components/typography/ellipsis';
+import { useMember } from '@/api/graph/member';
+import { MemberResponseData } from '@/api/typings/member';
+import { GqlProps } from '@/api/typings/member';
+import { MEMBERS_QUERY } from '@/api/gqls/member';
 
 const PieDonut = dynamic(() => import('@/components/charts/pieDonut'), {
   ssr: false,
@@ -37,14 +42,26 @@ const App = () => {
 
   const pageSize = 10;
   const [values, setValues] = useState({});
+  const [queryParams, setQueryParams] = useState<GqlProps>({});
+
+  const [memberVariables, setMemberVariables] = useState<{
+    orderBy: string;
+    orderDirection: 'desc' | 'asc';
+  }>({
+    orderBy: 'votes',
+    orderDirection: 'desc',
+  });
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [data, setData] = useState<Member[]>([]);
+  // const [data, setData] = useState<Member[]>([]);
+  const [data, setData] = useState<MemberResponseData[]>([]);
+
   // const [totalVotes, setTotalVotes] = useState(0);
-  const [pieData, setPieData] = useState([]);
+  const [pieData, setPieData] = useState<any[]>([]);
 
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-  const [selectedRows, setSelectedRows] = useState<Member[]>([]);
+  // const [selectedRows, setSelectedRows] = useState<Member[]>([]);
+  const [selectedRows, setSelectedRows] = useState<MemberResponseData[]>([]);
 
   const nftpModal: any = useRef(null);
   const permissionModal: any = useRef(null);
@@ -78,7 +95,7 @@ const App = () => {
       title: formatMessage({ id: 'member.nftp.date' }),
       dataIndex: 'time',
       key: 'time',
-      render: (text: string) => dayjs(text).format('MM/DD/YYYY'),
+      render: (text: string) => dayjs.unix(Number(text)).format('MM/DD/YYYY'),
     },
   ];
 
@@ -86,49 +103,97 @@ const App = () => {
     nftpModal.current.show();
   };
 
-  // const getData = async (page = 1) => {
-  //   const res = await request({
-  //     name: 'utils',
-  //     method: 'getMembersFrom',
-  //     params: {
-  //       chain: chainId,
-  //       host: currentDAO.host,
-  //       limit: [(page - 1) * pageSize, pageSize],
-  //       ...values,
-  //     },
-  //   });
+  const getData = async (page = 1) => {
+    // const res = await request({
+    //   name: 'utils',
+    //   method: 'getMembersFrom',
+    //   params: {
+    //     chain: chainId,
+    //     host: currentDAO.host,
+    //     limit: [(page - 1) * pageSize, pageSize],
+    //     ...values,
+    //   },
+    // });
 
-  //   setData(res);
-  // };
+    // setData(res);
+
+    await fetchMore({
+      query: MEMBERS_QUERY({
+        ...queryParams,
+      }),
+      variables: {
+        host: currentDAO.host,
+        first: pageSize,
+        skip: page === 1 ? 0 : page - 1,
+        ...memberVariables,
+      },
+    });
+  };
+
+  const { data: memberData, fetchMore } = useMember({
+    host: currentDAO.host,
+    first: pageSize,
+    skip: 0,
+  });
+
+  useEffect(() => {
+    if (memberData) {
+      const pieData = memberData.map((item: any, index) => {
+        return {
+          id: index + '',
+          name: item.name,
+          value: Number(item.votes || 0),
+        };
+      });
+
+      // setTotalVotes(totalVotes);
+      setTotal(memberData.length && memberData[0].count);
+      setData(memberData as []);
+      setPieData(pieData);
+    }
+  }, [memberData]);
 
   const getTotal = async () => {
     const filterValues: any = { ...values };
     delete filterValues.time;
 
-    const total = await request({
-      name: 'utils',
-      method: 'getMembersTotalFrom',
-      params: {
-        chain: chainId,
+    // const total = await request({
+    //   name: 'utils',
+    //   method: 'getMembersTotalFrom',
+    //   params: {
+    //     chain: chainId,
+    //     host: currentDAO.host,
+    //     ...filterValues,
+    //   },
+    // });
+
+    // setTotal(total);
+
+    // const res = await request({
+    //   name: 'utils',
+    //   method: 'getMembersFrom',
+    //   params: {
+    //     chain: chainId,
+    //     host: currentDAO.host,
+    //     limit: [0, Math.min(total, 10000)],
+    //     ...values,
+    //   },
+    // });
+
+    // 缺少时间 加入DAO的时间
+    await fetchMore({
+      query: MEMBERS_QUERY({
+        ...queryParams,
+      }),
+      variables: {
         host: currentDAO.host,
-        ...filterValues,
+        first: pageSize,
+        skip: 0,
+        ...memberVariables,
       },
     });
 
-    setTotal(total);
-
-    const res = await request({
-      name: 'utils',
-      method: 'getMembersFrom',
-      params: {
-        chain: chainId,
-        host: currentDAO.host,
-        limit: [0, Math.min(total, 10000)],
-        ...values,
-      },
-    });
-
-    const data = res || [];
+    // const data = res || [];
     // let totalVotes = 0;
 
     // data.forEach((item: any) => {
@@ -137,31 +202,76 @@ const App = () => {
 
     // const per = 1 / totalVotes;
 
-    const pieData = data.map((item: any) => {
-      return {
-        id: item.id + '',
-        name: item.name,
-        value: item.votes,
-        // percent: Number((per * item.votes * 100).toFixed(2)),
-      };
-    });
+    // const pieData = data.map((item: any) => {
+    //   return {
+    //     id: item.id + '',
+    //     name: item.name,
+    //     value: item.votes,
+    //     // percent: Number((per * item.votes * 100).toFixed(2)),
+    //   };
+    // });
 
     // setTotalVotes(totalVotes);
-    setData(data);
-    setPieData(pieData);
+    // setData(data);
+    // setPieData(pieData);
   };
 
   const onValuesChange = (changedValues: any) => {
     let [[key, value]]: any = Object.entries(changedValues);
     const nextValues: any = { ...values };
+    let queryParamsCopy = { ...queryParams };
+    let variablesCopy = { ...memberVariables };
 
+    switch (key) {
+      case 'orderBy':
+        switch (value) {
+          case 'time desc':
+            variablesCopy.orderBy = 'blockTimestamp';
+            variablesCopy.orderDirection = 'desc';
+            break;
+          case 'time':
+            variablesCopy.orderBy = 'blockTimestamp';
+            variablesCopy.orderDirection = 'asc';
+            break;
+          case 'votes desc':
+            variablesCopy.orderBy = 'votes';
+            variablesCopy.orderDirection = 'desc';
+            break;
+          case 'votes':
+            variablesCopy.orderBy = 'votes';
+            variablesCopy.orderDirection = 'asc';
+            break;
+          default:
+            variablesCopy.orderBy = 'votes';
+            variablesCopy.orderDirection = 'desc';
+            break;
+        }
+        break;
+      case 'time':
+        if (value) {
+          queryParamsCopy.blockTimestamp_gte = dayjs(value[0])
+            .unix()
+            .toString();
+          queryParamsCopy.blockTimestamp_lte = dayjs(value[1])
+            .unix()
+            .toString();
+        } else {
+          delete queryParamsCopy.blockTimestamp_gte;
+          delete queryParamsCopy.blockTimestamp_lte;
+        }
+        break;
+      default:
+        break;
+    }
+
+    setQueryParams(queryParamsCopy);
+    setMemberVariables(variablesCopy);
     if (!value) {
       delete nextValues[key];
     } else {
       nextValues[key] = key === 'time' ? formatDayjsValues(value) : value;
     }
 
-    console.log('values', nextValues);
     setValues(nextValues);
   };
 
@@ -172,7 +282,7 @@ const App = () => {
 
   const onSelectChange = (
     newSelectedRowKeys: React.Key[],
-    selectedRows: Member[],
+    selectedRows: MemberResponseData[],
   ) => {
     console.log('selectedRowKeys changed: ', newSelectedRowKeys);
     console.log('selectedRows changed: ', selectedRows);
@@ -214,6 +324,11 @@ const App = () => {
     getTotal();
     setSelectedRowKeys([]);
   }, [values, chainId, address]);
+
+  const onPageChange: PaginationProps['onChange'] = (p) => {
+    setPage(p);
+    getData(p);
+  };
 
   return (
     <div>
@@ -334,20 +449,42 @@ const App = () => {
           rowSelection={
             data.findIndex(
               (item: any) =>
-                item.owner.toLocaleLowerCase() === address.toLocaleLowerCase(),
+                item.owner?.toLocaleLowerCase() === address.toLocaleLowerCase(),
             ) != -1
               ? rowSelection
               : undefined
           }
-          pagination={{
-            position: ['bottomCenter'],
-            // current: page,
-            pageSize: 10,
-            // total,
-            // onChange: onPageChange,
-          }}
+          pagination={false}
+          // pagination={{
+          // position: ['bottomCenter'],
+          // current: page,
+          // pageSize: 10,
+          // total,
+          // onChange: onPageChange,
+          // }}
           loading={loading}
         />
+
+        <Row justify="center" style={{ marginTop: 20 }}>
+          <Col span={3}>
+            <Button
+              disabled={page === 1}
+              onClick={() =>
+                onPageChange(page - 1 <= 1 ? 1 : page - 1, pageSize)
+              }
+            >
+              &lt; Previous
+            </Button>
+          </Col>
+          <Col span={2}>
+            <Button
+              disabled={!data.length}
+              onClick={() => onPageChange(page + 1, pageSize)}
+            >
+              Next &gt;
+            </Button>
+          </Col>
+        </Row>
       </div>
 
       <NftpModal ref={nftpModal} />

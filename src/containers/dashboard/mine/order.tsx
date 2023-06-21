@@ -401,7 +401,9 @@ const App = () => {
               }),
               // value: amount.amount + ' ' + getUnit(),
               value:
-                fromToken(statisticData?.assetOrderAmount || 0) + getUnit(),
+                fromToken(statisticData?.assetOrderAmount || 0) +
+                ' ' +
+                getUnit(),
             },
           ]}
         />

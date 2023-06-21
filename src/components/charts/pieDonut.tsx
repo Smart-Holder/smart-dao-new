@@ -150,7 +150,6 @@ const App = ({ data = testData }: any) => {
         customHtml: (container, view, datum, data: any) => {
           // setSelectData(data);
           selectData = data;
-
           const { width } = container.getBoundingClientRect();
           const text = datum
             ? `${datum.value}`
