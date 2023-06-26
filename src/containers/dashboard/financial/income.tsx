@@ -35,6 +35,8 @@ import { getMessage } from '@/utils/language';
 import { useLedgerQuery } from '@/api/graph/ledger';
 import { gqlProps, ledgerQueryType } from '@/api/typings/ledger';
 import { LEDGER_QUERY } from '@/api/gqls/ledgers';
+
+import { useLedgerBalances } from '@/api/graph/statistic';
 import { Amount } from '@/config/enum';
 import { LedgerBalance } from '@/config/define';
 
@@ -134,59 +136,119 @@ const App = () => {
     ...ledgerVariables,
   });
 
+  const { data: ledgerDataBalance, refetch } = useLedgerBalances({
+    host: currentDAO.host.toLocaleLowerCase(),
+  });
+
   const nftpModal: any = useRef(null);
 
-  const getBalanceData = async () => {
-    // const res1 = await getBalance();
-    const res = await request({
-      name: 'ledger',
-      method: 'getLedgerBalance',
-      params: { chain: chainId, host: currentDAO.host },
-    });
+  // const getBalanceData = async () => {
+  //   // const res1 = await getBalance();
+  //   const res = await request({
+  //     name: 'ledger',
+  //     method: 'getLedgerBalance',
+  //     params: { chain: chainId, host: currentDAO.host },
+  //   });
 
-    let balances = res.map((item: any) => {
-      return {
-        value: fromToken(item?.value || 0) + ' ' + item.symbol,
-        symbol: item.symbol,
-      };
-    });
-    setBalance(res[0]);
-    setBalanceList(balances);
-  };
+  //   let balances = res.map((item: any) => {
+  //     return {
+  //       value: fromToken(item?.value || 0) + ' ' + item.symbol,
+  //       symbol: item.symbol,
+  //     };
+  //   });
+  //   setBalance(res[0]);
+  //   setBalanceList(balances);
+  // };
+
+  // useEffect(() => {
+  // getBalanceData();
+  // }, []);
 
   useEffect(() => {
-    getBalanceData();
-  }, []);
-
-  const getAmount = async () => {
-    const res = await request({
-      name: 'utils',
-      method: 'getLedgerTotalAmount',
-      params: { chain: chainId, host: currentDAO.host },
-    });
-
-    if (res) {
-      // const symbol = getChain('symbol2');
-      // const ledgerItem: Amount = res.find(
-      //   (item: Amount) => item.balance.symbol === symbol,
-      // );
-      // setAmount(ledgerItem);
-
-      let amounts = res.map((item: any) => {
+    if (ledgerDataBalance) {
+      let balances = ledgerDataBalance.ledgerBalances.map((item) => {
+        let symbol = item.erc20 ? item.erc20.symbol : getUnit();
         return {
-          value: fromToken(item?.income || 0) + ' ' + item.balance.symbol,
-          symbol: item.balance.symbol,
+          value: fromToken(item?.income || 0) + ' ' + symbol,
+          symbol: symbol,
         };
       });
 
-      setAmount(res[0]);
-      setAmountList(amounts);
-    }
-  };
+      let amounts = ledgerDataBalance.ledgerPools.map((item) => {
+        let symbol = getUnit();
+        return {
+          value:
+            fromToken(
+              Number(item.assetIncomeAmount) - Number(item.expenditureAmount),
+            ) +
+            ' ' +
+            symbol,
+          symbol: symbol,
+        };
+      });
 
-  useEffect(() => {
-    getAmount();
-  }, []);
+      let ERC20AmountsList: any = [];
+      ledgerDataBalance.ledgerPools.forEach((item) => {
+        let ERC20Amount = item.assetIncomeERC20Amount.map((i) => {
+          let erc20Symbol = i.erc20 ? i.erc20.symbol : getUnit();
+          let expenditureERC20Amount = item.expenditureERC20Amount.reduce(
+            (accumulator, currentValue) => {
+              if (
+                currentValue.erc20 &&
+                currentValue.erc20.symbol === erc20Symbol
+              ) {
+                return accumulator + Number(currentValue.amount || 0);
+              } else {
+                return accumulator;
+              }
+            },
+            0,
+          );
+          return {
+            value:
+              fromToken(Number(i.amount) - Number(expenditureERC20Amount)) +
+              ' ' +
+              erc20Symbol,
+            symbol: erc20Symbol,
+          };
+        });
+        ERC20AmountsList.push(...ERC20Amount);
+      });
+
+      setAmountList(balances);
+      setBalanceList([...amounts, ...ERC20AmountsList]);
+    }
+  }, [ledgerDataBalance]);
+
+  // const getAmount = async () => {
+  //   const res = await request({
+  //     name: 'utils',
+  //     method: 'getLedgerTotalAmount',
+  //     params: { chain: chainId, host: currentDAO.host },
+  //   });
+
+  //   if (res) {
+  //     // const symbol = getChain('symbol2');
+  //     // const ledgerItem: Amount = res.find(
+  //     //   (item: Amount) => item.balance.symbol === symbol,
+  //     // );
+  //     // setAmount(ledgerItem);
+
+  //     let amounts = res.map((item: any) => {
+  //       return {
+  //         value: fromToken(item?.income || 0) + ' ' + item.balance.symbol,
+  //         symbol: item.balance.symbol,
+  //       };
+  //     });
+
+  //     setAmount(res[0]);
+  //     setAmountList(amounts);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   getAmount();
+  // }, []);
 
   useEffect(() => {
     setData([...(ledgerData?.ledgers || [])]);
@@ -366,7 +428,8 @@ const App = () => {
       });
       // window.location.reload();
       hideModal();
-      getBalanceData();
+      refetch();
+      // getBalanceData();
     } catch (error) {
       console.error(error);
     }
@@ -392,8 +455,9 @@ const App = () => {
         await release({ amount: balance?.value, description: 'description' });
         setIsModalOpen(false);
         message.success('success');
-        getBalanceData();
-        getAmount();
+        // getBalanceData();
+        refetch();
+        // getAmount();
         setPage(1);
         getData(1);
         // getTotal();

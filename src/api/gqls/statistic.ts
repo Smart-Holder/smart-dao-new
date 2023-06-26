@@ -9,7 +9,38 @@ const GET_DAOS_ASSET_STATISTIC_ACTION = gql`
       assetTotal
       incomeAmount
       incomeTotal
+      incomeERC20Amount {
+        amount
+        erc20 {
+          id
+          symbol
+          name
+        }
+      }
     }
   }
 `;
-export { GET_DAOS_ASSET_STATISTIC_ACTION };
+
+const GET_DAO_LEDGER_BALANCES_ACTION = gql`
+  query DAOLedgerBalances($host: String) {
+    ledgerBalances(where: { host: $host }) {
+      income
+      erc20 {
+        id
+        symbol
+        name
+      }
+    }
+    ledgerPools(where: { host: $host }) {
+      assetIncomeAmount
+      expenditureAmount
+      assetIncomeERC20Amount {
+        amount
+      }
+      expenditureERC20Amount {
+        amount
+      }
+    }
+  }
+`;
+export { GET_DAOS_ASSET_STATISTIC_ACTION, GET_DAO_LEDGER_BALANCES_ACTION };

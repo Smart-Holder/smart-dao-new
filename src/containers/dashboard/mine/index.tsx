@@ -226,7 +226,7 @@ const App = () => {
               {formatMessage({
                 id: DAOInfo.membersTotal === 1 ? 'member' : 'members',
               })} */}
-              {currentDAO.memberPool.count}
+              {currentDAO.memberPool.count + ' '}
               {formatMessage({
                 id: currentDAO.memberPool.count === 1 ? 'member' : 'members',
               })}

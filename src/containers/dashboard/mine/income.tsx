@@ -33,6 +33,7 @@ import { useLedgerQuery } from '@/api/graph/ledger';
 import { LEDGER_QUERY } from '@/api/gqls/ledgers';
 import { setLoading } from '@/store/features/commonSlice';
 import { LedgerType, Amount } from '@/config/enum';
+import { useAssetsStatistic } from '@/api/graph/statistic';
 
 dayjs.extend(customParseFormat);
 
@@ -128,6 +129,25 @@ const App = () => {
     host: currentDAO.host.toLocaleLowerCase(),
     ...ledgerVariables,
   });
+
+  const { data: statisticData } = useAssetsStatistic({
+    first: 1,
+    host: currentDAO.host.toLocaleLowerCase(),
+    owner: address.toLocaleLowerCase(),
+  });
+
+  useEffect(() => {
+    if (statisticData) {
+      let ERC20Amount = statisticData.incomeERC20Amount.map((item) => {
+        let symbol = item.erc20 ? item.erc20.symbol : getUnit();
+        return {
+          value: fromToken(item?.amount || 0) + ' ' + symbol,
+          symbol: symbol,
+        };
+      });
+      setAmountList(ERC20Amount);
+    }
+  }, [statisticData]);
 
   const getBalanceData = async () => {
     const res = await getBalance();
@@ -270,7 +290,7 @@ const App = () => {
       }
     };
 
-    getAmount();
+    // getAmount();
   }, []);
 
   useEffect(() => {
