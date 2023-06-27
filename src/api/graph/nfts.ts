@@ -28,6 +28,7 @@ const useDaosNfts = ({
   listed,
 }: queryRecord) => {
   const [items, setItems] = useState<AssetsResponseType[]>([]);
+  // listed = 是否在首页NFTS 列表内展示
   const [fetchMore, { data, loading, error }] = useLazyQuery<ResponseDataType>(
     GET_DAOS_NFTS_ACTION({ name_contains_nocase, destroyed, host, listed }),
     {

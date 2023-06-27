@@ -8,6 +8,8 @@ import {
   Space,
   message,
   Breadcrumb,
+  Row,
+  Col,
 } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -25,6 +27,8 @@ import { getCookie } from '@/utils/cookie';
 import { formatDayjsValues, fromToken, toToken } from '@/utils';
 import { useIntl } from 'react-intl';
 import { shelves } from '@/api/asset';
+import { useDaosNfts } from '@/api/graph/nfts';
+import { GET_DAOS_NFTS_ACTION } from '@/api/gqls/nfts';
 
 // const { RangePicker } = DatePicker;
 
@@ -41,7 +45,7 @@ const App: NextPageWithLayout = () => {
   const [values, setValues] = useState({});
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any[]>([]);
 
   const [tableLoading, setTableLoading] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -50,27 +54,52 @@ const App: NextPageWithLayout = () => {
   const [priceList, setPriceList] = useState({}) as any;
   const [price, setPrice] = useState(0);
   const [selectedRow, setSelectedRow] = useState({}) as any;
+  const [queryParams, setQueryParams] = useState({
+    host: currentDAO.host,
+    destroyed: false,
+    owner_: {
+      id: address,
+    },
+  });
 
   const [amount, setAmount] = useState({ total: 0, amount: '0' });
+
+  const { items: ntfDatas, fetchMore } = useDaosNfts({
+    first: pageSize,
+    chainId,
+    skip: 0,
+  });
 
   const getData = useCallback(
     async (page = 1) => {
       setTableLoading(true);
-      const res = await request({
-        name: 'utils',
-        method: 'getAssetFrom',
-        params: {
-          chain: chainId,
-          host: currentDAO.host,
-          limit: [(page - 1) * pageSize, pageSize],
-          state: 0,
-          owner: address,
-          ...values,
+      // const res = await request({
+      //   name: 'utils',
+      //   method: 'getAssetFrom',
+      //   params: {
+      //     chain: chainId,
+      //     host: currentDAO.host,
+      //     limit: [(page - 1) * pageSize, pageSize],
+      //     state: 0,
+      //     owner: address,
+      //     ...values,
+      //   },
+      // });
+
+      fetchMore({
+        query: GET_DAOS_NFTS_ACTION({
+          ...queryParams,
+        }),
+        variables: {
+          first: pageSize,
+          skip: (page - 1) * pageSize,
+          orderBy: 'blockNumber',
+          orderDirection: 'desc',
         },
       });
 
       setTableLoading(false);
-      setData(res);
+      // setData(res);
     },
     [chainId, currentDAO.host, values, address],
   );
@@ -94,6 +123,7 @@ const App: NextPageWithLayout = () => {
   const onValuesChange = (changedValues: any) => {
     let [[key, value]]: any = Object.entries(changedValues);
     let nextValues: any = { ...values };
+    let queryParamsCopy: any = { ...queryParams };
 
     if (key === 'type') {
       delete nextValues.author;
@@ -101,10 +131,36 @@ const App: NextPageWithLayout = () => {
       delete nextValues.author_not;
 
       const obj: any = {};
+      delete queryParamsCopy.owner_;
+      delete queryParamsCopy.author_;
+
+      switch (value) {
+        case '1':
+          queryParamsCopy.author_ = {
+            id: address,
+          };
+          queryParamsCopy.owner_ = {
+            id: address,
+          };
+          break;
+        case '2':
+          queryParamsCopy.owner_ = {
+            id: address,
+          };
+          break;
+        default:
+          queryParamsCopy.owner_ = {
+            id: address,
+          };
+          break;
+      }
+
+      setQueryParams(queryParamsCopy);
 
       switch (value) {
         case '1':
           obj.author = address;
+
           break;
         case 'agree':
           obj.owner = address;
@@ -149,20 +205,26 @@ const App: NextPageWithLayout = () => {
       }
     };
 
-    getAmount();
+    // getAmount();
   }, []);
 
   useEffect(() => {
     setPage(1);
     getData(1);
-    getTotal();
+    // getTotal();
   }, [searchText, values]);
 
   const resetData = () => {
     setPage(1);
     getData(1);
-    getTotal();
+    // getTotal();
   };
+
+  useEffect(() => {
+    if (ntfDatas) {
+      setData(ntfDatas);
+    }
+  }, [ntfDatas]);
 
   // useEffect(() => {
   //   if (price && market) {
@@ -310,13 +372,14 @@ const App: NextPageWithLayout = () => {
         </div>
 
         <Table
-          pagination={{
-            position: ['bottomRight'],
-            current: page,
-            pageSize,
-            total,
-            onChange: onPageChange,
-          }}
+          pagination={false}
+          // pagination={{
+          //   position: ['bottomRight'],
+          //   current: page,
+          //   pageSize,
+          //   total,
+          //   onChange: onPageChange,
+          // }}
           loading={tableLoading}
           rowKey="id"
           rowSelection={{
@@ -382,6 +445,27 @@ const App: NextPageWithLayout = () => {
           ]}
           dataSource={[...data]}
         />
+
+        <Row justify="center" style={{ marginTop: 20 }}>
+          <Col span={3}>
+            <Button
+              disabled={page === 1}
+              onClick={() =>
+                onPageChange(page - 1 <= 1 ? 1 : page - 1, pageSize)
+              }
+            >
+              &lt; Previous
+            </Button>
+          </Col>
+          <Col span={2}>
+            <Button
+              disabled={!data.length}
+              onClick={() => onPageChange(page + 1, pageSize)}
+            >
+              Next &gt;
+            </Button>
+          </Col>
+        </Row>
         <div className="footer" style={{ marginTop: 20 }}>
           <Space style={{ display: 'flex' }} direction="vertical" align="end">
             <Select
