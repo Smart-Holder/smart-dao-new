@@ -23,7 +23,7 @@ const initialState: WalletState = {
   provider: undefined,
   connectType: 0,
   isSupportChain: true,
-  chainId: 0,
+  chainId: 1,
   address: '',
 };
 
