@@ -269,3 +269,12 @@ export const getChain = (label) => {
 
   return '';
 };
+
+// 大图优化
+export const imageView2Max = ({ url, w, h = 0 }) => {
+  return url + `?imageView2/2/w/${w}${h !== 0 ? '/h/' + h : ''}/interlace/1`;
+};
+// 小图自动优化
+export const imageView2Min = (url) => {
+  return url + '?imageslim';
+};

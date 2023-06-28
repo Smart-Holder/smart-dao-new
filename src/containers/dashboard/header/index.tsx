@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { useAppSelector } from '@/store/hooks';
 import { Avatar, Button, Col, Image, Row, Space } from 'antd';
-import buffer from 'somes/buffer';
+import { imageView2Max, imageView2Min } from '@/utils/index';
 
 import Title from '@/containers/dashboard/header/title';
 import { formatToObj, formatToBbjExtend } from '@/utils/extend';
@@ -33,7 +33,10 @@ const App = ({ title, avatar, name, buttons, children, padding }: Data) => {
         <div className="image-box">
           <Image
             className="poster"
-            src={extend?.poster || extend_?.poster || currentDAO.image}
+            src={imageView2Max({
+              url: extend?.poster || extend_?.poster || currentDAO.image,
+              w: 1920,
+            })}
             width="100%"
             height={380}
             preview={false}
@@ -48,7 +51,11 @@ const App = ({ title, avatar, name, buttons, children, padding }: Data) => {
                 borderRadius: 10,
               }}
               size={70}
-              src={avatar || currentDAO.image}
+              src={imageView2Max({
+                url: avatar || currentDAO.image,
+                w: 120,
+                h: 120,
+              })}
               shape="square"
             />
           </div>

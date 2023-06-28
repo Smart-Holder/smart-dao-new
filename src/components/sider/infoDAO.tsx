@@ -6,7 +6,7 @@ import { useAppSelector } from '@/store/hooks';
 import { getMakeDAOStorage } from '@/utils/launch';
 
 import Ellipsis from '@/components/typography/ellipsis';
-import { formatAddress } from '@/utils';
+import { formatAddress, imageView2Max } from '@/utils';
 
 const { Paragraph } = Typography;
 
@@ -27,7 +27,14 @@ const App = ({ type }: { type?: string }) => {
     <div className="dao">
       <Space size={16}>
         {dao.image ? (
-          <Avatar size={44} src={dao.image} />
+          <Avatar
+            size={44}
+            src={imageView2Max({
+              url: dao.image,
+              w: 120,
+              h: 120,
+            })}
+          />
         ) : (
           <Avatar size={44} icon={<UserOutlined />} />
         )}

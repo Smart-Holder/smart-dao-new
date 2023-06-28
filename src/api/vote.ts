@@ -76,7 +76,7 @@ export async function createVote({
           reject(error);
           throw error;
         }
-
+        console.log(currentDAO, 'currentDAO', lifespan);
         const params = [
           '0x' + rng(32).toString('hex'),
           extra.map((e) => e.target),

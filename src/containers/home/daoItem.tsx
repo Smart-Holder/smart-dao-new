@@ -16,6 +16,7 @@ import { DAOType } from '@/config/enum';
 import { DAOExtend } from '@/config/define_ext';
 import { formatToObj, formatToBbjExtend } from '@/utils/extend';
 import { daosType } from '@/api/typings/dao';
+import { imageView2Max } from '@/utils';
 
 const { Paragraph } = Typography;
 
@@ -266,7 +267,11 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
 
             background: url('/images/home/img_home_card_dao_gradient@2x.png')
                 no-repeat center,
-              url(${extend?.poster || data.image || fallback}) no-repeat center;
+              url(${imageView2Max({
+                  url: extend?.poster || data.image || fallback,
+                  w: 900,
+                })})
+                no-repeat center;
             background-size: cover;
             border-radius: 16px;
 
