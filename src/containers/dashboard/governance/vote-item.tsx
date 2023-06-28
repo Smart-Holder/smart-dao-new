@@ -103,21 +103,23 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
     onClick({ ...data, status, extra, percent, originData: origin });
   };
 
-  useEffect(() => {
-    const getOrigin = async () => {
+  const getOrigin = useCallback(async () => {
+    if (data.origin != origin) {
       const user = await request({
         name: 'user',
         method: 'getUserFrom',
         params: { address: data.origin },
       });
-
+      console.log(data.origin, 'data.origin');
       setOrigin(user);
-    };
+    }
+  }, [data.origin]);
 
+  useEffect(() => {
     if (data.origin) {
       getOrigin();
     }
-  }, [data.origin]);
+  }, [data.origin, getOrigin]);
 
   return (
     <div className="item" onClick={handleClick}>

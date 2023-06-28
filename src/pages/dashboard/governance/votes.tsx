@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import Select from '@/components/form/filter/select';
 import Layout from '@/components/layout';
 import Footer from '@/components/footer';
-import { ReactElement, useMemo } from 'react';
+import { ReactElement, useCallback, useMemo } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
 import Title from '@/containers/dashboard/header/title';
 import { tokenIdFormat } from '@/utils';
@@ -98,7 +98,7 @@ const App: NextPageWithLayout = () => {
     setResData(obj);
   };
 
-  const resetData = async () => {
+  const resetData = useCallback(async () => {
     const t = await request({
       name: 'utils',
       method: 'getVoteProposalTotalFrom',
@@ -147,7 +147,7 @@ const App: NextPageWithLayout = () => {
       obj[proposal_id] = item;
     });
     setResData(obj);
-  };
+  }, []);
 
   // const getTotal = async () => {
   //   const filterValues: any = { ...values };
@@ -242,7 +242,7 @@ const App: NextPageWithLayout = () => {
       resetData();
       // getTotal();
     }
-  }, [searchText, values, chainId, address, currentDAO.root]);
+  }, [searchText, values, chainId, address, currentDAO.root, resetData]);
 
   useEffect(() => {
     if (voteData?.proposals) {
@@ -257,10 +257,12 @@ const App: NextPageWithLayout = () => {
       if (page === 1) {
         setData([...list]);
       } else {
-        setData([...data, ...list]);
+        setData((prev: any) => {
+          return [...prev, ...list];
+        });
       }
     }
-  }, [voteData?.proposals, resData]);
+  }, [voteData?.proposals, resData, page]);
 
   const onClickItem = (item: any) => {
     // console.log('item', item);
