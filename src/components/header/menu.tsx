@@ -11,7 +11,7 @@ import CreateModal from '@/components/modal/createModal';
 import InfoModal from '@/components/modal/infoModal';
 
 import { getCookie } from '@/utils/cookie';
-import { formatAddress } from '@/utils';
+import { formatAddress, imageView2Max } from '@/utils';
 import { ETH_CHAINS_INFO } from '@/config/chains';
 import { connectType as type } from '@/config/enum';
 
@@ -242,7 +242,15 @@ const Menu = () => {
             </Button>
           )}
 
-          {address && image && <Avatar size={34} src={image} />}
+          {address && image && (
+            <Avatar
+              size={34}
+              src={imageView2Max({
+                url: image,
+                w: 60,
+              })}
+            />
+          )}
 
           {address && !image && (
             <Avatar

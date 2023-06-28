@@ -15,6 +15,7 @@ import { UserOutlined } from '@ant-design/icons';
 import { DAOType } from '@/config/enum';
 import { DAOExtend } from '@/config/define_ext';
 import { formatToObj } from '@/utils/extend';
+import { imageView2Max } from '@/utils';
 
 const { Paragraph } = Typography;
 
@@ -178,7 +179,10 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
                   return (
                     <Avatar
                       className="member-avatar"
-                      src={item.image}
+                      src={imageView2Max({
+                        url: item.image,
+                        w: 80,
+                      })}
                       key={index}
                     />
                   );
