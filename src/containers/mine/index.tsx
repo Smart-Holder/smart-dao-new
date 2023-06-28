@@ -6,6 +6,7 @@ import Info from '@/containers/mine/info';
 import { useAppSelector } from '@/store/hooks';
 
 import type { TabsProps } from 'antd';
+import { imageView2Max } from '@/utils';
 
 const items: TabsProps['items'] = [
   {
@@ -29,7 +30,10 @@ export default function Mine() {
         <div className="user">
           <Avatar
             className="avatar"
-            src={userInfo.image}
+            src={imageView2Max({
+              url: userInfo.image,
+              w: 200,
+            })}
             size={110}
             style={{ border: '4px solid #fff' }}
           />
