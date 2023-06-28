@@ -1,5 +1,5 @@
 import { useAppSelector } from '@/store/hooks';
-import { debounce, formatAddress } from '@/utils';
+import { debounce, formatAddress, imageView2Max } from '@/utils';
 import { Avatar, Typography, Col, Image, Row, Tag, Button } from 'antd';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -82,7 +82,10 @@ const App = () => {
         <Col span={9}>
           <Image
             className="asset-detail-header-image"
-            src={storageData.imageOrigin || currentDAO.image}
+            src={imageView2Max({
+              url: storageData.imageOrigin || currentDAO.image,
+              w: 800,
+            })}
             // shape="square"
             // size={{ xs: 200, sm: 200, md: 200, lg: 300, xl: 442, xxl: 442 }}
             // size={imageSize}

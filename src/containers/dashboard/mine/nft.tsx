@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { formatAddress, fromToken } from '@/utils';
+import { formatAddress, fromToken, imageView2Max } from '@/utils';
 import { Avatar, Image, Space, Typography } from 'antd';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
@@ -88,7 +88,10 @@ const App = ({ data }: NFTProps) => {
       <div onClick={handleClick}>
         <Image
           className="image nft-item-image"
-          src={data.imageOrigin}
+          src={imageView2Max({
+            url: data.imageOrigin,
+            w: 500,
+          })}
           width="100%"
           height={width}
           preview={false}

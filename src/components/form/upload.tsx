@@ -7,6 +7,7 @@ import { getCookie, setCookie } from '@/utils/cookie';
 import { validateImage } from '@/utils/image';
 
 import { request } from '@/api';
+import { imageView2Max } from '@/utils';
 
 const App = (props: any) => {
   const { value, type, ...rest } = props;
@@ -79,7 +80,10 @@ const App = (props: any) => {
         {value ? (
           <Image
             className="upload-image"
-            src={value}
+            src={imageView2Max({
+              url: value,
+              w: 300,
+            })}
             preview={false}
             alt="image"
           />

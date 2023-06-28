@@ -5,7 +5,7 @@ import { AttrParams } from '@/components/modal/assetAttrModal';
 import Card, { CardDataProps } from '@/components/card';
 
 import styles from './detail.module.css';
-import { getUnit } from '@/utils';
+import { getUnit, imageView2Max } from '@/utils';
 
 const { Paragraph } = Typography;
 
@@ -47,7 +47,10 @@ const App = ({ data }: Props) => {
           <Col span={13}>
             <Image
               className="asset-image"
-              src={data.image}
+              src={imageView2Max({
+                url: data.image,
+                w: 500,
+              })}
               width={270}
               height={270}
               preview={false}

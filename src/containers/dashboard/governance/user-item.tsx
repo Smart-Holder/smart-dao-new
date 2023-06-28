@@ -1,3 +1,4 @@
+import { imageView2Max } from '@/utils';
 import { Avatar, Typography } from 'antd';
 
 const { Paragraph } = Typography;
@@ -12,7 +13,13 @@ type Props = {
 const App = ({ data: { name, image } }: Props) => {
   return (
     <div className="item-owner">
-      <Avatar src={image} size={28} />
+      <Avatar
+        src={imageView2Max({
+          url: image,
+          w: 50,
+        })}
+        size={28}
+      />
       <Paragraph ellipsis={{ rows: 1 }}>{name}</Paragraph>
 
       <style jsx>
