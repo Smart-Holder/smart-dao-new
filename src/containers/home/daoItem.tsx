@@ -235,7 +235,11 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
 
             background: url('/images/home/img_home_card_dao_gradient@2x.png')
                 no-repeat center,
-              url(${extend?.poster || data.image || fallback}) no-repeat center;
+              url(${imageView2Max({
+                  url: extend?.poster || data.image || fallback,
+                  w: 900,
+                })})
+                no-repeat center;
             background-size: cover;
             border-radius: 16px;
 
