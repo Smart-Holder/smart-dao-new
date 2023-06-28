@@ -244,7 +244,7 @@ const IssueForm: FC<IssueFormProps> = () => {
   const validateMinETH = (rule: any, value: any) => {
     const price = form.getFieldValue('price');
 
-    if (value && price && value < price) {
+    if (value && price && value > price) {
       return Promise.reject(new Error(`The minimum is ${price}`));
     }
 
