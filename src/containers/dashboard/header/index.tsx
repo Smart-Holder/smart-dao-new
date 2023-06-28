@@ -5,6 +5,7 @@ import buffer from 'somes/buffer';
 
 import Title from '@/containers/dashboard/header/title';
 import { formatToObj } from '@/utils/extend';
+import { imageView2Max } from '@/utils';
 
 type Data = {
   title?: string;
@@ -29,7 +30,10 @@ const App = ({ title, avatar, name, buttons, children, padding }: Data) => {
         <div className="image-box">
           <Image
             className="poster"
-            src={extend?.poster || currentDAO.image}
+            src={imageView2Max({
+              url: extend?.poster || currentDAO.image,
+              w: 1920,
+            })}
             width="100%"
             height={380}
             preview={false}
@@ -43,7 +47,10 @@ const App = ({ title, avatar, name, buttons, children, padding }: Data) => {
                 borderRadius: 10,
               }}
               size={70}
-              src={avatar || currentDAO.image}
+              src={imageView2Max({
+                url: avatar || currentDAO.image,
+                w: 120,
+              })}
               shape="square"
             />
           </div>

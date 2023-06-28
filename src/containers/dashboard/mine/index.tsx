@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 // import { rng } from 'somes/rng';
 
-import { fromToken, getChain, getUnit } from '@/utils';
+import { fromToken, getChain, getUnit, imageView2Max } from '@/utils';
 import { useIntl } from 'react-intl';
 import { request } from '@/api';
 import { Amount, DAOType, Permissions } from '@/config/enum';
@@ -224,7 +224,10 @@ const App = () => {
                       return (
                         <Avatar
                           style={{ backgroundColor: '#000', borderWidth: 3 }}
-                          src={item.image}
+                          src={imageView2Max({
+                            url: item.image,
+                            w: 80,
+                          })}
                           key={index}
                         />
                       );

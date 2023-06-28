@@ -2,6 +2,7 @@ import { Image } from 'antd';
 import { useIntl } from 'react-intl';
 
 import styles from './detail.module.css';
+import { imageView2Max } from '@/utils';
 
 type Props = {
   data: {
@@ -41,7 +42,10 @@ const App = ({ data }: Props) => {
             {formatMessage({ id: 'proposal.detail.label.basic.logo' })}:
           </div>
           <Image
-            src={data.image}
+            src={imageView2Max({
+              url: data.image,
+              w: 200,
+            })}
             alt="logo"
             width={100}
             height={100}
