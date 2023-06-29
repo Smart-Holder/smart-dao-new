@@ -213,7 +213,10 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
                   return (
                     <Avatar
                       className="member-avatar"
-                      src={item.image}
+                      src={imageView2Max({
+                        url: item.image,
+                        w: 80,
+                      })}
                       key={index}
                     />
                   );
