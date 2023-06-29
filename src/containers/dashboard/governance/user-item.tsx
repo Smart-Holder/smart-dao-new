@@ -14,10 +14,13 @@ const App = ({ data: { name, image } }: Props) => {
   return (
     <div className="item-owner">
       <Avatar
-        src={imageView2Max({
-          url: image,
-          w: 50,
-        })}
+        src={
+          image &&
+          imageView2Max({
+            url: image,
+            w: 50,
+          })
+        }
         size={28}
       />
       <Paragraph ellipsis={{ rows: 1 }}>{name}</Paragraph>

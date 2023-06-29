@@ -110,7 +110,6 @@ const VoteItem: FC<VoteItemProps> = ({ data, onClick }) => {
         method: 'getUserFrom',
         params: { address: data.origin },
       });
-      console.log(data.origin, 'data.origin');
       setOrigin(user);
     }
   }, [data.origin]);
