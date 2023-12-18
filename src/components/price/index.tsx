@@ -6,7 +6,7 @@ import { useAppSelector } from '@/store/hooks';
 
 type PriceProps = {
   icon?: string;
-  value?: number;
+  value?: number | string;
   unit?: string;
   data?: Asset;
 };
@@ -18,8 +18,8 @@ const App = ({
   data,
 }: PriceProps) => {
   const { chainId } = useAppSelector((store) => store.wallet);
-
-  let v = 0;
+  console.log(data, 'datadatadata');
+  let v: number | string = 0;
 
   if (value !== undefined) {
     v = value;
@@ -30,11 +30,17 @@ const App = ({
       properties.find((item: any) => item.listingPrice) || {};
     const priceObj = properties.find((item: any) => item.price) || {};
 
-    v = Math.max(
-      fromToken(min),
-      fromToken(listingPriceObj.listingPrice || 0),
-      fromToken(priceObj.price || 0),
+    let maxValue = Math.max(
+      Number(min) || 0,
+      listingPriceObj.listingPrice || 0,
+      priceObj.price || 0,
     );
+    v = fromToken(maxValue);
+    // v = Math.max(
+    //   fromToken(min),
+    //   fromToken(listingPriceObj.listingPrice || 0),
+    //   fromToken(priceObj.price || 0),
+    // );
   }
 
   return (

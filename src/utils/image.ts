@@ -13,7 +13,7 @@ export const validateImage = (file: RcFile) => {
     return 'You can only upload JPG/PNG file!';
   }
 
-  const isLt2M = file.size / 1024 / 1024 < 2;
+  const isLt2M = file.size / 1024 / 1024 < 100;
 
   if (!isLt2M) {
     return 'Image must smaller than 2MB!';

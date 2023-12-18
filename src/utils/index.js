@@ -12,7 +12,7 @@ export function fromToken(number, precision = 18, decimal = 4) {
       .decimalPlaces(decimal)
       .toFormat();
     if (amount === 'NaN') return 0;
-    return Number(amount);
+    return amount;
   } else {
     return 0;
   }
