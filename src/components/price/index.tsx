@@ -1,5 +1,5 @@
 import { Asset } from '@/config/define';
-import { fromToken, getUnit } from '@/utils';
+import { fromToken, fromTokenPlus, getUnit } from '@/utils';
 import { Image } from 'antd';
 import { ETH_CHAINS_INFO } from '@/config/chains';
 import { useAppSelector } from '@/store/hooks';
@@ -35,7 +35,7 @@ const App = ({
       listingPriceObj.listingPrice || 0,
       priceObj.price || 0,
     );
-    v = fromToken(maxValue);
+    v = fromTokenPlus(maxValue);
     // v = Math.max(
     //   fromToken(min),
     //   fromToken(listingPriceObj.listingPrice || 0),

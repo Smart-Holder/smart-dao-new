@@ -12,7 +12,13 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 // import { rng } from 'somes/rng';
 
-import { fromToken, getChain, getUnit, imageView2Max } from '@/utils';
+import {
+  fromToken,
+  fromTokenPlus,
+  getChain,
+  getUnit,
+  imageView2Max,
+} from '@/utils';
 import { useIntl } from 'react-intl';
 import { request } from '@/api';
 import { Amount, DAOType, Permissions } from '@/config/enum';
@@ -302,7 +308,7 @@ const App = () => {
             <div className="total-item-2">
               <div className="total-item-right">
                 <span className="num">
-                  {fromToken(DAOInfo.assetAmountTotal)} {DAOInfo.symbol}
+                  {fromTokenPlus(DAOInfo.assetAmountTotal)} {DAOInfo.symbol}
                 </span>
                 <span>
                   {formatMessage({ id: 'my.summary.total.assetAmount' })}

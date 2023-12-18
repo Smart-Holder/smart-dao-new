@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import store from '@/store';
 import { ETH_CHAINS_INFO } from '@/config/chains';
 
-export function fromToken(number, precision = 18, decimal = 4) {
+export function fromTokenPlus(number, precision = 18, decimal = 4) {
   if (typeof Number(number) === 'number') {
     const amount = new BigNumber(number)
       .shiftedBy(-precision)
@@ -13,6 +13,19 @@ export function fromToken(number, precision = 18, decimal = 4) {
       .toFormat();
     if (amount === 'NaN') return 0;
     return amount;
+  } else {
+    return 0;
+  }
+}
+
+export function fromToken(number, precision = 18, decimal = 4) {
+  if (typeof Number(number) === 'number') {
+    const amount = new BigNumber(number)
+      .shiftedBy(-precision)
+      .decimalPlaces(decimal)
+      .toFormat();
+    if (amount === 'NaN') return 0;
+    return Number(amount);
   } else {
     return 0;
   }
