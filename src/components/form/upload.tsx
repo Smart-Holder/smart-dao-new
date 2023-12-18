@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Image, Upload } from 'antd';
 import type { RcFile } from 'antd/es/upload/interface';
 import { useIntl } from 'react-intl';
+import hash from 'somes/hash';
 
 import { getCookie, setCookie } from '@/utils/cookie';
 import { validateImage } from '@/utils/image';
@@ -17,6 +18,7 @@ const App = (props: any) => {
   const [token, setToken] = useState();
   const [qiniuImgUrl, setQiniuImgUrl] = useState<string>();
   const [upLoadUrl, setUploadUrl] = useState<string>();
+  const [keyName, setKeyName] = useState<string>();
 
   // useEffect(() => {
   //   request({
@@ -48,7 +50,13 @@ const App = (props: any) => {
 
   const beforeUpload = (file: RcFile) => {
     const message = validateImage(file);
+    const time = new Date().getTime();
+    const fileName = file.name;
 
+    let md5Str = hash.md5(file.name).toString('hex');
+    const filename_suffix = '.' + fileName.split('.').pop();
+    let name = `${md5Str}_${time}${filename_suffix}`;
+    setKeyName(name);
     return !message;
   };
 
@@ -62,7 +70,6 @@ const App = (props: any) => {
   //   }
 
   // };
-
   return (
     <div className="wrap">
       <Upload
@@ -70,7 +77,7 @@ const App = (props: any) => {
         action={upLoadUrl}
         // action={process.env.NEXT_PUBLIC_QINIU_UPLOAD_URL}
         // data={{ token: getCookie('qiniuToken') }}
-        data={{ token }}
+        data={{ token, key: keyName }}
         showUploadList={false}
         beforeUpload={beforeUpload}
         // listType="picture-card"
