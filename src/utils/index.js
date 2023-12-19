@@ -262,8 +262,13 @@ export const getChain = (label) => {
 };
 
 // 大图优化
-export const imageView2Max = ({ url, w, h = 0 }) => {
-  return url + `?imageView2/2/w/${w}${h !== 0 ? '/h/' + h : ''}/interlace/1`;
+export const imageView2Max = ({ url, w = 0, h = 0 }) => {
+  return (
+    url +
+    `?imageView2/2${w != 0 ? '/w/' + w : ''}${
+      h !== 0 ? '/h/' + h : ''
+    }/interlace/1`
+  );
 };
 // 小图自动优化
 export const imageView2Min = (url) => {

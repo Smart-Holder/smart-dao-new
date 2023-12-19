@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Image, Upload } from 'antd';
+import { useCallback, useEffect, useState } from 'react';
+import { Image, Upload, message } from 'antd';
 import type { RcFile } from 'antd/es/upload/interface';
 import { useIntl } from 'react-intl';
 import hash from 'somes/hash';
@@ -11,7 +11,7 @@ import { request } from '@/api';
 import { imageView2Max } from '@/utils';
 
 const App = (props: any) => {
-  const { value, type, ...rest } = props;
+  const { value, type, imgWidth, ...rest } = props;
 
   const { formatMessage } = useIntl();
 
@@ -19,6 +19,7 @@ const App = (props: any) => {
   const [qiniuImgUrl, setQiniuImgUrl] = useState<string>();
   const [upLoadUrl, setUploadUrl] = useState<string>();
   const [keyName, setKeyName] = useState<string>();
+  const [blobType, setBlobType] = useState<string>();
 
   // useEffect(() => {
   //   request({
@@ -49,15 +50,19 @@ const App = (props: any) => {
   }, []);
 
   const beforeUpload = (file: RcFile) => {
-    const message = validateImage(file);
+    const msg = validateImage(file);
     const time = new Date().getTime();
     const fileName = file.name;
 
+    setBlobType(file.type);
     let md5Str = hash.md5(file.name).toString('hex');
     const filename_suffix = '.' + fileName.split('.').pop();
     let name = `${md5Str}_${time}${filename_suffix}`;
     setKeyName(name);
-    return !message;
+    if (msg) {
+      message.error(msg);
+    }
+    return !msg;
   };
 
   // const handleChange: UploadProps['onChange'] = (
@@ -70,6 +75,7 @@ const App = (props: any) => {
   //   }
 
   // };
+
   return (
     <div className="wrap">
       <Upload
@@ -84,15 +90,24 @@ const App = (props: any) => {
         // onChange={handleChange}
         {...rest}
       >
-        {value ? (
+        {value && blobType?.startsWith('image/') ? (
           <Image
             className="upload-image"
             src={imageView2Max({
               url: value,
-              w: 1600,
+              w: imgWidth,
             })}
             preview={false}
             alt="image"
+          />
+        ) : value && blobType?.startsWith('video/') ? (
+          <video
+            autoPlay
+            loop
+            muted
+            controls={false}
+            className="upload-image"
+            src={value}
           />
         ) : (
           <div className="upload-box">

@@ -290,7 +290,7 @@ const App: React.FC = () => {
             </span>
           }
         >
-          <Upload value={logo} onChange={onImageChange1} />
+          <Upload value={logo} imgWidth={300} onChange={onImageChange1} />
         </Form.Item>
 
         <Form.Item
@@ -303,7 +303,12 @@ const App: React.FC = () => {
             </span>
           }
         >
-          <Upload type="rectangle" value={poster} onChange={onImageChange2} />
+          <Upload
+            type="rectangle"
+            imgWidth={1600}
+            value={poster}
+            onChange={onImageChange2}
+          />
         </Form.Item>
 
         <div className="h1" style={{ marginTop: 56 }}>

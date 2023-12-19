@@ -1,5 +1,5 @@
-import React, { useRef, MouseEvent } from 'react';
-import { Typography, Image, Button, Avatar } from 'antd';
+import React, { useRef, MouseEvent, useCallback, useEffect } from 'react';
+import { Typography, Image, Button, Avatar, Spin } from 'antd';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
 
@@ -16,6 +16,7 @@ import { DAOType } from '@/config/enum';
 import { DAOExtend } from '@/config/define_ext';
 import { formatToObj } from '@/utils/extend';
 import { imageView2Max } from '@/utils';
+import { setLoading } from '@/utils/tool';
 
 const { Paragraph } = Typography;
 
@@ -52,6 +53,9 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
 
   const infoModal: any = useRef(null);
   const walletModal: any = useRef(null);
+
+  const [blobType, setblobType] = React.useState('');
+  const [ItemLoading, setItemLoading] = React.useState(false);
 
   let members = data.memberObjs || [];
 
@@ -129,200 +133,266 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
     setFollow();
   };
 
+  const getImgFileType = useCallback(async () => {
+    let url = extend.poster;
+    setItemLoading(true);
+    let res = await fetch(url);
+    if (res.ok) {
+      let blob = await res.blob();
+      setblobType(blob.type);
+    }
+    setItemLoading(false);
+  }, [extend.poster]);
+
+  useEffect(() => {
+    if (extend.poster) {
+      getImgFileType();
+    }
+  }, [extend.poster, getImgFileType]);
+
   return (
-    <div className="item">
-      <div className="item-content" onClick={handleClick}>
-        <div style={{ textAlign: 'right' }}>
-          {!readOnly && (
-            <Button
-              className="button-follow"
-              type="primary"
-              onClick={handleFollowClick}
-            >
-              <div className="button-image-wrap">
-                <Image
-                  src="/images/home/icon_home_card_dao_add@2x.png"
-                  alt=""
-                  width={10}
-                  height={10}
-                  preview={false}
-                />
-                {formatMessage({
-                  id: follow ? 'home.followed' : 'home.follow',
-                })}
-              </div>
-            </Button>
-          )}
-        </div>
+    <Spin spinning={ItemLoading}>
+      <div className="item">
+        {blobType.startsWith('image/') ? (
+          <Image
+            className="item-image"
+            src={imageView2Max({
+              url: extend?.poster || data.image || fallback,
+              w: 900,
+            })}
+            width="100%"
+            height={388}
+            preview={false}
+            alt=""
+          />
+        ) : (
+          <video
+            className="item-video"
+            src={extend?.poster}
+            width="100%"
+            height={388}
+            autoPlay
+            loop
+            muted
+            controls={false}
+          />
+        )}
+        <div className="item-content" onClick={handleClick}>
+          <div style={{ textAlign: 'right' }}>
+            {!readOnly && (
+              <Button
+                className="button-follow"
+                type="primary"
+                onClick={handleFollowClick}
+              >
+                <div className="button-image-wrap">
+                  <Image
+                    src="/images/home/icon_home_card_dao_add@2x.png"
+                    alt=""
+                    width={10}
+                    height={10}
+                    preview={false}
+                  />
+                  {formatMessage({
+                    id: follow ? 'home.followed' : 'home.follow',
+                  })}
+                </div>
+              </Button>
+            )}
+          </div>
 
-        <div className="footer">
-          <Paragraph
-            className="name"
-            style={{ width: 386 }}
-            ellipsis={{ rows: 2 }}
-          >
-            {data.name}
-          </Paragraph>
-
-          <div className="bottom">
-            <Avatar.Group
-              maxCount={5}
-              size={42}
-              maxStyle={{
-                color: '#fff',
-                backgroundColor: '#000',
-                cursor: 'pointer',
-              }}
+          <div className="footer">
+            <Paragraph
+              className="name"
+              style={{ width: 386 }}
+              ellipsis={{ rows: 2 }}
             >
-              {members.map((item: any, index: number) => {
-                if (item?.image) {
+              {data.name}
+            </Paragraph>
+
+            <div className="bottom">
+              <Avatar.Group
+                maxCount={5}
+                size={42}
+                maxStyle={{
+                  color: '#fff',
+                  backgroundColor: '#000',
+                  cursor: 'pointer',
+                }}
+              >
+                {members.map((item: any, index: number) => {
+                  if (item?.image) {
+                    return (
+                      <Avatar
+                        className="member-avatar"
+                        src={imageView2Max({
+                          url: item.image,
+                          w: 80,
+                        })}
+                        key={index}
+                      />
+                    );
+                  }
+
                   return (
                     <Avatar
                       className="member-avatar"
-                      src={imageView2Max({
-                        url: item.image,
-                        w: 80,
-                      })}
+                      style={{ backgroundColor: '#000' }}
+                      icon={<UserOutlined />}
                       key={index}
                     />
                   );
-                }
+                })}
+              </Avatar.Group>
+              <span className="total">
+                {formatMessage(
+                  { id: 'home.total.member' },
+                  { value: data.members || 1 },
+                )}
+              </span>
 
-                return (
-                  <Avatar
-                    className="member-avatar"
-                    style={{ backgroundColor: '#000' }}
-                    icon={<UserOutlined />}
-                    key={index}
-                  />
-                );
-              })}
-            </Avatar.Group>
-            <span className="total">
-              {formatMessage(
-                { id: 'home.total.member' },
-                { value: data.members || 1 },
-              )}
-            </span>
-
-            <div style={{ width: 190 }} onClick={joinWrapClick}>
-              {!readOnly && (
-                <Button
-                  className="button-join"
-                  ghost
-                  disabled={join}
-                  onClick={handleJoinClick}
-                  loading={loading}
-                >
-                  {formatMessage({ id: join ? 'home.joined' : 'home.join' })}
-                </Button>
-              )}
+              <div style={{ width: 190 }} onClick={joinWrapClick}>
+                {!readOnly && (
+                  <Button
+                    className="button-join"
+                    ghost
+                    disabled={join}
+                    onClick={handleJoinClick}
+                    loading={loading}
+                  >
+                    {formatMessage({ id: join ? 'home.joined' : 'home.join' })}
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <InfoModal ref={infoModal} />
-      <WalletModal ref={walletModal} />
+        <InfoModal ref={infoModal} />
+        <WalletModal ref={walletModal} />
 
-      <style jsx>
-        {`
-          .item {
-            position: relative;
-            width: 100%;
-            height: 388px;
-            overflow: hidden;
-
-            background: url('/images/home/img_home_card_dao_gradient@2x.png')
+        {/* 
+      background: url('/images/home/img_home_card_dao_gradient@2x.png')
                 no-repeat center,
               url(${imageView2Max({
                   url: extend?.poster || data.image || fallback,
                   w: 900,
                 })})
-                no-repeat center;
-            background-size: cover;
-            border-radius: 16px;
+                no-repeat center; */}
 
-            cursor: pointer;
-          }
+        <style jsx>
+          {`
+            .item {
+              position: relative;
+              width: 100%;
+              height: 388px;
+              overflow: hidden;
 
-          .item-content {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-            box-sizing: border-box;
-            padding: 32px 30px 26px;
-          }
+              background-size: cover;
+              border-radius: 16px;
+              background: url('/images/home/img_home_card_dao_gradient@2x.png')
+                  no-repeat center,
+                url(${imageView2Max({
+                    url: fallback,
+                    w: 900,
+                  })})
+                  no-repeat center;
+              cursor: pointer;
+            }
+            .item-video {
+              position: absolute;
+              top: 0;
+              left: 0;
+              z-index: 10;
+              object-fit: cover;
+            }
+            .item-image {
+              position: absolute;
+              top: 0;
+              left: 0;
+              z-index: 10;
+            }
 
-          .item-content :global(.button-follow) {
-            width: 132px;
-            height: 32px;
+            .item-content {
+              position: relative;
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              height: 100%;
+              box-sizing: border-box;
+              padding: 32px 30px 26px;
+              z-index: 11;
+            }
 
-            font-size: 16px;
-            font-weight: 500;
-            color: #ffffff;
-            line-height: 18px;
+            .item-content :global(.button-follow) {
+              width: 132px;
+              height: 32px;
 
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
-          }
+              font-size: 16px;
+              font-weight: 500;
+              color: #ffffff;
+              line-height: 18px;
 
-          .item-content :global(.ant-btn.ant-btn-primary.button-follow) {
-            box-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
-          }
+              background: rgba(255, 255, 255, 0.2);
+              border-radius: 3px;
+            }
 
-          .item :global(.name) {
-            font-size: 32px;
-            font-weight: bold;
-            color: #ffffff;
-            line-height: 39px;
-            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
-          }
+            .item-content :global(.ant-btn.ant-btn-primary.button-follow) {
+              box-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
+            }
 
-          .item :global(.member-avatar) {
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-          }
+            .item :global(.name) {
+              font-size: 32px;
+              font-weight: bold;
+              color: #ffffff;
+              line-height: 39px;
+              text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+            }
 
-          .bottom {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 28px;
-          }
+            .item :global(.member-avatar) {
+              box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            }
 
-          .total {
-            margin-left: 36px;
-            width: 102px;
-            height: 36px;
-            font-size: 16px;
-            font-weight: 600;
-            color: #ffffff;
-            line-height: 36px;
-          }
+            .bottom {
+              display: flex;
+              justify-content: space-between;
+              margin-top: 28px;
+            }
 
-          .bottom :global(.button-join) {
-            width: 190px;
-            height: 46px;
-            font-size: 17px;
-            font-weight: bold;
-            color: #ffffff;
-            line-height: 26px;
-            border-radius: 4px;
-            border: 1px solid #ffffff;
-          }
+            .total {
+              margin-left: 36px;
+              width: 102px;
+              height: 36px;
+              font-size: 16px;
+              font-weight: 600;
+              color: #ffffff;
+              line-height: 36px;
+            }
 
-          .bottom :global(.ant-avatar) {
-            border: 0;
-          }
+            .bottom :global(.button-join) {
+              width: 190px;
+              height: 46px;
+              font-size: 17px;
+              font-weight: bold;
+              color: #ffffff;
+              line-height: 26px;
+              border-radius: 4px;
+              border: 1px solid #ffffff;
+            }
 
-          .buttons :global(.button-light:disabled) {
-            color: rgba(0, 0, 0, 0.25);
-            background-color: rgba(0, 0, 0, 0.04);
-            box-shadow: none;
-          }
-        `}
-      </style>
-    </div>
+            .bottom :global(.ant-avatar) {
+              border: 0;
+            }
+
+            .buttons :global(.button-light:disabled) {
+              color: rgba(0, 0, 0, 0.25);
+              background-color: rgba(0, 0, 0, 0.04);
+              box-shadow: none;
+            }
+          `}
+        </style>
+      </div>
+    </Spin>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useCallback, useEffect } from 'react';
 import { useAppSelector } from '@/store/hooks';
 import { Avatar, Button, Col, Image, Row, Space } from 'antd';
 import buffer from 'somes/buffer';
@@ -18,9 +18,25 @@ type Data = {
 
 const App = ({ title, avatar, name, buttons, children, padding }: Data) => {
   const { currentDAO, currentMember } = useAppSelector((store) => store.dao);
+  const [blobType, setblobType] = React.useState('');
 
   const extend = formatToObj(currentDAO?.extend?.data);
-  // console.log('extend', extend);
+  // file.type.startsWith('image/') || file.type.startsWith('video/');
+
+  const getImgFileType = useCallback(async () => {
+    let url = extend.poster;
+    let res = await fetch(url);
+    if (res.ok) {
+      let blob = await res.blob();
+      setblobType(blob.type);
+    }
+  }, [extend]);
+
+  useEffect(() => {
+    if (extend.poster) {
+      getImgFileType();
+    }
+  }, [extend, getImgFileType]);
 
   return (
     <div>
@@ -28,17 +44,32 @@ const App = ({ title, avatar, name, buttons, children, padding }: Data) => {
 
       {currentDAO.image && (
         <div className="image-box">
-          <Image
-            className="poster"
-            src={imageView2Max({
-              url: extend?.poster || currentDAO.image,
-              w: 1920,
-            })}
-            width="100%"
-            height={380}
-            preview={false}
-            alt=""
-          />
+          {blobType.startsWith('image/') ? (
+            <Image
+              className="poster"
+              src={imageView2Max({
+                url: extend?.poster || currentDAO.image,
+                w: 1920,
+              })}
+              width="100%"
+              height={380}
+              preview={false}
+              alt=""
+            />
+          ) : (
+            <video
+              className="poster"
+              src={extend?.poster}
+              width="100%"
+              height={380}
+              autoPlay
+              loop
+              muted
+              controls={false}
+              style={{ objectFit: 'cover' }}
+            />
+          )}
+
           <div className="avatar">
             <Avatar
               style={{
