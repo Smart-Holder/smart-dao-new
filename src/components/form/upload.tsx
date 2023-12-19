@@ -89,7 +89,7 @@ const App = (props: any) => {
             className="upload-image"
             src={imageView2Max({
               url: value,
-              w: 300,
+              w: 1600,
             })}
             preview={false}
             alt="image"
