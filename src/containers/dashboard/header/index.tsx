@@ -25,18 +25,23 @@ const App = ({ title, avatar, name, buttons, children, padding }: Data) => {
 
   const getImgFileType = useCallback(async () => {
     let url = extend.poster;
-    let res = await fetch(url);
+    const controller = new AbortController();
+    const signal = controller.signal;
+    let res = await fetch(url, {
+      signal,
+    });
+    // 取消请求拿到 Content-Type'
+    controller.abort();
     if (res.ok) {
-      let blob = await res.blob();
-      setblobType(blob.type);
+      // let blob = await res.blob();
+      let typeStr = res.headers.get('Content-Type') || 'image/jpeg';
+      setblobType(typeStr);
     }
-  }, [extend]);
+  }, [extend.poster]);
 
   useEffect(() => {
-    if (extend.poster) {
-      getImgFileType();
-    }
-  }, [extend, getImgFileType]);
+    getImgFileType();
+  }, [getImgFileType]);
 
   return (
     <div>

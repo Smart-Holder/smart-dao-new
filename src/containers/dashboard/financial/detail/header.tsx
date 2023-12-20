@@ -1,7 +1,7 @@
 import { useAppSelector } from '@/store/hooks';
 import { debounce, formatAddress, imageView2Max } from '@/utils';
 import { Avatar, Typography, Col, Image, Row, Tag, Button } from 'antd';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import Ellipsis from '@/components/typography/ellipsis';
@@ -34,6 +34,9 @@ const App = () => {
   const ownerObj = extra.find((item: any) => item.owner) || {};
 
   const [imageSize, setImageSize] = useState(0);
+
+  const [blobType, setblobType] = useState('');
+  const [ItemLoading, setItemLoading] = useState(false);
 
   const chainData = ETH_CHAINS_INFO[chainId];
 
@@ -76,25 +79,61 @@ const App = () => {
     // https://opensea.io/zh-CN/assets/ethereum/0x5af0d9827e0c53e4799bb226655a1de152a425a5/969
   };
 
+  const getImgFileType = useCallback(async () => {
+    let url = storageData.imageOrigin || currentDAO.image;
+    setItemLoading(true);
+    const controller = new AbortController();
+    const signal = controller.signal;
+    let res = await fetch(url, {
+      signal,
+    });
+    // 取消请求拿到 Content-Type'
+    controller.abort();
+    if (res.ok) {
+      // let blob = await res.blob();
+      let typeStr = res.headers.get('Content-Type') || 'image/jpeg';
+      setblobType(typeStr);
+    }
+    setItemLoading(false);
+  }, [storageData.imageOrigin, currentDAO.image]);
+
+  useEffect(() => {
+    getImgFileType();
+  }, [getImgFileType]);
+
   return (
     <div className="asset-detail-header">
       <Row gutter={24}>
         <Col span={9}>
-          <Image
-            className="asset-detail-header-image"
-            src={imageView2Max({
-              url: storageData.imageOrigin || currentDAO.image,
-              w: 800,
-            })}
-            // shape="square"
-            // size={{ xs: 200, sm: 200, md: 200, lg: 300, xl: 442, xxl: 442 }}
-            // size={imageSize}
-            style={{ maxWidth: 442 }}
-            width="100%"
-            height={imageSize}
-            preview={false}
-            alt=""
-          />
+          {blobType.startsWith('image/') ? (
+            <Image
+              className="asset-detail-header-image"
+              src={imageView2Max({
+                url: storageData.imageOrigin || currentDAO.image,
+                w: 800,
+              })}
+              // shape="square"
+              // size={{ xs: 200, sm: 200, md: 200, lg: 300, xl: 442, xxl: 442 }}
+              // size={imageSize}
+              style={{ maxWidth: 442 }}
+              width="100%"
+              height={imageSize}
+              preview={false}
+              alt=""
+            />
+          ) : (
+            <video
+              className="asset-detail-header-image"
+              src={storageData.imageOrigin || currentDAO.image}
+              width="100%"
+              height={imageSize}
+              autoPlay
+              loop
+              muted
+              controls={false}
+              style={{ objectFit: 'cover', maxWidth: 442 }}
+            />
+          )}
         </Col>
         <Col span={12} offset={1}>
           <div className="asset-detail-header-right">

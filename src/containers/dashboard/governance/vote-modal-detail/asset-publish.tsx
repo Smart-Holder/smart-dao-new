@@ -1,4 +1,4 @@
-import { Typography, Image, Row, Col, Tag } from 'antd';
+import { Typography, Image, Row, Col, Tag, Spin } from 'antd';
 import { useIntl } from 'react-intl';
 
 import { AttrParams } from '@/components/modal/assetAttrModal';
@@ -6,6 +6,8 @@ import Card, { CardDataProps } from '@/components/card';
 
 import styles from './detail.module.css';
 import { getUnit, imageView2Max } from '@/utils';
+import { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 
 const { Paragraph } = Typography;
 
@@ -29,6 +31,8 @@ const App = ({ data }: Props) => {
   const { formatMessage } = useIntl();
 
   const cardData: CardDataProps[] = [];
+  const [blobType, setblobType] = useState('');
+  const [ItemLoading, setItemLoading] = useState(false);
 
   data?.attributes?.forEach((item: any) => {
     if (item.trait_type && item.trait_type !== 'tags') {
@@ -40,22 +44,60 @@ const App = ({ data }: Props) => {
     }
   });
 
+  const getImgFileType = useCallback(async () => {
+    let url = data.image;
+    setItemLoading(true);
+    const controller = new AbortController();
+    const signal = controller.signal;
+    let res = await fetch(url, {
+      signal,
+    });
+    // 取消请求拿到 Content-Type'
+    controller.abort();
+    if (res.ok) {
+      // let blob = await res.blob();
+      let typeStr = res.headers.get('Content-Type') || 'image/jpeg';
+      setblobType(typeStr);
+    }
+    setItemLoading(false);
+  }, [data.image]);
+
+  useEffect(() => {
+    getImgFileType();
+  }, [getImgFileType]);
+
   return (
     <div>
       <div className="asset-detail-header">
         <Row gutter={24}>
           <Col span={13}>
-            <Image
-              className="asset-image"
-              src={imageView2Max({
-                url: data.image,
-                w: 500,
-              })}
-              width={270}
-              height={270}
-              preview={false}
-              alt=""
-            />
+            <Spin spinning={ItemLoading}>
+              {blobType.startsWith('image/') ? (
+                <Image
+                  className="asset-image"
+                  src={imageView2Max({
+                    url: data.image,
+                    w: 500,
+                  })}
+                  width={270}
+                  height={270}
+                  preview={false}
+                  alt=""
+                />
+              ) : (
+                <video
+                  className="asset-image"
+                  src={data?.image}
+                  width={270}
+                  height={270}
+                  autoPlay
+                  loop
+                  muted
+                  controls={false}
+                  style={{ objectFit: 'cover' }}
+                />
+              )}
+            </Spin>
           </Col>
           <Col span={11}>
             <div className="asset-detail-header-right">

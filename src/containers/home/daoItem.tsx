@@ -136,19 +136,24 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
   const getImgFileType = useCallback(async () => {
     let url = extend.poster;
     setItemLoading(true);
-    let res = await fetch(url);
+    const controller = new AbortController();
+    const signal = controller.signal;
+    let res = await fetch(url, {
+      signal,
+    });
+    // 取消请求拿到 Content-Type'
+    controller.abort();
     if (res.ok) {
-      let blob = await res.blob();
-      setblobType(blob.type);
+      // let blob = await res.blob();
+      let typeStr = res.headers.get('Content-Type') || 'image/jpeg';
+      setblobType(typeStr);
     }
     setItemLoading(false);
   }, [extend.poster]);
 
   useEffect(() => {
-    if (extend.poster) {
-      getImgFileType();
-    }
-  }, [extend.poster, getImgFileType]);
+    getImgFileType();
+  }, [getImgFileType]);
 
   return (
     <Spin spinning={ItemLoading}>
@@ -299,18 +304,16 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
                   no-repeat center;
               cursor: pointer;
             }
-            .item-video {
+            .item .item-video {
               position: absolute;
               top: 0;
               left: 0;
-              z-index: 10;
               object-fit: cover;
             }
-            .item-image {
+            .item > :global(.ant-image) {
               position: absolute;
               top: 0;
               left: 0;
-              z-index: 10;
             }
 
             .item-content {
@@ -321,7 +324,6 @@ const App = ({ data, readOnly, daoType }: DAOItemProps) => {
               height: 100%;
               box-sizing: border-box;
               padding: 32px 30px 26px;
-              z-index: 11;
             }
 
             .item-content :global(.button-follow) {

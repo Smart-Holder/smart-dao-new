@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Image, Upload, message } from 'antd';
-import type { RcFile } from 'antd/es/upload/interface';
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import { Image, Spin, Upload, message } from 'antd';
+import type { RcFile, UploadChangeParam } from 'antd/es/upload/interface';
 import { useIntl } from 'react-intl';
 import hash from 'somes/hash';
 
@@ -10,7 +10,12 @@ import { validateImage } from '@/utils/image';
 import { request } from '@/api';
 import { imageView2Max } from '@/utils';
 
-const App = (props: any) => {
+export type RefType = {
+  fn: (val: boolean) => void;
+};
+type PropsType = any;
+
+const App = forwardRef<RefType, PropsType>((props, ref) => {
   const { value, type, imgWidth, ...rest } = props;
 
   const { formatMessage } = useIntl();
@@ -20,6 +25,9 @@ const App = (props: any) => {
   const [upLoadUrl, setUploadUrl] = useState<string>();
   const [keyName, setKeyName] = useState<string>();
   const [blobType, setBlobType] = useState<string>();
+  const [fileany, setFileany] = useState<any>();
+  const [spinning, setSpinning] = useState(false);
+  const [fileError, setFileError] = useState(false);
 
   // useEffect(() => {
   //   request({
@@ -50,9 +58,16 @@ const App = (props: any) => {
   }, []);
 
   const beforeUpload = (file: RcFile) => {
+    setFileError(false);
     const msg = validateImage(file);
     const time = new Date().getTime();
     const fileName = file.name;
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setFileany(reader.result);
+    };
 
     setBlobType(file.type);
     let md5Str = hash.md5(file.name).toString('hex');
@@ -61,6 +76,8 @@ const App = (props: any) => {
     setKeyName(name);
     if (msg) {
       message.error(msg);
+      setSpinning(false);
+      setFileError(true);
     }
     return !msg;
   };
@@ -76,56 +93,68 @@ const App = (props: any) => {
 
   // };
 
+  useImperativeHandle(ref, () => ({
+    fn: (val: boolean) => {
+      setSpinning(val);
+    },
+  }));
+
   return (
     <div className="wrap">
-      <Upload
-        className={type === 'rectangle' ? 'upload-rectangle' : ''}
-        action={upLoadUrl}
-        // action={process.env.NEXT_PUBLIC_QINIU_UPLOAD_URL}
-        // data={{ token: getCookie('qiniuToken') }}
-        data={{ token, key: keyName }}
-        showUploadList={false}
-        beforeUpload={beforeUpload}
-        // listType="picture-card"
-        // onChange={handleChange}
-        {...rest}
-      >
-        {value && blobType?.startsWith('image/') ? (
-          <Image
-            className="upload-image"
-            src={imageView2Max({
-              url: value,
-              w: imgWidth,
-            })}
-            preview={false}
-            alt="image"
-          />
-        ) : value && blobType?.startsWith('video/') ? (
-          <video
-            autoPlay
-            loop
-            muted
-            controls={false}
-            className="upload-image"
-            src={value}
-          />
-        ) : (
-          <div className="upload-box">
+      <Spin spinning={spinning}>
+        <Upload
+          className={type === 'rectangle' ? 'upload-rectangle' : ''}
+          action={upLoadUrl}
+          // action={process.env.NEXT_PUBLIC_QINIU_UPLOAD_URL}
+          // data={{ token: getCookie('qiniuToken') }}
+          data={{ token, key: keyName }}
+          showUploadList={false}
+          beforeUpload={beforeUpload}
+          // listType="picture-card"
+          // onChange={handleChange}
+          {...rest}
+        >
+          {value && !fileError && blobType?.startsWith('image/') ? (
             <Image
-              src="/images/home/icon_home_add_dao_default@2x.png"
-              width={20}
-              height={20}
+              className="upload-image"
+              src={imageView2Max({
+                url: value,
+                w: imgWidth,
+              })}
               preview={false}
               alt="image"
             />
-            {formatMessage({ id: 'start.upload' })}
-          </div>
-        )}
-      </Upload>
+          ) : value && !fileError && blobType?.startsWith('video/') ? (
+            <video
+              autoPlay
+              loop
+              muted
+              controls={false}
+              className="upload-image"
+              src={fileany}
+            />
+          ) : (
+            <div className="upload-box">
+              <Image
+                src="/images/home/icon_home_add_dao_default@2x.png"
+                width={20}
+                height={20}
+                preview={false}
+                alt="image"
+              />
+              {formatMessage({ id: 'start.upload' })}
+            </div>
+          )}
+        </Upload>
+      </Spin>
 
       <style jsx>
         {`
           .wrap :global(.ant-upload) {
+            width: 150px;
+            height: 150px;
+          }
+          .wrap :global(.ant-spin-nested-loading) {
             width: 150px;
             height: 150px;
           }
@@ -169,6 +198,6 @@ const App = (props: any) => {
       </style>
     </div>
   );
-};
-
+});
+App.displayName = 'Upload';
 export default App;

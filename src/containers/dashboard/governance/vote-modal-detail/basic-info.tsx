@@ -17,7 +17,6 @@ type Props = {
 
 const App = ({ data }: Props) => {
   const { formatMessage } = useIntl();
-
   return (
     <div style={{ marginTop: 20 }}>
       {data.mission && (

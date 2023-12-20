@@ -26,7 +26,7 @@ import { createVote } from '@/api/vote';
 
 import Modal from '@/components/modal';
 import AssetAttrModal, { AttrParams } from '@/components/modal/assetAttrModal';
-import Upload from '@/components/form/upload';
+import Upload, { RefType } from '@/components/form/upload';
 import Select from '@/components/form/select';
 import { useRouter } from 'next/router';
 import { validateETH } from '@/utils/validator';
@@ -57,6 +57,8 @@ const IssueForm: FC<IssueFormProps> = () => {
   const [initialValues, setInitialValues] = useState() as any;
 
   const assetAttrModal: any = useRef(null);
+
+  const uploadFileRef = useRef<RefType>(null);
 
   useEffect(() => {
     if (ETH_CHAINS_INFO[chainId]) {
@@ -215,10 +217,15 @@ const IssueForm: FC<IssueFormProps> = () => {
   const onImageChange: UploadProps['onChange'] = (
     info: UploadChangeParam<UploadFile>,
   ) => {
-    if (info.file.status === 'done') {
+    if (info.file.status === 'uploading') {
+      uploadFileRef.current?.fn(true);
+    } else if (info.file.status === 'done') {
       // setImage(process.env.NEXT_PUBLIC_QINIU_IMG_URL + info.file.response.key);
       setImage(getCookie('qiniuImgUrl') + info.file.response.key);
       setImageMessage('');
+      uploadFileRef.current?.fn(false);
+    } else {
+      uploadFileRef.current?.fn(false);
     }
   };
 
@@ -313,11 +320,11 @@ const IssueForm: FC<IssueFormProps> = () => {
         </Form.Item>
         <Form.Item
           valuePropName="fileList"
-          label="Image"
+          label="Image / Video"
           required
           extra={<span style={{ color: 'red' }}>{imageMessage}</span>}
         >
-          <Upload value={image} onChange={onImageChange} />
+          <Upload ref={uploadFileRef} value={image} onChange={onImageChange} />
         </Form.Item>
         <Form.Item
           name="attributes"

@@ -18,7 +18,6 @@ const App = ({
   data,
 }: PriceProps) => {
   const { chainId } = useAppSelector((store) => store.wallet);
-  console.log(data, 'datadatadata');
   let v: number | string = 0;
 
   if (value !== undefined) {

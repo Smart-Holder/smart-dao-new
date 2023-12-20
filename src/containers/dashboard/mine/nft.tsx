@@ -9,7 +9,7 @@ import WalletModal from '@/components/modal/walletModal';
 import Price from '@/components/price';
 
 import useResize from '@/hooks/useResize';
-import { useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { DAOType } from '@/config/enum';
 
 import { setCurrentDAO, setDAOType } from '@/store/features/daoSlice';
@@ -37,6 +37,9 @@ const App = ({ data }: NFTProps) => {
   const currentDAO = data?.dao;
 
   const { width } = useResize({ target: '.nft-item-image' });
+
+  const [blobType, setblobType] = useState('');
+  const [ItemLoading, setItemLoading] = useState(false);
 
   const handleClick = async () => {
     if (!isInit) {
@@ -83,20 +86,57 @@ const App = ({ data }: NFTProps) => {
     router.push(`/dashboard/mine/assets/detail?id=${data.id}`);
   };
 
+  const getImgFileType = useCallback(async () => {
+    let url = data.imageOrigin;
+    setItemLoading(true);
+    const controller = new AbortController();
+    const signal = controller.signal;
+    let res = await fetch(url, {
+      signal,
+    });
+    // 取消请求拿到 Content-Type'
+    controller.abort();
+    if (res.ok) {
+      // let blob = await res.blob();
+      let typeStr = res.headers.get('Content-Type') || 'image/jpeg';
+      setblobType(typeStr);
+    }
+    setItemLoading(false);
+  }, [data.imageOrigin]);
+
+  useEffect(() => {
+    getImgFileType();
+  }, [getImgFileType]);
+
   return (
     <div className="nft-item">
       <div onClick={handleClick}>
-        <Image
-          className="image nft-item-image"
-          src={imageView2Max({
-            url: data.imageOrigin,
-            w: 500,
-          })}
-          width="100%"
-          height={width}
-          preview={false}
-          alt="image"
-        />
+        {blobType.startsWith('image/') ? (
+          <Image
+            className="image nft-item-image"
+            src={imageView2Max({
+              url: data.imageOrigin,
+              w: 500,
+            })}
+            width="100%"
+            height={width}
+            preview={false}
+            alt="image"
+          />
+        ) : (
+          <video
+            className="image nft-item-image"
+            src={data?.imageOrigin}
+            width="100%"
+            height={width}
+            autoPlay
+            loop
+            muted
+            controls={false}
+            style={{ objectFit: 'cover' }}
+          />
+        )}
+
         <div className="name">
           <Paragraph ellipsis className="paragraph">
             {data.name}
