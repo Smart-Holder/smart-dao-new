@@ -8,6 +8,7 @@ import {
   Space,
   message,
   Breadcrumb,
+  Result,
 } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -15,7 +16,13 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import Layout from '@/components/layout';
 import Select from '@/components/form/filter/select';
 import Price from '@/components/price';
-import { ReactElement, useCallback, useEffect, useState } from 'react';
+import {
+  ReactElement,
+  useCallback,
+  useEffect,
+  useState,
+  Suspense,
+} from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
 
 import Input from '@/containers/dashboard/mine/input-price';
@@ -89,7 +96,7 @@ const App: NextPageWithLayout = () => {
     });
 
     setTotal(res);
-  }, [chainId, currentDAO.host, values]);
+  }, [chainId, currentDAO.host, values, address]);
 
   const onValuesChange = (changedValues: any) => {
     let [[key, value]]: any = Object.entries(changedValues);
@@ -246,6 +253,58 @@ const App: NextPageWithLayout = () => {
     }
   };
 
+  const getImgFileType = async (url: string) => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+    let res = await fetch(url, {
+      signal,
+    });
+    controller.abort();
+    if (res.ok) {
+      let typeStr = res.headers.get('Content-Type') || 'image/jpeg';
+      return new Promise((resolve) => {
+        resolve(typeStr);
+      });
+    }
+  };
+
+  const BolbComponent = ({ url, name }: { url: string; name: string }) => {
+    const [blobType, setblobType] = useState('image/');
+    useEffect(() => {
+      if (url) {
+        getImgFileType(url).then((res) => {
+          setblobType(res as string);
+        });
+      }
+    }, [url]);
+    return (
+      <Image
+        src={
+          blobType.startsWith('image/')
+            ? `${url}`
+            : `${url}?vframe/jpg/offset/3/`
+        }
+        alt={name}
+        preview={false}
+        width={30}
+        height={30}
+      />
+    );
+    // return blobType.startsWith('image/') ? (
+    //   <Image src={url} alt={name} preview={false} width={30} height={30} />
+    // ) : (
+    //   <video
+    //     src={url}
+    //     width={30}
+    //     height={30}
+    //     autoPlay
+    //     loop
+    //     muted
+    //     controls={false}
+    //   />
+    // );
+  };
+
   return (
     <div>
       <Breadcrumb>
@@ -328,15 +387,44 @@ const App: NextPageWithLayout = () => {
               title: formatMessage({ id: 'my.asset.shelves.asset' }),
               dataIndex: 'mediaOrigin',
               key: 'mediaOrigin',
-              render: (url, item: any) => (
-                <Image
-                  src={url}
-                  alt={item.name}
-                  preview={false}
-                  width={30}
-                  height={30}
-                />
-              ),
+              render: (url, item: any) => {
+                // return (
+                //   <Image
+                //     src={url}
+                //     alt={item.name}
+                //     preview={false}
+                //     width={30}
+                //     height={30}
+                //   />
+                // );
+
+                return (
+                  <Suspense>
+                    <BolbComponent key={url} url={url} name={item.name} />
+                  </Suspense>
+                );
+
+                // await getImgFileType(url);
+                // return blobType.startsWith('image/') ? (
+                //   <Image
+                //     src={url}
+                //     alt={item.name}
+                //     preview={false}
+                //     width={30}
+                //     height={30}
+                //   />
+                // ) : (
+                //   <video
+                //     src={url}
+                //     width={30}
+                //     height={30}
+                //     autoPlay
+                //     loop
+                //     muted
+                //     controls={false}
+                //   />
+                // );
+              },
             },
             {
               title: formatMessage({ id: 'my.asset.shelves.label' }),
